@@ -1,0 +1,193 @@
+# Addon Name: ResolveURL
+# Addon id: script.module.resolveurl
+# Addon Provider:
+# Translators:
+# Jonatan Nyberg, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jonatan Nyberg, 2017\n"
+"Language-Team: Swedish ()\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#33000"
+msgid "OpenLoad Stream Authorization"
+msgstr "OpenLoad strömauktorisering"
+
+msgctxt "#33001"
+msgid "To play this video, authorization is required"
+msgstr "För att spela den här videon krävs auktorisation"
+
+msgctxt "#33002"
+msgid "Visit the link below to authorize the devices on your network:"
+msgstr "Besök länken nedan för att tillåta enheter i nätverket:"
+
+msgctxt "#33003"
+msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
+msgstr "[B][COLOR blue]%s[/COLOR][/B] klicka sedan 'Ihopparning'"
+
+msgctxt "#33004"
+msgid "No OpenLoad Authorization"
+msgstr "Ingen OpenLoad auktorisering"
+
+msgctxt "#33005"
+msgid "Automatically update resolver"
+msgstr "Uppdatera automatiskt Resolver"
+
+msgctxt "#33006"
+msgid "Auto-Update Url"
+msgstr "Uppdatera automatiskt url"
+
+msgctxt "#33007"
+msgid "Decryption Key"
+msgstr "Dekrypteringsnyckel"
+
+msgctxt "#33008"
+msgid "TheVideo.me Stream Authorization"
+msgstr "TheVideo.me strömauktorisering"
+
+msgctxt "#33009"
+msgid "VidUP.me Stream Authorization"
+msgstr "VidUP.me strömauktorisering"
+
+msgctxt "#33010"
+msgid "Enable Universal Resolvers"
+msgstr "Aktivera Universal Resolvers"
+
+msgctxt "#33011"
+msgid "Automatically pick best quality"
+msgstr "Välj automatiskt bästa kvalitet"
+
+msgctxt "#33012"
+msgid "Use Function Cache"
+msgstr "Använd funktionscache"
+
+msgctxt "#33013"
+msgid "Reset Function Cache"
+msgstr "Nollställ funktionscache"
+
+msgctxt "#33014"
+msgid "Universal Resolvers"
+msgstr "Universal Resolvers"
+
+msgctxt "#33015"
+msgid "Resolvers"
+msgstr "Resolvers"
+
+msgctxt "#33016"
+msgid "Priority"
+msgstr "Prioritet"
+
+msgctxt "#33017"
+msgid "Enabled"
+msgstr "Aktiverad"
+
+msgctxt "#33018"
+msgid "Real-Debrid Resolver Authorized"
+msgstr "Real-Debrid Resolver auktorisering"
+
+msgctxt "#33019"
+msgid "Real-Debrid Authorization Reset"
+msgstr "Nollställ Real-Debrid auktorisering"
+
+msgctxt "#33020"
+msgid "Cache Reset"
+msgstr "Nollställ cache"
+
+msgctxt "#33021"
+msgid "Cache Reset Failed"
+msgstr "Cache nollställning misslyckades"
+
+msgctxt "#33022"
+msgid "login"
+msgstr "logga in"
+
+msgctxt "#33023"
+msgid "Username"
+msgstr "Användarnamn"
+
+msgctxt "#33024"
+msgid "Password"
+msgstr "Lösenord"
+
+msgctxt "#33025"
+msgid "Use HTTPS"
+msgstr "Använd HTTPS"
+
+msgctxt "#33026"
+msgid "Customer ID"
+msgstr "Kund-ID"
+
+msgctxt "#33027"
+msgid "PIN"
+msgstr "PIN"
+
+msgctxt "#33028"
+msgid "Choose Primary Link Automatically"
+msgstr "Välj primär länk automatiskt"
+
+msgctxt "#33029"
+msgid "(Re)Authorize My Account"
+msgstr "(Om)auktorisera mitt konto"
+
+msgctxt "#33030"
+msgid "Reset My Authorization"
+msgstr "Nollställ min auktorisering"
+
+msgctxt "#33031"
+msgid "Resolver Auto-Updated"
+msgstr "Resolver automatiskt uppdaterad"
+
+msgctxt "#33032"
+msgid "Type the letters in the image"
+msgstr "Skriv in bokstäverna i bilden"
+
+msgctxt "#33033"
+msgid "Captcha Error"
+msgstr "Fel captcha"
+
+msgctxt "#33034"
+msgid "Choose the link"
+msgstr "Välj en länk"
+
+msgctxt "#33035"
+msgid "No link selected"
+msgstr "Ingen länk markerad"
+
+msgctxt "#33036"
+msgid "No Video Link Found"
+msgstr "Ingen video länk hittades"
+
+msgctxt "#33037"
+msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
+msgstr "Captcha runda: %s [I](2 rundor är typiskt)[/I]"
+
+msgctxt "#33038"
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgctxt "#33039"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#33040"
+msgid "IP Stream Authorization Pairing"
+msgstr "IP-strömauktorisering ihopparning"
+
+msgctxt "#33041"
+msgid "No IP Authorization"
+msgstr "Ingen IP-auktorisering"
+
+msgctxt "#33043"
+msgid "Vshare.eu Stream Authorization"
+msgstr "Vshare.eu strömauktorisering"
+
+msgctxt "#33044"
+msgid "Flashx Stream Authorization"
+msgstr "Flashx strömauktorisering"

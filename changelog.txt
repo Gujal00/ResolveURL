@@ -1,0 +1,188 @@
+[B]Version 5.0.10 (May 24, 2018)[/B]
+- Code Base Changes:
+    - Update GMU file locations
+    - No longer raising ResolveError on pairing timeout/cancel
+- Resolvers Added:
+    - putvid
+    - gounlimited
+    - upfiles
+    - nxload
+- Resolvers Fixed/Updated:
+    - vidlox
+    - thevideo
+    - dailymotion
+    - premiumize
+    - flashx
+    - streamplay
+    - powvideo
+    - estream
+    - thevid
+    - vidup_me
+    - gorrilavid
+    - waaw
+- Resolvers Removed
+    - vidup_org
+- Languages Added/Updated
+    - None
+
+
+[B]Version 5.0.09 (Mar 17, 2018)[/B]
+- Code Base Changes:
+    - None
+- Resolvers Added:
+    - None
+- Resolvers Fixed/Updated:
+    - realdebrid (still handling 'bogus escape' to be safe)
+    - vidlox
+    - thevideo
+- Resolvers Removed
+    - None
+- Languages Added/Updated
+    - None
+
+
+[B]Version 5.0.08 (Mar 10, 2018)[/B]
+- Code Base Changes:
+    - None
+- Resolvers Added:
+    - yandex
+    - filebebo
+    - streamgo
+- Resolvers Fixed/Updated:
+    - mycloud
+    - mehlizmovies
+    - flixtor
+    - clicknupload
+    - vshare.io
+    - streamango
+- Resolvers Removed
+    - None
+- Languages Added/Updated
+    - None
+
+
+[B]Version 5.0.07 (Mar 01, 2018)[/B]
+- Code Base Changes:
+    - Fix for testing streams with SSL errors
+- Resolvers Added:
+    - None
+- Resolvers Fixed/Updated:
+    - premiumize
+    - openload
+    - flashx
+- Resolvers Removed
+    - ol_gmu
+- Languages Added/Updated
+    - None
+
+
+[B]Version 5.0.06b (Feb 17, 2018)[/B]
+- Code Base Changes:
+    - Additional fixes for iOS and Xbox One
+- Resolvers Added:
+    - ssfiles
+- Resolvers Fixed/Updated:
+    - tunepk
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - None
+
+
+[B]Version 5.0.06 (Feb 08, 2018)[/B]
+- Code Base Changes:
+    - New artwork(thanks to jokstergfx)
+    - Include jsunfuck
+- Resolvers Added:
+    - none
+- Resolvers Fixed/Updated:
+    - powvideo
+    - streamplay
+    - speedvid
+    - thevid
+    - thevideo
+    - userscloud
+    - vidlox
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - None
+
+
+[B]Version 5.0.05 (Feb 06, 2018)[/B]
+- Public Release
+
+[B]Version 5.0.04 (Jan 14, 2018)[/B]
+- Code Base Changes:
+    - Fix for SSL Context
+- Resolvers Added:
+    - none
+- Resolvers Fixed/Updated:
+    - rapidvideocom
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - Greek
+
+
+[B]Version 5.0.03 (Dec 29, 2017)[/B]
+- Code Base Changes:
+    - Fixes for Python > 2.7.12
+    - Fixes for Xbox One
+- Resolvers Added:
+    - none
+- Resolvers Fixed/Updated:
+    - alldebrid
+    - uptobox
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - Italian
+
+
+[B]Version 5.0.02 (Dec 29, 2017)[/B]
+- Code Base Changes:
+    - New gmu file locations
+- Resolvers Added:
+    - vidnode
+- Resolvers Fixed/Updated:
+    - streamplay
+    - thevid
+    - alldebrid
+    - speedvid
+    - tunepk
+    - speedplay
+    - vidzella
+- Resolvers Removed
+    - divxstage
+    - cloudtime
+    - nosvideo
+    - stagevu
+- Languages Added/Updated
+    - Norwegian translation
+    - Croatian strings
+
+
+[B]Version 5.0.01 (Dec 15, 2017)[/B]
+- Code Base Changes:
+    - Support for GDrive (see dmdsoftware.net)
+- Resolvers Added:
+    - None
+- Resolvers Fixed/Updated:
+    - googlevideo
+    - powvideo
+    - vidtodo
+    - xvidstage
+- Languages Added/Updated
+    - Spanish summary
+
+
+[B]Version 5.0.00 (Dec 03, 2017)[/B]
+- Code Base Changes:
+    - Forked from SMU
+- Resolvers Added:
+    - None
+- Resolvers Fixed/Updated:
+    - None
+- Languages Added/Updated
+    - None

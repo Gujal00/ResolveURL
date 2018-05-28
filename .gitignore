@@ -1,0 +1,14 @@
+*.pyc
+*.pyo
+*.cookies
+*.DS_Store
+temp/*
+script.module.resolveurl/resources/settings.xml
+doc/build
+doc/resources
+.project
+.pydevproject
+.settings
+.idea
+*~
+nano.save

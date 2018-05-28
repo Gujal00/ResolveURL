@@ -1,0 +1,193 @@
+# Addon Name: ResolveURL
+# Addon id: script.module.resolveurl
+# Addon Provider:
+# Translators:
+# Irene Royster, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Irene Royster, 2017\n"
+"Language-Team: Spanish ()\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#33000"
+msgid "OpenLoad Stream Authorization"
+msgstr "Autorización para Transmitir OpenLoad"
+
+msgctxt "#33001"
+msgid "To play this video, authorization is required"
+msgstr "Autorización necesaria para reproducir este video"
+
+msgctxt "#33002"
+msgid "Visit the link below to authorize the devices on your network:"
+msgstr "Visita este link para autorizar este dispositivo en tu network:"
+
+msgctxt "#33003"
+msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
+msgstr "[B][COLOR blue]%s[/COLOR][/B] entonces has click en 'Pair'"
+
+msgctxt "#33004"
+msgid "No OpenLoad Authorization"
+msgstr "No hay Autorización para OpenLoad"
+
+msgctxt "#33005"
+msgid "Automatically update resolver"
+msgstr "Actualizar resolver automáticamente"
+
+msgctxt "#33006"
+msgid "Auto-Update Url"
+msgstr "Auto-Actualizar URL"
+
+msgctxt "#33007"
+msgid "Decryption Key"
+msgstr "Descripción"
+
+msgctxt "#33008"
+msgid "TheVideo.me Stream Authorization"
+msgstr "Autorización para Transmitir TheVideo.me"
+
+msgctxt "#33009"
+msgid "VidUP.me Stream Authorization"
+msgstr "Autorización para Transmitir VidUP.me"
+
+msgctxt "#33010"
+msgid "Enable Universal Resolvers"
+msgstr "Activar Resolver Universales"
+
+msgctxt "#33011"
+msgid "Automatically pick best quality"
+msgstr "Elegir mejor calidad automáticamente"
+
+msgctxt "#33012"
+msgid "Use Function Cache"
+msgstr "Usar Función de Cache"
+
+msgctxt "#33013"
+msgid "Reset Function Cache"
+msgstr "Reiniciar Función de Cache"
+
+msgctxt "#33014"
+msgid "Universal Resolvers"
+msgstr "Resolvers Universales"
+
+msgctxt "#33015"
+msgid "Resolvers"
+msgstr "Resolvers"
+
+msgctxt "#33016"
+msgid "Priority"
+msgstr "Prioridad"
+
+msgctxt "#33017"
+msgid "Enabled"
+msgstr "Activado"
+
+msgctxt "#33018"
+msgid "Real-Debrid Resolver Authorized"
+msgstr "Real-Debrid Resolver Autorizado"
+
+msgctxt "#33019"
+msgid "Real-Debrid Authorization Reset"
+msgstr "Autorización de Real-Debrid Autorizada"
+
+msgctxt "#33020"
+msgid "Cache Reset"
+msgstr "Cache Reiniciada"
+
+msgctxt "#33021"
+msgid "Cache Reset Failed"
+msgstr "Error Reiniciando Cache"
+
+msgctxt "#33022"
+msgid "login"
+msgstr "Login"
+
+msgctxt "#33023"
+msgid "Username"
+msgstr "Usuario"
+
+msgctxt "#33024"
+msgid "Password"
+msgstr "Contraseña"
+
+msgctxt "#33025"
+msgid "Use HTTPS"
+msgstr "Usar HTTPS"
+
+msgctxt "#33026"
+msgid "Customer ID"
+msgstr "Identificación de Cliente"
+
+msgctxt "#33027"
+msgid "PIN"
+msgstr "PIN"
+
+msgctxt "#33028"
+msgid "Choose Primary Link Automatically"
+msgstr "Elegir Link Principal Automáticamente"
+
+msgctxt "#33029"
+msgid "(Re)Authorize My Account"
+msgstr "(Re)Autorizar Mi Cuenta"
+
+msgctxt "#33030"
+msgid "Reset My Authorization"
+msgstr "Reiniciar Mi Autorización"
+
+msgctxt "#33031"
+msgid "Resolver Auto-Updated"
+msgstr "Resolver Actualizado Automáticamente"
+
+msgctxt "#33032"
+msgid "Type the letters in the image"
+msgstr "Introduce las letras en la imagen"
+
+msgctxt "#33033"
+msgid "Captcha Error"
+msgstr "Error de Captcha"
+
+msgctxt "#33034"
+msgid "Choose the link"
+msgstr "Elige el link"
+
+msgctxt "#33035"
+msgid "No link selected"
+msgstr "Ningún link seleccionado"
+
+msgctxt "#33036"
+msgid "No Video Link Found"
+msgstr "Ningún link de video encontrado"
+
+msgctxt "#33037"
+msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
+msgstr "Ronda de Captcha: %s [I](Normalmente 2 Rondas)[/I]"
+
+msgctxt "#33038"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "#33039"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#33040"
+msgid "IP Stream Authorization Pairing"
+msgstr "Combinando IP con Autorización de Transmisión"
+
+msgctxt "#33041"
+msgid "No IP Authorization"
+msgstr "IP No Autorizada"
+
+msgctxt "#33043"
+msgid "Vshare.eu Stream Authorization"
+msgstr "Autorización para Transmitir Vshare.eu"
+
+msgctxt "#33044"
+msgid "Flashx Stream Authorization"
+msgstr "Autorización para Transmitir Flashx"

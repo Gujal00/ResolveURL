@@ -1,0 +1,185 @@
+# Addon Name: ResolveURL
+# Addon id: script.module.resolveurl
+# Addon Provider:
+# Translators:
+# Kis Pista, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kis Pista, 2016\n"
+"Language-Team: Hungarian ()\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#33000"
+msgid "OpenLoad Stream Authorization"
+msgstr "OpenLoad Stream autorizáció"
+
+msgctxt "#33001"
+msgid "To play this video, authorization is required"
+msgstr "A video lejátszásához autorizáció szükséges"
+
+msgctxt "#33002"
+msgid "Visit the link below to authorize the devices on your network:"
+msgstr "Az eszközeid engedélyezéséhez látogass el az alábbi címre:"
+
+msgctxt "#33003"
+msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
+msgstr "[B][COLOR blue]%s[/COLOR][/B] majd kattints a 'Pair' gombra"
+
+msgctxt "#33004"
+msgid "No OpenLoad Authorization"
+msgstr "OpenLoad autorizáció hiányzik"
+
+msgctxt "#33005"
+msgid "Automatically update resolver"
+msgstr "Resolver automatikus frissítése"
+
+msgctxt "#33006"
+msgid "Auto-Update Url"
+msgstr "Automatikus frissítés Url-címe"
+
+msgctxt "#33007"
+msgid "Decryption Key"
+msgstr "Feloldó kulcs"
+
+msgctxt "#33008"
+msgid "TheVideo.me Stream Authorization"
+msgstr "TheVideo.me Stream autorizáció"
+
+msgctxt "#33009"
+msgid "VidUP.me Stream Authorization"
+msgstr "VidUP.me Stream autorizáció"
+
+msgctxt "#33010"
+msgid "Enable Universal Resolvers"
+msgstr "Unverzális resolverek engedélyezése"
+
+msgctxt "#33011"
+msgid "Automatically pick best quality"
+msgstr "Legjobb minőség automatikus kiválasztása"
+
+msgctxt "#33012"
+msgid "Use Function Cache"
+msgstr "Gyorsítótár használata"
+
+msgctxt "#33013"
+msgid "Reset Function Cache"
+msgstr "Gyorsítótár tisztítása"
+
+msgctxt "#33014"
+msgid "Universal Resolvers"
+msgstr "Univerzális resolverek"
+
+msgctxt "#33015"
+msgid "Resolvers"
+msgstr "Resolverek"
+
+msgctxt "#33016"
+msgid "Priority"
+msgstr "Prioritás"
+
+msgctxt "#33017"
+msgid "Enabled"
+msgstr "Engedélyezve"
+
+msgctxt "#33018"
+msgid "Real-Debrid Resolver Authorized"
+msgstr "Real-Debrid Resolver autorizáció sikeres"
+
+msgctxt "#33019"
+msgid "Real-Debrid Authorization Reset"
+msgstr "Real-Debrid autorizáció törölve"
+
+msgctxt "#33020"
+msgid "Cache Reset"
+msgstr "Gyorsítótár tisztítása"
+
+msgctxt "#33021"
+msgid "Cache Reset Failed"
+msgstr "Gyorsítótár tisztítása sikertelen"
+
+msgctxt "#33022"
+msgid "login"
+msgstr "bejelentkezés"
+
+msgctxt "#33023"
+msgid "Username"
+msgstr "Felhasználónév"
+
+msgctxt "#33024"
+msgid "Password"
+msgstr "Jelszó"
+
+msgctxt "#33025"
+msgid "Use HTTPS"
+msgstr "HTTPS használata"
+
+msgctxt "#33026"
+msgid "Customer ID"
+msgstr "Ügyfél-azonosító"
+
+msgctxt "#33027"
+msgid "PIN"
+msgstr "PIN"
+
+msgctxt "#33028"
+msgid "Choose Primary Link Automatically"
+msgstr "Elsődleges link automatikus kiválasztása"
+
+msgctxt "#33029"
+msgid "(Re)Authorize My Account"
+msgstr "Saját hozzáférés (úrjra) autorizálás"
+
+msgctxt "#33030"
+msgid "Reset My Authorization"
+msgstr "Saját autorizáció törlése"
+
+msgctxt "#33031"
+msgid "Resolver Auto-Updated"
+msgstr "Resolver automatikusan frissítve"
+
+msgctxt "#33032"
+msgid "Type the letters in the image"
+msgstr "Írd be a képen látható karaktereket"
+
+msgctxt "#33033"
+msgid "Captcha Error"
+msgstr "Captha hiba"
+
+msgctxt "#33034"
+msgid "Choose the link"
+msgstr "Válaszd ki a linket"
+
+msgctxt "#33035"
+msgid "No link selected"
+msgstr "Nincs link kiválasztva"
+
+msgctxt "#33036"
+msgid "No Video Link Found"
+msgstr "Nem található video link"
+
+msgctxt "#33037"
+msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
+msgstr "Captcha kör: %s [I](Általában 2 kör)[/I]"
+
+msgctxt "#33038"
+msgid "Cancel"
+msgstr "Mégse"
+
+msgctxt "#33039"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#33043"
+msgid "Vshare.eu Stream Authorization"
+msgstr "Vshare.eu Stream autorizáció"
+
+msgctxt "#33044"
+msgid "Flashx Stream Authorization"
+msgstr "Flashx Stream autorizáció"

@@ -1,0 +1,193 @@
+# Addon Name: ResolveURL
+# Addon id: script.module.resolveurl
+# Addon Provider:
+# Translators:
+# Ondřej Zima, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Ondřej Zima, 2017\n"
+"Language-Team: Czech ()\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+msgctxt "#33000"
+msgid "OpenLoad Stream Authorization"
+msgstr "Autorizace vysílání OpenLoad"
+
+msgctxt "#33001"
+msgid "To play this video, authorization is required"
+msgstr "Pro přehrání tohoto videa je vyžadována autorizace"
+
+msgctxt "#33002"
+msgid "Visit the link below to authorize the devices on your network:"
+msgstr "Autorizace zařízení provedete na následující webové stránce:"
+
+msgctxt "#33003"
+msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
+msgstr "[B][COLOR blue]%s[/COLOR][/B] a poté zvolte „Párovat“ (Pair)"
+
+msgctxt "#33004"
+msgid "No OpenLoad Authorization"
+msgstr "OpenLoad není autorizován"
+
+msgctxt "#33005"
+msgid "Automatically update resolver"
+msgstr "Automaticky aktualizovat průzkumníka"
+
+msgctxt "#33006"
+msgid "Auto-Update Url"
+msgstr "URL automatické aktualizace"
+
+msgctxt "#33007"
+msgid "Decryption Key"
+msgstr "Dešifrovací klíč"
+
+msgctxt "#33008"
+msgid "TheVideo.me Stream Authorization"
+msgstr "Autorizace vysílání TheVideo.me"
+
+msgctxt "#33009"
+msgid "VidUP.me Stream Authorization"
+msgstr "Autorizace vysílání VidUP.me"
+
+msgctxt "#33010"
+msgid "Enable Universal Resolvers"
+msgstr "Povolit univerzální průzkumníky"
+
+msgctxt "#33011"
+msgid "Automatically pick best quality"
+msgstr "Automaticky vybrat nejlepší kvalitu"
+
+msgctxt "#33012"
+msgid "Use Function Cache"
+msgstr "Použít funkční mezipaměť"
+
+msgctxt "#33013"
+msgid "Reset Function Cache"
+msgstr "Vyčistit funkční mezipaměť"
+
+msgctxt "#33014"
+msgid "Universal Resolvers"
+msgstr "Univerzální průzkumník"
+
+msgctxt "#33015"
+msgid "Resolvers"
+msgstr "Průzkumníci"
+
+msgctxt "#33016"
+msgid "Priority"
+msgstr "Priorita"
+
+msgctxt "#33017"
+msgid "Enabled"
+msgstr "Povoleno"
+
+msgctxt "#33018"
+msgid "Real-Debrid Resolver Authorized"
+msgstr "Autorizace průzkumníku Real-Debrid"
+
+msgctxt "#33019"
+msgid "Real-Debrid Authorization Reset"
+msgstr "Obnovit autorizaci Real-Debrid"
+
+msgctxt "#33020"
+msgid "Cache Reset"
+msgstr "Vyčistit mezipaměť"
+
+msgctxt "#33021"
+msgid "Cache Reset Failed"
+msgstr "Selhalo vyčištění mezipaměti"
+
+msgctxt "#33022"
+msgid "login"
+msgstr "přihlášení"
+
+msgctxt "#33023"
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+msgctxt "#33024"
+msgid "Password"
+msgstr "Heslo"
+
+msgctxt "#33025"
+msgid "Use HTTPS"
+msgstr "Použít HTTPS"
+
+msgctxt "#33026"
+msgid "Customer ID"
+msgstr "Zákaznické ID"
+
+msgctxt "#33027"
+msgid "PIN"
+msgstr "PIN"
+
+msgctxt "#33028"
+msgid "Choose Primary Link Automatically"
+msgstr "Automaticky vybrat primární odkaz"
+
+msgctxt "#33029"
+msgid "(Re)Authorize My Account"
+msgstr "Autorizovat / znovu autorizovat účet"
+
+msgctxt "#33030"
+msgid "Reset My Authorization"
+msgstr "Obnovit autorizaci"
+
+msgctxt "#33031"
+msgid "Resolver Auto-Updated"
+msgstr "Průzkumník automaticky aktualizován"
+
+msgctxt "#33032"
+msgid "Type the letters in the image"
+msgstr "Zadejte znaky z obrázku"
+
+msgctxt "#33033"
+msgid "Captcha Error"
+msgstr "Chyba ověření Captcha"
+
+msgctxt "#33034"
+msgid "Choose the link"
+msgstr "Vyberte odkaz"
+
+msgctxt "#33035"
+msgid "No link selected"
+msgstr "Žádný odkaz není vybrán"
+
+msgctxt "#33036"
+msgid "No Video Link Found"
+msgstr "Nenalezen žádný odkaz na video"
+
+msgctxt "#33037"
+msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
+msgstr "Ověření Captcha - pokus: %s [I](typicky 2 pokusy)[/I]"
+
+msgctxt "#33038"
+msgid "Cancel"
+msgstr "Zrušit"
+
+msgctxt "#33039"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#33040"
+msgid "IP Stream Authorization Pairing"
+msgstr "Párování autorizace IP vysílání"
+
+msgctxt "#33041"
+msgid "No IP Authorization"
+msgstr "Žádná IP autorizace"
+
+msgctxt "#33043"
+msgid "Vshare.eu Stream Authorization"
+msgstr "Autorizace vysílání Vshare.eu"
+
+msgctxt "#33044"
+msgid "Flashx Stream Authorization"
+msgstr "Flashx vysílání Vshare.eu"

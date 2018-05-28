@@ -1,0 +1,204 @@
+# Addon Name: ResolveUrl
+# Addon id: script.module.resolveurl
+# Addon Provider:
+msgid ""
+msgstr ""
+"Project-Id-Version: script.module.resolveurl 5.0.01\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-12-11 21:47+0100\n"
+"Language-Team: Norwegian Bokmal\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nb\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: Johnny A. Solbu <johnny@solbu.net>\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+msgctxt "#33000"
+msgid "OpenLoad Stream Authorization"
+msgstr "OpenLoad strømme-autorisasjon"
+
+msgctxt "#33001"
+msgid "To play this video, authorization is required"
+msgstr "Autorisasjon trengs for å spille av denne videoen"
+
+msgctxt "#33002"
+msgid "Visit the link below to authorize the devices on your network:"
+msgstr "Besøk lenken nedenfor for å autorisere enheter i nettverket ditt."
+
+msgctxt "#33003"
+msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
+msgstr "[B][COLOR blue]%s[/COLOR][/B] deretter klikk «Pair»"
+
+msgctxt "#33004"
+msgid "No OpenLoad Authorization"
+msgstr "Ingen OpenLoad-autorisasjon"
+
+msgctxt "#33005"
+msgid "Automatically update resolver"
+msgstr "Oppdater resolver automatisk"
+
+msgctxt "#33006"
+msgid "Auto-Update Url"
+msgstr "Auto-oppdater Url"
+
+msgctxt "#33007"
+msgid "Decryption Key"
+msgstr "Dekrypteringsnøkkel"
+
+msgctxt "#33008"
+msgid "TheVideo.me Stream Authorization"
+msgstr "TheVideo.me strømme-autorisasjon"
+
+msgctxt "#33009"
+msgid "VidUP.me Stream Authorization"
+msgstr "VidUP.me strømme-autorisasjon"
+
+msgctxt "#33010"
+msgid "Enable Universal Resolvers"
+msgstr "Aktiver universielle resolvere"
+
+msgctxt "#33011"
+msgid "Automatically pick best quality"
+msgstr "Velg beste kvalitet automatisk"
+
+msgctxt "#33012"
+msgid "Use Function Cache"
+msgstr "Bruk Funksjons-mellomlager"
+
+msgctxt "#33013"
+msgid "Reset Function Cache"
+msgstr "Nullstill Funksjons-mellomlager"
+
+msgctxt "#33014"
+msgid "Universal Resolvers"
+msgstr "Universielle resolvere"
+
+msgctxt "#33015"
+msgid "Resolvers"
+msgstr "Resolvere"
+
+msgctxt "#33016"
+msgid "Priority"
+msgstr "Prioritet"
+
+msgctxt "#33017"
+msgid "Enabled"
+msgstr "Aktivert"
+
+msgctxt "#33018"
+msgid "Real-Debrid Resolver Authorized"
+msgstr "Real-Debrid resolver-autorisasjon"
+
+msgctxt "#33019"
+msgid "Real-Debrid Authorization Reset"
+msgstr "Real-Debrid autorisasjons-nullstilling"
+
+msgctxt "#33020"
+msgid "Cache Reset"
+msgstr "Nullstill mellomlager"
+
+msgctxt "#33021"
+msgid "Cache Reset Failed"
+msgstr "Nullstilling av mellomlager misslyktes"
+
+msgctxt "#33022"
+msgid "login"
+msgstr "Logg inn"
+
+msgctxt "#33023"
+msgid "Username"
+msgstr "Brukernavn"
+
+msgctxt "#33024"
+msgid "Password"
+msgstr "Passord"
+
+msgctxt "#33025"
+msgid "Use HTTPS"
+msgstr "Bruk HTTPS"
+
+msgctxt "#33026"
+msgid "Customer ID"
+msgstr "Kunde-ID"
+
+msgctxt "#33027"
+msgid "PIN"
+msgstr "PIN"
+
+msgctxt "#33028"
+msgid "Choose Primary Link Automatically"
+msgstr "Velg primærlink automatisk"
+
+msgctxt "#33029"
+msgid "(Re)Authorize My Account"
+msgstr "(Re)autoriser kontoen min"
+
+msgctxt "#33030"
+msgid "Reset My Authorization"
+msgstr "Nullstill autorisasjonen min"
+
+msgctxt "#33031"
+msgid "Resolver Auto-Updated"
+msgstr "Resolver auto-oppdatert"
+
+msgctxt "#33032"
+msgid "Type the letters in the image"
+msgstr "Skriv inn bokstavene i bildet"
+
+msgctxt "#33033"
+msgid "Captcha Error"
+msgstr "Captcha-feil"
+
+msgctxt "#33034"
+msgid "Choose the link"
+msgstr "Velg lenken"
+
+msgctxt "#33035"
+msgid "No link selected"
+msgstr "Ingen lenke valgt"
+
+msgctxt "#33036"
+msgid "No Video Link Found"
+msgstr "Ingen videolenke funnet"
+
+msgctxt "#33037"
+msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
+msgstr "Captcha-runde: %s [I](2 runder er typisk)[/I]"
+
+msgctxt "#33038"
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgctxt "#33039"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#33040"
+msgid "IP Stream Authorization Pairing"
+msgstr "IP-Strøm autorisasjonsparing"
+
+msgctxt "#33041"
+msgid "No IP Authorization"
+msgstr "Ingen IP-autorisasjon"
+
+msgctxt "#33042"
+msgid "Client ID"
+msgstr "Klient-ID"
+
+msgctxt "#33043"
+msgid "Vshare.eu Stream Authorization"
+msgstr "Vshare.eu strømme-autorisasjon"
+
+msgctxt "#33044"
+msgid "Flashx Stream Authorization"
+msgstr "Flashx strømme-autorisasjon"
+
+msgctxt "#33045"
+msgid "AllDebrid Authorization Reset"
+msgstr "AllDebrid autorisasjons-nullstilling"
+
+msgctxt "#33046"
+msgid "AllDebrid Resolver Authorized"
+msgstr "AllDebrid-resolver autorisert"
