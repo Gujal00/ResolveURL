@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
-import re
+import re, base64
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -38,7 +38,13 @@ class TubePornClassicResolver(ResolveUrl):
             if html:
                 source = re.search('''video_url=['"]([^'"]+)['"]''', html, re.DOTALL)
                 if source:
-                    return self.net.http_GET(source.group(1), headers=headers).get_url() + helpers.append_headers(headers)
+                    source = source.group(1).decode('utf-8')
+                    replacemap = {'M':u'\u041C', 'A':u'\u0410', 'B':u'\u0412', 'C':u'\u0421', 'E':u'\u0415', '=':'~'}
+
+                    for key in replacemap:
+                        source = source.replace(replacemap[key], key)
+
+                    return self.net.http_GET(base64.b64decode(source), headers=headers).get_url() + helpers.append_headers(headers)
 
             raise ResolverError('File not found')
         except:
