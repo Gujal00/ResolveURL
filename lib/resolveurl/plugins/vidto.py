@@ -18,5 +18,5 @@ from __resolve_generic__ import ResolveGeneric
 
 class VidtoResolver(ResolveGeneric):
     name = "vidto"
-    domains = ["vidto.me"]
-    pattern = '(?://|\.)(vidto\.me)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ["vidto.me", "vidto.se"]
+    pattern = '(?://|\.)(vidto\.[sm]e)/(?:embed-)?([0-9a-zA-Z]+)'
