@@ -33,7 +33,7 @@ class StreamangoResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         
         if html:
-            encoded = re.search('''srces\.push\({type:"video/mp4",src:\w+\('([^']+)',(\d+)''', html)
+            encoded = re.search('''srces\.push\(\s*{type:"video/mp4",src:\w+\('([^']+)',(\d+)''', html)
             if encoded:
                 source = self.decode(encoded.group(1), int(encoded.group(2)))
                 if source:
