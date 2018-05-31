@@ -33,7 +33,13 @@ class TheVideoResolver(ResolveUrl):
         self.headers = {'User-Agent': common.SMR_USER_AGENT}
 
     def get_media_url(self, host, media_id):
-        result = self.__auth_ip(media_id)
+        try:
+            result = self.__check_auth(media_id)
+            if not result:
+                result = self.__auth_ip(media_id)
+        except ResolverError:
+            raise
+
         if 'vt' in result:
             vt = result['vt']
             del result['vt']
@@ -48,7 +54,7 @@ class TheVideoResolver(ResolveUrl):
         line3 = i18n('click_pair') % ('https://thevideo.website/pair')
         with common.kodi.CountdownDialog(header, line1, line2, line3) as cd:
             return cd.start(self.__check_auth, [media_id])
-        
+
     def __check_auth(self, media_id):
         common.logger.log('Checking Auth: %s' % (media_id))
         url = 'https://thevideo.website/pair?file_code=%s&check' % (media_id)
@@ -60,12 +66,12 @@ class TheVideoResolver(ResolveUrl):
                 js_result = json.loads(str(e.read()))
             else:
                 raise
-            
+
         common.logger.log('Auth Result: %s' % (js_result))
         if js_result.get('status'):
             return js_result.get('response', {})
         else:
             return {}
-        
+
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://thevideo.website/embed-{media_id}.html')
