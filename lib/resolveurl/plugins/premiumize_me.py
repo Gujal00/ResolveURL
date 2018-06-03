@@ -62,7 +62,7 @@ class PremiumizeMeResolver(ResolveUrl):
             raise ResolverError('Unexpected Response Received')
 
         logger.log_debug('Premiumize.me: Resolved to %s' % link)
-        return link + helpers.append_headers({'User-Agent': common.FF_USER_AGENT})
+        return link + helpers.append_headers({'User-Agent': common.CHROME_USER_AGENT})
 
     def get_url(self, host, media_id):
         return media_id
