@@ -80,6 +80,4 @@ class StreamangoResolver(ResolveUrl):
         return _0x59b81a
 
     def get_url(self, host, media_id):
-        if host.lower() == 'streamango.com':
-            host = 'fruitstreams.com'
-        return self._default_get_url(host, media_id, 'http://{host}/embed/{media_id}')
+        return self._default_get_url(host, media_id, 'https://streamango.com/embed/{media_id}')
