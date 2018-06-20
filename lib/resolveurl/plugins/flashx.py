@@ -48,13 +48,13 @@ class FlashxResolver(ResolveUrl):
         header = i18n('flashx_auth_header')
         line1 = i18n('auth_required')
         line2 = i18n('visit_link')
-        line3 = i18n('click_pair') % 'http://flashx.cc/pair'
+        line3 = i18n('click_pair') % 'http://flashx.tv/pair'
         with common.kodi.CountdownDialog(header, line1, line2, line3, countdown=120) as cd:
             return cd.start(self.__check_auth, [media_id])
 
     def __check_auth(self, media_id):
         common.logger.log('Checking Auth: %s' % media_id)
-        url = 'https://www.flashx.cc/pairing.php?c=paircheckjson'
+        url = 'https://www.flashx.tv/pairing.php?c=paircheckjson'
         try:
             js_result = json.loads(self.net.http_GET(url, headers=self.headers).content)
         except ValueError:
@@ -72,7 +72,7 @@ class FlashxResolver(ResolveUrl):
             return False
 
     def resolve_url(self, media_id):
-        web_url = self.get_url('flashx.sx', media_id)
+        web_url = self.get_url('flashx.tv', media_id)
         html = self.net.http_GET(web_url, headers=self.headers).content
 
         if html:
@@ -83,7 +83,7 @@ class FlashxResolver(ResolveUrl):
                     url = 'http:%s' % match.group(1) if match.group(1).startswith('//') else match.group(1)
                     if any(i in url.lower() for i in scripts):
                         self.net.http_GET(url, headers=self.headers)
-                self.net.http_GET('https://www.flashx.sx/flashx.php', headers=self.headers)
+                self.net.http_GET('https://www.flashx.tv/flashx.php', headers=self.headers)
                 playvid_url = re.search('''href=['"]([^"']+/playvideo-[^"']+)''', html)
                 if playvid_url:
                     return playvid_url.group(1)
@@ -94,4 +94,4 @@ class FlashxResolver(ResolveUrl):
                 raise ResolverError('Exception during flashx resolve parse: %s' % e)
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://www.flashx.cc/embed.php?c={media_id}')
+        return self._default_get_url(host, media_id, template='https://www.flashx.tv/embed.php?c={media_id}')
