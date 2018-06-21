@@ -51,13 +51,13 @@ class TheVideoResolver(ResolveUrl):
         header = i18n('thevideo_auth_header')
         line1 = i18n('auth_required')
         line2 = i18n('visit_link')
-        line3 = i18n('click_pair') % ('https://thevideo.website/pair')
+        line3 = i18n('click_pair') % ('https://tvad.me/pair')
         with common.kodi.CountdownDialog(header, line1, line2, line3) as cd:
             return cd.start(self.__check_auth, [media_id])
 
     def __check_auth(self, media_id):
         common.logger.log('Checking Auth: %s' % (media_id))
-        url = 'https://thevideo.website/pair?file_code=%s&check' % (media_id)
+        url = 'https://tvad.me/pair?file_code=%s&check' % (media_id)
         try: js_result = json.loads(self.net.http_GET(url, headers=self.headers).content)
         except ValueError:
             raise ResolverError('Unusable Authorization Response')
@@ -74,4 +74,4 @@ class TheVideoResolver(ResolveUrl):
             return {}
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://thevideo.website/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://tvad.me/embed-{media_id}.html')
