@@ -18,6 +18,9 @@
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.lib import kodi
 from lib import helpers
+import re
+import urllib
+from resolveurl import common
 
 try:
     import youtube_resolver
@@ -30,17 +33,35 @@ class YoutubeResolver(ResolveUrl):
     domains = ['youtube.com', 'youtu.be', 'youtube-nocookie.com']
     pattern = '''https?://(?:[0-9A-Z-]+\.)?(?:(youtu\.be|youtube(?:-nocookie)?\.com)/?\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|</a>))[?=&+%\w.-]*'''
 
+    def __init__(self):
+        self.net = common.Net()
+        self.headers = {'User-Agent': common.RAND_UA}
+
     def get_media_url(self, host, media_id):
-        if youtube_resolver is None:
-            return 'plugin://plugin.video.youtube/play/?video_id=' + media_id
-        else:
-            streams = youtube_resolver.resolve(media_id)
-            streams_no_dash = [item for item in streams if item['container'] != 'mpd']
-            stream_tuples = [(item['title'], item['url']) for item in streams_no_dash]
-            return helpers.pick_source(stream_tuples)
+        try:
+            web_url = self.get_url(host, media_id)
+            html = self.net.http_GET(web_url, headers=self.headers).content
+            stream_map = urllib.unquote(re.findall('url_encoded_fmt_stream_map=([^&]+)',html)[0])
+            streams = stream_map.split(',')
+            sources = []
+            streams_mp4 = [item for item in streams if 'video%2Fmp4' in item]
+            for stream in streams_mp4:
+                quality = re.findall('quality=([^&]+)',stream)[0]
+                url=re.findall('url=([^&]+)',stream)[0]
+                sources.append((quality,urllib.unquote(url)))
+            return helpers.pick_source(sources)
+            
+        except:
+            if youtube_resolver is None:
+                return 'plugin://plugin.video.youtube/play/?video_id=' + media_id
+            else:
+                streams = youtube_resolver.resolve(media_id)
+                streams_no_dash = [item for item in streams if item['container'] != 'mpd']
+                stream_tuples = [(item['title'], item['url']) for item in streams_no_dash]
+                return helpers.pick_source(stream_tuples)
 
     def get_url(self, host, media_id):
-        return 'http://youtube.com/watch?v=%s' % media_id
+        return 'https://www.youtube.com/get_video_info?html5=1&video_id=%s' % media_id
 
     @classmethod
     def _is_enabled(cls):
