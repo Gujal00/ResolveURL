@@ -175,6 +175,8 @@ class AllDebridResolver(ResolveUrl):
     @classmethod
     def get_settings_xml(cls):
         xml = super(cls, cls).get_settings_xml()
+        # xml.append('<setting id="%s_autopick" type="bool" label="%s" default="false"/>' % (
+        #    cls.__name__, i18n('auto_primary_link')))
         xml.append(
             '<setting id="%s_auth" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=auth_ad)"/>' % (
                 cls.__name__, i18n('auth_my_account')))
