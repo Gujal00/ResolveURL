@@ -53,7 +53,8 @@ def unpack(source):
     def lookup(match):
         """Look up symbols in the synthetic symtab."""
         word  = match.group(0)
-        return symtab[unbase(word)] or word
+        word2 = symtab[int(word)] if radix == 1 else symtab[unbase(word)]
+        return word2 or word
 
     source = re.sub(r'\b\w+\b', lookup, payload)
     return _replacestrings(source)
