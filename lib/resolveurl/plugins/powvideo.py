@@ -35,11 +35,11 @@ class PowVideoResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
 
         if html:
-            var = re.search('var _0x[0-f]+=\[([^;]+)\];', html)
+            splice = re.search("\['splice'\]\(0x([0-9a-fA-F]*),0x([0-9a-fA-F]*)\);", html)
             sources = helpers.scrape_sources(html, patterns=['''src\s*:\s*["'](?P<url>http[^"']+\.mp4)["']'''])
-            if sources and var:
+            if sources and splice:
                 headers.update({'Referer': web_url})
-                sources = [(source[0], self.decode_video_url(source[1])) for source in sources]
+                sources = [(source[0], self.decode_video_url(source[1], int(splice.group(1), 16), int(splice.group(2), 16))) for source in sources]
 
                 return helpers.pick_source(sources) + helpers.append_headers(headers)
 
@@ -47,10 +47,13 @@ class PowVideoResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='http://{host}/iframe-{media_id}-954x562.html')
-        
-    def decode_video_url(self, url):
+
+    def decode_video_url(self, url, desde, num):
         tria = re.compile('[0-9a-z]{40,}', re.IGNORECASE).findall(url)[0]
         gira = tria[::-1]
-        x = gira[:2] + gira[3:]
+        if desde == 0:
+            x = gira[num:]
+        else:
+            x = gira[:desde] + gira[(desde+num):]
         
         return re.sub(tria, x, url)
