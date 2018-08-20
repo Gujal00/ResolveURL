@@ -27,7 +27,7 @@ class AnyFilesResolver(ResolveUrl):
 
     def __init__(self):
         self.net = common.Net()
-        self.user_agent = common.IE_USER_AGENT
+        self.user_agent = common.EDGE_USER_AGENT
         self.headers = {'User-Agent': self.user_agent}
 
     def get_media_url(self, host, media_id):

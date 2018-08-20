@@ -30,7 +30,7 @@ class Mp4streamResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.IE_USER_AGENT, 'Referer': web_url}
+        headers = {'User-Agent': common.EDGE_USER_AGENT, 'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
         url = re.findall('src\s*:\s*\'(.+?)\'', html)
         if url:

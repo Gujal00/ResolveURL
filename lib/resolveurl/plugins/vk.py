@@ -35,7 +35,7 @@ class VKResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         headers = {
-            'User-Agent': common.IE_USER_AGENT
+            'User-Agent': common.EDGE_USER_AGENT
         }
 
         query = urlparse.parse_qs(media_id)

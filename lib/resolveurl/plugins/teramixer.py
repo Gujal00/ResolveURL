@@ -44,7 +44,7 @@ class TeramixerResolver(ResolveUrl):
             url = base64.b64decode(url)
             if not url.startswith('aws'): url = url[1:]
 
-            stream_url = 'http://%s' % url + helpers.append_headers({'User-Agent': common.IE_USER_AGENT})
+            stream_url = 'http://%s' % url + helpers.append_headers({'User-Agent': common.EDGE_USER_AGENT})
             return stream_url
         except IndexError as e:
             if re.search("""<title>File not found or deleted - Teramixer</title>""", html):

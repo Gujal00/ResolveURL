@@ -28,7 +28,7 @@ class UpToBoxResolver(ResolveUrl):
 
     def __init__(self):
         self.net = common.Net()
-        self.user_agent = common.IE_USER_AGENT
+        self.user_agent = common.EDGE_USER_AGENT
         self.net.set_user_agent(self.user_agent)
         self.headers = {'User-Agent': self.user_agent}
 

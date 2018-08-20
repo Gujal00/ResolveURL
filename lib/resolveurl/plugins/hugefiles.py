@@ -54,7 +54,7 @@ class HugefilesResolver(ResolveUrl):
         # Re-grab data values
         data = helpers.get_hidden(html)
         data['referer'] = web_url
-        headers = {'User-Agent': common.IE_USER_AGENT}
+        headers = {'User-Agent': common.EDGE_USER_AGENT}
         logger.log_debug('HugeFiles - Requesting POST URL: %s with data: %s' % (web_url, data))
         request = urllib2.Request(web_url, data=urllib.urlencode(data), headers=headers)
 

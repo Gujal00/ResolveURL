@@ -56,7 +56,7 @@ class EcostreamResolver(ResolveUrl):
         tpm = ''.join(found_parts)
         
         # emulate click on button "Start Stream"
-        headers = ({'Referer': web_url, 'X-Requested-With': 'XMLHttpRequest', 'User-Agent': common.IE_USER_AGENT})
+        headers = ({'Referer': web_url, 'X-Requested-With': 'XMLHttpRequest', 'User-Agent': common.EDGE_USER_AGENT})
         web_url = 'http://www.ecostream.tv' + post_url
         html = self.net.http_POST(web_url, {'id': media_id, 'tpm': tpm}, headers=headers).content
         sPattern = '"url":"([^"]+)"'
@@ -67,7 +67,7 @@ class EcostreamResolver(ResolveUrl):
         stream_url = urllib2.unquote(stream_url)
         stream_url = urllib2.urlopen(urllib2.Request(stream_url, headers=headers)).geturl()
 
-        return stream_url + helpers.append_headers({'User-Agent': common.IE_USER_AGENT})
+        return stream_url + helpers.append_headers({'User-Agent': common.EDGE_USER_AGENT})
 
     def get_url(self, host, media_id):
         return 'http://www.ecostream.tv/stream/%s.html' % (media_id)

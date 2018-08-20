@@ -48,7 +48,7 @@ class FileWeedResolver(ResolveUrl):
             if 'downloadbtn222' in html:
                 r = re.search('class="downloadbtn222".*?href="([^"]+)', html, re.I | re.DOTALL)
                 if r:
-                    return r.group(1) + helpers.append_headers({'User-Agent': common.IE_USER_AGENT})
+                    return r.group(1) + helpers.append_headers({'User-Agent': common.EDGE_USER_AGENT})
 
             tries = tries + 1
 
