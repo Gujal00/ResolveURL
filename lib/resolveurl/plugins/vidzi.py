@@ -21,8 +21,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidziResolver(ResolveUrl):
     name = "vidzi"
-    domains = ["vidzi.tv"]
-    pattern = '(?://|\.)(vidzi\.tv)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ["vidzi.tv", "vidzi.nu"]
+    pattern = '(?://|\.)(vidzi\.(?:tv|nu))/(?:embed-)?([0-9a-zA-Z]+)'
     
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id), patterns=['''["']?(?:file|url)["']?\s*[:=]\s*["'](?P<url>[^"']+)''']).replace(' ', '%20')
