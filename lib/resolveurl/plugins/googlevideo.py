@@ -28,8 +28,8 @@ import urllib2
 class GoogleResolver(ResolveUrl):
     name = "googlevideo"
     domains = ["googlevideo.com", "googleusercontent.com", "get.google.com",
-               "plus.google.com", "googledrive.com", "drive.google.com", "docs.google.com", "youtube.googleapis.com", "bp.blogspot.com"]
-    pattern = 'https?://(.*?(?:\.googlevideo|\.bp\.blogspot|(?:plus|drive|get|docs)\.google|google(?:usercontent|drive|apis))\.com)/(.*?(?:videoplayback\?|[\?&]authkey|host/)*.+)'
+               "plus.google.com", "googledrive.com", "drive.google.com", "docs.google.com", "youtube.googleapis.com", "bp.blogspot.com", "blogger.com]
+    pattern = 'https?://(.*?(?:\.googlevideo|\.bp\.blogspot|blogger|(?:plus|drive|get|docs)\.google|google(?:usercontent|drive|apis))\.com)/(.*?(?:videoplayback\?|[\?&]authkey|host/)*.+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -131,6 +131,12 @@ class GoogleResolver(ResolveUrl):
             else: raise ResolverError('ID not found')
             response = self.net.http_GET(link)
             sources = self._parse_gdocs(response.content)
+        elif 'blogger.com/video.g?token=' in link:
+            # Quick hack till I figure the direction to take this plugin
+            response = self.net.http_GET(link)
+            source = re.search('''['"]play_url["']\s*:\s*["']([^"']+)''', response.content)
+            if source:
+                sources = [("Unknown Quality", source.group(1).decode('unicode-escape'))]
         return response, sources
 
     def __parse_gplus(self, html):
