@@ -16,11 +16,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
+import re
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-import re
-import random
+
 
 class RapidVideoResolver(ResolveUrl):
     name = "rapidvideo.com"
@@ -33,27 +33,32 @@ class RapidVideoResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
-        response = self.net.http_GET(web_url, headers=headers)
-        web_url = web_url.replace('/embed/','/e/')
-        headers['Referer'] = 'https://www.rapidvideo.com/'
-        formdata = {'confirm.x':random.randint(50,80),
-                    'confirm.y':random.randint(50,80),
-                    'block':1}
-        html =  self.net.http_POST(web_url, form_data=formdata, headers=headers).content
-        r = re.search('href="([^&"]+&q=[^"]+)">\n.+?>\s*([^<\n]+)',html)
-        if r:
-            sources = []
-            srcs = re.findall('href="([^&"]+&q=[^"]+)">\n.+?>\s*([^<\n]+)',html)
-            for src,qual in srcs:
-                shtml = self.net.http_POST(src, form_data=formdata, headers=headers).content
-                strurl = re.findall('source\s*src="([^"]+)',shtml)[0]
-                sources.append((qual,strurl))
-            
-            return helpers.pick_source(sources) + helpers.append_headers({'User-Agent': common.FF_USER_AGENT})
-        else:
-            raise ResolverError('File Not Found or removed')
+        html = self.net.http_GET(web_url, headers=headers).content
         
-        return strurl
+        if html:
+            srcs = re.findall(r'href="(%s&q=[^"]+)' % web_url, html, re.I)
+            if srcs:
+                sources = []
+                for src in srcs:
+                    shtml = self.net.http_GET(src, headers=headers).content
+                    strurl = helpers.parse_html5_source_list(shtml)
+                    if strurl:
+                        sources.append(strurl[0])
+                if len(sources) > 1:
+                    try: 
+                        sources.sort(key=lambda x: int(re.sub("\D", "", x[0])), reverse=True)
+                    except: 
+                        common.logger.log_debug('Scrape sources sort failed |int(re.sub("\D", "", x[0])|')
+                        try:
+                            sources.sort(key=lambda x: re.sub("[^a-zA-Z]", "", x[0]))
+                        except:
+                            common.logger.log_debug('Scrape sources sort failed |re.sub("[^a-zA-Z]", "", x[0])|')
+            else:
+                sources = helpers.parse_html5_source_list(html)
+                
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
+            
+        raise ResolverError("Video not found")
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
+        return self._default_get_url(host, media_id, template='https://www.{host}/e/{media_id}')
