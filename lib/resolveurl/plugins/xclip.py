@@ -1,5 +1,5 @@
-"""
-    plugin for ResolveURL
+'''
+    Plugin for ResolveURL
     Copyright (C) 2018 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -14,20 +14,15 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
+'''
 
-import re
-from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from lib import jsunpack, helpers
+from lib import helpers
 
 class xClipResolver(ResolveUrl):
     name = "xclip"
     domains = ['xclip.to']
     pattern = '(?://|\.)(xclip\.to)/([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id), patterns=['''file:\s*"(?P<url>[^"]+)",\n?\s*label:\s*"(?P<label>[^"]+)'''])
