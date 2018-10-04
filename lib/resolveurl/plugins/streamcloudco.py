@@ -18,9 +18,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from __resolve_generic__ import ResolveGeneric
 
+
 class StreamcloudcoResolver(ResolveGeneric):
     name = "streamcloudco"
     domains = ["streamcloud.co"]
     pattern = '(?://|\.)(streamcloud\.co)/(?:embed[/-])?([0-9A-Za-z]+)'
+    
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://{host}/embed/{media_id}') 
+        return self._default_get_url(host, media_id, template='http://{host}/embed/{media_id}')
