@@ -36,9 +36,9 @@ class CdaResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'Referer': web_url, 'User-Agent': common.FF_USER_AGENT}
-
-        player_headers = {'Cookie': 'PHPSESSID=1', 'Referer': 'http://static.cda.pl/flowplayer/flash/flowplayer.commercial-3.2.18.swf'}
+        headers = {'Referer': web_url, 'User-Agent': common.CHROME_USER_AGENT}
+		
+        player_headers = {'Cookie': 'PHPSESSID=1', 'Referer': web_url, 'User-Agent': common.CHROME_USER_AGENT}
         player_headers.update(headers)
 
         html = self.net.http_GET(web_url, headers=headers).content
@@ -69,4 +69,4 @@ class CdaResolver(ResolveUrl):
         return video_link
 
     def get_url(self, host, media_id):
-        return 'http://ebd.cda.pl/620x368/%s' % media_id
+        return 'http://ebd.cda.pl/647x500/%s' % media_id
