@@ -33,9 +33,8 @@ class TunePkResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         apiurl = 'https://api.tune.pk/v3/videos/{}'.format(media_id)
-        _type = 'videos/{}'.format(media_id)
         x_req_time = time.strftime('%a, %d %b %Y %H:%M:%S GMT',time.gmtime())
-        tunestring = '{} . {} . KH42JVbO'.format(_type, int(time.time()))
+        tunestring = 'videos/{} . {} . KH42JVbO'.format(media_id, int(time.time()))
         token = hashlib.sha1(tunestring).hexdigest()
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'X-KEY': '777750fea4d3bd585bf47dc1873619fc',
