@@ -1,7 +1,7 @@
 '''
 tunepk resolveurl plugin
 Copyright (C) 2013 icharania
-updated Copyright (C) 2017 Gujal
+updated Copyright (C) 2017 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import re,json
+import json, time, hashlib
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -32,29 +32,31 @@ class TunePkResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        response = self.net.http_GET(web_url, headers=headers)
-        html = response.content
-        if 'video has been deactivated' in html:
-            raise ResolverError('File Removed')
-
-        headers.update({'Referer': web_url})
-        hdrs = re.search("headers':\s*([^\n]+),", html)
-        if hdrs:
-            try:
-                hdrs = json.loads(hdrs.group(1))
-                headers.update(hdrs)
-            except:
-                pass
-        web_url = re.findall("requestURL = '(.*?)'", html)[0]
-        response = self.net.http_GET(web_url, headers=headers)
-        jdata = json.loads(response.content)
-        vids = jdata.get('data', {}).get('details', {}).get('player', {}).get('sources', [])
-        sources = [(vid['label'], vid['file']) for vid in vids]
-        return helpers.pick_source(sources) + helpers.append_headers(headers)
-
+        apiurl = 'https://api.tune.pk/v3/videos/{}'.format(media_id)
+        x_req_time = time.strftime('%a, %d %b %Y %H:%M:%S GMT',time.gmtime())
+        tunestring = 'videos/{} . {} . KH42JVbO'.format(media_id, int(time.time()))
+        token = hashlib.sha1(tunestring).hexdigest()
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'X-KEY': '777750fea4d3bd585bf47dc1873619fc',
+                   'X-REQ-APP': 'web',
+                   'X-REQ-TIME': x_req_time,
+                   'X-REQ-TOKEN': token}
+        try:
+            response = self.net.http_GET(apiurl, headers=headers)
+            jdata = json.loads(response.content)
+            if jdata['message'] == 'OK':
+                vids = jdata['data']['videos']['files']
+                sources = []
+                for key in vids.keys():
+                    sources.append((vids[key]['label'], vids[key]['file']))
+                headers = {'Referer': web_url,
+                           'User-Agent': common.FF_USER_AGENT}
+                return helpers.pick_source(sources) + helpers.append_headers(headers)
+        except:
+            raise ResolverError('This video has been removed due to a copyright claim.')
+        
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://embed.tune.pk/play/{media_id}')
+        return self._default_get_url(host, media_id, template='https://tune.pk/video/{media_id}/')
 
     @classmethod
     def get_settings_xml(cls):
