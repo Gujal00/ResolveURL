@@ -1,3 +1,24 @@
+[B]Version 5.0.17 (October 21, 2018)[/B]
+- Code Base Changes:
+    - jsunpack
+- Resolvers Added:
+    - vkprime
+    - myupload
+    - streamcloud
+    - flix555
+    - xclip
+- Resolvers Fixed/Updated:
+    - rapidvideo.com
+    - tunepk
+    - cda
+    - videozoo
+    - gounlimited
+    - tvlogy
+- Resolvers Removed
+    - None
+- Languages Added/Updated
+    - None
+
 [B]Version 5.0.16 (September 19, 2018)[/B]
 - Code Base Changes:
     - None
