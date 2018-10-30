@@ -1,6 +1,7 @@
 """
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2017 tknorris
+    Copyright (C) 2018 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +18,7 @@
 """
 import re
 import json
+import random
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -41,9 +43,23 @@ class StreamableResolver(ResolveUrl):
             sources = [(stream.get('height', 'Unknown'), stream['url']) for _key, stream in streams.iteritems()]
             sources = [(label, 'https:' + stream_url) if stream_url.startswith('//') else (label, stream_url) for label, stream_url in sources]
             sources.sort(key=lambda x: x[0], reverse=True)
-            return helpers.pick_source(sources) + helpers.append_headers(headers)
+            headers['Cookie'] = 'volume=0.51; muted=false; session={}'.format(self.base36encode(int(str(random.random())[2:16]))) 
+            return helpers.pick_source(sources).replace('&amp;','&') + helpers.append_headers(headers)
         else:
             raise ResolverError('JSON Not Found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/s/{media_id}')
+
+    def base36encode(self, number, alphabet='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
+        """Converts a positive integer to a base36 string."""
+        base36 = ''
+
+        if 0 <= number < len(alphabet):
+            return alphabet[number]
+
+        while number != 0:
+            number, i = divmod(number, len(alphabet))
+            base36 = alphabet[i] + base36
+
+        return base36
