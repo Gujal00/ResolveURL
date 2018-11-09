@@ -37,21 +37,30 @@ class TubePornClassicResolver(ResolveUrl):
             
             if html:
                 source = re.search('''video_url=['"]([^'"]+)['"]''', html, re.DOTALL)
+                replaceparts = re.search('''video_url\+=['"]([^'"]+)['"]''', html, re.DOTALL)
+                
                 if source:
-                    source = source.group(1).decode('utf-8')
+                    source = source.group(1)
                     replacemap = {'M':u'\u041C', 'A':u'\u0410', 'B':u'\u0412', 'C':u'\u0421', 'E':u'\u0415', '=':'~'}
 
                     for key in replacemap:
                         source = source.replace(replacemap[key], key)
 
-                    return self.net.http_GET(base64.b64decode(source), headers=headers).get_url() + helpers.append_headers(headers)
+                    videourl = base64.b64decode(source)
+                    if replaceparts:
+                        replaceparts = [x for x in replaceparts.group(1).split('||') if x]
+                        videourl = re.sub('/get_file/\d+/[0-9a-z]{32}/', replaceparts[0], videourl)
+                        videourl += '&' if '?' in videourl else '?'
+                        videourl += 'lip=' + replaceparts[1] + '&lt=' + replaceparts[2]
+                        
+                        return self.net.http_GET(videourl, headers=headers).get_url() + helpers.append_headers(headers)
 
             raise ResolverError('File not found')
         except:
             raise ResolverError('File not found')
     
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://www.{host}/videos/{media_id}/')
+        return self._default_get_url(host, media_id, template='https://www.{host}/videos/{media_id}/')
         
     @classmethod
     def _is_enabled(cls):
