@@ -20,10 +20,12 @@ from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
+import re
+
 class KSplayerResolver(ResolveUrl):
     name = 'ksplayer'
     domains = ['ksplayer.com']
-    pattern = '(?://|\.)(ksplayer\.com)/(?:plugins/mediaplayer/site/_embed\.php\?u=|player/)([A-Za-z0-9]+)'
+    pattern = '(?://|\.)(ksplayer\.com)/(?:plugins/mediaplayer/site/_embed\.php\?u=|player/|embed/)([A-Za-z0-9]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -34,11 +36,18 @@ class KSplayerResolver(ResolveUrl):
                    'Referer': web_url}
         response = self.net.http_GET(web_url, headers=headers)
         html = response.content
-        sources = helpers.scrape_sources(html)
+        sources = []
+        for r in re.finditer('''href=["']?(?P<url>[^"']+)["']?>DOWNLOAD <span>(?P<label>[^<]+)''', html, re.DOTALL):
+            match = r.groupdict()
+            stream_url = match['url'].replace('&amp;', '&')
+            label = match.get('label', '0')
+            sources.append([label, stream_url])
+        if len(sources) > 1:
+            sources.sort(key=lambda x: int(re.sub("\D", "", x[0])), reverse=True)
         return helpers.pick_source(sources) + helpers.append_headers(headers)
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/player/{media_id}/')
+        return self._default_get_url(host, media_id, template='https://stream.{host}/download/{media_id}/')
 
     @classmethod
     def _is_enabled(cls):
