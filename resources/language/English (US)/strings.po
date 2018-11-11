@@ -203,3 +203,7 @@ msgstr "AllDebrid Authorization Reset"
 msgctxt "#33046"
 msgid "AllDebrid Resolver Authorized"
 msgstr "AllDebrid Resolver Authorized"
+
+msgctxt "#33047"
+msgid "Enable PopUps"
+msgstr "Enable PopUps"

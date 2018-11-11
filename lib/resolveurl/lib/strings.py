@@ -63,5 +63,6 @@ STRINGS = {
     'vshareeu_auth_header': 33043,
     'flashx_auth_header': 33044,
     'ad_auth_reset': 33045,
-    'ad_authorized': 33046
+    'ad_authorized': 33046,
+    'enable_popups': 33047
 }

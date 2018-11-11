@@ -24,9 +24,11 @@ import resolveurl
 from resolveurl import common
 
 resolver_cache = {}
+ALLOW_POPUPS = False if common.get_setting('allow_popups') == "false" else True
+
 
 class HostedMediaFile:
-    '''
+    """
     This class represents a piece of media (file or stream) that is hosted
     somewhere on the internet. It may be instantiated with EITHER the url to the
     web page associated with the media file, OR the host name and a unique
@@ -60,15 +62,15 @@ class HostedMediaFile:
 
         If you pass ``url`` you must not pass ``host`` or ``media_id``. You
         must pass either ``url`` or ``host`` AND ``media_id``.
-    '''
+    """
 
     def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None):
-        '''
+        """
         Args:
             url (str): a URL to a web page that represents a piece of media.
             host (str): the host of the media to be represented.
             media_id (str): the unique ID given to the media by the host.
-        '''
+        """
         if not url and not (host and media_id) or (url and (host or media_id)):
             raise ValueError('Set either url, or host AND media_id. No other combinations are valid.')
         self._url = 'http:%s' % url if url.startswith("//") else url
@@ -121,32 +123,32 @@ class HostedMediaFile:
         return domain
 
     def get_url(self):
-        '''
+        """
         Returns the URL of this :class:`HostedMediaFile`.
-        '''
+        """
         return self._url
 
     def get_host(self):
-        '''
+        """
         Returns the host of this :class:`HostedMediaFile`.
-        '''
+        """
         return self._host
 
     def get_media_id(self):
-        '''
+        """
         Returns the media_id of this :class:`HostedMediaFile`.
-        '''
+        """
         return self._media_id
 
     def get_resolvers(self, validated=False):
-        '''
+        """
         Returns the list of resolvers of this :class:`HostedMediaFile`.
-        '''
+        """
         if validated: self.valid_url()
         return self.__resolvers
         
-    def resolve(self, include_universal=True, allow_popups=True):
-        '''
+    def resolve(self, include_universal=True, allow_popups=ALLOW_POPUPS):
+        """
         Resolves this :class:`HostedMediaFile` to a media URL.
 
         Example::
@@ -156,7 +158,7 @@ class HostedMediaFile:
         Args:
             include_universal: if False, then universal resolvers are not allowed to be resolvers
             allow_popups: If False, then any function dependent on a pop-up dialog (e.g. captcha, /pair, etc) will fail.
-            
+
         .. note::
 
             This method currently uses just the highest priority resolver to
@@ -168,13 +170,13 @@ class HostedMediaFile:
         Returns:
             A direct URL to the media file that is playable by XBMC, or False
             if this was not possible.
-        '''
+        """
         resolveurl.ALLOW_POPUPS = allow_popups
         for resolver in self.__resolvers:
             try:
                 if include_universal or not resolver.isUniversal():
                     if resolver.valid_url(self._url, self._host):
-                        common.logger.log_debug('Resolving using %s plugin' % (resolver.name))
+                        common.logger.log_debug('Resolving using %s plugin' % resolver.name)
                         resolver.login()
                         self._host, self._media_id = resolver.get_host_and_id(self._url)
                         stream_url = resolver.get_media_url(self._host, self._media_id)
@@ -195,7 +197,7 @@ class HostedMediaFile:
         return False
 
     def valid_url(self):
-        '''
+        """
         Returns True if the ``HostedMediaFile`` can be resolved.
 
         .. note::
@@ -208,7 +210,7 @@ class HostedMediaFile:
                 if HostedMediaFile('http://youtube.com/watch?v=ABC123XYZ'):
                     print 'resolvable!'
 
-        '''
+        """
         if self._valid_url is None:
             resolvers = []
             for resolver in self.__resolvers:
@@ -224,12 +226,12 @@ class HostedMediaFile:
         return self._valid_url
 
     def __test_stream(self, stream_url):
-        '''
+        """
         Returns True if the stream_url gets a non-failure http status (i.e. <400) back from the server
         otherwise return False
 
         Intended to catch stream urls returned by resolvers that would fail to playback
-        '''
+        """
         # parse_qsl doesn't work because it splits elements by ';' which can be in a non-quoted UA
         try: headers = dict([item.split('=') for item in (stream_url.split('|')[1]).split('&')])
         except: headers = {}

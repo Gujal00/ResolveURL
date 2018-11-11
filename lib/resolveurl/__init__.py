@@ -253,6 +253,7 @@ def _update_settings_xml():
         '<settings>',
         '\t<category label="ResolveURL">',
         '\t\t<setting default="true" id="allow_universal" label="%s" type="bool"/>' % (common.i18n('enable_universal')),
+        '\t\t<setting default="true" id="allow_popups" label="%s" type="bool"/>' % (common.i18n('enable_popups')),
         '\t\t<setting default="true" id="auto_pick" label="%s" type="bool"/>' % (common.i18n('auto_pick')),
         '\t\t<setting default="true" id="use_cache" label="%s" type="bool"/>' % (common.i18n('use_function_cache')),
         '\t\t<setting id="reset_cache" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_cache)"/>' % (common.i18n('reset_function_cache')),
