@@ -1,3 +1,14 @@
+[B]Version 2.0.03 (Nov 10, 2018)[/B]
+- Code Base Changes:
+    - none
+- Resolvers Added:
+    - animeidhentai
+- Resolvers Fixed/Updated:
+    - ksplayer
+    - tubepornclassic
+- Resolvers Removed
+    - none
+
 [B]Version 2.0.02 (Mar 01, 2018)[/B]
 - Code Base Changes:
     - none
