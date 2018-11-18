@@ -29,8 +29,8 @@ logger.disable()
 
 class HugefilesResolver(ResolveUrl):
     name = "hugefiles"
-    domains = ["hugefiles.net"]
-    pattern = '(?://|\.)(hugefiles\.net)/([0-9a-zA-Z/]+)'
+    domains = ["hugefiles.net", "hugefiles.cc"]
+    pattern = '(?://|\.)(hugefiles\.(?:net|cc))/([0-9a-zA-Z/]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -65,7 +65,7 @@ class HugefilesResolver(ResolveUrl):
         return stream_url
 
     def get_url(self, host, media_id):
-        return 'http://hugefiles.net/%s' % media_id
+        return 'http://hugefiles.cc/%s' % media_id
 
     @classmethod
     def isPopup(self):
