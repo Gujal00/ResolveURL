@@ -56,3 +56,7 @@ class UploadXResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return 'https://uploadx.link/%s' % media_id
+
+    @classmethod
+    def isPopup(self):
+        return True

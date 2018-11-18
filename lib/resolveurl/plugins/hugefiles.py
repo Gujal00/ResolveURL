@@ -66,3 +66,7 @@ class HugefilesResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return 'http://hugefiles.net/%s' % media_id
+
+    @classmethod
+    def isPopup(self):
+        return True

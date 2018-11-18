@@ -24,7 +24,6 @@ import resolveurl
 from resolveurl import common
 
 resolver_cache = {}
-ALLOW_POPUPS = False if common.get_setting('allow_popups') == "false" else True
 
 
 class HostedMediaFile:
@@ -64,7 +63,7 @@ class HostedMediaFile:
         must pass either ``url`` or ``host`` AND ``media_id``.
     """
 
-    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None):
+    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None, include_popups=None):
         """
         Args:
             url (str): a URL to a web page that represents a piece of media.
@@ -84,7 +83,7 @@ class HostedMediaFile:
         else:
             self._domain = self.__top_domain(self._host)
 
-        self.__resolvers = self.__get_resolvers(include_disabled, include_universal)
+        self.__resolvers = self.__get_resolvers(include_disabled, include_universal, include_popups)
         if not url:
             for resolver in self.__resolvers:  # Find a valid URL
                 try:
@@ -95,19 +94,23 @@ class HostedMediaFile:
                     # Shity resolver. Ignore
                     continue
 
-    def __get_resolvers(self, include_disabled, include_universal):
+    def __get_resolvers(self, include_disabled, include_universal, include_popups):
         if include_universal is None:
             include_universal = common.get_setting('allow_universal') == "true"
 
+        if include_popups is None:
+            include_popups = common.get_setting('allow_popups') == "true"
+
         klasses = resolveurl.relevant_resolvers(self._domain, include_universal=include_universal,
-                                                 include_external=True, include_disabled=include_disabled, order_matters=True)
+                                                include_popups=include_popups, include_external=True,
+                                                include_disabled=include_disabled, order_matters=True)
         resolvers = []
         for klass in klasses:
             if klass in resolver_cache:
-                common.logger.log_debug('adding resolver from cache: %s' % (klass))
+                common.logger.log_debug('adding resolver from cache: %s' % klass)
                 resolvers.append(resolver_cache[klass])
             else:
-                common.logger.log_debug('adding resolver to cache: %s' % (klass))
+                common.logger.log_debug('adding resolver to cache: %s' % klass)
                 resolver_cache[klass] = klass()
                 resolvers.append(resolver_cache[klass])
         return resolvers
@@ -147,7 +150,7 @@ class HostedMediaFile:
         if validated: self.valid_url()
         return self.__resolvers
         
-    def resolve(self, include_universal=True, allow_popups=ALLOW_POPUPS):
+    def resolve(self, include_universal=True, allow_popups=True):
         """
         Resolves this :class:`HostedMediaFile` to a media URL.
 
@@ -157,7 +160,9 @@ class HostedMediaFile:
 
         Args:
             include_universal: if False, then universal resolvers are not allowed to be resolvers
-            allow_popups: If False, then any function dependent on a pop-up dialog (e.g. captcha, /pair, etc) will fail.
+
+            allow_popups: If False, then any resolver dependent on a pop-up dialog (e.g. captcha, /pair, etc) are not
+            allowed to be resolvers (does not include premium or debrid hosts)
 
         .. note::
 
@@ -171,10 +176,9 @@ class HostedMediaFile:
             A direct URL to the media file that is playable by XBMC, or False
             if this was not possible.
         """
-        resolveurl.ALLOW_POPUPS = allow_popups
         for resolver in self.__resolvers:
             try:
-                if include_universal or not resolver.isUniversal():
+                if (include_universal or not resolver.isUniversal()) and (allow_popups or not resolver.isPopup()):
                     if resolver.valid_url(self._url, self._host):
                         common.logger.log_debug('Resolving using %s plugin' % resolver.name)
                         resolver.login()
@@ -237,7 +241,7 @@ class HostedMediaFile:
         except: headers = {}
         for header in headers:
             headers[header] = urllib.unquote_plus(headers[header])
-        common.logger.log_debug('Setting Headers on UrlOpen: %s' % (headers))
+        common.logger.log_debug('Setting Headers on UrlOpen: %s' % headers)
 
         try:
             import ssl

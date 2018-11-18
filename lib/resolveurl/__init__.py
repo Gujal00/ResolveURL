@@ -40,14 +40,12 @@ from resolveurl.resolver import ResolveUrl
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from plugins import *
 
-common.logger.log_notice('Initializing ResolveURL version: %s' % (common.addon_version))
+common.logger.log_notice('Initializing ResolveURL version: %s' % common.addon_version)
 MAX_SETTINGS = 75
 
 PLUGIN_DIRS = []
 host_cache = {}
 
-# Terrible hack to allow hmf to set a global var to stop pop-ups for all resolvers during resolve()
-ALLOW_POPUPS = True
 
 def add_plugin_dirs(dirs):
     global PLUGIN_DIRS
@@ -56,9 +54,10 @@ def add_plugin_dirs(dirs):
     else:
         PLUGIN_DIRS += dirs
 
+
 def load_external_plugins():
     for d in PLUGIN_DIRS:
-        common.logger.log_debug('Adding plugin path: %s' % (d))
+        common.logger.log_debug('Adding plugin path: %s' % d)
         sys.path.insert(0, d)
         for filename in os.listdir(d):
             if not filename.startswith('__') and filename.endswith('.py'):
@@ -67,7 +66,8 @@ def load_external_plugins():
                 sys.modules[mod_name] = imp
                 common.logger.log_debug('Loaded %s as %s from %s' % (imp, mod_name, filename))
 
-def relevant_resolvers(domain=None, include_universal=None, include_external=False, include_disabled=False, order_matters=False):
+
+def relevant_resolvers(domain=None, include_universal=None, include_popups=None, include_external=False, include_disabled=False, order_matters=False):
     if include_external:
         load_external_plugins()
     
@@ -76,23 +76,27 @@ def relevant_resolvers(domain=None, include_universal=None, include_external=Fal
 
     if include_universal is None:
         include_universal = common.get_setting('allow_universal') == "true"
+
+    if include_popups is None:
+        include_popups = common.get_setting('allow_popups') == "true"
         
     classes = ResolveUrl.__class__.__subclasses__(ResolveUrl) + ResolveUrl.__class__.__subclasses__(ResolveGeneric)
     relevant = []
     for resolver in classes:
         if include_disabled or resolver._is_enabled():
-            if include_universal or not resolver.isUniversal():
+            if (include_universal or not resolver.isUniversal()) and (include_popups or not resolver.isPopup()):
                 if domain is None or ((domain and any(domain in res_domain.lower() for res_domain in resolver.domains)) or '*' in resolver.domains):
                     relevant.append(resolver)
 
     if order_matters:
         relevant.sort(key=lambda x: x._get_priority())
 
-    common.logger.log_debug('Relevant Resolvers: %s' % (relevant))
+    common.logger.log_debug('Relevant Resolvers: %s' % relevant)
     return relevant
 
+
 def resolve(web_url):
-    '''
+    """
     Resolve a web page to a media stream.
 
     It is usually as simple as::
@@ -120,19 +124,20 @@ def resolve(web_url):
     Returns:
         If the ``web_url`` could be resolved, a string containing the direct
         URL to the media file, if not, returns ``False``.
-    '''
+    """
     source = HostedMediaFile(url=web_url)
     return source.resolve()
 
+
 def filter_source_list(source_list):
-    '''
+    """
     Takes a list of :class:`HostedMediaFile`s representing web pages that are
     thought to be associated with media content. If no resolver plugins exist
     to resolve a :class:`HostedMediaFile` to a link to a media file it is
     removed from the list.
 
     Args:
-        urls (list of :class:`HostedMediaFile`): A list of
+        source_list (list of :class:`HostedMediaFile`): A list of
         :class:`HostedMediaFiles` representing web pages that are thought to be
         associated with media content.
 
@@ -140,12 +145,12 @@ def filter_source_list(source_list):
         The same list of :class:`HostedMediaFile` but with any that can't be
         resolved by a resolver plugin removed.
 
-    '''
+    """
     return [source for source in source_list if source]
 
 
 def choose_source(sources):
-    '''
+    """
     Given a list of :class:`HostedMediaFile` representing web pages that are
     thought to be associated with media content this function checks which are
     playable and if there are more than one it pops up a dialog box displaying
@@ -170,7 +175,7 @@ def choose_source(sources):
         The chosen :class:`HostedMediaFile` or ``False`` if the dialog is
         cancelled or none of the :class:`HostedMediaFile` are resolvable.
 
-    '''
+    """
     sources = filter_source_list(sources)
     if not sources:
         common.logger.log_warning('no playable streams found')
@@ -185,19 +190,20 @@ def choose_source(sources):
         else:
             return False
 
+
 def scrape_supported(html, regex=None, host_only=False):
-    '''
+    """
     returns a list of links scraped from the html that are supported by resolveurl
-    
+
     args:
         html: the html to be scraped
         regex: an optional argument to override the default regex which is: href\s*=\s*["']([^'"]+
         host_only: an optional argument if true to do only host validation vs full url validation (default False)
-    
+
     Returns:
         a list of links scraped from the html that passed validation
-    
-    '''
+
+    """
     if regex is None: regex = '''href\s*=\s*['"]([^'"]+)'''
     links = []
     for match in re.finditer(regex, html):
@@ -222,8 +228,9 @@ def scrape_supported(html, regex=None, host_only=False):
             links.append(stream_url)
     return links
 
+
 def display_settings():
-    '''
+    """
     Opens the settings dialog for :mod:`resolveurl` and its plugins.
 
     This can be called from your addon to provide access to global
@@ -234,15 +241,16 @@ def display_settings():
 
         All changes made to these setting by the user are global and will
         affect any addon that uses :mod:`resolveurl` and its plugins.
-    '''
+    """
     _update_settings_xml()
     common.open_settings()
 
+
 def _update_settings_xml():
-    '''
+    """
     This function writes a new ``resources/settings.xml`` file which contains
     all settings for this addon and its plugins.
-    '''
+    """
     try:
         os.makedirs(os.path.dirname(common.settings_file))
     except OSError:
@@ -268,7 +276,7 @@ def _update_settings_xml():
     resolvers = sorted(resolvers, key=lambda x: x.name.upper())
     for resolver in resolvers:
         if resolver.isUniversal():
-            new_xml.append('\t\t<setting label="%s" type="lsep"/>' % (resolver.name))
+            new_xml.append('\t\t<setting label="%s" type="lsep"/>' % resolver.name)
             new_xml += ['\t\t' + line for line in resolver.get_settings_xml()]
     new_xml.append('\t</category>')
     new_xml.append('\t<category label="%s 1">' % (common.i18n('resolvers')))
@@ -282,7 +290,7 @@ def _update_settings_xml():
                 new_xml.append('\t<category label="%s %s">' % (common.i18n('resolvers'), cat_count))
                 cat_count += 1
                 i = 0
-            new_xml.append('\t\t<setting label="%s" type="lsep"/>' % (resolver.name))
+            new_xml.append('\t\t<setting label="%s" type="lsep"/>' % resolver.name)
             res_xml = resolver.get_settings_xml()
             new_xml += ['\t\t' + line for line in res_xml]
             i += len(res_xml) + 1
@@ -306,5 +314,6 @@ def _update_settings_xml():
             raise
     else:
         common.logger.log_debug('No Settings Update Needed')
+
 
 _update_settings_xml()

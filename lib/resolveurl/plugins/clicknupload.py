@@ -56,3 +56,7 @@ class ClickNUploadResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return 'https://clicknupload.org/%s' % media_id
+
+    @classmethod
+    def isPopup(self):
+        return True

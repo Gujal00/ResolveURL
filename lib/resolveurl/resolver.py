@@ -13,16 +13,18 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 This module defines the interfaces that you can implement when writing
 your URL resolving plugin.
-'''
+"""
 import os
 import re
 import abc
 from resolveurl import common
 
 abstractstaticmethod = abc.abstractmethod
+
+
 class abstractclassmethod(classmethod):
     __isabstractmethod__ = True
 
@@ -30,8 +32,10 @@ class abstractclassmethod(classmethod):
         callable.__isabstractmethod__ = True
         super(abstractclassmethod, self).__init__(callable)
 
+
 class ResolverError(Exception):
     pass
+
 
 class ResolveUrl(object):
     __metaclass__ = abc.ABCMeta
@@ -45,7 +49,7 @@ class ResolveUrl(object):
 
     @abc.abstractmethod
     def get_media_url(self, host, media_id):
-        '''
+        """
         The method that does the actual resolving. You must implement this method.
 
         Args:
@@ -55,12 +59,12 @@ class ResolveUrl(object):
         Returns:
             If the media_id could be resolved, a string containing the direct
             URL to the media file, if not, raises ResolverError.
-        '''
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
     def get_url(self, host, media_id):
-        '''
+        """
         The method that converts a host and media_id into a valid url
 
         Args:
@@ -69,11 +73,11 @@ class ResolveUrl(object):
 
         Returns:
             a valid url on the host this resolver resolves
-        '''
+        """
         raise NotImplementedError
 
     def get_host_and_id(self, url):
-        '''
+        """
         The method that converts a host and media_id into a valid url
 
         Args:
@@ -82,7 +86,7 @@ class ResolveUrl(object):
         Returns:
             host (str): the host the link is on
             media_id (str): the media_id the can be returned by get_host_and_id
-        '''
+        """
         r = re.search(self.pattern, url, re.I)
         if r:
             return r.groups()
@@ -90,14 +94,14 @@ class ResolveUrl(object):
             return False
 
     def valid_url(self, url, host):
-        '''
+        """
         Determine whether this plugin is capable of resolving this URL. You must
         implement this method.
 
         Returns:
             True if this plugin thinks it can handle the web_url or host
             otherwise False.
-        '''
+        """
         if isinstance(host, basestring):
             host = host.lower()
         
@@ -108,23 +112,31 @@ class ResolveUrl(object):
 
     @classmethod
     def isUniversal(cls):
-        '''
-            You need to override this to return True, if you are implementing a univeral resolver
-            like real-debrid etc., which handles multiple hosts
-        '''
+        """
+        You need to override this to return True, if you are implementing a universal resolver
+        like real-debrid etc., which handles multiple hosts
+        """
+        return False
+
+    @classmethod
+    def isPopup(cls):
+        """
+        You need to override this to return True, if you are implementing a resolver like openload etc.,
+        which handles pairing or captcha hosts
+        """
         return False
 
     def login(self):
-        '''
+        """
         This method should perform the login to the file host site. This will
         normally involve posting credentials (stored in your plugin's settings)
         to a web page which will set cookies.
-        '''
+        """
         return True
 
     @classmethod
     def get_settings_xml(cls, include_login=True):
-        '''
+        """
         This method should return XML which describes the settings you would
         like for your plugin. You should make sure that the ``id`` starts
         with your plugins class name (which can be found using
@@ -136,7 +148,7 @@ class ResolveUrl(object):
 
         Returns:
             A list containing XML elements that will be valid in settings.xml
-        '''
+        """
         xml = [
             '<setting id="%s_priority" type="number" label="%s" default="100"/>' % (cls.__name__, common.i18n('priority')),
             '<setting id="%s_enabled" ''type="bool" label="%s" default="true"/>' % (cls.__name__, common.i18n('enabled'))

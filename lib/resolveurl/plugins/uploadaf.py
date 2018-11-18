@@ -52,3 +52,7 @@ class UploadAfResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return 'https://upload.mn/%s' % (media_id)
+
+    @classmethod
+    def isPopup(self):
+        return True

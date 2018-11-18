@@ -104,3 +104,7 @@ class OpenLoadResolver(ResolveUrl):
         xml.append('<setting id="%s_key" type="text" label="    %s" default="" option="hidden" visible="eq(-2,true)"/>' % (cls.__name__, i18n('decrypt_key')))
         xml.append('<setting id="%s_etag" type="text" default="" visible="false"/>' % (cls.__name__))
         return xml
+
+    @classmethod
+    def isPopup(self):
+        return True
