@@ -25,7 +25,7 @@ STRINGS = {
     'auto_update': 33005,
     'update_url': 33006,
     'decrypt_key': 33007,
-    'thevideo_auth_header': 33008,
+    'vevio_auth_header': 33008,
     'vidup_auth_header': 33009,
     'enable_universal': 33010,
     'auto_pick': 33011,

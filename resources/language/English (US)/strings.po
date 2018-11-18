@@ -49,8 +49,8 @@ msgid "Decryption Key"
 msgstr "Decryption Key"
 
 msgctxt "#33008"
-msgid "TheVideo.me Stream Authorization"
-msgstr "TheVideo.me Stream Authorization"
+msgid "Vev.io Stream Authorization"
+msgstr "Vev.io Stream Authorization"
 
 msgctxt "#33009"
 msgid "VidUP.me Stream Authorization"
