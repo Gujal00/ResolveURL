@@ -23,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VidCloudResolver(ResolveUrl):
     name = 'vidcloud'
     domains = ['vidcloud.co', 'loadvid.online', 'vcstream.to']
-    pattern = '(?://|\.)((?:vidcloud\.co|loadvid\.online|vcstream\.to))/(?:embed|v)/([0-9a-zA-Z]+)'
+    pattern = '(?://|\.)((?:vidcloud\.co|loadvid\.online|vcstream\.to))/(?:embed|v|player\?fid=)/([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -35,7 +35,8 @@ class VidCloudResolver(ResolveUrl):
 
         if html:
             sources = helpers.scrape_sources(html.replace("\\n", "").replace("\\", ""), patterns=[
-                '''file":\s*"(?P<url>[^"]+)'''], generic_patterns=False)
+                '''file":\s*"(?P<url>[^"]+)''', '''src":\s*"(?P<url>[^"]+)(?:[^}>\]]+)label":\s*"(?P<label>[^"]+)'''],
+                                             generic_patterns=False)
             if sources:
                 return helpers.pick_source(sources) + helpers.append_headers(headers)
 
