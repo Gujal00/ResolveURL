@@ -1,6 +1,6 @@
 '''
-vivo.sx resolveurl plugin
-Copyright (C) 2015 y2000j
+Plugin for ResolveURL
+Copyright (C) 2018 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import re
-import base64
-import json
+from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -32,20 +31,16 @@ class VivosxResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': web_url}
+        html = self.net.http_GET(web_url, headers=headers).content
 
-        # get landing page
-        resp = self.net.http_GET(web_url, headers={'Referer': web_url})
-        html = resp.content
+        r = re.search(r'<div\s*id="player"[^>]+data-stream="([^"]+)', html)
+        
+        if r:
+            return r.group(1).decode('base64') + helpers.append_headers(headers)
 
-        r = re.search(r'Core\.InitializeStream \(\'(.*?)\'\)', html)
-        if not r: raise ResolverError('page structure changed')
-
-        b = base64.b64decode(r.group(1))
-        j = json.loads(b)
-
-        if len(j) == 0: raise ResolverError('video not found')
-
-        return j[0]
+        raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
-        return 'http://vivo.sx/%s' % media_id
+        return 'https://vivo.sx/%s' % media_id
