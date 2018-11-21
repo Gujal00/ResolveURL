@@ -79,6 +79,8 @@ def relevant_resolvers(domain=None, include_universal=None, include_popups=None,
 
     if include_popups is None:
         include_popups = common.get_setting('allow_popups') == "true"
+    if include_popups is False:
+        common.logger.log_debug('Resolvers that require popups have been disabled')
         
     classes = ResolveUrl.__class__.__subclasses__(ResolveUrl) + ResolveUrl.__class__.__subclasses__(ResolveGeneric)
     relevant = []
