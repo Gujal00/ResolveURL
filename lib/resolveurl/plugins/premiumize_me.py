@@ -15,7 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
 import re
 import urllib
 import json
@@ -42,7 +41,7 @@ class PremiumizeMeResolver(ResolveUrl):
         self.scheme = 'https' if self.get_setting('use_https') == 'true' else 'http'
         self.username = self.get_setting('username')
         self.password = self.get_setting('password')
-        self.headers = {'User-Agent': USER_AGENT}
+        self.headers = {'User-Agent': common.RAND_UA}
 
     def get_media_url(self, host, media_id):
         cached = self.__check_cache(media_id)
@@ -62,7 +61,7 @@ class PremiumizeMeResolver(ResolveUrl):
             raise ResolverError('Unexpected Response Received')
 
         logger.log_debug('Premiumize.me: Resolved to %s' % link)
-        return link + helpers.append_headers({'User-Agent': common.CHROME_USER_AGENT})
+        return link + helpers.append_headers(self.headers)
 
     def get_url(self, host, media_id):
         return media_id
