@@ -41,7 +41,7 @@ class PremiumizeMeResolver(ResolveUrl):
         self.scheme = 'https' if self.get_setting('use_https') == 'true' else 'http'
         self.username = self.get_setting('username')
         self.password = self.get_setting('password')
-        self.headers = {'User-Agent': common.RAND_UA}
+        self.headers = {'User-Agent': common.CHROME_USER_AGENT}
 
     def get_media_url(self, host, media_id):
         cached = self.__check_cache(media_id)
