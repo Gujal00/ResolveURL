@@ -1,3 +1,18 @@
+[B]Version 5.0.19 (December 05, 2018)[/B]
+- Code Base Changes:
+    - new sorting method
+- Resolvers Added:
+    - fembed
+    - irshare
+- Resolvers Fixed/Updated:
+    - premiumize
+    - vidtodo
+    - vivosx
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - none
+
 [B]Version 5.0.18 (November 20, 2018)[/B]
 - Code Base Changes:
     - option to globally disable hosts that use popups
