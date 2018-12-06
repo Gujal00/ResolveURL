@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -37,10 +36,7 @@ class MehlizMoviesResolver(ResolveUrl):
         if html:
             sources = helpers.parse_sources_list(html)
             if sources:
-                if len(sources) > 1:
-                    try: sources.sort(key=lambda x: int(re.sub("\D", "", x[0])), reverse=True)
-                    except: common.logger.log_debug('Scrape sources sort failed |int(re.sub("\D", "", x[0])|')
-                    
+                sources = helpers.sort_sources_list(sources)
                 return helpers.pick_source(sources) + helpers.append_headers(headers)
             
         raise ResolverError('Video not found')

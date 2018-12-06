@@ -85,6 +85,18 @@ def get_packed_data(html):
         
     return packed_data
 
+def sort_sources_list(sources):
+    if len(sources) > 1:
+        try:
+            sources.sort(key=lambda x: int(re.sub("\D", "", x[0])), reverse=True)
+        except:
+            common.logger.log_debug('Scrape sources sort failed |int(re.sub("\D", "", x[0])|')
+            try:
+                sources.sort(key=lambda x: re.sub("[^a-zA-Z]", "", x[0]))
+            except:
+                common.logger.log_debug('Scrape sources sort failed |re.sub("[^a-zA-Z]", "", x[0])|')
+    return sources
+
 def parse_sources_list(html):
     sources = []
     match = re.search('''['"]?sources['"]?\s*:\s*\[(.*?)\]''', html, re.DOTALL)
@@ -156,12 +168,7 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
     source_list = list(set(source_list))
     
     common.logger.log(source_list)
-    if len(source_list) > 1:
-        try: source_list.sort(key=lambda x: int(re.sub("\D", "", x[0])), reverse=True)
-        except: 
-            common.logger.log_debug('Scrape sources sort failed |int(re.sub("\D", "", x[0])|')
-            try: source_list.sort(key=lambda x: re.sub("[^a-zA-Z]", "", x[0]))
-            except: common.logger.log_debug('Scrape sources sort failed |re.sub("[^a-zA-Z]", "", x[0])|')
+    source_list = sort_sources_list(source_list)
 
     return source_list
 

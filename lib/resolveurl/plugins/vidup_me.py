@@ -44,11 +44,7 @@ class VidUpMeResolver(ResolveUrl):
                     vt_html = self.net.http_GET(vt_url, headers=headers).content
                     vt = re.search('''\|([-\w]{50,})''', vt_html)
                     if vt:
-                        if len(sources) > 1:
-                            try:
-                                sources.sort(key=lambda x: int(re.sub("\D", '', x[0])), reverse=True)
-                            except:
-                                common.logger.log_debug('Scrape sources sort failed |int(re.sub(r"""\D""", '', x[0])|')
+                        sources = helpers.sort_sources_list(sources)
                         params = {'direct': 'false', 'ua': 1, 'vt': vt.group(1)}
                         return helpers.pick_source(sources) + '?' + urllib.urlencode(params) + helpers.append_headers(headers)
                     else:

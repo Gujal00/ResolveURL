@@ -15,7 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-import re
 import json
 from lib import helpers
 from resolveurl import common
@@ -42,12 +41,7 @@ class FembedResolver(ResolveUrl):
                 if js_data.get('success'):
                     sources = [(i.get('label'), 'https://www.%s%s' % (host, i.get('file'))) for i in js_data.get('data') if i.get('type') == 'mp4']
                     common.logger.log(sources)
-                    if len(sources) > 1:
-                        try: sources.sort(key=lambda x: int(re.sub("\D", "", x[0])), reverse=True)
-                        except: 
-                            common.logger.log_debug('Scrape sources sort failed |int(re.sub("\D", "", x[0])|')
-                            try: sources.sort(key=lambda x: re.sub("[^a-zA-Z]", "", x[0]))
-                            except: common.logger.log_debug('Scrape sources sort failed |re.sub("[^a-zA-Z]", "", x[0])|')
+                    sources = helpers.sort_sources_list(sources)
                     return helpers.pick_source(sources) + helpers.append_headers(headers)
                 else:
                     raise Exception(js_data.get('data'))

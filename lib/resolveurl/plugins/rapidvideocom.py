@@ -49,15 +49,7 @@ class RapidVideoResolver(ResolveUrl):
                 strurl = helpers.parse_html5_source_list(shtml)
                 if strurl:
                     sources.append(strurl[0])
-            if len(sources) > 1:
-                try: 
-                    sources.sort(key=lambda x: int(re.sub("\D", "", x[0])), reverse=True)
-                except: 
-                    common.logger.log_debug('Scrape sources sort failed |int(re.sub("\D", "", x[0])|')
-                    try:
-                        sources.sort(key=lambda x: re.sub("[^a-zA-Z]", "", x[0]))
-                    except:
-                        common.logger.log_debug('Scrape sources sort failed |re.sub("[^a-zA-Z]", "", x[0])|')
+            sources = helpers.sort_sources_list(sources)
         else:
             sources = helpers.parse_html5_source_list(html)
         
