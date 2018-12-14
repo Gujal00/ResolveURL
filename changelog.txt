@@ -1,3 +1,22 @@
+[B]Version 5.0.20 (December 13, 2018)[/B]
+- Code Base Changes:
+    - updated Premiumize to use new API
+    - case-insensitive sorting
+    - increase supported tld length
+- Resolvers Added:
+    - khatriuploads
+    - 24hd
+    - fileholic
+    - movierulz
+- Resolvers Fixed/Updated:
+    - premiumize
+    - thevid
+- Resolvers Removed
+    - flixtor
+- Languages Added/Updated
+    - English
+    - English(US)
+
 [B]Version 5.0.19 (December 05, 2018)[/B]
 - Code Base Changes:
     - new sorting method
