@@ -39,7 +39,7 @@ class PremiumizeMeResolver(ResolveUrl):
         self.patterns = []
         self.net = common.Net()
         self.password = self.get_setting('password')
-        self.headers = {'User-Agent': common.CHROME_USER_AGENT}
+        self.headers = {'User-Agent': USER_AGENT}
 
     def get_media_url(self, host, media_id):
         cached = self.__check_cache(media_id)
