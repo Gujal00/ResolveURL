@@ -38,8 +38,6 @@ class PremiumizeMeResolver(ResolveUrl):
         self.hosts = []
         self.patterns = []
         self.net = common.Net()
-        self.scheme = 'https' if self.get_setting('use_https') == 'true' else 'http'
-        self.username = self.get_setting('username')
         self.password = self.get_setting('password')
         self.headers = {'User-Agent': common.CHROME_USER_AGENT}
 
@@ -47,16 +45,15 @@ class PremiumizeMeResolver(ResolveUrl):
         cached = self.__check_cache(media_id)
         if cached:
             logger.log_debug('Premiumize.me: %s is readily available to stream' % media_id)
-        url = '%s://api.premiumize.me/pm-api/v1.php?' % self.scheme
-        query = urllib.urlencode({'method': 'directdownloadlink', 'params[login]': self.username, 'params[pass]': self.password, 'params[link]': media_id})
-        url = url + query
-        response = self.net.http_GET(url, headers=self.headers).content
-        response = json.loads(response)
-        if 'status' in response:
-            if response['status'] == 200:
-                link = response['result']['location']
+        url = 'https://www.premiumize.me/api/transfer/directdl?apikey=%s' % self.password
+        data = urllib.urlencode({'src': media_id})
+        response = self.net.http_POST(url, form_data=data, headers=self.headers).content
+        result = json.loads(response)
+        if 'status' in result:
+            if result.get('status') == 'success':
+                link = result.get('location')
             else:
-                raise ResolverError('Link Not Found: Error Code: %s' % response['status'])
+                raise ResolverError('Link Not Found: Error Code: %s' % result.get('status'))
         else:
             raise ResolverError('Unexpected Response Received')
 
@@ -72,21 +69,23 @@ class PremiumizeMeResolver(ResolveUrl):
     @common.cache.cache_method(cache_limit=8)
     def get_all_hosters(self):
         try:
-            url = '%s://api.premiumize.me/pm-api/v1.php' % self.scheme
-            query = urllib.urlencode({'method': 'hosterlist', 'params[login]': self.username, 'params[pass]': self.password})
-            url = url + '?' + query
+            url = 'https://www.premiumize.me/api/services/list?apikey=%s' % self.password
             response = self.net.http_GET(url, headers=self.headers).content
-            response = json.loads(response)
-            result = response.get('result', {})
-            tldlist = result.get('tldlist', [])
-            patterns = result.get('regexlist', [])
+            result = json.loads(response)
+            aliases = result.get('aliases', {})
+            patterns = result.get('regexpatterns', {})
+            tldlist = []
+            for tlds in aliases.values():
+                for tld in tlds:
+                    tldlist.append(tld)
             regex_list = []
-            for regex in patterns:
-                try:
-                    regex_list.append(re.compile(regex))
-                except:
-                    common.logger.log_warning('Throwing out bad Premiumize regex: %s' % regex)
-            logger.log_debug('Premiumize.me patterns: %s (%d) regex: (%d) hosts: %s' % (patterns, len(patterns), len(regex_list), tldlist))
+            for regexes in patterns.values():
+                for regex in regexes:
+                    try:
+                        regex_list.append(re.compile(regex))
+                    except:
+                        common.logger.log_warning('Throwing out bad Premiumize regex: %s' % regex)
+            logger.log_debug('Premiumize.me patterns: %s regex: (%d) hosts: %s' % (patterns, len(regex_list), tldlist))
             return tldlist, regex_list
         except Exception as e:
             logger.log_error('Error getting Premiumize hosts: %s' % e)
@@ -112,7 +111,7 @@ class PremiumizeMeResolver(ResolveUrl):
 
     def __check_cache(self, item):
         try:
-            url = '%s://www.premiumize.me/api/cache/check?customer_id=%s&pin=%s&items[]=%s' % (self.scheme, self.username, self.password, item)
+            url = 'https://www.premiumize.me/api/cache/check?apikey=%s&items[]=%s' % (self.password, item)
             result = self.net.http_GET(url, headers=self.headers).content
             result = json.loads(result)
             if 'status' in result:
@@ -127,12 +126,10 @@ class PremiumizeMeResolver(ResolveUrl):
     @classmethod
     def get_settings_xml(cls):
         xml = super(cls, cls).get_settings_xml(include_login=False)
-        xml.append('<setting id="%s_use_https" type="bool" label="%s" default="true"/>' % (cls.__name__, i18n('use_https')))
         xml.append('<setting id="%s_login" type="bool" label="%s" default="false"/>' % (cls.__name__, i18n('login')))
-        xml.append('<setting id="%s_username" enable="eq(-1,true)" type="text" label="%s" default=""/>' % (cls.__name__, i18n('customer_id')))
-        xml.append('<setting id="%s_password" enable="eq(-2,true)" type="text" label="%s" option="hidden" default=""/>' % (cls.__name__, i18n('pin')))
+        xml.append('<setting id="%s_password" enable="eq(-1,true)" type="text" label="%s" option="hidden" default=""/>' % (cls.__name__, i18n('api_key')))
         return xml
 
     @classmethod
-    def isUniversal(self):
+    def isUniversal(cls):
         return True

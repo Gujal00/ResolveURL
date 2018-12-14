@@ -207,3 +207,7 @@ msgstr "AllDebrid Resolver Authorized"
 msgctxt "#33047"
 msgid "Enable PopUps"
 msgstr "Enable PopUps"
+
+msgctxt "#33048"
+msgid "API Key"
+msgstr "API Key"

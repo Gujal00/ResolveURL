@@ -204,3 +204,7 @@ msgstr ""
 msgctxt "#33047"
 msgid "Enable PopUps"
 msgstr ""
+
+msgctxt "#33048"
+msgid "API Key"
+msgstr ""
