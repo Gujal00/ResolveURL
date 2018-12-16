@@ -208,3 +208,7 @@ msgstr ""
 msgctxt "#33048"
 msgid "API Key"
 msgstr ""
+
+msgctxt "#33049"
+msgid "Torrent Support"
+msgstr ""

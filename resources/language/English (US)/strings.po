@@ -211,3 +211,7 @@ msgstr "Enable PopUps"
 msgctxt "#33048"
 msgid "API Key"
 msgstr "API Key"
+
+msgctxt "#33049"
+msgid "Torrent Support"
+msgstr "Torrent Support"
