@@ -1,3 +1,16 @@
+[B]Version 5.0.21 (December 16, 2018)[/B]
+- Code Base Changes:
+    - torrent and magnet link support using Premiumize (experimental)
+- Resolvers Added:
+    - none
+- Resolvers Fixed/Updated:
+    - premiumize
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - English
+    - English(US)
+
 [B]Version 5.0.20 (December 13, 2018)[/B]
 - Code Base Changes:
     - updated Premiumize to use new API
