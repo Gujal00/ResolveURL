@@ -61,6 +61,7 @@ class PremiumizeMeResolver(ResolveUrl):
         if cached:
             logger.log_debug('Premiumize.me: %s is readily available to stream' % media_id)
         elif media_id.endswith('.torrent') or media_id.startswith('magnet:'):
+            self.torrent = True
             logger.log_debug('Premiumize.me: initiating transfer to cloud for %s' % media_id)
             self.__initiate_transfer(media_id)
 
@@ -107,7 +108,6 @@ class PremiumizeMeResolver(ResolveUrl):
     def valid_url(self, url, host):
         if url and self.get_setting('torrents') == 'true':
             if url.endswith('.torrent') or url.startswith('magnet:'):
-                self.torrent = True
                 return True
 
         if not self.patterns or not self.hosts:
@@ -214,7 +214,7 @@ class PremiumizeMeResolver(ResolveUrl):
                         # self.__delete_folder()
                         raise ResolverError('Transfer ID %s has stalled' % transfer_id)
             xbmc.sleep(1000 * interval)  # allow api time to generate the stream_link
-            self.__delete_transfer(transfer_id)  # just in case __clear_finished() doesnt work
+        self.__delete_transfer(transfer_id)  # just in case __clear_finished() doesnt work
 
         return
 
