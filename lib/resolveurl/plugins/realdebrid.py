@@ -15,7 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import xbmc
 import re
 import urllib2
 import json
@@ -87,7 +86,7 @@ class RealDebridResolver(ResolveUrl):
                                     self.__delete_torrent(torrent_id, headers)
                                     raise ResolverError('Real-Debrid: Torrent ID %s has stalled | REASON: %s' % (torrent_id, status))
                                 _TIMEOUT -= INTERVALS
-                                xbmc.sleep(1000 * INTERVALS)
+                                common.kodi.sleep(1000 * INTERVALS)
                                 torrent_info = self.__torrent_info(torrent_id, headers)
                                 status = torrent_info.get('status')
                                 line3 = '%s seeders' % torrent_info.get('seeders')
@@ -116,7 +115,7 @@ class RealDebridResolver(ResolveUrl):
                                 line3 = status
                                 with common.kodi.ProgressDialog(heading, line1, line2, line3) as pd:
                                     while not status == 'downloaded':
-                                        xbmc.sleep(1000 * INTERVALS)
+                                        common.kodi.sleep(1000 * INTERVALS)
                                         torrent_info = self.__torrent_info(torrent_id, headers)
                                         status = torrent_info.get('status')
                                         if status == 'downloading':
