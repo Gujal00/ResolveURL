@@ -196,7 +196,7 @@ class PremiumizeMeResolver(ResolveUrl):
         transfer_info = self.__list_transfer(transfer_id)
         if transfer_info:
             line1 = transfer_info.get('name')
-            line2 = 'Saving item to the Premiumize Cloud'
+            line2 = 'Saving torrent to the Premiumize Cloud'
             line3 = transfer_info.get('message')
             with common.kodi.ProgressDialog('Resolve URL Premiumize Transfer', line1, line2, line3) as pd:
                 while not transfer_info.get('status') == 'seeding':
