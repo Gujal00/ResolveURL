@@ -257,6 +257,29 @@ class Net:
         response = urllib2.urlopen(request)
         return HttpResponse(response)
 
+    def http_DELETE(self, url, headers={}):
+        '''
+        Perform an HTTP DELETE request.
+
+        Args:
+            url (str): The URL to GET.
+
+        Kwargs:
+            headers (dict): A dictionary describing any headers you would like
+            to add to the request. (eg. ``{'X-Test': 'testing'}``)
+
+        Returns:
+            An :class:`HttpResponse` object containing headers and other
+            meta-information about the page.
+        '''
+        request = urllib2.Request(url)
+        request.get_method = lambda: 'DELETE'
+        request.add_header('User-Agent', self._user_agent)
+        for key in headers:
+            request.add_header(key, headers[key])
+        response = urllib2.urlopen(request)
+        return HttpResponse(response)
+
     def _fetch(self, url, form_data={}, headers={}, compression=True):
         '''
         Perform an HTTP GET or POST request.
