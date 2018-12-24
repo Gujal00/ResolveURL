@@ -201,9 +201,10 @@ class PremiumizeMeResolver(ResolveUrl):
                 while not transfer_info.get('status') == 'seeding':
                     common.kodi.sleep(1000 * interval)
                     transfer_info = self.__list_transfer(transfer_id)
+                    line1 = transfer_info.get('name')
                     line3 = transfer_info.get('message')
                     logger.log_debug(line3)
-                    pd.update(int(float(transfer_info.get('progress')) * 100), line3=line3)
+                    pd.update(int(float(transfer_info.get('progress')) * 100), line1=line1, line3=line3)
                     if pd.is_canceled():
                         self.__delete_transfer(transfer_id)
                         # self.__delete_folder()

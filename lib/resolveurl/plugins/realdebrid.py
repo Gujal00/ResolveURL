@@ -70,7 +70,7 @@ class RealDebridResolver(ResolveUrl):
                 if not torrent_id == "":
                     torrent_info = self.__torrent_info(torrent_id, headers)
                     heading = 'Resolve URL Real-Debrid Transfer'
-                    line1 = torrent_info.get('filename')
+                    line1 = torrent_info.get('original_filename', torrent_info.get('filename'))
                     status = torrent_info.get('status')
                     if status == 'magnet_conversion':
                         line2 = 'Converting MAGNET...'
@@ -78,7 +78,7 @@ class RealDebridResolver(ResolveUrl):
                         _TIMEOUT = 100  # seconds
                         with common.kodi.ProgressDialog(heading, line1, line2, line3) as cd:
                             while status == 'magnet_conversion' and _TIMEOUT > 0:
-                                cd.update(_TIMEOUT, line3=line3)
+                                cd.update(_TIMEOUT, line1=line1, line3=line3)
                                 if cd.is_canceled():
                                     self.__delete_torrent(torrent_id, headers)
                                     raise ResolverError('Real-Debrid: Torrent ID %s canceled by user' % torrent_id)
@@ -89,6 +89,7 @@ class RealDebridResolver(ResolveUrl):
                                 common.kodi.sleep(1000 * INTERVALS)
                                 torrent_info = self.__torrent_info(torrent_id, headers)
                                 status = torrent_info.get('status')
+                                line1 = torrent_info.get('original_filename', torrent_info.get('filename'))
                                 line3 = '%s seeders' % torrent_info.get('seeders')
                         if status == 'magnet_conversion':
                             self.__delete_torrent(torrent_id, headers)
@@ -117,13 +118,14 @@ class RealDebridResolver(ResolveUrl):
                                     while not status == 'downloaded':
                                         common.kodi.sleep(1000 * INTERVALS)
                                         torrent_info = self.__torrent_info(torrent_id, headers)
+                                        line1 = torrent_info.get('original_filename', torrent_info.get('filename'))
                                         status = torrent_info.get('status')
                                         if status == 'downloading':
                                             line3 = 'Downloading %s GB @ %s mbps from %s peers, %s %% completed' % (file_size, round(float(torrent_info.get('speed')) / (1000**2), 2), torrent_info.get("seeders"), torrent_info.get('progress'))
                                         else:
                                             line3 = status
                                         logger.log_debug(line3)
-                                        pd.update(int(float(torrent_info.get('progress'))), line3=line3)
+                                        pd.update(int(float(torrent_info.get('progress'))), line1=line1, line3=line3)
                                         if pd.is_canceled():
                                             self.__delete_torrent(torrent_id, headers)
                                             raise ResolverError('Real-Debrid: Torrent ID %s canceled by user' % torrent_id)
