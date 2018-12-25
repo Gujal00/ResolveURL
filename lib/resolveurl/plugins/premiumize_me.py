@@ -53,19 +53,23 @@ class PremiumizeMeResolver(ResolveUrl):
         self.net = common.Net()
         self.password = self.get_setting('password')
         self.headers = {'User-Agent': USER_AGENT}
-        self.torrent = False
 
     def get_media_url(self, host, media_id):
+        torrent = False
         cached = self.__check_cache(media_id)
+        media_id_lc = media_id.lower()
         if cached:
             logger.log_debug('Premiumize.me: %s is readily available to stream' % media_id)
-        elif media_id.endswith('.torrent') or media_id.startswith('magnet:'):
+            if media_id_lc.endswith('.torrent') or media_id_lc.startswith('magnet:'):
+                torrent = True
+        elif media_id_lc.endswith('.torrent') or media_id_lc.startswith('magnet:'):
+            torrent = True
             logger.log_debug('Premiumize.me: initiating transfer to cloud for %s' % media_id)
             self.__initiate_transfer(media_id)
+            self.__clear_finished()
+            # self.__delete_folder()
 
-        self.__clear_finished()
-        # self.__delete_folder()
-        link = self.__direct_dl(media_id, torrent=self.torrent)
+        link = self.__direct_dl(media_id, torrent=torrent)
         if not link == "":
             logger.log_debug('Premiumize.me: Resolved to %s' % link)
             return link + helpers.append_headers(self.headers)
@@ -105,8 +109,8 @@ class PremiumizeMeResolver(ResolveUrl):
 
     def valid_url(self, url, host):
         if url and self.get_setting('torrents') == 'true':
-            if url.endswith('.torrent') or url.startswith('magnet:'):
-                self.torrent = True
+            url_lc = url.lower()
+            if url_lc.endswith('.torrent') or url_lc.startswith('magnet:'):
                 return True
 
         if not self.patterns or not self.hosts:

@@ -58,13 +58,12 @@ class RealDebridResolver(ResolveUrl):
         self.hosters = None
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
-        self.torrent = False
 
     def get_media_url(self, host, media_id, retry=False):
         try:
             headers = self.headers
             headers.update({'Authorization': 'Bearer %s' % self.get_setting('token')})
-            if self.torrent:
+            if media_id.lower().startswith('magnet:'):
                 cached = self.__check_cache(media_id, headers)  # useless
                 torrent_id = self.__add_magnet(media_id, headers)
                 if not torrent_id == "":
@@ -135,7 +134,7 @@ class RealDebridResolver(ResolveUrl):
                             # xbmc.sleep(1000 * INTERVALS)  # allow api time to generate the stream_link
                             media_id = torrent_info.get('links')[0]
                     self.__delete_torrent(torrent_id, headers)
-                if media_id.startswith('magnet:'):
+                if media_id.lower().startswith('magnet:'):
                     self.__delete_torrent(torrent_id, headers)  # clean up just incase
                     raise ResolverError('Real-Debrid Error: Failed to transfer torrent to/from the cloud')
 
@@ -342,15 +341,14 @@ class RealDebridResolver(ResolveUrl):
     def valid_url(self, url, host):
         logger.log_debug('in valid_url %s : %s' % (url, host))
         if url:
-            if url.startswith('magnet:') and self.get_setting('torrents') == 'true':
-                self.torrent = True
+            if url.lower().startswith('magnet:') and self.get_setting('torrents') == 'true':
                 return True
             if self.hosters is None:
                 self.hosters = self.get_all_hosters()
                 
             for host in self.hosters:
                 # logger.log_debug('RealDebrid checking host : %s' %str(host))
-                if re.search(host, url):
+                if re.search(host, url, re.I):
                     logger.log_debug('RealDebrid Match found')
                     return True
         elif host:
