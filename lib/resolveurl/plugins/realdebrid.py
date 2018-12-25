@@ -348,7 +348,7 @@ class RealDebridResolver(ResolveUrl):
                 
             for host in self.hosters:
                 # logger.log_debug('RealDebrid checking host : %s' %str(host))
-                if re.search(host, url, re.I):
+                if re.search(host, url):
                     logger.log_debug('RealDebrid Match found')
                     return True
         elif host:
