@@ -32,8 +32,8 @@ class cInputWindow(xbmcgui.WindowDialog):
     def __init__(self, *args, **kwargs):
         bg_image = os.path.join(common.addon_path, 'resources', 'images', 'DialogBack2.png')
         check_image = os.path.join(common.addon_path, 'resources', 'images', 'checked.png')
-        button_fo = os.path.join(common.kodi.get_path(), 'resources', 'skins', 'Default', 'media', 'button-fo.png')
-        button_nofo = os.path.join(common.kodi.get_path(), 'resources', 'skins', 'Default', 'media', 'button-nofo.png')
+        button_fo = os.path.join(common.kodi.get_path(), 'resources', 'images', 'button-fo.png')
+        button_nofo = os.path.join(common.kodi.get_path(), 'resources', 'images', 'button-nofo.png')
         self.cancelled = False
         self.chk = [0] * 9
         self.chkbutton = [0] * 9
