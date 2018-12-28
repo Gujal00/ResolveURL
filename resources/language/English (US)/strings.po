@@ -215,3 +215,7 @@ msgstr "API Key"
 msgctxt "#33049"
 msgid "Torrent Support"
 msgstr "Torrent Support"
+
+msgctxt "#33050"
+msgid "Cached torrents only"
+msgstr "Cached torrents only"

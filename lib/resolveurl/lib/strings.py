@@ -66,5 +66,6 @@ STRINGS = {
     'ad_authorized': 33046,
     'enable_popups': 33047,
     'api_key': 33048,
-    'torrents': 33049
+    'torrents': 33049,
+    'cached_only': 33050
 }

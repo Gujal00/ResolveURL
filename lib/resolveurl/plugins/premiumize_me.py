@@ -63,6 +63,8 @@ class PremiumizeMeResolver(ResolveUrl):
             if media_id_lc.endswith('.torrent') or media_id_lc.startswith('magnet:'):
                 torrent = True
         elif media_id_lc.endswith('.torrent') or media_id_lc.startswith('magnet:'):
+            if self.get_setting('cached_only') == 'true':
+                raise ResolverError('Premiumize.me: Cached torrents only allowed to be initiated')
             torrent = True
             logger.log_debug('Premiumize.me: initiating transfer to cloud for %s' % media_id)
             self.__initiate_transfer(media_id)
@@ -315,6 +317,7 @@ class PremiumizeMeResolver(ResolveUrl):
     def get_settings_xml(cls):
         xml = super(cls, cls).get_settings_xml(include_login=False)
         xml.append('<setting id="%s_torrents" type="bool" label="%s" default="true"/>' % (cls.__name__, i18n('torrents')))
+        xml.append('<setting id="%s_cached_torrents" enable="eq(-1,true)" type="bool" label="%s" default="false" />' % (cls.__name__, i18n('cached_only')))
         xml.append('<setting id="%s_login" type="bool" label="%s" default="false"/>' % (cls.__name__, i18n('login')))
         xml.append('<setting id="%s_password" enable="eq(-1,true)" type="text" label="%s" option="hidden" default=""/>' % (cls.__name__, i18n('api_key')))
         return xml

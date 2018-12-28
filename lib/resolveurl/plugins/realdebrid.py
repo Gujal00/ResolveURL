@@ -64,7 +64,9 @@ class RealDebridResolver(ResolveUrl):
             headers = self.headers
             headers.update({'Authorization': 'Bearer %s' % self.get_setting('token')})
             if media_id.lower().startswith('magnet:'):
-                cached = self.__check_cache(media_id, headers)  # useless
+                cached = self.__check_cache(media_id, headers)
+                if not cached and self.get_setting('cached_only') == 'true':
+                    raise ResolverError('Real-Debrid: Cached torrents only allowed to be initiated')
                 torrent_id = self.__add_magnet(media_id, headers)
                 if not torrent_id == "":
                     torrent_info = self.__torrent_info(torrent_id, headers)
@@ -365,6 +367,7 @@ class RealDebridResolver(ResolveUrl):
     def get_settings_xml(cls):
         xml = super(cls, cls).get_settings_xml()
         xml.append('<setting id="%s_torrents" type="bool" label="%s" default="true"/>' % (cls.__name__, i18n('torrents')))
+        xml.append('<setting id="%s_cached_torrents" enable="eq(-1,true)" type="bool" label="%s" default="false" />' % (cls.__name__, i18n('cached_only')))
         xml.append('<setting id="%s_autopick" type="bool" label="%s" default="false"/>' % (cls.__name__, i18n('auto_primary_link')))
         xml.append('<setting id="%s_auth" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=auth_rd)"/>' % (cls.__name__, i18n('auth_my_account')))
         xml.append('<setting id="%s_reset" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_rd)"/>' % (cls.__name__, i18n('reset_my_auth')))

@@ -212,3 +212,7 @@ msgstr ""
 msgctxt "#33049"
 msgid "Torrent Support"
 msgstr ""
+
+msgctxt "#33050"
+msgid "Cached torrents only"
+msgstr ""
