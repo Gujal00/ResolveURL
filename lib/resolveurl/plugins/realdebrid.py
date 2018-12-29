@@ -29,7 +29,6 @@ logger.disable()
 CLIENT_ID = 'X245A4XAIBGVM'
 USER_AGENT = 'ResolveURL for Kodi/%s' % common.addon_version
 INTERVALS = 5  # seconds
-MINIMUM_FILE_SIZE = 75  # megabytes
 FORMATS = ['.aac', '.asf', '.avi', '.flv', '.m4a', '.m4v', '.mka', '.mkv', '.mp4', '.mpeg', '.nut', '.ogg']
 STALLED = ['magnet_error', 'error', 'virus', 'dead']
 
@@ -96,12 +95,16 @@ class RealDebridResolver(ResolveUrl):
                             self.__delete_torrent(torrent_id, headers)
                             raise ResolverError('Real-Debrid Error: MAGNET Conversion exceeded time limit')
                     if status == 'waiting_files_selection':
-                        file_selected = False
+                        _videos = []
                         for _file in torrent_info.get('files'):
-                            if any(_file.get('path').lower().endswith(x) for x in FORMATS) and _file.get('bytes') >= ((1000 ** 2) * MINIMUM_FILE_SIZE):
-                                file_id = _file.get('id')
-                                file_selected = self.__select_file(torrent_id, file_id, headers)
-                                break
+                            if any(_file.get('path').lower().endswith(x) for x in FORMATS):
+                                _videos.append(_file)
+                        try:
+                            file_id = max(_videos, key=lambda x: x.get('bytes')).get('id', 0)
+                        except ValueError:
+                            self.__delete_torrent(torrent_id, headers)
+                            raise ResolverError('Real-Debrid Error: Failed to locate largest video file')
+                        file_selected = self.__select_file(torrent_id, file_id, headers)
                         if not file_selected:
                             self.__delete_torrent(torrent_id, headers)
                             raise ResolverError('Real-Debrid Error: Failed to select file')
@@ -227,7 +230,7 @@ class RealDebridResolver(ResolveUrl):
             return True
         except Exception as e:
             common.logger.log_warning("Real-Debrid Error: SELECT FILE | %s" % e)
-            raise
+            return False
 
     def __delete_torrent(self, torrent_id, headers):
         try:

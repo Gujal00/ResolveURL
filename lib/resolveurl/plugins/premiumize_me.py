@@ -233,12 +233,17 @@ class PremiumizeMeResolver(ResolveUrl):
             if 'status' in result:
                 if result.get('status') == 'success':
                     if torrent:
-                        minimum_size = 75  # megabytes
+                        _videos = []
                         for items in result.get("content"):
-                            if items.get('size') >= ((1000**2) * minimum_size) and not items.get("stream_link") == "":
-                                return items.get("stream_link", "")
+                            if not items.get("stream_link", "") == "":
+                                _videos.append(items)
+                        try:
+                            stream_link = max(_videos, key=lambda x: x.get('size')).get('stream_link', '')
+                        except ValueError:
+                            raise ResolverError('Failed to locate largest video file')
+                        return stream_link
                     else:
-                        return result.get('location', "")
+                        return result.get('location', '')
                 else:
                     raise ResolverError('Link Not Found: Error Code: %s' % result.get('status'))
             else:
