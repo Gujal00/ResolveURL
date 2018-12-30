@@ -219,3 +219,11 @@ msgstr "Torrent Support"
 msgctxt "#33050"
 msgid "Cached torrents only"
 msgstr "Cached torrents only"
+
+msgctxt "#33051"
+msgid "Premiumize Authorization Reset"
+msgstr "Premiumize Authorization Reset"
+
+msgctxt "#33052"
+msgid "Premiumize Resolver Authorized"
+msgstr "Premiumize Resolver Authorized"

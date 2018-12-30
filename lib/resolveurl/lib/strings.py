@@ -67,5 +67,7 @@ STRINGS = {
     'enable_popups': 33047,
     'api_key': 33048,
     'torrents': 33049,
-    'cached_only': 33050
+    'cached_only': 33050,
+    'pm_auth_reset': 33051,
+    'pm_authorized': 33052
 }

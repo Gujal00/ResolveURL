@@ -27,7 +27,24 @@ url_dispatcher = URL_Dispatcher()
 def __enum(**enums):
     return type('Enum', (), enums)
 
-MODES = __enum(AUTH_RD='auth_rd', RESET_RD='reset_rd', RESET_CACHE='reset_cache', AUTH_AD='auth_ad', RESET_AD='reset_ad')
+MODES = __enum(AUTH_PM='auth_pm', RESET_PM='reset_pm', AUTH_RD='auth_rd', RESET_RD='reset_rd', RESET_CACHE='reset_cache', AUTH_AD='auth_ad', RESET_AD='reset_ad')
+
+@url_dispatcher.register(MODES.AUTH_PM)
+def auth_pm():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or authorize won't work for some reason
+    from resolveurl.plugins import premiumize_me
+    if premiumize_me.PremiumizeMeResolver().authorize_resolver():
+        kodi.notify(msg=kodi.i18n('pm_authorized'), duration=5000)
+
+@url_dispatcher.register(MODES.RESET_PM)
+def reset_pm():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or reset won't work for some reason
+    from resolveurl.plugins import premiumize_me
+    pm = premiumize_me.PremiumizeMeResolver()
+    pm.reset_authorization()
+    kodi.notify(msg=kodi.i18n('pm_auth_reset'), duration=5000)
 
 @url_dispatcher.register(MODES.AUTH_RD)
 def auth_rd():
