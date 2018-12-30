@@ -1,3 +1,20 @@
+[B]Version 5.0.25 (December 29, 2018)[/B]
+- Code Base Changes:
+    - removed jarvis progress dialog skin
+    - settings to allow cached torrents only
+    - fixes for torrents with samples larger than 75 MB
+    - premiumize now uses device authorization same as RD(you must re-auth)
+- Resolvers Added:
+    - none
+- Resolvers Fixed/Updated:
+    - realdebrid
+    - premiumize
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - English
+    - English(US)
+
 [B]Version 5.0.24 (December 25, 2018)[/B]
 - Code Base Changes:
     - none
