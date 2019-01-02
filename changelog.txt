@@ -1,3 +1,15 @@
+[B]Version 5.0.26 (January 02, 2019)[/B]
+- Code Base Changes:
+    - roll back progress dialog window changes
+- Resolvers Added:
+    - none
+- Resolvers Fixed/Updated:
+    - none
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - none
+
 [B]Version 5.0.25 (December 29, 2018)[/B]
 - Code Base Changes:
     - removed jarvis progress dialog skin
