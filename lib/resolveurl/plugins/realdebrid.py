@@ -181,7 +181,7 @@ class RealDebridResolver(ResolveUrl):
             return helpers.pick_source(links)
 
     def __check_cache(self, media_id):
-        r = re.search('''magnet:.+?urn:(\w+):([a-zA-Z0-9]+)''', media_id, re.I)
+        r = re.search('''magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)''', media_id, re.I)
         if r:
             _hash, _format = r.group(2).lower(), r.group(1)
             try:
