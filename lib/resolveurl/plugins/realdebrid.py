@@ -323,7 +323,7 @@ class RealDebridResolver(ResolveUrl):
             js_result = json.loads(self.net.http_GET(url, headers=self.headers).content)
             regexes = [regex[1:-1].replace('\/', '/').rstrip('\\') for regex in js_result]
             logger.log_debug('RealDebrid hosters : %s' % regexes)
-            hosters = [re.compile(regex) for regex in regexes]
+            hosters = [re.compile(regex, re.I) for regex in regexes]
         except Exception as e:
             logger.log_error('Error getting RD regexes: %s' % e)
         return hosters
