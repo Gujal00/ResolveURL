@@ -33,8 +33,8 @@ FILE_URL = API_BASE_URL + '/file/info?file={media_id}'
 
 class OpenLoadResolver(ResolveUrl):
     name = "openload"
-    domains = ["openload.io", "openload.co", "oload.tv", "oload.stream", "oload.win", "oload.download", "oload.info", "oload.icu", "oload.fun"]
-    pattern = '(?://|\.)(o(?:pen)??load\.(?:io|co|tv|stream|win|download|info|icu|fun))/(?:embed|f)/([0-9a-zA-Z-_]+)'
+    domains = ["openload.io", "openload.co", "oload.tv", "oload.stream", "oload.win", "oload.download", "oload.info", "oload.icu", "oload.fun", "openload.pw"]
+    pattern = '(?://|\.)(o(?:pen)??load\.(?:io|co|tv|stream|win|download|info|icu|fun|pw))/(?:embed|f)/([0-9a-zA-Z-_]+)'
 
     def __init__(self):
         self.net = common.Net()
