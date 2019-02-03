@@ -197,11 +197,10 @@ def has_addon(addon_id):
 
 
 class ProgressDialog(object):
-    def __init__(self, heading, line1='', line2='', line3='', background=False, active=True, timer=0, custom=False):
+    def __init__(self, heading, line1='', line2='', line3='', background=False, active=True, timer=0):
         self.begin = time.time()
         self.timer = timer
         self.background = background
-        self.custom = custom
         self.heading = heading
         if active and not timer:
             self.pd = self.__create_dialog(line1, line2, line3)
@@ -215,7 +214,7 @@ class ProgressDialog(object):
             msg = line1 + line2 + line3
             pd.create(self.heading, msg)
         else:
-            if self.custom:
+            if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
                 pd = CustomProgressDialog.ProgressDialog()
             else:
                 pd = xbmcgui.DialogProgress()
@@ -251,14 +250,13 @@ class ProgressDialog(object):
 class CountdownDialog(object):
     __INTERVALS = 5
     
-    def __init__(self, heading, line1='', line2='', line3='', active=True, countdown=60, interval=5, custom=False):
+    def __init__(self, heading, line1='', line2='', line3='', active=True, countdown=60, interval=5):
         self.heading = heading
         self.countdown = countdown
-        self.custom = custom
         self.interval = interval
         self.line3 = line3
         if active:
-            if self.custom:
+            if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
                 pd = CustomProgressDialog.ProgressDialog()
             else:
                 pd = xbmcgui.DialogProgress()
