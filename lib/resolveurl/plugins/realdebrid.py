@@ -58,12 +58,12 @@ class RealDebridResolver(ResolveUrl):
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
 
-    def get_media_url(self, host, media_id, retry=False):
+    def get_media_url(self, host, media_id, retry=False, cached_only=False):
         try:
             self.headers.update({'Authorization': 'Bearer %s' % self.get_setting('token')})
             if media_id.lower().startswith('magnet:'):
                 cached = self.__check_cache(media_id)
-                if not cached and self.get_setting('cached_only') == 'true':
+                if not cached and (self.get_setting('cached_only') == 'true' or cached_only):
                     raise ResolverError('Real-Debrid: Cached torrents only allowed to be initiated')
                 torrent_id = self.__add_magnet(media_id)
                 if not torrent_id == "":
@@ -334,6 +334,8 @@ class RealDebridResolver(ResolveUrl):
         try:
             url = '%s/%s' % (rest_base_url, hosts_domains_path)
             hosts = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if self.get_setting('torrents') == 'true':
+                hosts.extend([u'torrent', u'magnet'])
         except Exception as e:
             logger.log_error('Error getting RD hosts: %s' % e)
         logger.log_debug('RealDebrid hosts : %s' % hosts)

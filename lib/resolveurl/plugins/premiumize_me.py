@@ -59,7 +59,7 @@ class PremiumizeMeResolver(ResolveUrl):
         self.net = common.Net()
         self.headers = {'User-Agent': USER_AGENT, 'Authorization': 'Bearer %s' % self.get_setting('token')}
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, cached_only=False):
         torrent = False
         cached = self.__check_cache(media_id)
         media_id_lc = media_id.lower()
@@ -68,7 +68,7 @@ class PremiumizeMeResolver(ResolveUrl):
             if media_id_lc.endswith('.torrent') or media_id_lc.startswith('magnet:'):
                 torrent = True
         elif media_id_lc.endswith('.torrent') or media_id_lc.startswith('magnet:'):
-            if self.get_setting('cached_only') == 'true':
+            if self.get_setting('cached_only') == 'true' or cached_only:
                 raise ResolverError('Premiumize.me: Cached torrents only allowed to be initiated')
             torrent = True
             logger.log_debug('Premiumize.me: initiating transfer to cloud for %s' % media_id)
@@ -100,6 +100,8 @@ class PremiumizeMeResolver(ResolveUrl):
             for tlds in aliases.values():
                 for tld in tlds:
                     tldlist.append(tld)
+            if self.get_setting('torrents') == 'true':
+                tldlist.extend([u'torrent', u'magnet'])
             regex_list = []
             for regexes in patterns.values():
                 for regex in regexes:
