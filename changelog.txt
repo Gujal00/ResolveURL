@@ -1,4 +1,4 @@
-[B]Version 5.0.26 (January 02, 2019)[/B]
+[B]Version 5.0.27 (December 03, 2019)[/B]
 - Code Base Changes:
     - roll back progress dialog window changes
     - RESET FUNCTION CACHE IN RESOLVEURL SETTINGS!!!!
