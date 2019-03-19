@@ -35,8 +35,8 @@ class VivosxResolver(ResolveUrl):
                    'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
 
-        r = re.search(r'<div\s*id="player"[^>]+data-stream="([^"]+)', html)
-        
+        r = re.search(r'<video\s*id="player"[^>]+data-stream="([^"]+)', html)
+                
         if r:
             return r.group(1).decode('base64') + helpers.append_headers(headers)
 
