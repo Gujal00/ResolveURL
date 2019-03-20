@@ -200,3 +200,27 @@ msgstr "Επαναφορά έγκρισης AllDebrid"
 msgctxt "#33046"
 msgid "AllDebrid Resolver Authorized"
 msgstr "Ο επιλυτής AllDebrid έχει εγκριθεί"
+
+msgctxt "#33047"
+msgid "Enable PopUps"
+msgstr "Ενεργοποίηση αναδυόμενων μηνυμάτων"
+
+msgctxt "#33048"
+msgid "API Key"
+msgstr "Κλειδί API"
+
+msgctxt "#33049"
+msgid "Torrent Support"
+msgstr "Υποστήριξη torrent"
+
+msgctxt "#33050"
+msgid "Cached torrents only"
+msgstr "Αποθηκευμένα torrent μόνο"
+
+msgctxt "#33051"
+msgid "Premiumize Authorization Reset"
+msgstr "Επαναφορά έγκρισης premiumize"
+
+msgctxt "#33052"
+msgid "Premiumize Resolver Authorized"
+msgstr "Ο επιλυτής premiumize έχει εγκριθεί"
