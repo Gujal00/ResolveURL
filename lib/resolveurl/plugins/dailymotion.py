@@ -57,8 +57,7 @@ class DailymotionResolver(ResolveUrl):
                 
         sources.sort(key=lambda x: self.__key(x), reverse=True)
         source=helpers.pick_source(sources)
-        vid_url = self.net.http_GET(source, headers=self.headers).content
-        web_pdb.set_trace()		
+        vid_url = self.net.http_GET(source, headers=self.headers).content	
         vid_url = re.search('(http.+?m3u8)', vid_url)
         if vid_url:
             return vid_url.group(1)		
