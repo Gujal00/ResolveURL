@@ -52,11 +52,16 @@ class DailymotionResolver(ResolveUrl):
         streams = js_data.get('metadata', {}).get('qualities', {})
         for quality, links in streams.iteritems():
             for link in links:
-                if quality.isdigit() and link.get('type', '').startswith('video'):
+                if quality.isdigit() and link.get('type', '').startswith('application'):
                     sources.append((quality, link['url']))
                 
         sources.sort(key=lambda x: self.__key(x), reverse=True)
-        return helpers.pick_source(sources) + helpers.append_headers(self.headers)
+        source=helpers.pick_source(sources)
+        vid_url = self.net.http_GET(source, headers=self.headers).content	
+        vid_url = re.search('(http.+?m3u8)', vid_url)
+        if vid_url:
+            return vid_url.group(1)		
+        raise ResolverError('File not found')
     
     def __key(self, item):
         try: return int(item[0])
