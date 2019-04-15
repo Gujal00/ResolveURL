@@ -29,7 +29,7 @@ logger.disable()
 CLIENT_ID = 'X245A4XAIBGVM'
 USER_AGENT = 'ResolveURL for Kodi/%s' % common.addon_version
 INTERVALS = 5  # seconds
-FORMATS = ['.aac', '.asf', '.avi', '.flv', '.m4a', '.m4v', '.mka', '.mkv', '.mp4', '.mpeg', '.nut', '.ogg']
+FORMATS = common.VIDEO_FORMATS
 STALLED = ['magnet_error', 'error', 'virus', 'dead']
 
 rest_base_url = 'https://api.real-debrid.com/rest/1.0'
