@@ -30,6 +30,7 @@ logger.disable()
 
 CLIENT_ID = '522962560'
 USER_AGENT = 'ResolveURL for Kodi/%s' % common.addon_version
+FORMATS = common.VIDEO_FORMATS
 
 base_url = 'https://www.premiumize.me'
 api_path = '%s/api' % base_url
@@ -237,10 +238,10 @@ class PremiumizeMeResolver(ResolveUrl):
                     if torrent:
                         _videos = []
                         for items in result.get("content"):
-                            if not items.get("stream_link", "") == "":
+                            if any(items.get('path').lower().endswith(x) for x in FORMATS) and not items.get("link", "") == "":
                                 _videos.append(items)
                         try:
-                            return max(_videos, key=lambda x: x.get('size')).get('stream_link', None)
+                            return max(_videos, key=lambda x: x.get('size')).get('link', None)
                         except ValueError:
                             raise ResolverError('Failed to locate largest video file')
                     else:
