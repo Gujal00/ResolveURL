@@ -16,11 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import re
 from lib import helpers
-from lib import jsunpack
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class HXLoadResolver(ResolveUrl):
     name = "hxload"
@@ -36,13 +35,9 @@ class HXLoadResolver(ResolveUrl):
                    'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
         
-        r = re.search('script">(eval.*?)</script', html, re.DOTALL)
-        
-        if r:
-            html = jsunpack.unpack(r.group(1))
-            sources = helpers.scrape_sources(html)
-            if sources:
-                return helpers.pick_source(sources) + helpers.append_headers(headers)
+        sources = helpers.scrape_sources(html)
+        if sources:
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
         
         raise ResolverError('Video cannot be located.')
 
