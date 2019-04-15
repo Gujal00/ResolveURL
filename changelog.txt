@@ -1,4 +1,25 @@
-[B]Version 5.0.27 (December 03, 2019)[/B]
+[B]Version 5.0.28 (April 15, 2019)[/B]
+- Code Base Changes:
+    - common.py
+- Resolvers Added:
+    - xstreamcdn
+    - lewdhost
+    - videoapne
+    - hxload
+- Resolvers Fixed/Updated:
+    - realdebrid
+    - premiumize
+    - vivosx
+    - rapidvideocom
+    - dailymotion
+    - fembed
+    - thevid
+- Resolvers Removed
+    - vidzella
+- Languages Added/Updated
+    - Greek
+
+[B]Version 5.0.27 (February 03, 2019)[/B]
 - Code Base Changes:
     - roll back progress dialog window changes
     - RESET FUNCTION CACHE IN RESOLVEURL SETTINGS!!!!
