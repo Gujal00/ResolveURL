@@ -1,3 +1,17 @@
+[B]Version 5.0.29 (April 27, 2019)[/B]
+- Code Base Changes:
+    - none
+- Resolvers Added:
+    - verystream
+- Resolvers Fixed/Updated:
+    - vidoza
+    - uptobox
+    - vidlox
+- Resolvers Removed
+    - vidtodo
+- Languages Added/Updated
+    - none
+
 [B]Version 5.0.28 (April 15, 2019)[/B]
 - Code Base Changes:
     - common.py
