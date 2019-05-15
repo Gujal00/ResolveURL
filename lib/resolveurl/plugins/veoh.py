@@ -1,6 +1,7 @@
 """
     resolveurl XBMC Addon
-    Copyright (C) 2011 anilkuj, 2019 cache
+    Copyright (C) 2011 anilkuj
+    Copyright (C) 2019 cache-sk
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,20 +32,23 @@ class VeohResolver(ResolveUrl):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
-        _json = self.net.http_GET("https://www.veoh.com/watch/getVideo/" + media_id).content
-        _data = json.loads(_json)
-        if 'video' in _data and 'src' in _data['video']:
-            sources = []
-            _src = _data['video']['src']
-            if 'HQ' in _src:
-                sources.append(('HQ',_src['HQ']))
-            if 'Regular' in _src:
-                sources.append(('Regular',_src['Regular']))
-            
-            if len(sources) > 0:
-                return helpers.pick_source(sources)
+        try:
+            _json = self.net.http_GET("https://www.veoh.com/watch/getVideo/" + media_id).content
+            _data = json.loads(_json)
+            if 'video' in _data and 'src' in _data['video']:
+                sources = []
+                _src = _data['video']['src']
+                if 'HQ' in _src:
+                    sources.append(('HQ',_src['HQ']))
+                if 'Regular' in _src:
+                    sources.append(('Regular',_src['Regular']))
+                
+                if len(sources) > 0:
+                    return helpers.pick_source(sources)
 
-            raise ResolverError('File Not Found or removed')
+                raise ResolverError('File Not Found or removed')
+        except:
+            pass    
         
         raise ResolverError('Unknown error')
 
