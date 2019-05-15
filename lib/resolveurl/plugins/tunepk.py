@@ -2,7 +2,7 @@
 tunepk resolveurl plugin
 Copyright (C) 2013 icharania
 updated Copyright (C) 2017 gujal
-updated Copyright (C) 2019 cache
+updated Copyright (C) 2019 cache-sk
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -86,9 +86,3 @@ class TunePkResolver(ResolveUrl):
         
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://tune.pk/video/{media_id}/')
-
-    @classmethod
-    def get_settings_xml(cls):
-        xml = super(cls, cls).get_settings_xml()
-        xml.append('<setting label="Video Quality" id="%s_quality" type="enum" values="High|Medium|Low" default="0" />' % (cls.__name__))
-        return xml
