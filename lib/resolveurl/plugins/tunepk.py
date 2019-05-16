@@ -2,6 +2,7 @@
 tunepk resolveurl plugin
 Copyright (C) 2013 icharania
 updated Copyright (C) 2017 gujal
+updated Copyright (C) 2019 cache-sk
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import json, time, hashlib
+import json, time, hashlib, base64
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -33,12 +34,14 @@ class TunePkResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         apiurl = 'https://api.tune.pk/v3/videos/{}'.format(media_id)
-        x_req_time = time.strftime('%a, %d %b %Y %H:%M:%S GMT',time.gmtime())
-        tunestring = 'videos/{} . {} . KH42JVbO'.format(media_id, int(time.time()))
+        currentTime = time.time()
+        x_req_time = time.strftime('%a, %d %b %Y %H:%M:%S GMT',time.gmtime(currentTime))
+        tunestring = 'videos/{} . {} . KH42JVbO'.format(media_id, int(currentTime))
         token = hashlib.sha1(tunestring).hexdigest()
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'Content-Type': 'application/json; charset=utf-8',
+                   'User-Agent': common.FF_USER_AGENT,
                    'X-KEY': '777750fea4d3bd585bf47dc1873619fc',
-                   'X-REQ-APP': 'web',
+                   #'X-REQ-APP': 'web' #not needed, returning bullshit hash anyways
                    'X-REQ-TIME': x_req_time,
                    'X-REQ-TOKEN': token}
         try:
@@ -49,17 +52,37 @@ class TunePkResolver(ResolveUrl):
                 sources = []
                 for key in vids.keys():
                     sources.append((vids[key]['label'], vids[key]['file']))
+                
+                sources.reverse() #because it is from worst to best?
+
+                video_url = helpers.pick_source(sources)
+
+                # hash recount
+                serverTime = long(jdata['timestamp']) + (int(time.time()) - int(currentTime))
+                hashLifeDuration = long(jdata['data']['duration']) * 5
+                if hashLifeDuration < 3600:
+                    hashLifeDuration = 3600
+                expiryTime = serverTime + hashLifeDuration
+                try:
+                    startOfPathUrl = video_url.index('/files/videos/')
+                    pathUrl = video_url[startOfPathUrl:None]
+                except ValueError:
+                    try:
+                        startOfPathUrl = video_url.index('/files/streams/')
+                        pathUrl = video_url[startOfPathUrl:None]
+                    except ValueError:
+                            raise ResolverError('This video cannot be played.')
+
+                htoken = hashlib.md5(str(expiryTime) + pathUrl + ' ' + 'c@ntr@lw3biutun3cb').digest()
+                htoken = base64.urlsafe_b64encode(htoken).replace('=', '').replace('\n', '')
+                video_url = video_url + '?h=' + htoken + '&ttl=' + str(expiryTime)
+
                 headers = {'Referer': web_url,
                            'User-Agent': common.FF_USER_AGENT}
-                return helpers.pick_source(sources) + helpers.append_headers(headers)
+
+                return video_url + helpers.append_headers(headers)
         except:
             raise ResolverError('This video has been removed due to a copyright claim.')
         
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://tune.pk/video/{media_id}/')
-
-    @classmethod
-    def get_settings_xml(cls):
-        xml = super(cls, cls).get_settings_xml()
-        xml.append('<setting label="Video Quality" id="%s_quality" type="enum" values="High|Medium|Low" default="0" />' % (cls.__name__))
-        return xml

@@ -1,6 +1,7 @@
 """
     resolveurl XBMC Addon
     Copyright (C) 2011 anilkuj
+    Copyright (C) 2019 cache-sk
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +18,8 @@
 """
 
 import re
+import json
+from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -29,20 +32,25 @@ class VeohResolver(ResolveUrl):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
-        html = self.net.http_GET("http://www.veoh.com/iphone/views/watch.php?id=" + media_id + "&__async=true&__source=waBrowse").content
-        if not re.search('This video is not available on mobile', html):
-            r = re.compile("watchNow\('(.+?)'").findall(html)
-            if (len(r) > 0):
-                return r[0]
+        try:
+            _json = self.net.http_GET("https://www.veoh.com/watch/getVideo/" + media_id).content
+            _data = json.loads(_json)
+            if 'video' in _data and 'src' in _data['video']:
+                sources = []
+                _src = _data['video']['src']
+                if 'HQ' in _src:
+                    sources.append(('HQ',_src['HQ']))
+                if 'Regular' in _src:
+                    sources.append(('Regular',_src['Regular']))
+                
+                if len(sources) > 0:
+                    return helpers.pick_source(sources)
 
-        url = 'http://www.veoh.com/rest/video/' + media_id + '/details'
-        html = self.net.http_GET(url).content
-        file_id = re.compile('fullPreviewHashPath="(.+?)"').findall(html)
-
-        if len(file_id) == 0:
-            raise ResolverError('File Not Found or removed')
-
-        return file_id[0]
+                raise ResolverError('File Not Found or removed')
+        except:
+            pass    
+        
+        raise ResolverError('Unknown error')
 
     def get_url(self, host, media_id):
         return 'http://veoh.com/watch/%s' % media_id
