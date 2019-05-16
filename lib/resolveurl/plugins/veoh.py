@@ -17,11 +17,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 import json
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class VeohResolver(ResolveUrl):
     name = "veoh"
@@ -39,9 +39,9 @@ class VeohResolver(ResolveUrl):
                 sources = []
                 _src = _data['video']['src']
                 if 'HQ' in _src:
-                    sources.append(('HQ',_src['HQ']))
+                    sources.append(('HD', _src['HQ']))
                 if 'Regular' in _src:
-                    sources.append(('Regular',_src['Regular']))
+                    sources.append(('SD', _src['Regular']))
                 
                 if len(sources) > 0:
                     return helpers.pick_source(sources)
