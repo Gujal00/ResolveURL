@@ -1,3 +1,18 @@
+[B]Version 5.0.30 (May 16, 2019)[/B]
+- Code Base Changes:
+    - none
+- Resolvers Added:
+    - vidtodo
+    - idtbox
+- Resolvers Fixed/Updated:
+    - tunepk
+    - veoh
+    - alldebrid (torrent support)
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - none
+
 [B]Version 5.0.29 (April 27, 2019)[/B]
 - Code Base Changes:
     - none
