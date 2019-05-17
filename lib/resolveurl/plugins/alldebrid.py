@@ -147,7 +147,7 @@ class AllDebridResolver(ResolveUrl):
                             progress = int(float(transfer_info.get('downloaded')) / file_size * 100) if file_size > 0 else 0
                             line3 = "Downloading at %s MB/s from %s peers, %s%% of %sGB completed" % (download_speed, transfer_info.get('seeders'), progress, round(float(file_size) / (1000 ** 3), 2))
                         elif transfer_info.get('statusCode') == 3:
-                            upload_speed = round(float(transfer_info.get('downloadSpeed')) / (1000 ** 2), 2)
+                            upload_speed = round(float(transfer_info.get('uploadSpeed')) / (1000 ** 2), 2)
                             progress = int(float(transfer_info.get('uploaded')) / file_size * 100) if file_size > 0 else 0
                             line3 = "Uploading at %s MB/s, %s%% of %s GB completed" % (upload_speed, progress, round(float(file_size) / (1000 ** 3), 2))
                         else:
