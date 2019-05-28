@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-05-28 17:33+0200\n"
 "Last-Translator: Mike Bike, 2017\n"
 "Language-Team: Dutch ()\n"
 "MIME-Version: 1.0\n"
@@ -15,19 +15,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2.3\n"
 
 msgctxt "#33000"
 msgid "OpenLoad Stream Authorization"
-msgstr "OpenLoad Stream Authorisatie"
+msgstr "OpenLoad Stream Autorisatie"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
-msgstr "Om deze video af te spelen, is authorisatie nodig"
+msgstr "Om deze video af te spelen, is autorisatie nodig"
 
 msgctxt "#33002"
 msgid "Visit the link below to authorize the devices on your network:"
-msgstr ""
-"Bezoek de link hieronder om dit apparaat te autorizeren in uw netwerk:"
+msgstr "Bezoek de link hieronder om dit apparaat te autoriseren in uw netwerk:"
 
 msgctxt "#33003"
 msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
@@ -35,7 +35,7 @@ msgstr "[B][COLOR blue]%s[/COLOR][/B] en klik op 'Pair'"
 
 msgctxt "#33004"
 msgid "No OpenLoad Authorization"
-msgstr "Geen OpenLoad Authorisatie"
+msgstr "Geen OpenLoad Autorisatie"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"
@@ -47,15 +47,15 @@ msgstr "Auto-Update Url"
 
 msgctxt "#33007"
 msgid "Decryption Key"
-msgstr "Decryption Sleutel"
+msgstr "Decoderingssleutel"
 
 msgctxt "#33008"
 msgid "TheVideo.me Stream Authorization"
-msgstr "TheVideo.me Stream Authorisatie"
+msgstr "TheVideo.me Stream Autorisatie"
 
 msgctxt "#33009"
 msgid "VidUP.me Stream Authorization"
-msgstr "VidUP.me Stream Authorisatie"
+msgstr "VidUP.me Stream Autorisatie"
 
 msgctxt "#33010"
 msgid "Enable Universal Resolvers"
@@ -91,11 +91,11 @@ msgstr "Ingeschakeld"
 
 msgctxt "#33018"
 msgid "Real-Debrid Resolver Authorized"
-msgstr "Real-Debrid Resolver Authoriseren"
+msgstr "Real-Debrid Resolver Geautoriseerd"
 
 msgctxt "#33019"
 msgid "Real-Debrid Authorization Reset"
-msgstr "Real-Debrid Authorisatie Reset"
+msgstr "Real-Debrid Autorisatie Reset"
 
 msgctxt "#33020"
 msgid "Cache Reset"
@@ -107,7 +107,7 @@ msgstr "Cache Reset Mislukt"
 
 msgctxt "#33022"
 msgid "login"
-msgstr "Login"
+msgstr "login"
 
 msgctxt "#33023"
 msgid "Username"
@@ -135,11 +135,11 @@ msgstr "Kies Primaire Link Automatisch"
 
 msgctxt "#33029"
 msgid "(Re)Authorize My Account"
-msgstr "(Her)Authoriseren Mijn Account"
+msgstr "(Her)Autoriseren Mijn Account"
 
 msgctxt "#33030"
 msgid "Reset My Authorization"
-msgstr "Reset Mijn Authorisatie"
+msgstr "Reset Mijn Autorisatie"
 
 msgctxt "#33031"
 msgid "Resolver Auto-Updated"
@@ -179,16 +179,52 @@ msgstr "OK"
 
 msgctxt "#33040"
 msgid "IP Stream Authorization Pairing"
-msgstr "IP Stream Authoriseren Pair"
+msgstr "IP Stream Autoriseren Pair"
 
 msgctxt "#33041"
 msgid "No IP Authorization"
-msgstr "Geen IP Authorisatie"
+msgstr "Geen IP Autorisatie"
+
+msgctxt "#33042"
+msgid "Client ID"
+msgstr "Client ID"
 
 msgctxt "#33043"
 msgid "Vshare.eu Stream Authorization"
-msgstr "Vshare.eu Stream Authorisatie"
+msgstr "Vshare.eu Stream Autorisatie"
 
 msgctxt "#33044"
 msgid "Flashx Stream Authorization"
-msgstr "Flashx Stream Authorisatie"
+msgstr "Flashx Stream Autorisatie"
+
+msgctxt "#33045"
+msgid "AllDebrid Authorization Reset"
+msgstr "AllDebrid Autorisatie Reset"
+
+msgctxt "#33046"
+msgid "AllDebrid Resolver Authorized"
+msgstr "AllDebrid Resolver Geautoriseerd"
+
+msgctxt "#33047"
+msgid "Enable PopUps"
+msgstr "Popups ingeschakeld"
+
+msgctxt "#33048"
+msgid "API Key"
+msgstr "API sleutel"
+
+msgctxt "#33049"
+msgid "Torrent Support"
+msgstr "Torrent ondersteuning"
+
+msgctxt "#33050"
+msgid "Cached torrents only"
+msgstr "Allen gecachte torrents"
+
+msgctxt "#33051"
+msgid "Premiumize Authorization Reset"
+msgstr "Premiumize Autorisatie Reset"
+
+msgctxt "#33052"
+msgid "Premiumize Resolver Authorized"
+msgstr "Premiumize Resolver Geauthoriseerd"
