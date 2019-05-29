@@ -70,8 +70,8 @@ def open_settings():
     return addon.openSettings()
 
 
-def get_keyboard(heading, default=''):
-    keyboard = xbmc.Keyboard()
+def get_keyboard(heading, default='', hide_input=False):
+    keyboard = xbmc.Keyboard(hidden=hide_input)
     keyboard.setHeading(heading)
     if default: keyboard.setDefault(default)
     keyboard.doModal()
