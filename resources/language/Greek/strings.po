@@ -236,3 +236,11 @@ msgstr "Ο επιλυτής Linksnappy έχει εγκριθεί"
 msgctxt "#33055"
 msgid "Download rate:"
 msgstr "Ρυθμός μεταφόρτωσης:"
+
+msgctxt "#33056"
+msgid "Peers:"
+msgstr "Ομότιμοι:"
+
+msgctxt "#33057"
+msgid "δευτερόλεπτα"
+msgstr ""

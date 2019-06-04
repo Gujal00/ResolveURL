@@ -72,5 +72,7 @@ STRINGS = {
     'pm_authorized': 33052,
     'ls_auth_reset': 33053,
     'ls_authorized': 33054,
-    'download_rate': 33055
+    'download_rate': 33055,
+    'peer_number': 33056,
+    'seconds': 33057
 }

@@ -1,6 +1,7 @@
 """
-    resolveurl XBMC Addon
-    Copyright (C) 2018 jsergio
+    ResolveURL Kodi module
+    linksnappy plugin
+    Copyright (C) 2019 twilight0
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +23,7 @@ from urllib import urlencode, quote
 import json
 from os.path import join, exists
 from os import remove
-import time, sys, traceback
+import time
 
 from lib import helpers
 from resolveurl import common
@@ -37,14 +38,16 @@ USER_AGENT = 'ResolveURL for Kodi/{0}'.format(common.addon_version)
 base_url = 'https://linksnappy.com'
 api = '/'.join([base_url, 'api'])
 authenticate = '/'.join([api, 'AUTHENTICATE'])
-filehosts = '/'.join([api, 'FILEHOSTS'])
+# filehosts = '/'.join([api, 'FILEHOSTS'])  # Does not update itself as often as the one below
+filehosts = '/'.join([api, 'FILEHOSTSREALTIME'])
 regexarr = '/'.join([api, 'REGEXARR'])
+hostcachecheck = '/'.join([api, 'HOSTCACHECHECK?link={0}'])
 
 # regex = '/'.join([api, 'REGEX'])  # single regex pattern, not particularly useful
-user_details = '/'.join([api, 'USERDETAILS'])
+# user_details = '/'.join([api, 'USERDETAILS'])
 # torrents_genzip = '/'.join([torrents, 'GENZIP'])  # provides a zip-file of a torrent, not used in resolveurl
 
-toggle_download_log = '/'.join([api, 'TOGGLEDOWNLOADLOG?state={0}'])  # can toggle download logs, state=on or state=off
+# toggle_download_log = '/'.join([api, 'TOGGLEDOWNLOADLOG?state={0}'])  # can toggle download logs, state=on or state=off, not currently used in the plugin
 deletelink = '/'.join([api, 'DELETELINK'])
 linkgen = '/'.join([api, 'linkgen?genLinks={0}'])
 
@@ -56,14 +59,13 @@ torrents_list = '/'.join([torrents, 'LIST'])
 torrents_files = '/'.join([torrents, 'FILES?id={0}'])
 torrents_folderlist = '/'.join([torrents, 'FOLDERLIST'])
 torrents_status = '/'.join([torrents, 'STATUS?tid={0}'])
-torrents_create = '/'.join([torrents, 'CREATEFOLDER?name={0}'])  # add param dir for creating a subfolder
+torrents_create = '/'.join([torrents, 'CREATEFOLDER?name={0}&dir={1}'])  # add param dir for creating a subfolder
 torrents_rename = '/'.join([torrents, 'RENAMEFOLDER?name={0}&fid={1}'])
 torrents_deletefile = '/'.join([torrents, 'DELETEFILE?fid={0}'])
 torrents_delete = '/'.join([torrents, 'DELETETORRENT?tid={0}&delFiles={1}'])
 torrents_move = '/'.join([torrents, 'MOVETORRENTFILE?fid={0}&dir={1}'])
 torrents_links = '/'.join([torrents, 'DOWNLOADLINKS?fid={0}'])
-torrents_hash_check = '/'.join([torrents, 'HASHCHECK?hash={0}'])
-torrents_url_check = '/'.join([torrents, 'HASHCHECK?url={0}'])
+torrents_hashcheck = '/'.join([torrents, 'HASHCHECK?{0}'])
 
 folder_name = 'resolveurl'
 
@@ -78,8 +80,8 @@ class LinksnappyResolver(ResolveUrl):
 
     def __init__(self):
 
-        self.hosts = []
-        self.patterns = []
+        self.hosts = None
+        self.patterns = None
         self.net = common.Net()
         self.headers = {'User-Agent': USER_AGENT}
 
@@ -104,13 +106,12 @@ class LinksnappyResolver(ResolveUrl):
     def get_media_url(self, host, media_id, cached_only=False):
 
         cached = self.__check_cache(media_id)
-        media_id_lc = media_id.lower()
 
-        if media_id_lc.startswith('magnet:') or '.torrent' in media_id_lc:
+        if media_id.lower().startswith('magnet:') or '.torrent' in media_id.lower():
 
             if cached:
 
-                logger.log_debug('Linksnappy.com: {0} is readily available to stream'.format(media_id))
+                logger.log_debug('Linksnappy.com: "{0}" is readily available to stream'.format(media_id))
 
                 torrent_id = self.__create_transfer(media_id)
 
@@ -122,7 +123,7 @@ class LinksnappyResolver(ResolveUrl):
 
                 else:
 
-                    logger.log_debug('Linksnappy.com: initiating transfer to files for {0}'.format(media_id))
+                    logger.log_debug('Linksnappy.com: initiating transfer to files for "{0}"'.format(media_id))
 
                     torrent_id = self.__initiate_transfer(media_id)
 
@@ -130,23 +131,28 @@ class LinksnappyResolver(ResolveUrl):
 
             link = self.__direct_dl(media_id=torrent_id, torrent=True)
 
-            try:
-
-                if link is not None:
-
-                    self.__clear_finished(torrent_id)
-
-            except Exception:
-
-                pass
+            # Disabled by default:
+            # try:
+            #
+            #     if link is not None:
+            #
+            #         self.__clear_finished(torrent_id)
+            #
+            # except Exception:
+            #
+            #     pass
 
         else:
+
+            if cached and any(host in item for item in self.get_hosts[1]):
+
+                logger.log_debug('Linksnappy.com: "{0}" is readily available to stream'.format(media_id))
 
             link = self.__direct_dl(media_id)
 
         if link is not None:
 
-            logger.log_debug('Linksnappy.com: Successfully resolved url to {0}'.format(link))
+            logger.log_debug('Linksnappy.com: Successfully resolved url to "{0}"'.format(link))
 
             return link + helpers.append_headers(self.headers)
 
@@ -161,69 +167,51 @@ class LinksnappyResolver(ResolveUrl):
         return 'linksnappy.com', url
 
     @common.cache.cache_method(cache_limit=8)
-    def get_all_hosters(self):
+    def get_hosts(self):
+
+        _hosts = []
+        disabled = []
+        cached = []
 
         try:
 
-            _hosts = []
-            disabled = []
-
-            response = self.net.http_GET(user_details, headers=self.headers).content
-            details = json.loads(response).get('return')
-
-            torrent_access = details.get('torrentAccess')
-            account_type = details.get('accountType')
-
-            if self.get_setting('torrents') == 'true' and torrent_access:
+            if self.get_setting('torrents') == 'true':
                 _hosts.extend([u'torrent', u'magnet'])
 
-            if account_type == 'elite':
+            response = self.net.http_GET(filehosts, headers=self.headers).content
 
-                response = self.net.http_GET(filehosts, headers=self.headers).content
-                res = json.loads(response)
+            res = json.loads(response)
 
-                if res.get('status') != 'OK':
+            if res.get('status') != 'OK':
 
-                    raise ResolverError('Server did not return hosts list')
+                raise ResolverError('Server did not return hosts list')
 
-                result = res.get('return').iteritems()
+            result = res.get('return').iteritems()
 
-                for h, d in result:
+            for h, d in result:
 
-                    if d['Status'] == '0':
-                        disabled.append(h)
-                        continue
+                if d['Status'] == '0':
+                    disabled.append(h)
+                    continue
+                elif h == 'mp3':
+                    continue
+                elif d['iscacheable'] == 1:
+                    cached.append(h)
 
-                    _hosts.append(h)
-                    if 'alias' in d:
-                        for a in d['alias']:
-                            _hosts.append(a)
+                _hosts.append(h)
 
-                logger.log_debug('Linksnappy.com available hosts: {0}'.format(_hosts))
+                if 'alias' in d:
+                    for a in d['alias']:
+                        _hosts.append(a)
 
-                if disabled:
+            logger.log_debug('Linksnappy.com available hosts: {0}'.format(_hosts))
+            logger.log_debug('Linksnappy.com hosts supporting cache: {0}'.format(cached))
 
-                    logger.log_debug('Linksnappy.com currently disabled hosts: {0}'.format(disabled))
+            if disabled:
 
-                pattern = self.net.http_GET(regexarr, headers=self.headers).content
+                logger.log_debug('Linksnappy.com currently disabled hosts: {0}'.format(disabled))
 
-                json_object = json.loads(pattern)
-
-                if json_object.get('error') is not False:
-
-                    raise Exception, 'Unexpected response received when attempting reading regex patterns'
-
-                else:
-
-                    logger.log_debug('Linksnappy.com hosts pattern: {0}'.format(repr(json_object.get('return').values())))
-
-                regex_list = [re.compile(i[1:-1]) for i in json_object.get('return').values() if i]
-
-                return _hosts, regex_list
-
-            elif account_type == 'torrent':
-
-                return _hosts, []
+            return _hosts, cached
 
         except Exception as e:
 
@@ -231,29 +219,56 @@ class LinksnappyResolver(ResolveUrl):
 
         return [], []
 
+    @common.cache.cache_method(cache_limit=8)
+    def get_regexes(self):
+
+        try:
+
+            pattern = self.net.http_GET(regexarr, headers=self.headers).content
+
+            json_object = json.loads(pattern)
+
+            if json_object.get('error') is not False:
+
+                raise Exception('Unexpected response received when attempting reading regex patterns')
+
+            else:
+
+                logger.log_debug('Linksnappy.com hosts patterns: {0}'.format(repr(json_object.get('return'))))
+
+            regex_list = [re.compile(i[1:-1]) for i in json_object.get('return').values() if i]
+
+            return regex_list
+
+        except Exception as e:
+
+            logger.log_error('Error getting Linksnappy regex pattern: {0}'.format(e))
+
+        return []
+
     def valid_url(self, url, host):
-
-        if url and self.get_setting('torrents') == 'true':
-
-            url_lc = url.lower()
-
-            if url_lc.endswith('.torrent') or url_lc.startswith('magnet:'):
-
-                return True
-
-        if not self.patterns or not self.hosts:
-
-            self.hosts, self.patterns = self.get_all_hosters()
 
         if url:
 
-            for pattern in self.patterns:
+            if (url.lower().startswith('magnet:') or '.torrent' in url.lower()) and self.get_setting('torrents') == 'true':
 
-                if pattern.search(url):
+                return True
+
+            if self.patterns is None:
+
+                self.patterns = self.get_regexes()
+
+            for p in self.patterns:
+
+                if p.search(url):
 
                     return True
 
         elif host:
+
+            if self.hosts is None:
+
+                self.hosts = self.get_hosts()[0]
 
             if host.startswith('www.'):
 
@@ -273,14 +288,18 @@ class LinksnappyResolver(ResolveUrl):
 
             media_id = re.search(r'btih:(\w+)', media_id).group(1)
 
+        else:
+
+            media_id = quote(media_id)
+
         try:
 
             if _url.startswith('magnet:'):
-                check_url = torrents_hash_check.format(media_id)
-            elif '.torrent' in media_id:
-                check_url = torrents_url_check.format(quote(media_id))
+                check_url = torrents_hashcheck.format(''.join(['hash=', media_id]))
+            elif '.torrent' in _url:
+                check_url = torrents_hashcheck.format(''.join(['url=', media_id]))
             else:
-                return False
+                check_url = hostcachecheck.format(media_id)
 
             res = self.net.http_GET(check_url, headers=self.headers).content
             result = json.loads(res)
@@ -297,80 +316,82 @@ class LinksnappyResolver(ResolveUrl):
 
     def __create_transfer(self, media_id):
 
-        folder_id = self.__create_folder()
+        try:
 
-        if folder_id != '':
+            if media_id.startswith('magnet:'):
+                response = self.net.http_GET(torrents_addmagnet.format(quote(media_id)), headers=self.headers).content
+            else:
+                response = self.net.http_GET(torrents_addurl.format(quote(media_id)), headers=self.headers).content
 
-            try:
+            result = json.loads(response)
 
-                if media_id.startswith('magnet:'):
-                    response = self.net.http_GET(torrents_addmagnet.format(quote(media_id)), headers=self.headers).content
-                else:
-                    response = self.net.http_GET(torrents_addurl.format(quote(media_id)), headers=self.headers).content
+            if media_id.startswith('magnet:'):
 
-                result = json.loads(response)
+                if result.get('status') == 'OK' and result.get('error') is False:
 
-                if media_id.startswith('magnet:'):
+                    torrent = result.get('return')[0]
 
-                    if result.get('status') == 'OK' and result.get('error') is False:
+                    error = torrent.get('error')
 
-                        error = result.get('return')[0].get('error')
+                    torrent_id = torrent.get('torrentid')
 
-                        torrent_id = result.get('return')[0].get('torrentid')
+                    if error:
 
-                        if error is not False:
-
-                            logger.log_debug(error)
-
-                    else:
-
-                        raise ResolverError('Unexpected response received when attempting to add a torrent')
+                        logger.log_debug('Linksnappy error at line 332: ' + error)
 
                 else:
 
-                    if result.keys()[0].endswith('.torrent'):
+                    raise ResolverError('Unexpected response received when attempting to add a torrent')
 
-                        torrent_id = result.values()[0].get('torrentid')
+            else:
 
-                        error = result.values()[0].get('error')
+                if result.keys()[0].endswith('.torrent'):
 
-                        if error is not False:
+                    torrent_id = result.values()[0].get('torrentid')
 
-                            logger.log_debug(error)
+                    error = result.values()[0].get('error')
 
-                    else:
+                    if error:
 
-                        raise ResolverError('Unexpected response received when attempting to add a torrent')
-
-                if torrent_id:
-
-                    logger.log_debug('Linksnappy.com: Added the following url for transfer {0}'.format(media_id))
-
-                result = self.__start_transfer(torrent_id, folder_id)
-
-                logger.log_debug(result)
-
-                if result.get('error') is False:
-
-                    logger.log_debug('Linksnappy transfer with torrent id: {0} successfully started'.format(torrent_id))
+                        logger.log_debug('Linksnappy error at line 348:' + error)
 
                 else:
 
-                    logger.log_debug('Linksnappy transfer with torrent id {0} has the following error: {1}'.format(torrent_id, result.get('error')))
+                    raise ResolverError('Unexpected response received when attempting to add a torrent')
 
-                    if result.get('error') == 'Magnet URI processing in progress. Please wait.':
+            if torrent_id:
 
-                        while self.__start_transfer(torrent_id, folder_id).get('error') is not False:
+                logger.log_debug('Linksnappy.com: Added the following url for transfer {0}'.format(media_id))
 
-                            logger.log_debug('Waiting for Linksnappy transfer due to the following status: {0}'.format(torrent_id, result.get('error')))
+            folder_id = self.__create_folder()
 
-                            common.kodi.sleep(3000)
+            result = self.__start_transfer(torrent_id, folder_id)
 
-                return str(torrent_id)
+            if result.get('error') is False:
 
-            except Exception:
+                logger.log_debug('Linksnappy transfer with torrent id: "{0}" successfully started'.format(torrent_id))
 
-                pass
+            else:
+
+                logger.log_debug('Linksnappy transfer with torrent id "{0}" has the following error: {1}'.format(torrent_id, result.get('error')))
+
+                if result.get('error') == 'Magnet URI processing in progress. Please wait.':
+
+                    count = 1
+                    while self.__start_transfer(torrent_id, folder_id).get('error') is not False:
+
+                        logger.log_debug('Waiting for Linksnappy transfer due to the following status: "{0}"'.format(torrent_id, result.get('error')))
+
+                        common.kodi.sleep(3000)
+                        count += 1
+                        if count == 8:
+                            raise ResolverError('Linksnappy torrens: Waited too long for transfer to start')
+
+            return str(torrent_id)
+
+        except Exception as e:
+
+            logger.log_debug('Linksnappy error at __create_transfer: {0}'.format(e))
 
         return ''
 
@@ -430,24 +451,37 @@ class LinksnappyResolver(ResolveUrl):
         if transfer_info:
 
             line1 = transfer_info.get('name')
-            line2 = 'Saving torrent to the Linksnappy Files'
-            line3 = ''.join([i18n('download_rate'), ' ', str(transfer_info.get('downloadRate'))])
+            line2 = ''.join([i18n('download_rate'), ' ', str(transfer_info.get('downloadRate'))])
+            line3 = ''.join(
+                [
+                    i18n('peer_number'), ' ', str(transfer_info.get('getPeers'))
+                ]
+            )
 
-            with common.kodi.ProgressDialog('Resolve URL Linksnappy Transfer', line1, line2, line3) as pd:
+            with common.kodi.ProgressDialog('ResolveURL Linksnappy transfer', line1, line2, line3) as pd:
 
                 while transfer_info.get('status') != 'FINISHED':
 
-                    common.kodi.sleep(1000 * interval)
+                    common.kodi.sleep(2000)
                     transfer_info = self.__list_transfer(torrent_id)
-                    line1 = transfer_info.get('name')
-
-                    line3 = ''.join([i18n('download_rate'), ' ', str(transfer_info.get('downloadRate'))])
-
-                    logger.log_debug(line3)
 
                     try:
-                        pd.update(int(transfer_info.get('percentDone')), line1=line1, line3=line3)
+
+                        line1 = transfer_info.get('name')
+                        line2 = ''.join([i18n('download_rate'), ' ', str(transfer_info.get('downloadRate'))])
+                        line3 = ''.join(
+                            [
+                                i18n('peer_number'), ' ', str(transfer_info.get('getPeers')), ', ETA: ',
+                                str(transfer_info.get('eta')), ' ', i18n('seconds')
+                            ]
+                        )
+
+                        logger.log_debug(line2)
+
+                        pd.update(int(transfer_info.get('percentDone')), line1=line1, line2=line2, line3=line3)
+
                     except ValueError:
+
                         pass
 
                     if pd.is_canceled():
@@ -458,7 +492,7 @@ class LinksnappyResolver(ResolveUrl):
 
                 else:
 
-                    logger.log_debug('Linksnappy.com: Transfer completed')
+                    logger.log_debug('Linksnappy.com: Transfer with id "{0}" completed!'.format(torrent_id))
 
                     common.kodi.sleep(1000 * interval)  # allow api time to generate the stream_link
 
@@ -477,8 +511,6 @@ class LinksnappyResolver(ResolveUrl):
                 response = self.net.http_GET(linkgen.format(quote('{"link":"%s"}' % media_id))).content
 
             result = json.loads(response)
-
-            logger.log_debug(result)
 
             if torrent:
 
@@ -527,13 +559,11 @@ class LinksnappyResolver(ResolveUrl):
 
                 except Exception:
 
-                    raise ResolverError('Unexpected Response Received')
+                    pass
 
-        except Exception:
+        except Exception as e:
 
-            _, __, tb = sys.exc_info()
-
-            print traceback.print_tb(tb)
+            logger.log_debug('Linksnappy, error at __direct_dl function: {0}'.format(e))
 
         return None
 
@@ -548,9 +578,9 @@ class LinksnappyResolver(ResolveUrl):
 
                 for items in result.get("return")[::-1]:
 
-                    if items.get('type') == 'root' and items.get('text') == folder_name or items.get('text') == 'Downloads':
+                    if items.get('type') == 'root' and (items.get('text') == folder_name or items.get('text') == 'Downloads'):
 
-                        return items.get('id', '')
+                        return items.get('id', ''), items.get('text', '')
 
         except Exception:
 
@@ -560,18 +590,22 @@ class LinksnappyResolver(ResolveUrl):
 
     def __create_folder(self):
 
-        folder_id = self.__list_folders()
+        folder_id, f_name = self.__list_folders()
 
-        if folder_id == '':
+        if f_name == folder_name:
+
+            return folder_id
+
+        elif f_name == 'Downloads':
 
             try:
 
-                response = self.net.http_GET(torrents_create.format(folder_name), headers=self.headers).content
+                response = self.net.http_GET(torrents_create.format(folder_name, folder_id), headers=self.headers).content
                 result = json.loads(response)
 
                 if result.get('status') == 'OK':
 
-                    logger.log_debug('Created new folder named "{0}" into Linksnappy files'.format(folder_name))
+                    logger.log_debug('Created new folder named "{0}" at Linksnappy files'.format(folder_name))
 
                     folder_id = result.get('return').get('id')
 
@@ -581,15 +615,11 @@ class LinksnappyResolver(ResolveUrl):
 
                 pass
 
-        else:
-
-            return folder_id
-
         return ''
 
     def __delete_folder(self):
 
-        folder_id = self.__list_folders()
+        folder_id, f_name = self.__list_folders()
 
         if folder_id != '':
 
@@ -621,7 +651,7 @@ class LinksnappyResolver(ResolveUrl):
 
             if result.get('status') == 'OK':
 
-                logger.log_debug('Finished transfers successfully cleared from the Linksnappy torrents')
+                logger.log_debug('Successfully cleared torrent with id {0} from Linksnappy torrents'.format(torrent_id))
 
                 return True
 
@@ -647,11 +677,33 @@ class LinksnappyResolver(ResolveUrl):
 
     def authorize_resolver(self):
 
-        self.login_query = '?{0}'.format(
-            urlencode({'username': self.get_setting('username'), 'password': self.get_setting('password')})
-        )
+        if exists(self.cookie_file):
 
-        response = self.net.http_GET(url=''.join([authenticate, self.login_query]), headers=self.headers).content
+            remove(self.cookie_file)
+
+        if not self.get_setting('username') or not self.get_setting('password'):
+
+            username = common.kodi.get_keyboard(i18n('username'))
+            password = common.kodi.get_keyboard(i18n('password'), hide_input=True)
+
+            if username and password:
+
+                self.set_setting('username', username)
+                self.set_setting('password', password)
+
+                login_query = '?{0}'.format(urlencode({'username': username, 'password': password}))
+
+            else:
+
+                raise ResolverError('Linksnappy Error: {0}'.format('Did not provide both username and password'))
+
+        else:
+
+            login_query = '?{0}'.format(
+                urlencode({'username': self.get_setting('username'), 'password': self.get_setting('password')})
+            )
+
+        response = self.net.http_GET(url=''.join([authenticate, login_query]), headers=self.headers).content
 
         res = json.loads(response)
 
@@ -666,11 +718,17 @@ class LinksnappyResolver(ResolveUrl):
 
         elif 'ERROR' in res.get('status'):
 
+            self.set_setting('username', '')
+            self.set_setting('password', '')
+            remove(self.cookie_file)
+
             raise ResolverError('Linksnappy Error: {0}'.format(res.get('error')))
 
     def reset_authorization(self):
 
         remove(self.cookie_file)
+        self.set_setting('username', '')
+        self.set_setting('password', '')
         self.set_setting('expiration_timestamp', '')
 
     @classmethod
@@ -682,20 +740,21 @@ class LinksnappyResolver(ResolveUrl):
     def get_settings_xml(cls):
 
         xml = super(cls, cls).get_settings_xml()
+
         xml.append(
-            '<setting id="{0}_username" enable="eq(-1,true)" type="text" label="{1}" default=""/>'.format(
+            '<setting id="{0}_username" enable="eq(-1,true)" type="text" label="{1}" visible="false" default=""/>'.format(
                 cls.__name__, i18n('username')
             )
         )
 
         xml.append(
-            '<setting id="{0}_password" enable="eq(-2,true)" type="text" label="{1}" option="hidden" default=""/>'.format(
+            '<setting id="{0}_password" enable="eq(-2,true)" type="text" label="{1}" visible="false" default=""/>'.format(
                 cls.__name__, i18n('password')
             )
         )
 
         xml.append(
-            '<setting id="{0}_auth" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=auth_ls)"/>'.format(
+            '<setting id="{0}_auth" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=auth_ls)" option="close"/>'.format(
                 cls.__name__, i18n('auth_my_account')
             )
         )
@@ -713,7 +772,7 @@ class LinksnappyResolver(ResolveUrl):
         )
 
         xml.append(
-            '<setting id="{0}_cached_only" enable="eq(-1,true)" type="bool" label="{1}" default="false" />'.format(
+            '<setting id="{0}_cached_only" enable="eq(-1,true)" type="bool" label="{1}" default="true" />'.format(
                 cls.__name__, i18n('cached_only')
             )
         )
