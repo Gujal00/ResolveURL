@@ -236,3 +236,11 @@ msgstr ""
 msgctxt "#33055"
 msgid "Download rate:"
 msgstr ""
+
+msgctxt "#33056"
+msgid "Peers:"
+msgstr ""
+
+msgctxt "#33057"
+msgid "seconds"
+msgstr ""
