@@ -244,3 +244,7 @@ msgstr ""
 msgctxt "#33057"
 msgid "seconds"
 msgstr ""
+
+msgctxt "#33058"
+msgid "Cached filehosts only"
+msgstr ""
