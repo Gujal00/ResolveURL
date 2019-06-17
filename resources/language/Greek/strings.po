@@ -244,3 +244,7 @@ msgstr "Ομότιμοι:"
 msgctxt "#33057"
 msgid "δευτερόλεπτα"
 msgstr ""
+
+msgctxt "#33058"
+msgid "Cached filehosts only"
+msgstr "Αποθηκευμένα αρχεία μόνο"

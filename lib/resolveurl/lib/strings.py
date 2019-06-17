@@ -74,5 +74,6 @@ STRINGS = {
     'ls_authorized': 33054,
     'download_rate': 33055,
     'peer_number': 33056,
-    'seconds': 33057
+    'seconds': 33057,
+    'cached_files_only': 33058
 }
