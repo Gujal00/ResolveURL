@@ -324,7 +324,7 @@ class LinksnappyResolver(ResolveUrl):
 
     def __check_dl_status(self, hash_id):
 
-        response = self.net.http_GET(cachedlstatus.format(hash_id)).content
+        response = self.net.http_GET(cachedlstatus.format(hash_id), headers=self.headers).content
 
         result = json.loads(response)
 
@@ -524,11 +524,11 @@ class LinksnappyResolver(ResolveUrl):
 
             if torrent:
 
-                response = self.net.http_GET(torrents_files.format(media_id)).content
+                response = self.net.http_GET(torrents_files.format(media_id), headers=self.headers).content
 
             else:
 
-                response = self.net.http_GET(linkgen.format(quote('{"link":"%s"}' % media_id))).content
+                response = self.net.http_GET(linkgen.format(quote('{"link":"%s"}' % media_id)), headers=self.headers).content
 
             result = json.loads(response)
 
