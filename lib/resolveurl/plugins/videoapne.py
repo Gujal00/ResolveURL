@@ -36,13 +36,10 @@ class VideoApneResolver(ResolveUrl):
                    'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
         
-        r = re.search("script'>(eval.*?)</script", html, re.DOTALL)
+        r = re.search('file:"([^"]+m3u8)"', html)
         
         if r:
-            html = jsunpack.unpack(r.group(1))
-            src = re.search('file:\s*"([^"]+m3u8)"',html)
-            if src:
-                return src.group(1) + helpers.append_headers(headers)
+            return r.group(1) + helpers.append_headers(headers)
         
         raise ResolverError('Video cannot be located.')
 
