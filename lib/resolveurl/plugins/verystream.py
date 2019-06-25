@@ -37,7 +37,7 @@ class VeryStreamResolver(ResolveUrl):
         html = response.content
 
         if html:
-            regex = '(%s~[~.a-zA-Z0-9]+)' % media_id
+            regex = '(%s~[~.:a-zA-Z0-9]+)' % media_id
             videolink = re.search(regex, html)
             if videolink:
                 source = 'https://verystream.com/gettoken/%s?mime=true' % videolink.group(1)
