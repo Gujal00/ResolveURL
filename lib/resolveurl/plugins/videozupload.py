@@ -24,8 +24,8 @@ import re
 
 class VideozUpload(ResolveUrl):
     name = 'videozupload.net'
-    domains = ['videozupload.net']
-    pattern = '(?://|\.)(videozupload\.net)/video/([0-9a-z]+)'
+    domains = ['videozupload.net', 'videzup.pl', 'videzup.top']
+    pattern = '(?://|\.)((?:videozupload|videzup)\.(?:net|pl|top))/video/([0-9a-z]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -34,7 +34,7 @@ class VideozUpload(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
         response = self.net.http_GET(web_url, headers=headers)
-        headers['Referer'] = 'https://embed.videozupload.net/'
+        headers['Referer'] = 'https://embed.%s/' % host
         html = response.content
         html = unwise.unwise_process(html)
         r = re.search("Clappr.+?source:\s*'([^']+)",html)
@@ -46,4 +46,4 @@ class VideozUpload(ResolveUrl):
         return strurl
 
     def get_url(self, host, media_id):
-        return 'https://embed.videozupload.net/video/%s' % media_id
+        return 'https://embed.%s/video/%s' % (host,media_id)

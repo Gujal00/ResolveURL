@@ -18,7 +18,7 @@
 """
 
 
-import re
+import re  #, traceback, sys
 from urllib import urlencode, quote
 import json
 from os.path import join, exists
@@ -42,12 +42,14 @@ authenticate = '/'.join([api, 'AUTHENTICATE'])
 filehosts = '/'.join([api, 'FILEHOSTSREALTIME'])
 regexarr = '/'.join([api, 'REGEXARR'])
 hostcachecheck = '/'.join([api, 'HOSTCACHECHECK?link={0}'])
+cachedlstatus = '/'.join([api, 'CACHEDLSTATUS?id={0}'])
+
+# user_details = '/'.join([api, 'USERDETAILS'])  # Does not work well with cookies
+# torrents_genzip = '/'.join([torrents, 'GENZIP'])  # provides a zip-file of a torrent, not used in resolveurl
+# toggle_download_log = '/'.join([api, 'TOGGLEDOWNLOADLOG?state={0}'])  # can toggle download logs, state=on or state=off, not currently used in the plugin
 
 # regex = '/'.join([api, 'REGEX'])  # single regex pattern, not particularly useful
-# user_details = '/'.join([api, 'USERDETAILS'])
-# torrents_genzip = '/'.join([torrents, 'GENZIP'])  # provides a zip-file of a torrent, not used in resolveurl
 
-# toggle_download_log = '/'.join([api, 'TOGGLEDOWNLOADLOG?state={0}'])  # can toggle download logs, state=on or state=off, not currently used in the plugin
 deletelink = '/'.join([api, 'DELETELINK'])
 linkgen = '/'.join([api, 'linkgen?genLinks={0}'])
 
@@ -119,7 +121,7 @@ class LinksnappyResolver(ResolveUrl):
 
                 if self.get_setting('cached_only') == 'true' or cached_only:
 
-                    raise ResolverError('Linksnappy.com: Cached torrents only allowed to be initiated')
+                    raise ResolverError('Linksnappy.com: Cached torrents are only allowed to be initiated')
 
                 else:
 
@@ -144,9 +146,15 @@ class LinksnappyResolver(ResolveUrl):
 
         else:
 
-            if cached and any(host in item for item in self.get_hosts[1]):
+            in_list = any(item in media_id for item in self.get_hosts()[1]) or any(item in host for item in self.get_hosts()[1])
+
+            if cached and in_list:
 
                 logger.log_debug('Linksnappy.com: "{0}" is readily available to stream'.format(media_id))
+
+            elif (self.get_setting('cached_files_only') == 'true' or cached_only) and not cached and in_list:
+
+                raise ResolverError('Linksnappy.com: Cached files from hosts are only allowed to be initiated')
 
             link = self.__direct_dl(media_id)
 
@@ -274,7 +282,7 @@ class LinksnappyResolver(ResolveUrl):
 
                 host = host.replace('www.', '')
 
-            if any(host in item for item in self.hosts):
+            if any(item in host for item in self.hosts):
 
                 return True
 
@@ -313,6 +321,18 @@ class LinksnappyResolver(ResolveUrl):
             logger.log_debug('Linksnappy.com failure on retrieving cache status')
 
         return False
+
+    def __check_dl_status(self, hash_id):
+
+        response = self.net.http_GET(cachedlstatus.format(hash_id), headers=self.headers).content
+
+        result = json.loads(response)
+
+        if result.get('status') != 'OK':
+
+            raise ResolverError('Error occured when checking host transfer dl status')
+
+        return result.get('return')
 
     def __create_transfer(self, media_id):
 
@@ -488,7 +508,7 @@ class LinksnappyResolver(ResolveUrl):
 
                         self.__delete_transfer(torrent_id)
                         # self.__delete_folder()
-                        raise ResolverError('Transfer ID {0} canceled by user'.format(torrent_id))
+                        raise ResolverError('Transfer ID "{0}" canceled by user'.format(torrent_id))
 
                 else:
 
@@ -504,11 +524,11 @@ class LinksnappyResolver(ResolveUrl):
 
             if torrent:
 
-                response = self.net.http_GET(torrents_files.format(media_id)).content
+                response = self.net.http_GET(torrents_files.format(media_id), headers=self.headers).content
 
             else:
 
-                response = self.net.http_GET(linkgen.format(quote('{"link":"%s"}' % media_id))).content
+                response = self.net.http_GET(linkgen.format(quote('{"link":"%s"}' % media_id)), headers=self.headers).content
 
             result = json.loads(response)
 
@@ -547,21 +567,89 @@ class LinksnappyResolver(ResolveUrl):
 
             else:
 
-                try:
+                stream = result.get('links')[0]
 
-                    stream = result.get('links')[0]
+                if stream['status'] != 'OK':
 
-                    if stream['status'] != 'OK':
+                    raise ResolverError('Link Not Found: {0}'.format(stream.get('error')))
 
-                        raise ResolverError('Link Not Found: {0}'.format(result.get('error')))
+                elif stream['type'] != 'video':
 
-                    return stream.get('generated')
+                    raise ResolverError(
+                        'Generated link "{0}" does not contain a playable file'.format(stream.get('generated'))
+                    )
 
-                except Exception:
+                elif any(item in media_id for item in self.get_hosts()[1]):
 
-                    pass
+                    transfer_info = self.__check_dl_status(stream.get('hash'))
+
+                    if transfer_info.get('percent') != 100:
+
+                        line1 = stream.get('filename')
+                        line2 = stream.get('filehost')
+
+                        with common.kodi.ProgressDialog('ResolveURL Linksnappy transfer', line1, line2) as pd:
+
+                            while self.__check_dl_status(stream.get('hash')).get('percent') != 100:
+
+                                common.kodi.sleep(2000)
+
+                                transfer_info = self.__check_dl_status(stream.get('hash'))
+
+                                try:
+
+                                    logger.log_debug(
+                                        'Transfer with id "{0}" is still in progress, caching... active connections {1}, download speed {2}'.format(
+                                            stream.get('hash'), transfer_info.get('connections'), transfer_info.get('downloadSpeed')
+                                        )
+                                    )
+
+                                except ValueError:
+
+                                    pass
+
+                                try:
+
+                                    line1 = stream.get('filename')
+                                    line2 = stream.get('filehost')
+
+                                    try:
+
+                                        line3 = ''.join(
+                                            [i18n('download_rate'), ' ', transfer_info.get('downloadSpeed')]
+                                        )
+
+                                        pd.update(int(transfer_info.get('percent')), line1=line1, line2=line2, line3=line3)
+
+                                    except ValueError:
+
+                                        pd.update(int(transfer_info.get('percent')), line1=line1, line2=line2)
+
+                                except ValueError:
+
+                                    pass
+
+                                if pd.is_canceled():
+
+                                    raise ResolverError('Transfer ID "{0}" canceled by user'.format(stream.get('hash')))
+
+                            else:
+
+                                logger.log_debug('Transfer with id "{0}" completed'.format(stream.get('hash')))
+                                pd.update(percent=100)
+                                return stream.get('generated')
+
+                    else:
+
+                        stream.get('generated')
+
+                return stream.get('generated')
 
         except Exception as e:
+
+            # _, __, tb = sys.exc_info()
+            #
+            # print traceback.print_tb(tb)
 
             logger.log_debug('Linksnappy, error at __direct_dl function: {0}'.format(e))
 
@@ -762,6 +850,12 @@ class LinksnappyResolver(ResolveUrl):
         xml.append(
             '<setting id="{0}_reset" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_ls)"/>'.format(
                 cls.__name__, i18n('reset_my_auth')
+            )
+        )
+
+        xml.append(
+            '<setting id="{0}_cached_files_only" type="bool" label="{1}" default="false" />'.format(
+                cls.__name__, i18n('cached_files_only')
             )
         )
 

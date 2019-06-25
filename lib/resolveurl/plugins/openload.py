@@ -16,7 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
-import os
+
 import json
 from lib import helpers
 from resolveurl import common
@@ -32,9 +32,15 @@ GET_URL = API_BASE_URL + '/streaming/get?file={media_id}'
 FILE_URL = API_BASE_URL + '/file/info?file={media_id}'
 
 class OpenLoadResolver(ResolveUrl):
+
     name = "openload"
-    domains = ["openload.io", "openload.co", "oload.tv", "oload.stream", "oload.win", "oload.download", "oload.info", "oload.icu", "oload.fun", "openload.pw"]
-    pattern = '(?://|\.)(o(?:pen)??load\.(?:io|co|tv|stream|win|download|info|icu|fun|pw))/(?:embed|f)/([0-9a-zA-Z-_]+)'
+
+    domains = [
+        "openload.io", "openload.co", "oload.tv", "oload.stream", "oload.win", "oload.download", "oload.info",
+        "oload.icu", "oload.fun", "openload.pw"
+    ]
+
+    pattern = r'(?://|\.)(o(?:pen)??load\.(?:io|co|tv|stream|win|download|info|icu|fun|pw))/(?:embed|f)/([0-9a-zA-Z-_]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -58,7 +64,7 @@ class OpenLoadResolver(ResolveUrl):
             raise ResolverError(i18n('no_ol_auth'))
 
     def get_url(self, host, media_id):
-        return 'http://openload.co/embed/%s' % (media_id)
+        return 'http://{0}/embed/{1}'.format(host, media_id)
 
     def __file_exists(self, media_id):
         js_data = self.__get_json(FILE_URL.format(media_id=media_id))
