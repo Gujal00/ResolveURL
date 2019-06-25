@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class StreamvidResolver(ResolveUrl):
     name = "streamvid"
     domains = ["streamvid.co"]
-    pattern = '(?://|\.)(streamvid\.co)/player/([0-9a-zA-Z]+)' #https://streamvid.co/player/F1Szlk3rgHXcaKQ/
+    pattern = '(?://|\.)(streamvid\.co)/player/([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
