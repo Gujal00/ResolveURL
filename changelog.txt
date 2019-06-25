@@ -1,3 +1,23 @@
+[B]Version 5.0.33 (June 24, 2019)[/B]
+- Code Base Changes:
+    - none
+- Resolvers Added:
+    - streamvid
+    - onlystream
+    - videoz
+- Resolvers Fixed/Updated:
+    - verystream
+    - linksnappy
+    - videozupload
+    - xstreamcdn
+    - mp4upload
+    - videoapne
+    - rapidvideocom
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - none
+
 [B]Version 5.0.32 (June 11, 2019)[/B]
 - Code Base Changes:
     - none
