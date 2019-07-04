@@ -20,14 +20,14 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class xvideosResolver(ResolveUrl):
     name = 'xvideos'
-    domains = ['xvideos.com']
-    pattern = '(?://|\.)(xvideos\.com)/(?:video|embedframe/)(\d+)'
+    domains = ['xvideos.com', 'xvideos.es']
+    pattern = r'(?://|\.)(xvideos\.(?:com|es))/(?:video|embedframe/)(\d+)'
     
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id), patterns=['''setVideo(?:Url)?(?P<label>(?:HLS|High|Low))\(['"](?P<url>[^"']+)''']).replace(' ', '%20')
+        return helpers.get_media_url(self.get_url(host, media_id), patterns=[r'''setVideo(?:Url)?(?P<label>(?:HLS|High|Low))\(['"](?P<url>[^"']+)''']).replace(' ', '%20')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://flashservice.{host}/embedframe/{media_id}')
+        return self._default_get_url(host, media_id, template='https://www.{host}/embedframe/{media_id}')
 
     @classmethod
     def _is_enabled(cls):
