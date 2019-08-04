@@ -37,10 +37,10 @@ class OpenLoadResolver(ResolveUrl):
 
     domains = [
         "openload.io", "openload.co", "oload.tv", "oload.stream", "oload.win", "oload.download", "oload.info",
-        "oload.icu", "oload.fun", "openload.pw"
+        "oload.icu", "oload.fun", "oload.space", "openload.pw"
     ]
 
-    pattern = r'(?://|\.)(o(?:pen)??load\.(?:io|co|tv|stream|win|download|info|icu|fun|pw))/(?:embed|f)/([0-9a-zA-Z-_]+)'
+    pattern = r'(?://|\.)(o(?:pen)??load\.(?:io|co|tv|stream|win|download|info|icu|fun|pw|space))/(?:embed|f)/([0-9a-zA-Z-_]+)'
 
     def __init__(self):
         self.net = common.Net()
