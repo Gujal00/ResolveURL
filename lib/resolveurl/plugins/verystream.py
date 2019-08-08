@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VeryStreamResolver(ResolveUrl):
     name = "verystream"
-    domains = ["verystream.com"]
-    pattern = '(?://|\.)(verystream\.com)/(?:stream|e)/([a-zA-Z0-9]+)'
+    domains = ["verystream.com", "verystream.xyz"]
+    pattern = r'(?://|\.)(verystream\.(?:com|xyz))/(?:stream|e|source)/([a-zA-Z0-9]+)'
 
     def __init__(self):
         self.net = common.Net()
