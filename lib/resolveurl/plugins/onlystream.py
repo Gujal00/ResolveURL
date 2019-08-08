@@ -20,8 +20,8 @@ from __resolve_generic__ import ResolveGeneric
 
 class OnlyStreamResolver(ResolveGeneric):
     name = 'onlystream'
-    domains = ['onlystream.tv']
-    pattern = '(?://|\.)(onlystream\.tv)/(?:e/)?([0-9a-zA-Z]+)'
+    domains = ['onlystream.tv', 'onlystream.xyz']
+    pattern = r'(?://|\.)(onlystream\.(?:tv|xyz))/(?:e/)?([0-9a-zA-Z-_/]+)'
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}')
+        return self._default_get_url(host, media_id, 'https://{host}/{media_id}')
