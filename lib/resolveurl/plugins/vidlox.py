@@ -26,8 +26,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidloxResolver(ResolveUrl):
     name = "vidlox"
-    domains = ['vidlox.tv', 'vidlox.me']
-    pattern = '(?://|\.)(vidlox\.(?:tv|me))/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['vidlox.tv', 'vidlox.me', 'vidlox.xyz']
+    pattern = r'(?://|\.)(vidlox\.(?:tv|me|xyz))/(?:embed-|source/)?([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -48,4 +48,4 @@ class VidloxResolver(ResolveUrl):
         raise ResolverError('Unable to locate link')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://vidlox.me/embed-{media_id}.html')
