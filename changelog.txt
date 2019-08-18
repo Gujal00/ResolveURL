@@ -1,3 +1,26 @@
+[B]Version 5.0.34 (August 18, 2019)[/B]
+- Code Base Changes:
+    - headers fix
+- Resolvers Added:
+    - vup
+    - viuclips
+    - vidia
+    - chromecast.video
+- Resolvers Fixed/Updated:
+    - fembed
+    - openload
+    - vidwatch
+    - vidlox
+    - onlystream
+    - verystream
+    - vkprime
+    - vkspeed
+    - ok.ru
+- Resolvers Removed
+    - none
+- Languages Added/Updated
+    - none
+
 [B]Version 5.0.33 (June 24, 2019)[/B]
 - Code Base Changes:
     - none
