@@ -256,6 +256,8 @@ class HostedMediaFile:
         try:
             msg = ''
             request = urllib2.Request(stream_url.split('|')[0], headers=headers)
+            # only do a HEAD request. gujal
+            request.get_method = lambda : 'HEAD'
             #  set urlopen timeout to 15 seconds
             http_code = urllib2.urlopen(request, timeout=15).getcode()
         except urllib2.URLError as e:
