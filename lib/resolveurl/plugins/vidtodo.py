@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidToDoResolver(ResolveUrl):
     name = 'Vidtodo'
-    domains = ['vidtodoo.com', 'vidtodo.com']
-    pattern = '(?://|\.)((?:vidtodoo|vidtodo)\.(?:com))/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['playvidto.com', 'vidtodu.com', 'vidtodo.com', 'vidtodoo.com']
+    pattern = '(?://|\.)((?:playvidto|vidtodu|vidtodo|vidtodoo)\.(?:com))/(?:embed-)?([0-9a-zA-Z]+)'
  
     def __init__(self):
         self.net = Net()
