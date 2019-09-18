@@ -282,7 +282,7 @@ class HostedMediaFile:
         if int(http_code) >= 400:
             common.logger.log_warning('Stream UrlOpen Failed: Url: %s HTTP Code: %s Msg: %s' % (stream_url, http_code, msg))
 
-        return int(http_code) < 400
+        return int(http_code) < 400 or int(http_code) == 504
 
     def __nonzero__(self):
         if self._valid_url is None:
