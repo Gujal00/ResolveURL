@@ -21,8 +21,8 @@ from __resolve_generic__ import ResolveGeneric
 
 class TusfilesResolver(ResolveGeneric):
     name = "tusfiles"
-    domains = ['tusfiles.net']
-    pattern = '(?://|\.)(tusfiles\.net)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['tusfiles.net', 'tusfiles.com']
+    pattern = '(?://|\.)(tusfiles\.(?:net|com))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         direct_url = 'http://%s/%s' % (host, media_id)
