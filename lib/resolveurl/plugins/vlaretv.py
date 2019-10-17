@@ -46,7 +46,9 @@ class VlareTVResolver(ResolveUrl):
 
         sources = [(s[1], s[0]) for s in sources]
 
-        return helpers.pick_source(sources)
+        self.headers.update({'Referer': web_url})
+
+        return helpers.pick_source(sources) + helpers.append_headers(self.headers)
 
     def get_url(self, host, media_id):
 

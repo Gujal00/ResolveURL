@@ -31,17 +31,20 @@ class BitchuteResolver(ResolveUrl):
     def __init__(self):
 
         self.net = common.Net()
+        self.headers = {'User-Agent': common.RAND_UA}
 
     def get_media_url(self, host, media_id):
 
         web_url = self.get_url(host, media_id)
-        response = self.net.http_GET(web_url)
+        response = self.net.http_GET(web_url, headers=self.headers)
 
         sources = helpers.scrape_sources(
-            response.content, patterns=[r'''source src=['"](?P<url>https.+?\.mp4)['"] type="video/mp4''']
+            response.content, patterns=[r'''source src=['"](?P<url>https.+?\.mp4)['"] type=['"]video/mp4['"]''']
         )
 
-        return helpers.pick_source(sources)
+        self.headers.update({'Referer': web_url})
+
+        return helpers.pick_source(sources) + helpers.append_headers(self.headers)
 
     def get_url(self, host, media_id):
 
