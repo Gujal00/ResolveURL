@@ -242,8 +242,8 @@ msgid "Peers:"
 msgstr "Ομότιμοι:"
 
 msgctxt "#33057"
-msgid "δευτερόλεπτα"
-msgstr ""
+msgid "seconds"
+msgstr "δευτερόλεπτα"
 
 msgctxt "#33058"
 msgid "Cached filehosts only"
