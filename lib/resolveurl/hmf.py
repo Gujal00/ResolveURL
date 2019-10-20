@@ -276,10 +276,12 @@ class HostedMediaFile:
         except Exception as e:
             http_code = 601
             msg = str(e)
+            if msg == "''":
+                http_code = 504
 
         # added this log line for now so that we can catch any logs on streams that are rejected due to test_stream failures
         # we can remove it once we are sure this works reliably
-        if int(http_code) >= 400:
+        if int(http_code) >= 400 and int(http_code) != 504:
             common.logger.log_warning('Stream UrlOpen Failed: Url: %s HTTP Code: %s Msg: %s' % (stream_url, http_code, msg))
 
         return int(http_code) < 400 or int(http_code) == 504
