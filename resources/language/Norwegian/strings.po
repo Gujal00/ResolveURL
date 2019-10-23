@@ -3,16 +3,16 @@
 # Addon Provider:
 msgid ""
 msgstr ""
-"Project-Id-Version: script.module.resolveurl 5.0.01\n"
+"Project-Id-Version: script.module.resolveurl 5.0.34\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2017-12-11 21:47+0100\n"
+"PO-Revision-Date: 2019-10-23 12:19+0200\n"
+"Last-Translator: Johnny A. Solbu <johnny@solbu.net>\n"
 "Language-Team: Norwegian Bokmal\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nb\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Last-Translator: Johnny A. Solbu <johnny@solbu.net>\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
 msgctxt "#33000"
@@ -48,8 +48,8 @@ msgid "Decryption Key"
 msgstr "Dekrypteringsnøkkel"
 
 msgctxt "#33008"
-msgid "TheVideo.me Stream Authorization"
-msgstr "TheVideo.me strømme-autorisasjon"
+msgid "Vev.io Stream Authorization"
+msgstr "Vev.io strømme-autorisasjon"
 
 msgctxt "#33009"
 msgid "VidUP.me Stream Authorization"
@@ -202,3 +202,55 @@ msgstr "AllDebrid autorisasjons-nullstilling"
 msgctxt "#33046"
 msgid "AllDebrid Resolver Authorized"
 msgstr "AllDebrid-resolver autorisert"
+
+msgctxt "#33047"
+msgid "Enable PopUps"
+msgstr "Aktiver PopUps"
+
+msgctxt "#33048"
+msgid "API Key"
+msgstr "API-nøkkel"
+
+msgctxt "#33049"
+msgid "Torrent Support"
+msgstr "Torrent-støtte"
+
+msgctxt "#33050"
+msgid "Cached torrents only"
+msgstr "Bare bufrede torrenter"
+
+msgctxt "#33051"
+msgid "Premiumize Authorization Reset"
+msgstr "Premiumize autorisasjons-nullstilling"
+
+msgctxt "#33052"
+msgid "Premiumize Resolver Authorized"
+msgstr "Premiumize-resolver autorisert"
+
+msgctxt "#33053"
+msgid "Linksnappy Authorization Reset"
+msgstr "Linksnappy autorisasjons-nullstilling"
+
+msgctxt "#33054"
+msgid "Linksnappy Resolver Authorized"
+msgstr "Linksnappy-resolver autorisert"
+
+msgctxt "#33055"
+msgid "Download rate:"
+msgstr "Nedlastingsfrekvens:"
+
+msgctxt "#33056"
+msgid "Peers:"
+msgstr ""
+
+msgctxt "#33057"
+msgid "seconds"
+msgstr "sekunder"
+
+msgctxt "#33058"
+msgid "Cached filehosts only"
+msgstr "Bare bufrede filverter"
+
+#~ msgctxt "#33008"
+#~ msgid "TheVideo.me Stream Authorization"
+#~ msgstr "TheVideo.me strømme-autorisasjon"
