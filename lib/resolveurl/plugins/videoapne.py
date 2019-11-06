@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VideoApneResolver(ResolveUrl):
     name = "videoapne"
     domains = ["videoapne.co"]
-    pattern = '(?://|\.)(videoapne\.co)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(videoapne\.co)/(?:embed-)?([0-9a-zA-Z]+)'
     
     def __init__(self):
         self.net = common.Net()
@@ -33,15 +33,18 @@ class VideoApneResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
-                   'Referer': web_url}
+                   'Referer': 'http://bestinforoom.com/'}
         html = self.net.http_GET(web_url, headers=headers).content
         
-        r = re.search('file:"([^"]+m3u8)"', html)
+        r = re.search("script'>(eval.*?)</script", html, re.DOTALL)
         
         if r:
-            return r.group(1) + helpers.append_headers(headers)
+            html = jsunpack.unpack(r.group(1))
+            src = re.search(r'file:\s*"([^"]+m3u8)',html)
+            if src:
+                return src.group(1) + helpers.append_headers(headers)
         
         raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://{host}/{media_id}.html')
+        return self._default_get_url(host, media_id, template='http://{host}/embed-{media_id}.html')
