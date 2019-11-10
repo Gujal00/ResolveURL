@@ -28,19 +28,20 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class GoUnlimitedResolver(ResolveUrl):
     name = "gounlimited.to"
     domains = ['gounlimited.to']
-    pattern = '(?://|\.)(gounlimited\.to)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(gounlimited\.to)/(?:embed-)?([0-9a-zA-Z]+)'
     
     def __init__(self):
         self.net = common.Net()
         
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {'User-Agent': common.RAND_UA,
+                   'verifypeer': 'False'}
         html = self.net.http_GET(web_url, headers=headers).content
         
         if html:
             html += helpers.get_packed_data(html)
-            source = re.search('''sources\s*:\s*\["([^"]+)''', html)
+            source = re.search(r'''sources\s*:\s*\["([^"]+)''', html)
             if source:
                 return source.group(1) + helpers.append_headers(headers)
                 
