@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidUpMeResolver(ResolveUrl):
     name = "vidup.me"
-    domains = ["vidup.me", "vidup.tv"]
-    pattern = '(?://|\.)(vidup\.(?:me|tv))/(?:embed-|download/)?([0-9a-zA-Z]+)'
+    domains = ["vidup.me", "vidup.tv", "vidup.io"]
+    pattern = '(?://|\.)(vidup\.(?:me|tv|io))/(?:embed-|download/)?([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
