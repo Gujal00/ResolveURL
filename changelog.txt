@@ -1,3 +1,7 @@
+[B]Version 5.0.35 (November 10, 2019)[/B]
+- See GitHub for changes
+    - https://github.com/jsergio123/script.module.resolveurl/commits/master
+
 [B]Version 5.0.34 (August 18, 2019)[/B]
 - Code Base Changes:
     - headers fix
