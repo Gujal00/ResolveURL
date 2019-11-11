@@ -34,9 +34,9 @@ class ClipWatchingResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         
         html += helpers.get_packed_data(html)
-        source = re.search(r'''sources\s*:\s*\["([^"]+)''', html)
-        if source:
-            return source.group(1) + helpers.append_headers(headers)
+        sources = helpers.scrape_sources(html)
+        if sources:
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
                 
         raise ResolverError("Video not found")
         
