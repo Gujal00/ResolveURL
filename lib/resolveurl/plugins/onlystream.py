@@ -17,10 +17,8 @@
 """
 import re
 from lib import helpers
-from lib import jsunpack
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-
 
 class OnlyStreamResolver(ResolveUrl):
     name = 'onlystream'
@@ -32,18 +30,13 @@ class OnlyStreamResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
-                   'Referer': web_url}
+        headers = {'Referer':'onlystream.tv','User-Agent':common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search("script'>(eval.*?)</script", html, re.DOTALL)
-        
-        if r:
-            html = jsunpack.unpack(r.group(1))
-            sources = helpers.scrape_sources(html, result_blacklist=['.m3u8'])
-            if sources:
-                return helpers.pick_source(sources) + helpers.append_headers(headers)
+        r = re.search('sources: .{file:"(.+?)"', html, re.DOTALL)
 
-        raise ResolverError('Video cannot be located.')
+        headers = {'Referer':'https://onlystream.tv/'+media_id,'User-Agent':common.RAND_UA}
+        if r:return r.group(1) + helpers.append_headers(headers)
+        else:raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
