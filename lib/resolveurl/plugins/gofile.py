@@ -1,6 +1,6 @@
 """
     Kodi resolveurl plugin
-    Copyright (C) 2018  script.module.resolveurl
+    Copyright (C) 2019  script.module.resolveurl
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,16 +29,17 @@ class GofileResolver(ResolveUrl):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
-        try:
-            web_url = self.get_url(host, media_id)
-            headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
-            download_serv = json.loads( self.net.http_GET('https://apiv2.gofile.io/getServer?c=' + media_id, headers=headers).content )
-            if ( download_serv['status'] == 'ok' ):
-                download_url = json.loads( self.net.http_GET('https://' + download_serv['data']['server'] + '.gofile.io/getUpload?c=' + media_id, headers=headers).content )
-                return download_url['data']['files']['0']['link']
-        except:
-            raise ResolverError('Unable to locate video')
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
+        download_serv = json.loads( self.net.http_GET('https://apiv2.' + host + '/getServer?c=' + media_id, headers=headers).content )
+        if ( download_serv['status'] == 'ok' ):
+            download_url = json.loads( self.net.http_GET('https://' + download_serv['data']['server'] + '.' + host + '/getUpload?c=' + media_id, headers=headers).content )
+            sources = []
+            if( download_url['data']['files'] ):
+                for file_index in download_url['data']['files']:
+                    sources += [( download_url['data']['files'][file_index]['name'], download_url['data']['files'][file_index]['link'] )]
+            return helpers.pick_source( sources, False )
         raise ResolverError('Unable to locate video')
 
     def get_url(self, host, media_id):
-        return 'https://gofile.io/?c=%s' % (media_id)
+        return self._default_get_url(host, media_id, template='https://{host}/?c={media_id}')
