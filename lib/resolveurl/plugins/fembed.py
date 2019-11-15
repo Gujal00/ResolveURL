@@ -33,7 +33,7 @@ class FembedResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
-        api_url = 'https://{0}/api/source/{1}'.format(host, media_id)
+        api_url = 'https://www.{0}/api/source/{1}'.format(host, media_id)
         js_result = self.net.http_POST(api_url, form_data={'r': ''}, headers=headers).content
         
         if js_result:
