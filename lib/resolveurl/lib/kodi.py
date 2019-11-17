@@ -66,19 +66,66 @@ def get_name():
     return addon.getAddonInfo('name')
 
 
+def kodi_version():
+
+    """
+    Get kodi version as a float. Useful for various conditionals,
+    especially when doing operations that old versions do not support
+    :return: float
+    """
+
+    return float(xbmcaddon.Addon('xbmc.addon').getAddonInfo('version')[:4])
+
+
 def open_settings():
     return addon.openSettings()
 
 
-def get_keyboard(heading, default='', hide_input=False):
+def get_keyboard_legacy(heading, default='', hide_input=False):
+
     keyboard = xbmc.Keyboard(hidden=hide_input)
     keyboard.setHeading(heading)
-    if default: keyboard.setDefault(default)
+
+    if default:
+        keyboard.setDefault(default)
+
     keyboard.doModal()
+
     if keyboard.isConfirmed():
         return keyboard.getText()
     else:
         return None
+
+
+def get_keyboard_new(heading, default='', hide_input=False):
+
+    """
+    This function has been in support since XBMC Gotham v13
+    """
+
+    if hide_input is False:
+        hide_input = 0
+    elif hide_input is True:
+        hide_input = xbmcgui.ALPHANUM_HIDE_INPUT
+
+    dialog = xbmcgui.Dialog()
+
+    keyboard = dialog.input(heading, defaultt=default, type=0, option=hide_input)
+
+    if keyboard:
+
+        return keyboard
+
+    return None
+
+
+if kodi_version() >= 13.0:
+
+    get_keyboard = get_keyboard_new
+
+else:
+
+    get_keyboard = get_keyboard_legacy
 
 
 def i18n(string_id):
