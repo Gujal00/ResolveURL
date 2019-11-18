@@ -34,13 +34,13 @@ class VidloxResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
 
         if html:
             _srcs = re.search(r'sources\s*:\s*\[(.+?)\]', html)
             if _srcs:
-                srcs = helpers.scrape_sources(_srcs.group(1), patterns=['''["'](?P<url>http[^"']+)'''], result_blacklist=['.m3u8'])
+                srcs = helpers.scrape_sources(_srcs.group(1), patterns=['''["'](?P<url>http[^"']+)'''], result_blacklist=['.mp4'])
                 if srcs:
                     headers.update({'Referer': web_url})
                     return helpers.pick_source(srcs) + helpers.append_headers(headers)
