@@ -24,18 +24,19 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class FembedResolver(ResolveUrl):
     name = "fembed"
     domains = ["fembed.com", "24hd.club", "vcdn.io", "sharinglink.club", "votrefiles.club", "there.to",
-               "femoload.xyz", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live", "vcdnplay.com"]
-    pattern = r'(?://|\.)((?:fembed|24hd|vcdn|sharinglink|votrefiles|femoload|dailyplanet|jplayer|there|gcloud|xstreamcdn|vcdnplay)\.(?:com|club|io|xyz|pw|net|to|live))/v/([a-zA-Z0-9-]+)'
+               "femoload.xyz", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
+               "vcdnplay.com", "vidsource.me"]
+    pattern = r'(?://|\.)((?:fembed|24hd|vcdn|sharinglink|votrefiles|femoload|dailyplanet|jplayer|there|gcloud|xstreamcdn|vcdnplay|vidsource)\.(?:com|club|io|xyz|pw|net|to|live|me))/v/([a-zA-Z0-9-]+)'
 
     def __init__(self):
         self.net = common.Net()
-        
+
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
         api_url = 'https://www.{0}/api/source/{1}'.format(host, media_id)
         js_result = self.net.http_POST(api_url, form_data={'r': ''}, headers=headers).content
-        
+
         if js_result:
             try:
                 js_data = json.loads(js_result)
@@ -48,7 +49,7 @@ class FembedResolver(ResolveUrl):
                     raise Exception(js_data.get('data'))
             except Exception as e:
                 raise ResolverError('Error getting video: %s' % e)
-                
+
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
