@@ -33,7 +33,7 @@ class MixdropResolver(ResolveUrl):
         try:
             r = re.search('\s+?(eval\(function\(p,a,c,k,e,d\).+)\s+?', html)
             r = jsunpack.unpack(r.group(1))
-            r = re.search('vsrc="([^"]+)', r.replace('\\', ''))
+            r = re.search('vsrc?="([^"]+)', r.replace('\\', ''))
             return "https:" + r.group(1)
         except:
             raise ResolverError("Video not found")
