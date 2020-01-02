@@ -25,8 +25,8 @@ class FembedResolver(ResolveUrl):
     name = "fembed"
     domains = ["fembed.com", "24hd.club", "vcdn.io", "sharinglink.club", "votrefiles.club", "there.to",
                "femoload.xyz", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
-               "vcdnplay.com", "vidsource.me", "zidiplay.com"]
-    pattern = r'(?://|\.)((?:fembed|24hd|vcdn|sharinglink|votrefiles|femoload|dailyplanet|jplayer|there|gcloud|xstreamcdn|vcdnplay|vidsource|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me))/v/([a-zA-Z0-9-]+)'
+               "vcdnplay.com", "vidohd.com", "vidsource.me", "zidiplay.com"]
+    pattern = r'(?://|\.)((?:fembed|24hd|vcdn|sharinglink|votrefiles|femoload|dailyplanet|jplayer|there|gcloud|xstreamcdn|vcdnplay|vidohd|vidsource|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me))/v/([a-zA-Z0-9-]+)'
 
     def __init__(self):
         self.net = common.Net()
