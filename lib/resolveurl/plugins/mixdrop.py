@@ -20,16 +20,16 @@ from lib import helpers
 
 class MixdropResolver(ResolveUrl):
     name = "mixdrop"
-    domains = ["mixdrop.co"]
-    pattern = r'(?://|\.)(mixdrop\.co)/(?:f|e)/(\w+)'
+    domains = ["mixdrop.co", "mixdrop.to"]
+    pattern = r'(?://|\.)(mixdrop\.[ct]o)/(?:f|e)/(\w+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'Origin': 'https://mixdrop.co',
-                   'Referer': 'https://mixdrop.co/',
+        headers = {'Origin': 'https://{}'.format(host),
+                   'Referer': 'https://{}/'.format(host),
                    'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
 
