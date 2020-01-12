@@ -34,17 +34,20 @@ class GoUnlimitedResolver(ResolveUrl):
         self.net = common.Net()
         
     def get_media_url(self, host, media_id):
+
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
-                   'verifypeer': 'False'}
+
+        headers = {'User-Agent': common.RAND_UA, 'verifypeer': 'False'}
+
         html = self.net.http_GET(web_url, headers=headers).content
-        
+
         if html:
+
             html += helpers.get_packed_data(html)
             source = re.search(r'''sources\s*:\s*\["([^"]+)''', html)
             if source:
-                return source.group(1) + helpers.append_headers(headers)
-                
+                return source.group(1) + '&start_seq=$START_NUMBER$' + helpers.append_headers(headers)
+
         raise ResolverError("Video not found")
         
     def get_url(self, host, media_id):
