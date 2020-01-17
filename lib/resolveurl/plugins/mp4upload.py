@@ -41,6 +41,7 @@ class Mp4uploadResolver(ResolveUrl):
             html = jsunpack.unpack(r.group(1))
             src = re.search('src\("([^"]+)',html)
             if src:
+                headers.update({'verifypeer': 'false'})
                 return src.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('Video cannot be located.')
