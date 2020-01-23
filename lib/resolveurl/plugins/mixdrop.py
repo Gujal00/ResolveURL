@@ -35,7 +35,7 @@ class MixdropResolver(ResolveUrl):
 
         if '(p,a,c,k,e,d)' in html:
             html = helpers.get_packed_data(html)
-        r = re.search(r'vsr[^=]+=\s*"([^"]+)', html)
+        r = re.search(r'(?:vsr|furl)[^=]*=\s*"([^"]+)', html)
         if r:
             headers = {'User-Agent': common.RAND_UA}
             return "https:" + r.group(1) + helpers.append_headers(headers)
