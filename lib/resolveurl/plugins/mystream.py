@@ -69,7 +69,6 @@ class MystreamResolver(ResolveUrl):
             for k in range(len(n)):
                 domtable[l[j] + n[k]] = h[j + k]
         key = ""
-        print domtable
         for i in range(0, len(hash_val), 2):
             key = key + domtable[hash_val[i] + hash_val[i + 1]]
         return key
