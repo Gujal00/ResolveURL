@@ -37,7 +37,7 @@ class MixdropResolver(ResolveUrl):
             html = helpers.get_packed_data(html)
         r = re.search(r'(?:vsr|wurl|surl)[^=]*=\s*"([^"]+)', html)
         if r:
-            headers = {'User-Agent': common.RAND_UA}
+            headers = {'User-Agent': common.RAND_UA, 'Referer': web_url}
             return "https:" + r.group(1) + helpers.append_headers(headers)
 
         raise ResolverError("Video not found")
