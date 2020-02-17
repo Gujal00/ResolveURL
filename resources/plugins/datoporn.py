@@ -19,12 +19,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from resolveurl.plugins.lib import helpers
+
 
 class DatoPornResolver(ResolveGeneric):
     name = "datoporn"
     domains = ['datoporn.com', 'dato.porn', 'datoporn.co']
-    pattern = '(?://|\.)(datoporn\.com|dato\.porn|datoporn\.co)/(?:embed[/-])?([0-9a-zA-Z]+)'
-    
+    pattern = r'(?://|\.)(datoporn\.com|dato\.porn|datoporn\.co)/(?:embed[/-])?([0-9a-zA-Z]+)'
+
+    def get_media_url(self, host, media_id):
+        return helpers.get_media_url(self.get_url(host, media_id), patterns=[r'''sources:\s*\[{\s*src:\s*"(?P<url>[^"]+)'''])
+
     @classmethod
     def _is_enabled(cls):
         return True
