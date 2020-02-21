@@ -1,3 +1,3 @@
-[B]Version 5.0.37 (December 18, 2019)[/B]
+[B]Version 5.0.38 (Feb 20, 2020)[/B]
 - See GitHub for changes
     - https://github.com/jsergio123/script.module.resolveurl/commits/master
