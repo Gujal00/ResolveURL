@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VevIoResolver(ResolveUrl):
     name = "vevio"
-    domains = ["vev.io"]
-    pattern = '(?://|\.)(vev\.io)/(?:embed/)?([0-9a-zA-Z]+)'
+    domains = ["vev.io", "vev.red"]
+    pattern = '(?://|\.)(vev\.(?:io|red))/(?:embed/)?([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -68,7 +68,8 @@ class VevIoResolver(ResolveUrl):
 
         common.logger.log('Auth Result: %s' % js_result)
         if 'qualities' in js_result:
-            return js_result.get('qualities', {}).items()
+			qualities = js_result.get('qualities', {})
+			return qualities[-1].items()
         else:
             return {}
 
