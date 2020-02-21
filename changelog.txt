@@ -1,36 +1,3 @@
-[B]Version 2.0.03 (Nov 10, 2018)[/B]
-- Code Base Changes:
-    - none
-- Resolvers Added:
-    - animeidhentai
-- Resolvers Fixed/Updated:
-    - ksplayer
-    - tubepornclassic
-- Resolvers Removed
-    - none
-
-[B]Version 2.0.02 (Mar 01, 2018)[/B]
-- Code Base Changes:
-    - none
-- Resolvers Added:
-    - ksplayer
-    - tiwi
-- Resolvers Fixed/Updated:
-    - porn00
-    - tubepornclassic
-- Resolvers Removed
-    - none
-
-
-[B]Version 2.0.01 (Feb 08, 2018)[/B]
-- Code Base Changes:
-    - none
-- Resolvers Added:
-    - vartuc
-    - mega3x
-    - imperioporno
-    - bitporno
-- Resolvers Fixed/Updated:
-    - datoporn
-- Resolvers Removed
-    - none
+[B]Version 2.0.1 (Feb 20, 2020)[/B]
+- See GitHub for changes
+    - https://github.com/jsergio123/script.module.resolveurl.xxx/commits/master
