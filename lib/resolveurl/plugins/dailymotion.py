@@ -1,6 +1,6 @@
 '''
-dailymotion resolveurl plugin
-Copyright (C) 2011 cyrus007
+plugin for ResolveURL
+Copyright (C) 2020 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,55 +17,35 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 import json
 import re
-import urllib
-from lib import helpers
 from resolveurl import common
+from lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class DailymotionResolver(ResolveUrl):
     name = 'dailymotion'
     domains = ['dailymotion.com']
-    pattern = '(?://|\.)(dailymotion\.com)/(?:video|embed|sequence|swf)(?:/video)?/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(dailymotion\.com)/(?:video|embed|sequence|swf)(?:/video)?/([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
-        self.headers = {'User-Agent': common.RAND_UA}
+        self.headers = {'User-Agent': common.RAND_UA,
+                        'Origin': 'https://www.dailymotion.com',
+                        'Referer': 'https://www.dailymotion.com/'}
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        html = self.net.http_GET(web_url, headers=self.headers).content
-        """if '"reason":"video attribute|explicit"' in html:
-            headers = {'Referer': web_url}
-            headers.update(self.headers)
-            url_back = '/embed/video/%s' % (media_id)
-            web_url = 'http://www.dailymotion.com/family_filter?enable=false&urlback=%s' % (urllib.quote_plus(url_back))
-            html = self.net.http_GET(url=web_url, headers=headers).content"""
-        
-        if '"title":"Content rejected."' in html: raise ResolverError('This video has been removed due to a copyright claim.')
-        
-        match = re.search('var\s+config\s*=\s*(.*?}});', html)
-        if not match: raise ResolverError('Unable to locate config')
-        try: js_data = json.loads(match.group(1))
-        except: js_data = {}
-        
-        sources = []
-        streams = js_data.get('metadata', {}).get('qualities', {})
-        for quality, links in streams.iteritems():
-            for link in links:
-                if quality.isdigit() and link.get('type', '').startswith('application'):
-                    sources.append((quality, link['url']))
-                
-        sources.sort(key=lambda x: self.__key(x), reverse=True)
-        source=helpers.pick_source(sources)
-        vid_url = self.net.http_GET(source, headers=self.headers).content	
-        vid_url = re.search('(http.+?m3u8)', vid_url)
-        if vid_url:
-            return vid_url.group(1)		
-        raise ResolverError('File not found')
-    
-    def __key(self, item):
-        try: return int(item[0])
-        except: return 0
+        js_result = json.loads(self.net.http_GET(web_url, headers=self.headers).content)
+
+        if js_result.get('error'):
+            raise ResolverError(js_result.get('error').get('title'))
+
+        quals = js_result.get('qualities')
+        if quals:
+            mbtext = self.net.http_GET(quals.get('auto')[0].get('url'), headers=self.headers).content
+            sources = re.findall('NAME="(?P<label>[^"]+)",PROGRESSIVE-URI="(?P<url>[^#]+)', mbtext)
+            return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(self.headers)
+        raise ResolverError('No playable video found.')
 
     def get_url(self, host, media_id):
-        return 'http://www.dailymotion.com/embed/video/%s' % media_id
+        return self._default_get_url(host, media_id, template='https://www.dailymotion.com/player/metadata/video/{media_id}')
