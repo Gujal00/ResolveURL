@@ -23,7 +23,7 @@ from lib import helpers
 class StreamWireResolver(ResolveGeneric):
     name = "streamwire"
     domains = ['streamwire.net']
-    pattern = r'(?://|\.)(streamwire\.net)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(streamwire\.net)/(?:embed-|e/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
