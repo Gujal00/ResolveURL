@@ -1,9 +1,6 @@
 """
-    OVERALL CREDIT TO:
-        t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
-
-    resolveurl XBMC Addon
-    Copyright (C) 2011 t0mm0
+    plugin for ResolveURL
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,10 +17,11 @@
 """
 from __resolve_generic__ import ResolveGeneric
 
+
 class EnterVideoResolver(ResolveGeneric):
     name = "entervideo"
-    domains = ['entervideo.net']
-    pattern = '(?://|\.)(entervideo\.net)/(?:watch/)?([0-9a-zA-Z]+)'
+    domains = ['entervideo.net', 'eplayvid.com']
+    pattern = r'(?://|\.)((?:entervideo|eplayvid)\.(?:com|net))/(?:watch/)?([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://entervideo.net/watch/{media_id}')
+        return self._default_get_url(host, media_id, template='http://eplayvid.com/watch/{media_id}')
