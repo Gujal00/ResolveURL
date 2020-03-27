@@ -15,16 +15,38 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
+import re
 from lib import helpers
+from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class GamoVideoResolver(ResolveUrl):
     name = 'GamoVideo'
     domains = ['gamovideo.com']
-    pattern = '(?://|\.)(gamovideo\.com)/(?:embed-)?([0-9a-zA-Z]+)'
-    
+    pattern = r'(?://|\.)(gamovideo\.com)/(?:embed-)?([0-9a-zA-Z]+)'
+
+    def __init__(self):
+        self.net = common.Net()
+
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id), patterns=['''file:\s*["'](?P<url>http[^"']+)''']).replace(' ', '%20')
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': 'http://gamovideo.com/player61/jwplayer.flash.swf'}
+        r = self.net.http_GET(web_url, headers=headers)
+        cookie = ''
+        for item in r.get_headers(as_dict=True)['Set-Cookie'].split('GMT,'):
+            cookie += item.split('path')[0]
+        headers.update({'Cookie': cookie + 'sugamun=1; invn=1; pfm=1'})
+
+        html = self.net.http_GET(web_url, headers=headers).content
+        html += helpers.get_packed_data(html)
+        source = re.search(r'''file:\s*["'](?P<url>http[^"']+)["']''', html)
+        headers.pop('Cookie')
+        if source:
+            return source.group(1) + helpers.append_headers(headers)
+
+        raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id)
+        return self._default_get_url(host, media_id, template='http://{host}/embed-{media_id}.html')
