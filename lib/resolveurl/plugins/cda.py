@@ -16,57 +16,45 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import re
-from lib import jsunpack
+import urllib
+import json
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-import string
 
-rot13 = string.maketrans(
-    "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz",
-    "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
 
 class CdaResolver(ResolveUrl):
     name = "cda"
     domains = ['cda.pl', 'www.cda.pl', 'ebd.cda.pl']
-    pattern = '(?://|\.)(cda\.pl)/(?:.\d+x\d+|video)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(cda\.pl)/(?:.\d+x\d+|video)/([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'Referer': web_url, 'User-Agent': common.CHROME_USER_AGENT}
-		
-        player_headers = {'Cookie': 'PHPSESSID=1', 'Referer': web_url, 'User-Agent': common.CHROME_USER_AGENT}
-        player_headers.update(headers)
+        headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
 
         html = self.net.http_GET(web_url, headers=headers).content
-        try: html = html.encode('utf-8')
-        except: pass
-        match = re.findall('data-quality="(.*?)" href="(.*?)".*?>(.*?)</a>', html, re.DOTALL)
-        if match:
-            mylinks = sorted(match, key=lambda x: x[2])
-            html = self.net.http_GET(mylinks[-1][1], headers=headers).content
-            
-        from HTMLParser import HTMLParser
-        match = re.search('''['"]file['"]:\s*['"](.+?)['"]''', HTMLParser().unescape(html))
-        if match:
-            mylink = match.group(1).replace("\\", "")
-            return self.__check_vid(mylink) + helpers.append_headers(player_headers)
-
-        html = jsunpack.unpack(re.search("eval(.*?)\{\}\)\)", html, re.DOTALL).group(1))
-        match = re.search('src="(.*?\.mp4)"', html)
-        if match:
-            return self.__check_vid(match.group(1)) + helpers.append_headers(player_headers)
+        sources = re.findall('data-quality.+?href="(?P<url>[^"]+).+?>(?P<label>[^<]+)', html)
+        if sources:
+            sources = [(source[1], source[0]) for source in sources]
+            html = self.net.http_GET(helpers.pick_source(helpers.sort_sources_list(sources)), headers=headers).content
+            match = re.search(r"player_data='([^']+)", html)
+            if match:
+                js_data = json.loads(match.group(1))
+                return self.cda_decode(js_data.get('video').get('file')) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
-    def __check_vid(self, video_link):
-        if re.match('uggc', video_link):
-            video_link = string.translate(video_link, rot13)
-            video_link = video_link[:-7] + video_link[-4:]
-        return video_link
-
     def get_url(self, host, media_id):
-        return 'http://ebd.cda.pl/647x500/%s' % media_id
+        return self._default_get_url(host, media_id, template='https://ebd.cda.pl/647x500/{media_id}/vfilm')
+
+    def cda_decode(self, url):
+        url = urllib.unquote(url)
+        strurl = ''
+        for i in range(len(url)):
+            strurl += chr(33 + (ord(url[i]) + 14) % 94) if 32 < ord(url[i]) < 127 else url[i]
+        strurl = strurl if strurl.startswith('http') else 'https://{0}'.format(strurl)
+        strurl = strurl if strurl.endswith('.mp4') else '{0}.mp4'.format(strurl)
+        return strurl.replace("adc.mp4", ".mp4")
