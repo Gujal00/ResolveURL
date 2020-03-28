@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class CdaResolver(ResolveUrl):
     name = "cda"
-    domains = ['cda.pl', 'www.cda.pl', 'ebd.cda.pl']
+    domains = ['m.cda.pl', 'cda.pl', 'www.cda.pl', 'ebd.cda.pl']
     pattern = r'(?://|\.)(cda\.pl)/(?:.\d+x\d+|video)/([0-9a-zA-Z]+)'
 
     def __init__(self):
@@ -53,8 +53,8 @@ class CdaResolver(ResolveUrl):
     def cda_decode(self, url):
         url = urllib.unquote(url)
         strurl = ''
-        for i in range(len(url)):
-            strurl += chr(33 + (ord(url[i]) + 14) % 94) if 32 < ord(url[i]) < 127 else url[i]
+        for char in url:
+            strurl += chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char
         strurl = strurl if strurl.startswith('http') else 'https://{0}'.format(strurl)
         strurl = strurl if strurl.endswith('.mp4') else '{0}.mp4'.format(strurl)
         return strurl.replace("adc.mp4", ".mp4")
