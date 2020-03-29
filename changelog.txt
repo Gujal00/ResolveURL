@@ -1,3 +1,19 @@
-[B]Version 5.0.39 (Mar 25, 2020)[/B]
-- See GitHub for changes
-    - https://github.com/jsergio123/script.module.resolveurl/commits/master
+[B]Version 5.0.40 (Mar 29, 2020)[/B]
+- Code Base Changes:
+    - none
+- Resolvers Added:
+    - saruch
+    - sibnet
+    - vidfast
+    - vidspace
+- Resolvers Fixed/Updated:
+    - cda
+    - gamovideo
+    - upstream
+    - uptobox
+    - videa
+- Resolvers Removed
+    - fileholic
+    - putvid
+- Languages Added/Updated
+    - all
