@@ -75,5 +75,9 @@ STRINGS = {
     'download_rate': 33055,
     'peer_number': 33056,
     'seconds': 33057,
-    'cached_files_only': 33058
+    'cached_files_only': 33058,
+    'jetload_auth_header': 33059,
+    'uptobox_auth_header': 33060,
+    'upto_link': 33061,
+    'upto_pair': 33062
 }
