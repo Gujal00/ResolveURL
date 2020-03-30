@@ -1,5 +1,5 @@
 '''
-clicknupload resolveurl plugin
+Plugin for ResolveURL
 Copyright (C) 2015 tknorris
 
 This program is free software: you can redistribute it and/or modify
@@ -23,39 +23,36 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 MAX_TRIES = 3
 
+
 class ClickNUploadResolver(ResolveUrl):
     name = "clicknupload"
-    domains = ['clicknupload.com', 'clicknupload.me', 'clicknupload.link', 'clicknupload.org']
-    pattern = '(?://|\.)(clicknupload\.(?:com|me|link|org))/(?:f/)?([0-9A-Za-z]+)'
+    domains = ['clicknupload.co', 'clicknupload.com', 'clicknupload.me', 'clicknupload.link', 'clicknupload.org']
+    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org))/(?:f/)?([0-9A-Za-z]+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Referer': web_url
-        }
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
         tries = 0
         while tries < MAX_TRIES:
             data = helpers.get_hidden(html)
             data.update(captcha_lib.do_captcha(html))
             html = self.net.http_POST(web_url, data, headers=headers).content
-            r = re.search('''class="downloadbtn"[^>]+onClick\s*=\s*\"window\.open\('([^']+)''', html)
+            r = re.search(r'''class="downloadbtn"[^>]+onClick\s*=\s*\"window\.open\('([^']+)''', html)
             if r:
                 return r.group(1) + helpers.append_headers(headers)
 
-            if tries > 0:
-                common.kodi.sleep(1000)
-                
+            common.kodi.sleep(1000)
             tries = tries + 1
 
         raise ResolverError('Unable to locate link')
 
     def get_url(self, host, media_id):
-        return 'https://clicknupload.org/%s' % media_id
+        return 'https://clicknupload.co/%s' % media_id
 
     @classmethod
     def isPopup(self):
