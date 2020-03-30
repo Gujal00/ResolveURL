@@ -1,9 +1,6 @@
 """
-    OVERALL CREDIT TO:
-        t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
-
-    resolveurl XBMC Addon
-    Copyright (C) 2011 t0mm0
+    Plugin for ResolveUrl
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,23 +18,29 @@
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+from lib import helpers
+
 
 class MailRuResolver(ResolveUrl):
     name = "cloud.mail.ru"
     domains = ['cloud.mail.ru']
-    pattern = '(?://|\.)(cloud\.mail\.ru)/public/([0-9A-Za-z]+/[^/]+)'
+    pattern = r'(?://|\.)(cloud\.mail\.ru)/public/([0-9A-Za-z]+/[^/]+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        html = self.net.http_GET(web_url).content
-        html = re.sub(r'[^\x00-\x7F]+', ' ', html)
-        url_match = re.search('"weblink_get"\s*:\s*\[.+?"url"\s*:\s*"([^"]+)', html)
-        tok_match = re.search('"tokens"\s*:\s*{\s*"download"\s*:\s*"([^"]+)', html)
-        if url_match and tok_match:
-            return '%s/%s?key=%s' % (url_match.group(1), media_id, tok_match.group(1))
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'Referer': 'https://mail.ru/'}
+        html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r'"weblink_get".+?url":\s*"([^"]+)', html, re.DOTALL)
+        if r:
+            strurl = '{0}/{1}'.format(r.group(1), media_id)
+            tok = re.search(r'"tokens"[^}]+"download"\s*:\s*"([^"]+)', html, re.DOTALL)
+            if tok:
+                strurl += '?key={0}'.format(tok.group(1))
+            return strurl + helpers.append_headers(headers)
         raise ResolverError('No playable video found.')
 
     def get_url(self, host, media_id):
