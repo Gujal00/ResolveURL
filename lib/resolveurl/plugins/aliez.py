@@ -2,7 +2,7 @@
     OVERALL CREDIT TO:
         t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
 
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2011 t0mm0
 
     This program is free software: you can redistribute it and/or modify
@@ -22,13 +22,16 @@ import re
 from lib import helpers
 from __resolve_generic__ import ResolveGeneric
 
+
 class AliezResolver(ResolveGeneric):
     name = "aliez"
     domains = ['aliez.me']
-    pattern = '(?://|\.)(aliez\.me)/(?:(?:player/video\.php\?id=([0-9]+)&s=([A-Za-z0-9]+))|(?:video/([0-9]+)/([A-Za-z0-9]+)))'
-    
+    pattern = r'(?://|\.)(aliez\.me)/(?:(?:player/video\.php\?id=([0-9]+)&s=([A-Za-z0-9]+))|(?:video/([0-9]+)/([A-Za-z0-9]+)))'
+
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id), patterns=['''file:\s*['"](?P<url>[^'"]+)''']).replace(' ', '%20')
+        return helpers.get_media_url(self.get_url(host, media_id),
+                                     patterns=[r'''file:\s*['"](?P<url>[^'"]+)'''],
+                                     generic_patterns=False).replace(' ', '%20')
 
     def get_host_and_id(self, url):
         r = re.search(self.pattern, url, re.I)
@@ -41,4 +44,4 @@ class AliezResolver(ResolveGeneric):
 
     def get_url(self, host, media_id):
         media_id = media_id.split("|")
-        return self._default_get_url(host, media_id, 'http://emb.%s/player/video.php?id=%s&s=%s&w=590&h=332' % (host, media_id[0], media_id[1]))
+        return self._default_get_url(host, media_id, 'http://emb.apl5.me/player/video.php?id=%s&s=%s&w=590&h=332' % (media_id[0], media_id[1]))
