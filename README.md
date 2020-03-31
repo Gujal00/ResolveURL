@@ -4,26 +4,43 @@ I am in no way responsible for the urls being resolved by 3rd parties. This scri
 
 Include the script in your addon.xml
 
-    <requires>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.module.resolveurl" version="5.0.00"/>
-	</requires>
+```xml
+<requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.resolveurl" version="5.0.00"/>
+</requires>
+```
 
 Import ResolveUrl and use it the same as you would with the UrlResolver
 
-    import resolveurl
-    resolved = resolveurl.resolve(url)
+```python
+import resolveurl
+resolved = resolveurl.resolve(url)
+```
 
 Or you can import ResolveUrl as UrlResolver to your existing addon that uses the UrlResolver
 
-    import resolveurl as urlresolver
-    resolved = urlresolver.resolve(url)
-    
-Include my repo with your repo to always have the latest updates from me
+```python
+import resolveurl as urlresolver
+resolved = urlresolver.resolve(url)
+```
 
-    <dir>
-	        <info compressed="false">https://raw.githubusercontent.com/jsergio123/zips/master/addons.xml</info>
-	        <checksum>https://raw.githubusercontent.com/jsergio123/zips/master/addons.xml.md5</checksum>
-	        <datadir zip="true">https://raw.githubusercontent.com/jsergio123/zips/master/</datadir>
-	</dir>
+Include my repo with your repo to always have the ~~latest~~ updates from me
 
+```xml
+<dir>
+    <info compressed="false">https://raw.githubusercontent.com/jsergio123/zips/master/addons.xml</info>
+    <checksum>https://raw.githubusercontent.com/jsergio123/zips/master/addons.xml.md5</checksum>
+    <datadir zip="true">https://raw.githubusercontent.com/jsergio123/zips/master/</datadir>
+</dir>
+```
+
+Include gujal dir with your repo to always have the **latest** updates
+
+```xml
+<dir>
+    <info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
+    <checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
+    <datadir zip="true">https://raw.githubusercontent.com/Gujal00/smrzips/master/zips/</datadir>
+</dir>
+```
