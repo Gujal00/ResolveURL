@@ -1,19 +1,29 @@
-[B]Version 5.0.40 (Mar 29, 2020)[/B]
+[B]Version 5.0.41 (Apr 2, 2020)[/B]
 - Code Base Changes:
     - none
 - Resolvers Added:
-    - saruch
-    - sibnet
-    - vidfast
-    - vidspace
+    - primevideos
 - Resolvers Fixed/Updated:
-    - cda
-    - gamovideo
-    - upstream
-    - uptobox
-    - videa
+    - aliez
+    - chromecast
+    - clicknupload
+    - clipwatching
+    - cloudb
+    - cloud.mail.ru
+    - datemule
+    - gounlimited
+    - mystream
 - Resolvers Removed
-    - fileholic
-    - putvid
+    - anyfiles
+    - bestream
+    - daclips
+    - estream
+    - gorillavid
+    - h265
+    - idtbox
+    - mehlizmovies
+    - movpod
+    - videoapne
+    - watchshare
 - Languages Added/Updated
-    - all
+    - none
