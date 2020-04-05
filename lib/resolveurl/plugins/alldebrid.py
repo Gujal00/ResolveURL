@@ -1,5 +1,7 @@
 """
-    resolveurl Kodi Addon
+    Plugin for ResolveURL
+    v4 api updates
+    Copyright (c) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
