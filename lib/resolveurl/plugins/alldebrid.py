@@ -19,6 +19,7 @@ import re
 from urllib import quote_plus
 from urllib2 import HTTPError
 import json
+from lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -31,7 +32,7 @@ VERSION = common.addon_version
 USER_AGENT = '%s/%s' % (AGENT, VERSION)
 FORMATS = common.VIDEO_FORMATS
 
-api_url = 'https://api.alldebrid.com'
+api_url = 'https://api.alldebrid.com/v4'
 
 
 class AllDebridResolver(ResolveUrl):
@@ -61,14 +62,15 @@ class AllDebridResolver(ResolveUrl):
                             self.__initiate_transfer(transfer_id)
 
                     transfer_info = self.__list_transfer(transfer_id)
-                    for _link, _file in transfer_info.get('links').items():
-                        if any(_file.lower().endswith(x) for x in FORMATS):
-                            media_id = _link.replace("\/", "/")
-                            break
-
+                    sources = []
+                    for link in transfer_info.get('links'):
+                        if any(link.get('filename').lower().endswith(x) for x in FORMATS):
+                            sources.append((link.get('size'), link.get('link')))
+                    sources.sort(reverse=True)
+                    media_id = sources[0][1]
                     self.__delete_transfer(transfer_id)
 
-            url = '%s/link/unlock?agent=%s&version=%s&token=%s&link=%s' % (api_url, quote_plus(AGENT), quote_plus(VERSION), self.get_setting('token'), media_id)
+            url = '{0}/link/unlock?agent={1}&apikey={2}&link={3}'.format(api_url, quote_plus(AGENT), self.get_setting('token'), quote_plus(media_id))
             result = self.net.http_GET(url, headers=self.headers).content
         except HTTPError as e:
             try:
@@ -84,21 +86,36 @@ class AllDebridResolver(ResolveUrl):
             js_result = json.loads(result)
             logger.log_debug('AllDebrid resolve: [%s]' % js_result)
             if 'error' in js_result:
-                raise ResolverError('AllDebrid Error: %s (%s)' % (js_result.get('error'), js_result.get('errorCode')))
-            elif js_result.get('success', False):
-                if js_result.get('infos').get('link'):
-                    return js_result.get('infos').get('link')
+                e = js_result.get('error')
+                raise ResolverError('AllDebrid Error: %s (%s)' % (e.get('message'), e.get('code')))
+            elif js_result.get('status', False) == "success":
+                if js_result.get('data').get('link'):
+                    return js_result.get('data').get('link')
+                elif js_result.get('data').get('host') == "stream":
+                    sources = js_result.get('data').get('streams')
+                    fid = js_result.get('data').get('id')
+                    sources = [(str(source.get("quality")), source.get("id")) for source in sources if '+' not in source.get("id")]
+                    sid = helpers.pick_source(helpers.sort_sources_list(sources))
+                    url = '{0}/link/streaming?agent={1}&apikey={2}&id={3}&stream={4}' \
+                          .format(api_url, quote_plus(AGENT), self.get_setting('token'), fid, sid)
+                    result = self.net.http_GET(url, headers=self.headers).content
+                    js_data = json.loads(result)
+                    if js_data.get('data').get('link'):
+                        return js_data.get('data').get('link')
 
         raise ResolverError('AllDebrid: no stream returned')
 
     def __check_cache(self, media_id):
         try:
-            url = '%s/magnet/instant?agent=%s&version=%s&token=%s&magnet=%s' % (api_url, quote_plus(AGENT), quote_plus(VERSION), self.get_setting('token'), media_id)
+            url = '{0}/magnet/instant?agent={1}&apikey={2}&magnets[]={3}'.format(api_url, quote_plus(AGENT), self.get_setting('token'), media_id.lower())
             result = self.net.http_GET(url, headers=self.headers).content
             result = json.loads(result)
-            if result.get('success', False):
-                response = result.get('instant', False)
-                return response
+            if result.get('status', False) == "success":
+                magnets = result.get('data').get('magnets')
+                for magnet in magnets:
+                    if media_id == magnet.get('magnet') or media_id == magnet.get('hash'):
+                        response = magnet.get('instant', False)
+                        return response
         except:
             pass
 
@@ -106,11 +123,16 @@ class AllDebridResolver(ResolveUrl):
 
     def __list_transfer(self, transfer_id):
         try:
-            url = '%s/magnet/status?agent=%s&version=%s&token=%s&id=%s' % (api_url, quote_plus(AGENT), quote_plus(VERSION), self.get_setting('token'), transfer_id)
-            response = self.net.http_GET(url, headers=self.headers).content
-            result = json.loads(response)
-            if result.get('success', False):
-                return result
+            url = '{0}/magnet/status?agent={1}&apikey={2}&id={3}'.format(api_url, quote_plus(AGENT), self.get_setting('token'), transfer_id)
+            result = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if result.get('status', False) == "success":
+                magnets = result.get('data').get('magnets')
+                if type(magnets) is list:
+                    for magnet in magnets:
+                        if transfer_id == magnet.get('id'):
+                            return magnet
+                else:
+                    return magnets
         except:
             pass
 
@@ -118,25 +140,27 @@ class AllDebridResolver(ResolveUrl):
 
     def __create_transfer(self, media_id):
         try:
-            url = '%s/magnet/upload?agent=%s&version=%s&token=%s&magnet=%s' % (api_url, quote_plus(AGENT), quote_plus(VERSION), self.get_setting('token'), media_id)
-            response = self.net.http_GET(url, headers=self.headers).content
-            result = json.loads(response)
-            if result.get('success', False):
+            url = '{0}/magnet/upload?agent={1}&apikey={2}&magnets[]={3}'.format(api_url, quote_plus(AGENT), self.get_setting('token'), media_id)
+            result = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if result.get('status', False) == "success":
                 logger.log_debug('Transfer successfully started to the AllDebrid cloud')
-                return result.get('id', "")
+                magnets = result.get('data').get('magnets')
+                for magnet in magnets:
+                    if media_id in magnet.get('magnet') or media_id.lower() == magnet.get('hash').lower():
+                        return magnet.get('id')
         except:
             pass
 
         return ""
 
-    def __initiate_transfer(self, transfer_id, interval=5):
+    def __initiate_transfer(self, transfer_id, interval=10):
         try:
             transfer_info = self.__list_transfer(transfer_id)
             if transfer_info:
                 line1 = transfer_info.get('filename')
                 line2 = 'Saving torrent to UptoBox via AllDebrid'
                 line3 = transfer_info.get('status')
-                with common.kodi.ProgressDialog('Resolve URL AllDebrid Transfer', line1, line2, line3) as pd:
+                with common.kodi.ProgressDialog('ResolveURL AllDebrid Transfer', line1, line2, line3) as pd:
                     while not transfer_info.get('statusCode') == 4:
                         common.kodi.sleep(1000 * interval)
                         transfer_info = self.__list_transfer(transfer_id)
@@ -174,12 +198,13 @@ class AllDebridResolver(ResolveUrl):
 
     def __delete_transfer(self, transfer_id):
         try:
-            url = '%s/magnet/delete?agent=%s&version=%s&token=%s&id=%s' % (api_url, quote_plus(AGENT), quote_plus(VERSION), self.get_setting('token'), transfer_id)
+            url = '{0}/magnet/delete?agent={1}&apikey={2}&id={3}'.format(api_url, quote_plus(AGENT), self.get_setting('token'), transfer_id)
             response = self.net.http_GET(url, headers=self.headers).content
             result = json.loads(response)
-            if result.get('success', False):
-                logger.log_debug('Transfer ID "%s" deleted from the AllDebrid cloud' % transfer_id)
-                return True
+            if result.get('status', False) == "success":
+                if 'deleted' in response.get('data').get('message'):
+                    logger.log_debug('Transfer ID "%s" deleted from the AllDebrid cloud' % transfer_id)
+                    return True
         except:
             pass
 
@@ -194,15 +219,27 @@ class AllDebridResolver(ResolveUrl):
     @common.cache.cache_method(cache_limit=8)
     def get_all_hosters(self):
         hosters = []
-        url = '%s/user/hosts?agent=%s&version=%s&token=%s' % (api_url, quote_plus(AGENT), quote_plus(VERSION), self.get_setting('token'))
+        url = '{0}/user/hosts?agent={1}&apikey={2}'.format(api_url, quote_plus(AGENT), self.get_setting('token'))
         try:
-            js_result = self.net.http_GET(url, headers=self.headers).content
-            js_data = json.loads(js_result)
-            if js_data.get('success', False):
-                regexes = [value.get('regexp').replace('\/', '/') for key, value in js_data.get('hosts', {}).iteritems()
+            result = self.net.http_GET(url, headers=self.headers).content
+            js_data = json.loads(result)
+            if js_data.get('status', False) == "success":
+                js_data = js_data.get('data')
+                regexes = [value.get('regexp') for key, value in js_data.get('hosts', {}).iteritems()
                            if value.get('status', False)]
-                logger.log_debug('AllDebrid hosters : %s' % regexes)
+                # logger.log_debug('AllDebrid hosters : %s' % regexes)
                 hosters = [re.compile(regex) for regex in regexes]
+                logger.log_debug('AllDebrid hosters : %s' % len(hosters))
+                regexes = [value.get('regexp') for key, value in js_data.get('streams', {}).iteritems()]
+                streamers = []
+                for regex in regexes:
+                    try:
+                        streamers.append(re.compile(regex))
+                    except:
+                        pass
+                logger.log_debug('AllDebrid Streamers : %s' % len(streamers))
+                hosters.extend(streamers)
+                logger.log_debug('AllDebrid Total hosters : %s' % len(hosters))
             else:
                 logger.log_error('Error getting AD Hosters')
         except Exception as e:
@@ -212,17 +249,19 @@ class AllDebridResolver(ResolveUrl):
     @common.cache.cache_method(cache_limit=8)
     def get_hosts(self):
         hosts = []
-        url = '%s/hosts/domains' % api_url
+        url = '{0}/hosts/domains?agent={1}&apikey={2}'.format(api_url, quote_plus(AGENT), self.get_setting('token'))
         try:
             js_result = self.net.http_GET(url, headers=self.headers).content
             js_data = json.loads(js_result)
-            if js_data.get('success', False):
-                hosts = [host.replace('www.', '') for host in js_data.get('hosts', [])]
+            if js_data.get('status', False) == "success":
+                # hosts = [host.replace('www.', '') for host in js_data.get('hosts', [])]
+                hosts = js_data.get('data').get('hosts')
+                hosts.extend(js_data.get('data').get('streams'))
                 if self.get_setting('torrents') == 'true':
                     hosts.extend([u'torrent', u'magnet'])
                 logger.log_debug('AllDebrid hosts : %s' % hosts)
             else:
-                logger.log_error('Error getting AD Hosters')
+                logger.log_error('Error getting AD Hosts')
         except Exception as e:
             logger.log_error('Error getting AD Hosts: %s' % e)
         return hosts
@@ -258,26 +297,26 @@ class AllDebridResolver(ResolveUrl):
         self.set_setting('token', '')
 
     def authorize_resolver(self):
-        url = '%s/pin/get?agent=%s&version=%s' % (api_url, quote_plus(AGENT), quote_plus(VERSION))
+        url = '{0}/pin/get?agent={1}'.format(api_url, quote_plus(AGENT))
         js_result = self.net.http_GET(url, headers=self.headers).content
-        js_data = json.loads(js_result)
-        line1 = 'Go to URL: %s' % (js_data.get('base_url').replace('\/', '/'))
+        js_data = json.loads(js_result).get('data')
+        line1 = 'Go to URL: %s' % (js_data.get('base_url'))
         line2 = 'When prompted enter: %s' % (js_data.get('pin'))
-        with common.kodi.CountdownDialog('Resolve Url All Debrid Authorization', line1, line2,
+        with common.kodi.CountdownDialog('ResolveUrl AllDebrid Authorization', line1, line2,
                                          countdown=js_data.get('expired_in', 120)) as cd:
-            result = cd.start(self.__check_auth, [js_data.get('check_url').replace('\/', '/')])
+            result = cd.start(self.__check_auth, [js_data.get('check_url')])
 
         # cancelled
         if result is None:
             return
-        return self.__get_token(js_data.get('check_url').replace('\/', '/'))
+        return self.__get_token(js_data.get('check_url'))
 
     def __get_token(self, url):
         try:
-            js_result = self.net.http_GET(url, headers=self.headers).content
-            js_data = json.loads(js_result)
-            if js_data.get("success", False):
-                token = js_data.get('token', '')
+            js_data = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if js_data.get("status", False) == "success":
+                js_data = js_data.get('data')
+                token = js_data.get('apikey', '')
                 logger.log_debug('Authorizing All Debrid Result: |%s|' % token)
                 self.set_setting('token', token)
                 return True
@@ -288,9 +327,9 @@ class AllDebridResolver(ResolveUrl):
     def __check_auth(self, url):
         activated = False
         try:
-            js_result = self.net.http_GET(url, headers=self.headers).content
-            js_data = json.loads(js_result)
-            if js_data.get("success", False):
+            js_data = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if js_data.get("status", False) == "success":
+                js_data = js_data.get('data')
                 activated = js_data.get('activated', False)
         except Exception as e:
             logger.log_debug('Exception during AD auth: %s' % e)
