@@ -52,9 +52,8 @@ class CdaResolver(ResolveUrl):
 
     def cda_decode(self, url):
         url = urllib.unquote(url)
-        strurl = ''
-        for char in url:
-            strurl += chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char
-        strurl = strurl if strurl.startswith('http') else 'https://{0}'.format(strurl)
-        strurl = strurl if strurl.endswith('.mp4') else '{0}.mp4'.format(strurl)
-        return strurl.replace("adc.mp4", ".mp4")
+        a = ''.join([chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char for char in url])
+        a = a[:-4].replace(".cda.mp4", "")
+        a = a.replace(".2cda.pl", ".cda.pl")
+        a = a.replace(".3cda.pl", ".cda.pl")
+        return "https://{0}.mp4".format(a)
