@@ -79,5 +79,7 @@ STRINGS = {
     'jetload_auth_header': 33059,
     'uptobox_auth_header': 33060,
     'upto_link': 33061,
-    'upto_pair': 33062
+    'upto_pair': 33062,
+    'dl_auth_reset': 33063,
+    'dl_authorized': 33064
 }

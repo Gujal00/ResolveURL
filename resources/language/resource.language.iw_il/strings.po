@@ -266,3 +266,11 @@ msgstr "[B][COLOR blue]{0}[/COLOR][/B]בקר בקישור זה: "
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
 msgstr "הזן את ה- PIN כ- [B][COLOR blue]{0}[/COLOR][/B] ולחץ על 'קישור חשבון'"
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorization Reset"
+msgstr "איפוס הרשאה ל-Debrid-Link"
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorized"
+msgstr "הרשאה ל-Debrid-Link Resolver"

@@ -32,8 +32,9 @@ def __enum(**enums):
 
 
 MODES = __enum(
-    AUTH_PM='auth_pm', RESET_PM='reset_pm', AUTH_RD='auth_rd', RESET_RD='reset_rd', RESET_CACHE='reset_cache',
-    AUTH_AD='auth_ad', RESET_AD='reset_ad', AUTH_LS='auth_ls', RESET_LS='reset_ls'
+    AUTH_PM='auth_pm', RESET_PM='reset_pm', AUTH_RD='auth_rd', RESET_RD='reset_rd',
+    AUTH_AD='auth_ad', RESET_AD='reset_ad', AUTH_LS='auth_ls', RESET_LS='reset_ls',
+    AUTH_DL='auth_dl', RESET_DL='reset_dl', RESET_CACHE='reset_cache'
 )
 
 
@@ -119,6 +120,25 @@ def reset_ls():
     ls = linksnappy.LinksnappyResolver()
     ls.reset_authorization()
     kodi.notify(msg=kodi.i18n('ls_auth_reset'), duration=5000)
+
+
+@url_dispatcher.register(MODES.AUTH_DL)
+def auth_dl():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or authorize won't work for some reason
+    from resolveurl.plugins import debrid_link
+    if debrid_link.DebridLinkResolver().authorize_resolver():
+        kodi.notify(msg=kodi.i18n('dl_authorized'), duration=5000)
+
+
+@url_dispatcher.register(MODES.RESET_DL)
+def reset_dl():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or reset won't work for some reason
+    from resolveurl.plugins import debrid_link
+    dl = debrid_link.DebridLinkResolver()
+    dl.reset_authorization()
+    kodi.notify(msg=kodi.i18n('dl_auth_reset'), duration=5000)
 
 
 def main(argv=None):

@@ -263,3 +263,11 @@ msgstr "Navštivte tento odkaz: [B][COLOR blue]{0}[/COLOR][/B]"
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
 msgstr "Zadejte PIN jako [B][COLOR blue]{0}[/COLOR][/B] a poté klikněte na 'Propojit účet'"
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorization Reset"
+msgstr "Debrid-Link Obnovení autorizace"
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorized"
+msgstr "Debrid-Link Resolver autorizován"

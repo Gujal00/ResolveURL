@@ -1,6 +1,6 @@
 """
-    resolveurl XBMC Addon
-    Copyright (C) 2013 Bstrdsmkr
+    Plugin for ResolveURL
+    Copyright (c) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,14 +18,20 @@
 
 import re
 import json
-import hashlib
-import time
+from urllib2 import HTTPError
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
+
+CLIENT_ID = 'TH7yOa_pgRD1MRyIs6496Q'
+USER_AGENT = 'ResolveURL for Kodi/{0}'.format(common.addon_version)
+FORMATS = common.VIDEO_FORMATS
+
+api_url = 'https://debrid-link.com/api/v2'
+
 
 class DebridLinkResolver(ResolveUrl):
     name = "Debrid-Link.fr"
@@ -34,35 +40,171 @@ class DebridLinkResolver(ResolveUrl):
 
     def __init__(self):
         self.net = common.Net()
-        self.base_url = 'https://debrid-link.fr/api'
+        self.hosters = None
         self.hosts = None
+        self.headers = {'User-Agent': USER_AGENT, 'Authorization': 'Bearer {0}'.format(self.get_setting('token'))}
 
-    def get_media_url(self, host, media_id):
-        offset = self.get_setting('ts_offset')
-        token = self.get_setting('token')
-        api_key = self.get_setting('key')
-        if not offset or not token or not api_key:
-            logger.log_debug('offset: %s, token: %s, key: %s' % (offset, token, api_key))
-            raise ResolverError('Insufficent Information to make API call')
-        
-        url = '/downloader/add'
-        server_ts = int(time.time()) - int(offset)
-        signature = hashlib.sha1(str(server_ts) + url + api_key).hexdigest()
-        url = self.base_url + url
-        headers = {'X-DL-SIGN': signature, 'X-DL-TOKEN': token, 'X-DL-TS': server_ts}
-        logger.log_debug('Debrid-Link Headers: %s' % (headers))
-        js_data = self.net.http_POST(url, form_data={'link': media_id}, headers=headers).content
-        js_data = json.loads(js_data)
-        self.__store_offset(js_data)
-        if js_data.get('result') == 'OK':
-            stream_url = js_data.get('value', {}).get('downloadLink')
-            if stream_url is None:
-                raise ResolverError('No usable link returned from Debrid-Link.fr')
-            
-            logger.log_debug('Debrid-Link.fr Resolved to %s' % (stream_url))
-            return stream_url
+    def get_media_url(self, host, media_id, retry=False, cached_only=False):
+        try:
+            if media_id.lower().startswith('magnet:'):
+                r = re.search('''magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)''', media_id, re.I)
+                if r:
+                    _hash = r.group(2)
+                    if self.__check_cache(_hash):
+                        logger.log_debug('Debrid-Link: BTIH {0} is readily available to stream'.format(_hash))
+                        transfer_id = self.__create_transfer(_hash)
+                    else:
+                        if self.get_setting('cached_only') == 'true' or cached_only:
+                            raise ResolverError('Debrid-Link: Cached torrents only allowed to be initiated')
+                        else:
+                            transfer_id = self.__create_transfer(media_id)
+                            self.__initiate_transfer(transfer_id)
+
+                    transfer_info = self.__list_transfer(transfer_id)
+                    sources = [(item.get('size'), item.get('downloadUrl'))
+                               for item in transfer_info.get('files')
+                               if any(item.get('name').lower().endswith(x) for x in FORMATS)]
+                    stream_url = max(sources)[1]
+                    return stream_url
+            url = '{0}/downloader/add'.format(api_url)
+            data = {'url': media_id}
+            js_data = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
+        except HTTPError as e:
+            if not retry and e.code == 401:
+                if self.get_setting('refresh'):
+                    self.refresh_token()
+                    return self.get_media_url(host, media_id, retry=True)
+                else:
+                    self.reset_authorization()
+                    raise ResolverError('Debrid-Link Auth Failed & No Refresh Token')
+            else:
+                try:
+                    js_result = json.loads(e.read())
+                    if 'error' in js_result:
+                        msg = js_result.get('error')
+                    else:
+                        msg = 'Unknown Error (1)'
+                except:
+                    msg = 'Unknown Error (2)'
+                raise ResolverError('Debrid-Link Error: {0} ({1})'.format(msg, e.code))
+        except Exception as e:
+            raise ResolverError('Unexpected Exception during DL Unrestrict: {0}'.format(e))
         else:
-            raise ResolverError('Debrid-Link.fr Link failed: %s' % (js_data.get('ERR', '')))
+            if js_data.get('success', False):
+                stream_url = js_data.get('value', {}).get('downloadUrl')
+                if stream_url is None:
+                    raise ResolverError('No usable link returned from Debrid-Link.fr')
+
+                logger.log_debug('Debrid-Link.fr Resolved to {0}'.format(stream_url))
+                return stream_url
+            else:
+                raise ResolverError('Debrid-Link.fr Link failed: {0}'.format(js_data.get('ERR', '')))
+
+        raise ResolverError('Debrid-Link: no stream returned')
+
+    def __check_cache(self, media_id, retry=False):
+        try:
+            url = '{0}/seedbox/{1}/cached'.format(api_url, media_id.lower())
+            result = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if result.get('success', False):
+                if result.get('value'):
+                    if media_id in result.get('value').keys():
+                        return True
+        except HTTPError as e:
+            if not retry and e.code == 401:
+                if self.get_setting('refresh'):
+                    self.refresh_token()
+                    return self.__check_cache(media_id, retry=True)
+                else:
+                    self.reset_authorization()
+                    raise ResolverError('Debrid-Link Auth Failed & No Refresh Token')
+            else:
+                try:
+                    js_result = json.loads(e.read())
+                    if 'error' in js_result:
+                        msg = js_result.get('error')
+                    else:
+                        msg = 'Unknown Error (1)'
+                except:
+                    msg = 'Unknown Error (2)'
+                raise ResolverError('Debrid-Link Error: {0} ({1})'.format(msg, e.code))
+        except Exception as e:
+            raise ResolverError('Unexpected Exception during DL Cache check: {0}'.format(e))
+
+        return False
+
+    def __list_transfer(self, transfer_id):
+        try:
+            url = '{0}/seedbox/{1}/infos'.format(api_url, transfer_id)
+            js_data = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if js_data.get('success', False):
+                return js_data.get('value')
+        except:
+            pass
+
+        return {}
+
+    def __create_transfer(self, media_id):
+        try:
+            url = '{0}/seedbox/add'.format(api_url)
+            data = {'url': media_id,
+                    'async': 'true'}
+            js_result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
+            if js_result.get('value'):
+                logger.log_debug('Transfer successfully started to the Debrid-Link cloud')
+                return js_result.get('value').get('id')
+        except:
+            pass
+
+        return ""
+
+    def __initiate_transfer(self, transfer_id, interval=5):
+        try:
+            transfer_info = self.__list_transfer(transfer_id)
+            if transfer_info:
+                line1 = transfer_info.get('name')
+                line2 = 'Saving torrent to Debrid-Link Seedbox'
+                line3 = transfer_info.get('serverId')
+                with common.kodi.ProgressDialog('ResolveURL Debrid-Link Transfer', line1, line2, line3) as pd:
+                    while transfer_info.get('downloadPercent') < 100.0:
+                        common.kodi.sleep(1000 * interval)
+                        transfer_info = self.__list_transfer(transfer_id)
+                        file_size = round(float(transfer_info.get('totalSize')) / (1000**3), 2)
+                        if transfer_info.get('status') == 4:
+                            download_speed = round(float(transfer_info.get('downloadSpeed')) / (1000**2), 2)
+                            progress = int(transfer_info.get('downloadPercent'))
+                            line3 = "Downloading at {0}MB/s from {1} peers, {2}% completed of {3}GB".format(download_speed, transfer_info.get('peersConnected'), progress, file_size)
+                        elif transfer_info.get('status') == 6:
+                            upload_speed = round(float(transfer_info.get('uploadSpeed')) / (1000**2), 2)
+                            progress = int(transfer_info.get('downloadPercent'))
+                            line3 = "Uploading at {0}MB/s to {1} peers, {2}% completed of {3} GB".format(upload_speed, transfer_info.get('peersConnected'), progress, file_size)
+                        else:
+                            line3 = transfer_info.get('serverId')
+                            progress = 0
+                        logger.log_debug(line3)
+                        pd.update(progress, line3=line3)
+                        if pd.is_canceled():
+                            self.__delete_transfer(transfer_id)
+                            raise ResolverError('Transfer ID {0} :: Canceled by user'.format(transfer_id))
+
+            return
+
+        except Exception as e:
+            self.__delete_transfer(transfer_id)
+            raise ResolverError('Transfer ID {0} :: {1}'.format(transfer_id, e))
+
+    def __delete_transfer(self, transfer_id):
+        try:
+            url = '{0}/seedbox/{1}/remove'.format(api_url, transfer_id)
+            js_data = json.loads(self.net.http_DELETE(url, headers=self.headers).content)
+            if js_data.get('success', False):
+                if transfer_id in js_data.get('value'):
+                    logger.log_debug('Transfer ID "{0}" deleted from the Debrid-Link cloud'.format(transfer_id))
+                    return True
+        except:
+            pass
+
+        return False
 
     def get_url(self, host, media_id):
         return media_id
@@ -72,68 +214,158 @@ class DebridLinkResolver(ResolveUrl):
 
     @common.cache.cache_method(cache_limit=8)
     def get_all_hosters(self):
+        hosters = []
+        url = '{0}/downloader/regex'.format(api_url)
         try:
-            url = self.base_url + '/downloader/status'
-            js_data = self.net.http_GET(url).content
-            js_data = json.loads(js_data)
-            self.__store_offset(js_data)
-            host_list = js_data.get('value', {}).get('hosters', [])
-            hosts = [host for status in host_list for host in status.get('hosts', [])]
-            return hosts
-        except Exception as e:
-            logger.log_error('Error getting debrid-link hosts: %s' % (e))
-        return []
-
-    def __store_offset(self, js_data):
-        if 'ts' in js_data:
-            offset = int(time.time()) - js_data['ts']
-            self.set_setting('ts_offset', offset)
-        
-    def valid_url(self, url, host):
-        if self.hosts is None:
-            self.hosts = self.get_all_hosters()
-            
-        logger.log_debug('in valid_url %s : %s' % (url, host))
-        if url:
-            match = re.search('//(.*?)/', url)
-            if match:
-                host = match.group(1)
+            js_data = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if js_data.get('success', False):
+                js_data = js_data.get('value')
+                regexes = [value.get('regexs')[0] for value in js_data]
+                for regex in regexes:
+                    try:
+                        hosters.append(re.compile(regex))
+                    except:
+                        pass
+                logger.log_debug('Debrid-Link hosters : {0}'.format(len(hosters)))
             else:
-                return False
+                logger.log_error('Error getting DL Hosters')
+        except Exception as e:
+            logger.log_error('Error getting DL Hosters: {0}'.format(e))
+        return hosters
 
-        if host.startswith('www.'): host = host.replace('www.', '')
-        if host and any(host in item for item in self.hosts):
-            return True
+    @common.cache.cache_method(cache_limit=8)
+    def get_hosts(self):
+        hosts = []
+        url = '{0}/downloader/hostnames'.format(api_url)
+        try:
+            js_data = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            if js_data.get('success', False):
+                hosts = js_data.get('value')
+                if self.get_setting('torrents') == 'true':
+                    hosts.extend([u'torrent', u'magnet'])
+                logger.log_debug('Debrid-Link hosts : {0}'.format(hosts))
+            else:
+                logger.log_error('Error getting DL Hosts')
+        except Exception as e:
+            logger.log_error('Error getting DL Hosts: {0}'.format(e))
+        return hosts
+
+    def valid_url(self, url, host):
+        logger.log_debug('in valid_url {0} : {1}'.format(url, host))
+        if url:
+            if url.lower().startswith('magnet:') and self.get_setting('torrents') == 'true':
+                return True
+
+            if self.hosters is None:
+                self.hosters = self.get_all_hosters()
+
+            for regexp in self.hosters:
+                if re.search(regexp, url):
+                    logger.log_debug('Debrid-Link Match found')
+                    return True
+        elif host:
+            if self.hosts is None:
+                self.hosts = self.get_hosts()
+
+            if any(host in item for item in self.hosts):
+                return True
 
         return False
 
+    # SiteAuth methods
     def login(self):
-        url = self.base_url + '/account/login'
-        username = self.get_setting('username')
-        password = self.get_setting('password')
-        login_data = {'pseudo': username, 'password': password}
-        js_data = self.net.http_POST(url, form_data=login_data).content
-        js_data = json.loads(js_data)
-        if js_data.get('result') == 'OK':
-            self.__store_offset(js_data)
-            if 'value' in js_data:
-                self.set_setting('token', js_data['value'].get('token'))
-                self.set_setting('key', js_data['value'].get('key'))
-            return True
+        if not self.get_setting('token'):
+            self.authorize_resolver()
 
-        return False
+    def refresh_token(self):
+        REFRESH_TOKEN = self.get_setting('refresh')
+        logger.log_debug('Refreshing Expired Debrid-Link Token: |{0}|'.format(REFRESH_TOKEN))
+        try:
+            url = '{0}/oauth/token'.format(api_url[:-3])
+            data = {'client_id': CLIENT_ID,
+                    'refresh_token': REFRESH_TOKEN,
+                    'grant_type': 'refresh_token'}
+            if self.headers.get('Authorization', False):
+                self.headers.pop('Authorization')
+            js_result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
+            if js_result.get('access_token', False):
+                self.set_setting('token', js_result.get('access_token'))
+                self.headers.update({'Authorization': 'Bearer {0}'.format(self.get_setting('token'))})
+                return True
+            else:
+                # empty all auth settings to force a re-auth on next use
+                self.reset_authorization()
+                raise ResolverError('Unable to Refresh Debrid-Link Token')
+        except Exception as e:
+            self.reset_authorization()
+            logger.log_debug('Debrid-Link Authorization Failed: {0}'.format(e))
+            return False
+
+    def authorize_resolver(self):
+        url = '{0}/oauth/device/code'.format(api_url[:-3])
+        data = {'client_id': CLIENT_ID,
+                'scope': 'get.post.delete.downloader get.post.delete.seedbox get.account'}
+        if self.headers.get('Authorization', False):
+            self.headers.pop('Authorization')
+        js_result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
+        line1 = 'Go to URL: {0}'.format(js_result.get('verification_url'))
+        line2 = 'When prompted enter: {0}'.format(js_result.get('user_code'))
+        with common.kodi.CountdownDialog('ResolveURL Debrid-Link Authorization', line1, line2,
+                                         countdown=js_result.get('expires_in'), interval=10) as cd:
+            result = cd.start(self.__check_auth, [js_result.get('device_code')])
+
+        # cancelled
+        if result is None:
+            return
+        return True
+
+    def __check_auth(self, device_code):
+        activated = False
+        try:
+            url = '{0}/oauth/token'.format(api_url[:-3])
+            data = {'client_id': CLIENT_ID,
+                    'code': device_code,
+                    'grant_type': 'urn:ietf:params:oauth:grant-type:device_code'}
+            if self.headers.get('Authorization', False):
+                self.headers.pop('Authorization')
+            js_data = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
+            if js_data.get('access_token', False):
+                logger.log_debug('Authorizing Debrid-Link Result: |{0}|'.format(js_data))
+                activated = True
+                self.set_setting('token', js_data.get('access_token'))
+                self.set_setting('refresh', js_data.get('refresh_token'))
+        except HTTPError as e:
+            if e.code == 400:
+                js_data = json.loads(e.read())
+                if js_data.get('error') != 'authorization_pending':
+                    logger.log_debug('Exception during DL auth: {0}'.format(e))
+                    raise ResolverError('Unknown error during Authorization')
+            else:
+                logger.log_debug('Exception during DL auth: {0}'.format(e))
+                raise ResolverError('Unknown error during Authorization')
+        except Exception as e:
+            logger.log_debug('Exception during DL auth: {0}'.format(e))
+        return activated
+
+    def reset_authorization(self):
+        self.set_setting('token', '')
+        self.set_setting('refresh', '')
+
+    @classmethod
+    def _is_enabled(cls):
+        return cls.get_setting('enabled') == 'true' and cls.get_setting('token')
 
     @classmethod
     def get_settings_xml(cls):
-        xml = super(cls, cls).get_settings_xml(include_login=False)
-        xml.append('<setting id="%s_login" type="bool" label="%s" default="false"/>' % (cls.__name__, i18n('login')))
-        xml.append('<setting id="%s_username" enable="eq(-1,true)" type="text" label="%s" default=""/>' % (cls.__name__, i18n('username')))
-        xml.append('<setting id="%s_password" enable="eq(-2,true)" type="text" label="%s" option="hidden" default=""/>' % (cls.__name__, i18n('password')))
-        xml.append('<setting id="%s_ts_offset" type="number" visible="false" enable="false" default="0"/>' % (cls.__name__))
-        xml.append('<setting id="%s_token" type="text" visible="false" enable="false"/>' % (cls.__name__))
-        xml.append('<setting id="%s_key" type="text" visible="false" enable="false"/>' % (cls.__name__))
+        xml = super(cls, cls).get_settings_xml()
+        xml.append('<setting id="{0}_torrents" type="bool" label="{1}" default="true"/>'.format(cls.__name__, i18n('torrents')))
+        xml.append('<setting id="{0}_cached_only" enable="eq(-1,true)" type="bool" label="{1}" default="false" />'.format(cls.__name__, i18n('cached_only')))
+        xml.append('<setting id="{0}_auth" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=auth_dl)"/>'.format(cls.__name__, i18n('auth_my_account')))
+        xml.append('<setting id="{0}_reset" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_dl)"/>'.format(cls.__name__, i18n('reset_my_auth')))
+        xml.append('<setting id="{0}_token" visible="false" type="text" default=""/>'.format(cls.__name__))
+        xml.append('<setting id="{0}_refresh" visible="false" type="text" default=""/>'.format(cls.__name__))
         return xml
 
     @classmethod
-    def isUniversal(self):
+    def isUniversal(cls):
         return True

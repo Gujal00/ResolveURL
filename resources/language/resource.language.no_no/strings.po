@@ -266,3 +266,11 @@ msgstr "Besøk denne lenken: [B][COLOR blue]{0}[/COLOR][/B]"
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
 msgstr "Skriv inn PIN-koden som [B][COLOR blue]{0}[/COLOR][/B], og klikk deretter på 'Link Account'"
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorization Reset"
+msgstr "Debrid-Link autorisasjons-nullstilling"
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorized"
+msgstr "Debrid-Link-resolver autorisert"

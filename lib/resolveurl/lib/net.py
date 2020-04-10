@@ -314,7 +314,7 @@ class Net:
         if compression:
             req.add_header('Accept-Encoding', 'gzip')
         req.add_unredirected_header('Host', req.get_host())
-        response = urllib2.urlopen(req)
+        response = urllib2.urlopen(req, timeout=15)
         return HttpResponse(response)
 
 class HttpResponse:

@@ -265,3 +265,11 @@ msgstr "Accesați acest link: [B][COLOR blue]{0}[/COLOR][/B]"
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
 msgstr "Introduceți codul PIN ca [B][COLOR blue]{0}[/COLOR][/B] și apoi faceți clic pe 'Link Account'"
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorization Reset"
+msgstr "Resetare rezolver Debrid-Link"
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorized"
+msgstr "Rezolver Debrid-Link autorizat"

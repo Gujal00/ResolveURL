@@ -263,3 +263,11 @@ msgstr "Visita este enlace: [B][COLOR blue]{0}[/COLOR][/B]"
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
 msgstr "Ingrese el PIN como [B][COLOR blue]{0}[/COLOR][/B] y luego haga clic en 'Link Account'"
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorization Reset"
+msgstr "Autorización de Debrid-Link Autorizada"
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorized"
+msgstr "Debrid-Link Resolver Resolver Autorizado"

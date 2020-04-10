@@ -264,3 +264,11 @@ msgstr ""
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
 msgstr ""
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorisation Reset"
+msgstr ""
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorised"
+msgstr ""
