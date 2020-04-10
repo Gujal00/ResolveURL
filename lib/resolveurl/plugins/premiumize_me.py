@@ -236,12 +236,11 @@ class PremiumizeMeResolver(ResolveUrl):
             if 'status' in result:
                 if result.get('status') == 'success':
                     if torrent:
-                        _videos = []
-                        for items in result.get("content"):
-                            if any(items.get('path').lower().endswith(x) for x in FORMATS) and not items.get("link", "") == "":
-                                _videos.append(items)
+                        _videos = [(int(item.get('size')), item.get('link')) for item in result.get("content")
+                                   if any(item.get('path').lower().endswith(x)
+                                          for x in FORMATS)]
                         try:
-                            return max(_videos, key=lambda x: x.get('size')).get('link', None)
+                            return max(_videos)[1]
                         except ValueError:
                             raise ResolverError('Failed to locate largest video file')
                     else:
