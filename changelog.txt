@@ -1,29 +1,20 @@
-[B]Version 5.0.41 (Apr 2, 2020)[/B]
+[B]Version 5.0.42 (Apr 11, 2020)[/B]
 - Code Base Changes:
-    - none
+    - Add 15 seconds timeout on urlopen
+    - Add strings for debridlink oauth
 - Resolvers Added:
-    - primevideos
+    - anavids
+    - liivideo
+    - vidcloud9
 - Resolvers Fixed/Updated:
-    - aliez
-    - chromecast
-    - clicknupload
+    - alldebrid
+    - cda
+    - debridlink
     - clipwatching
-    - cloudb
-    - cloud.mail.ru
-    - datemule
-    - gounlimited
-    - mystream
+    - premiumize
+    - upstream
+    - vkprime
 - Resolvers Removed
-    - anyfiles
-    - bestream
-    - daclips
-    - estream
-    - gorillavid
-    - h265
-    - idtbox
-    - mehlizmovies
-    - movpod
-    - videoapne
-    - watchshare
+    - none
 - Languages Added/Updated
     - none
