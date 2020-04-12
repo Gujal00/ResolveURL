@@ -50,10 +50,16 @@ class CdaResolver(ResolveUrl):
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://ebd.cda.pl/647x500/{media_id}/vfilm')
 
-    def cda_decode(self, url):
-        url = urllib.unquote(url)
-        a = ''.join([chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char for char in url])
-        a = a[:-4].replace(".cda.mp4", "")
+    def cda_decode(self, a):
+        a = a.replace("_XDDD", "")
+        a = a.replace("_CDA", "")
+        a = a.replace("_ADC", "")
+        a = a.replace("_CXD", "")
+        a = a.replace("_QWE", "")
+        a = a.replace("_Q5", "")
+        a = urllib.unquote(a)
+        a = ''.join([chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char for char in a])
+        a = a.replace(".cda.mp4", "")
         a = a.replace(".2cda.pl", ".cda.pl")
         a = a.replace(".3cda.pl", ".cda.pl")
         return "https://{0}.mp4".format(a)
