@@ -18,6 +18,7 @@
 
 import re
 import json
+from urllib import quote
 from urllib2 import HTTPError
 from resolveurl import common
 from resolveurl.common import i18n
@@ -46,26 +47,26 @@ class DebridLinkResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id, retry=False, cached_only=False):
         try:
-            if media_id.lower().startswith('magnet:'):
-                r = re.search('''magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)''', media_id, re.I)
-                if r:
-                    _hash = r.group(2)
-                    if self.__check_cache(_hash):
-                        logger.log_debug('Debrid-Link: BTIH {0} is readily available to stream'.format(_hash))
-                        transfer_id = self.__create_transfer(_hash)
+            if media_id.lower().startswith('magnet:') or '.torrent' in media_id.lower():
+                if self.__check_cache(media_id):
+                    logger.log_debug('Debrid-Link: BTIH {0} is readily available to stream'.format(media_id))
+                    transfer_id = self.__create_transfer(media_id)
+                else:
+                    if self.get_setting('cached_only') == 'true' or cached_only:
+                        raise ResolverError('Debrid-Link: Cached torrents only allowed to be initiated')
                     else:
-                        if self.get_setting('cached_only') == 'true' or cached_only:
-                            raise ResolverError('Debrid-Link: Cached torrents only allowed to be initiated')
-                        else:
-                            transfer_id = self.__create_transfer(media_id)
+                        transfer_id = self.__create_transfer(media_id)
+                        if transfer_id:
                             self.__initiate_transfer(transfer_id)
+                        else:
+                            raise ResolverError('Debrid-Link torrent queueing Failed')
 
-                    transfer_info = self.__list_transfer(transfer_id)
-                    sources = [(item.get('size'), item.get('downloadUrl'))
-                               for item in transfer_info.get('files')
-                               if any(item.get('name').lower().endswith(x) for x in FORMATS)]
-                    stream_url = max(sources)[1]
-                    return stream_url
+                transfer_info = self.__list_transfer(transfer_id)
+                sources = [(item.get('size'), item.get('downloadUrl'))
+                           for item in transfer_info.get('files')
+                           if any(item.get('name').lower().endswith(x) for x in FORMATS)]
+                stream_url = max(sources)[1]
+                return stream_url
             url = '{0}/downloader/add'.format(api_url)
             data = {'url': media_id}
             js_data = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
@@ -88,7 +89,7 @@ class DebridLinkResolver(ResolveUrl):
                     msg = 'Unknown Error (2)'
                 raise ResolverError('Debrid-Link Error: {0} ({1})'.format(msg, e.code))
         except Exception as e:
-            raise ResolverError('Unexpected Exception during DL Unrestrict: {0}'.format(e))
+            raise ResolverError('Exception during DL Unrestrict: {0}'.format(e))
         else:
             if js_data.get('success', False):
                 stream_url = js_data.get('value', {}).get('downloadUrl')
@@ -103,13 +104,19 @@ class DebridLinkResolver(ResolveUrl):
         raise ResolverError('Debrid-Link: no stream returned')
 
     def __check_cache(self, media_id, retry=False):
+        if media_id.startswith('magnet:'):
+            media_id = re.findall('''magnet:.+?urn:[a-zA-Z0-9]+:([a-zA-Z0-9]+)''', media_id.lower(), re.I)[0]
+        else:
+            media_id = quote(media_id)
         try:
-            url = '{0}/seedbox/{1}/cached'.format(api_url, media_id.lower())
+            # url = '{0}/seedbox/{1}/cached'.format(api_url, media_id.lower())
+            url = '{0}/seedbox/cached?url={1}'.format(api_url, media_id)
             result = json.loads(self.net.http_GET(url, headers=self.headers).content)
             if result.get('success', False):
                 if result.get('value'):
-                    if media_id in result.get('value').keys():
-                        return True
+                    # if media_id in result.get('value').keys():
+                    #     return True
+                    return True
         except HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):
@@ -213,7 +220,7 @@ class DebridLinkResolver(ResolveUrl):
         return 'debrid-link.fr', url
 
     @common.cache.cache_method(cache_limit=8)
-    def get_all_hosters(self):
+    def get_all_hosters(self, retry=False):
         hosters = []
         url = '{0}/downloader/regex'.format(api_url)
         try:
@@ -221,6 +228,7 @@ class DebridLinkResolver(ResolveUrl):
             if js_data.get('success', False):
                 js_data = js_data.get('value')
                 regexes = [value.get('regexs')[0] for value in js_data]
+                logger.log_debug('Debrid-Link regexes : {0}'.format(len(regexes)))
                 for regex in regexes:
                     try:
                         hosters.append(re.compile(regex))
@@ -229,6 +237,24 @@ class DebridLinkResolver(ResolveUrl):
                 logger.log_debug('Debrid-Link hosters : {0}'.format(len(hosters)))
             else:
                 logger.log_error('Error getting DL Hosters')
+        except HTTPError as e:
+            if not retry and e.code == 401:
+                if self.get_setting('refresh'):
+                    self.refresh_token()
+                    return self.get_all_hosters(retry=True)
+                else:
+                    self.reset_authorization()
+                    raise ResolverError('Debrid-Link Auth Failed & No Refresh Token')
+            else:
+                try:
+                    js_result = json.loads(e.read())
+                    if 'error' in js_result:
+                        msg = js_result.get('error')
+                    else:
+                        msg = 'Unknown Error (1)'
+                except:
+                    msg = 'Unknown Error (2)'
+                raise ResolverError('Debrid-Link Error: {0} ({1})'.format(msg, e.code))
         except Exception as e:
             logger.log_error('Error getting DL Hosters: {0}'.format(e))
         return hosters
@@ -253,7 +279,7 @@ class DebridLinkResolver(ResolveUrl):
     def valid_url(self, url, host):
         logger.log_debug('in valid_url {0} : {1}'.format(url, host))
         if url:
-            if url.lower().startswith('magnet:') and self.get_setting('torrents') == 'true':
+            if (url.lower().startswith('magnet:') or '.torrent' in url.lower()) and self.get_setting('torrents') == 'true':
                 return True
 
             if self.hosters is None:
