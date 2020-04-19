@@ -61,12 +61,16 @@ class DebridLinkResolver(ResolveUrl):
                         else:
                             raise ResolverError('Debrid-Link torrent queueing Failed')
 
-                transfer_info = self.__list_transfer(transfer_id)
-                sources = [(item.get('size'), item.get('downloadUrl'))
-                           for item in transfer_info.get('files')
-                           if any(item.get('name').lower().endswith(x) for x in FORMATS)]
-                stream_url = max(sources)[1]
-                return stream_url
+                if transfer_id:
+                    transfer_info = self.__list_transfer(transfer_id)
+                    sources = [(item.get('size'), item.get('downloadUrl'))
+                               for item in transfer_info.get('files')
+                               if any(item.get('name').lower().endswith(x) for x in FORMATS)]
+                    stream_url = max(sources)[1]
+                    return stream_url
+                else:
+                    raise ResolverError('Debrid-Link torrent access not available')
+
             url = '{0}/downloader/add'.format(api_url)
             data = {'url': media_id}
             js_data = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
