@@ -113,13 +113,10 @@ class DebridLinkResolver(ResolveUrl):
         else:
             media_id = quote(media_id)
         try:
-            # url = '{0}/seedbox/{1}/cached'.format(api_url, media_id.lower())
             url = '{0}/seedbox/cached?url={1}'.format(api_url, media_id)
             result = json.loads(self.net.http_GET(url, headers=self.headers).content)
             if result.get('success', False):
-                if result.get('value'):
-                    # if media_id in result.get('value').keys():
-                    #     return True
+                if result.get('value', False):
                     return True
         except HTTPError as e:
             if not retry and e.code == 401:
