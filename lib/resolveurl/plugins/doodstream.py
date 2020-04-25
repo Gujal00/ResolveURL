@@ -38,10 +38,10 @@ class DoodStreamResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA}
 
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r'''function\s*makePlay.+?return[^?]+([^"]+)[^/]+([^']+)''', html)
+        match = re.search(r'''vvplay[^']+'([^']+).+\n\s*function\s*makePlay.+?return[^?]+([^"]+)''', html)
         if match:
-            token = match.group(1)
-            url = 'https://dood.watch' + match.group(2)
+            token = match.group(2)
+            url = 'https://dood.watch' + match.group(1)
             headers.update({'Referer': web_url})
             html = self.net.http_GET(url, headers=headers).content
             return self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
