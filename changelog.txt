@@ -1,13 +1,13 @@
-Version 5.0.43 (Apr 23, 2020)
+Version 5.0.44 (Apr 28, 2020)
 - Code Base Changes:
-    - None
+    - none
+
 - Resolvers Added:
-    - doodstream
-    - wstream
+    - videomega
+    - youdbox
  
 - Resolvers Fixed/Updated:
-    - debridlink
-    - cda
+    - none
 
 - Resolvers Removed
     - none
