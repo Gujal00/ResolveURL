@@ -25,11 +25,12 @@ from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
+
 class MailRuResolver(ResolveUrl):
     name = "mail.ru"
     domains = ['mail.ru', 'my.mail.ru', 'm.my.mail.ru', 'videoapi.my.mail.ru', 'api.video.mail.ru']
-    # This pattern is starting to becoming unreliable and we may have to rethink it to support all the current urls 
-    pattern = '(?://|\.)(mail\.ru)/(?:\w+/)?(?:videos/embed/)?(inbox|mail|embed|mailua|list|bk|v)/(?:([^/]+)/[^.]+/)?(\d+)'
+    # This pattern is starting to becoming unreliable and we may have to rethink it to support all the current urls
+    pattern = r'(?://|\.)(mail\.ru)/(?:\w+/)?(?:videos/embed/)?(inbox|mail|embed|mailua|list|bk|v)/(?:([^/]+)/[^.]+/)?(\d+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -44,11 +45,11 @@ class MailRuResolver(ResolveUrl):
             try:
                 js_data = json.loads(html)
                 sources = [(video['key'], video['url']) for video in js_data['videos']]
-                #sources = sources[::-1]
                 sorted(sources)
                 source = helpers.pick_source(sources)
                 source = source.encode('utf-8')
-                if source.startswith("//"): source = 'http:%s' % source
+                if source.startswith("//"):
+                    source = 'http:%s' % source
                 return source + helpers.append_headers({'Cookie': response.get_headers(as_dict=True).get('Set-Cookie', '')})
             except:
                 raise ResolverError('No playable video found.')
@@ -58,12 +59,14 @@ class MailRuResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         location, user, media_id = media_id.split('|')
-        if user == 'None': return 'http://my.mail.ru/+/video/meta/%s' % (media_id)
-        else: return 'http://my.mail.ru/+/video/meta/%s/%s/%s?ver=0.2.60' % (location, user, media_id)
+        if user == 'None':
+            return 'http://my.mail.ru/+/video/meta/%s' % (media_id)
+        else:
+            return 'http://my.mail.ru/+/video/meta/%s/%s/%s?ver=0.2.60' % (location, user, media_id)
 
     def get_host_and_id(self, url):
         r = re.search(self.pattern, url)
         if r:
-            return (r.groups()[0], '%s|%s|%s' % (r.groups()[1], r.groups()[2], r.groups()[3]))
+            return (r.group(1), '%s|%s|%s' % (r.group(2), r.group(3), r.group(4)))
         else:
             return False
