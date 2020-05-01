@@ -1,13 +1,12 @@
-Version 5.0.44 (Apr 28, 2020)
+Version 5.0.45 (May 1, 2020)
 - Code Base Changes:
     - none
 
 - Resolvers Added:
-    - videomega
-    - youdbox
+    - vidmoly
  
 - Resolvers Fixed/Updated:
-    - none
+    - clipwatching
 
 - Resolvers Removed
     - none
