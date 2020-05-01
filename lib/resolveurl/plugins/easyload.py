@@ -16,18 +16,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import re
-import random
-import string
-import time
+import json
 from lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class DoodStreamResolver(ResolveUrl):
-    name = "doodstream"
-    domains = ['dood.watch', 'doodstream.com']
-    pattern = r'(?://|\.)(dood(?:stream)?\.(?:com|watch))/(?:d|e)/([0-9a-zA-Z]+)'
+class EasyLoadResolver(ResolveUrl):
+    name = "easyload"
+    domains = ['easyload.io']
+    pattern = r'(?://|\.)(easyload\.io)/e/([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -37,22 +35,17 @@ class DoodStreamResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA}
 
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r'''vvplay[^']+'([^']+).+\n\s*function\s*makePlay.+?return[^?]+([^"]+)''', html)
+        match = re.search('data="([^"]+)', html)
         if match:
-            token = match.group(2)
-            url = 'https://dood.watch' + match.group(1)
-            headers.update({'Referer': web_url})
-            html = self.net.http_GET(url, headers=headers).content
-            return self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
+            data = json.loads(match.group(1).replace('&quot;', '"'))
+            src = data.get('streams').get('0').get('src')
+            return self.easyload_decode(src, '15') + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://dood.watch/e/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
 
-    def dood_decode(self, data):
-        data = data.replace('/', '1').decode('base64')
-        data = data.replace('/', 'Z').decode('base64')
-        data = data.replace('@', 'a').decode('base64')
-        t = string.ascii_letters + string.digits
-        return data + ''.join([random.choice(t) for _ in range(10)])
+    def easyload_decode(self, src, t):
+        url = ''.join([chr(ord(src[i]) ^ ord(t[i % len(t)])) for i in range(len(src))])
+        return url
