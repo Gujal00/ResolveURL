@@ -1,12 +1,12 @@
-Version 5.0.45 (May 1, 2020)
+Version 5.0.46 (May 12, 2020)
 - Code Base Changes:
-    - none
+    - update User-Agents
 
 - Resolvers Added:
-    - vidmoly
+    - easyload
  
 - Resolvers Fixed/Updated:
-    - clipwatching
+    - hxload
 
 - Resolvers Removed
     - none
