@@ -15,11 +15,12 @@
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
+
 class BitPornoResolver(ResolveGeneric):
     name = "bitporno"
     domains = ['bitporno.com']
-    pattern = '(?://|\.)(bitporno\.com)/(?:embed)/([0-9a-zA-Z]+)'
-    
+    pattern = r'(?://|\.)(bitporno\.com)/(?:embed/|\?v=)?([0-9a-zA-Z]+)'
+
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://www.bitporno.com/?v={media_id}')
 
