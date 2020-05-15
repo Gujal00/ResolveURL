@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class MystreamResolver(ResolveUrl):
     name = "mystream"
-    domains = ['mystream.la', 'mystream.to', 'mstream.xyz', 'mstream.cloud', 'mstream.fun']
-    pattern = r'(?://|\.)(my?stream\.(?:la|to|cloud|xyz|fun))/(?:external|watch/)?([0-9a-zA-Z_]+)'
+    domains = ['mystream.la', 'mystream.to', 'mstream.xyz', 'mstream.cloud', 'mstream.fun', 'mstream.press']
+    pattern = r'(?://|\.)(my?stream\.(?:la|to|cloud|xyz|fun|press))/(?:external|watch/)?([0-9a-zA-Z_]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -39,7 +39,7 @@ class MystreamResolver(ResolveUrl):
         if "unable to find the video" in html:
             raise ResolverError('The requested video was not found or may have been removed.')
 
-        match = re.search(r'(\$=.+?;)\s*<', html)
+        match = re.search(r'(\$=.+?;)\s*<', html, re.DOTALL)
         if match:
             sdata = self.decode(match.group(1))
             s = re.search(r"src',\s*'([^']+)", sdata)
@@ -49,7 +49,7 @@ class MystreamResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, 'https://embed.mystream.to/{media_id}')
+        return self._default_get_url(host, media_id, 'https://mstream.press/{media_id}')
 
     def decode(self, data):
         startpos = data.find('"\\""+') + 5
