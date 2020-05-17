@@ -1,12 +1,14 @@
-Version 5.0.46 (May 12, 2020)
+Version 5.0.47 (May 17, 2020)
 - Code Base Changes:
-    - update User-Agents
+    - None
 
 - Resolvers Added:
-    - easyload
+    - abcvideo
+    - viduplayer
  
 - Resolvers Fixed/Updated:
-    - hxload
+    - mystream
+    - vidmoly
 
 - Resolvers Removed
     - none
