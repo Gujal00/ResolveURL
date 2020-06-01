@@ -1,17 +1,17 @@
-Version 5.0.47 (May 17, 2020)
+Version 5.0.48 (June 2, 2020)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - abcvideo
-    - viduplayer
+    - None
  
 - Resolvers Fixed/Updated:
-    - mystream
-    - vidmoly
+    - anavid
+    - vivo
+    - wstream
 
 - Resolvers Removed
-    - none
+    - None
 
 - Languages Added/Updated
-    - none
+    - None
