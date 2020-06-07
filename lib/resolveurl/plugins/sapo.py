@@ -1,5 +1,5 @@
 """
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2011 t0mm0
 
     This program is free software: you can redistribute it and/or modify
@@ -19,31 +19,29 @@
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.lib import helpers
+
 
 class SapoResolver(ResolveUrl):
     name = "sapo"
     domains = ["videos.sapo.pt"]
-    pattern = '(?://|\.)(videos\.sapo\.pt)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(videos\.sapo\.pt)/([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r'''data-video-link=["']([^"']+)''', html)
+        if r:
+            video_link = r.group(1)
+            if video_link.startswith('//'):
+                video_link = 'http:{0}'.format(video_link)
+            return video_link + helpers.append_headers(headers)
 
-        html = self.net.http_GET(web_url).content
-
-        if html:
-            try:
-                video_link = re.search(r'data-video-link=[\"\'](.+?)[\"\']', html).groups()[0]
-                if video_link.startswith('//'): video_link = 'http:%s' % video_link
-                return video_link
-            except:
-                raise ResolverError('No playable video found.')
-
-        else:
-            raise ResolverError('No playable video found.')
+        raise ResolverError('No playable video found.')
 
     def get_url(self, host, media_id):
         return 'http://%s/%s' % (host, media_id)
-        

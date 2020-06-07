@@ -1,6 +1,6 @@
-'''
-    resolveurl Kodi plugin
-    Copyright (C) 2016 Gujal
+"""
+    Plugin for ResolveUrl
+    Copyright (C) 2016 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,9 +14,10 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
+
 import re
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -24,10 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class TVLogyResolver(ResolveUrl):
     name = "tvlogy.to"
     domains = ["tvlogy.to"]
-    pattern = '(?://|\.)(tvlogy\.to)/(?:embed/|watch\.php\?v=)?([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(tvlogy\.to)/(?:embed/|watch\.php\?v=)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -40,12 +38,12 @@ class TVLogyResolver(ResolveUrl):
         if 'Video is processing' in html:
             raise ResolverError('File still being processed')
 
-        packed = re.search("JuicyCodes\.Run\((.+?)\)", html, re.I)
+        packed = re.search(r"JuicyCodes\.Run\((.+?)\)", html, re.I)
         if packed:
             from base64 import b64decode
             packed = packed.group(1).replace('"', '').replace('+', '')
-            packed = b64decode(packed)
-            html += '%s</script>' % packed.strip()
+            packed = b64decode(packed.encode('ascii'))
+            html += '%s</script>' % packed.decode('latin-1').strip()
 
         sources = helpers.scrape_sources(html)
         if sources:

@@ -1,5 +1,5 @@
 """
-    plugin for ResolveURL
+    Plugin for ResolveURL
     Copyright (C) 2019 gujal
     Copyright (C) 2020 eco-plus
 
@@ -19,7 +19,7 @@
 
 import re
 from resolveurl import common
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
@@ -27,9 +27,6 @@ class MystreamResolver(ResolveUrl):
     name = "mystream"
     domains = ['mystream.la', 'mystream.to', 'mstream.xyz', 'mstream.cloud', 'mstream.fun', 'mstream.press']
     pattern = r'(?://|\.)(my?stream\.(?:la|to|cloud|xyz|fun|press))/(?:external|watch/)?([0-9a-zA-Z_]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -42,9 +39,10 @@ class MystreamResolver(ResolveUrl):
         match = re.search(r'(\$=.+?;)\s*<', html, re.DOTALL)
         if match:
             sdata = self.decode(match.group(1))
-            s = re.search(r"src',\s*'([^']+)", sdata)
-            if s:
-                return s.group(1) + helpers.append_headers(headers)
+            if sdata:
+                s = re.search(r"src',\s*'([^']+)", sdata)
+                if s:
+                    return s.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
@@ -87,7 +85,7 @@ class MystreamResolver(ResolveUrl):
                     elif b == '(!""+"")[$]':
                         tmplist.append(("$.{}+".format(a), 'true'[i]))
 
-                tmplist = sorted(tmplist, key=lambda z: z[1])
+                tmplist = sorted(tmplist, key=lambda z: str(z[1]))
                 for x in tmplist:
                     first_group = first_group.replace(x[0], str(x[1]))
 
@@ -95,7 +93,7 @@ class MystreamResolver(ResolveUrl):
                                          .replace('\\"', '\\').replace('"', '').replace("+", "")
 
             try:
-                final_data = first_group.decode('unicode-escape').decode('unicode-escape')
+                final_data = first_group.encode('ascii').decode('unicode-escape').encode('ascii').decode('unicode-escape')
                 return final_data
             except:
                 return False

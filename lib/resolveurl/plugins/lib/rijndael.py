@@ -57,11 +57,13 @@ log = [0] * 256
 for i in range(1, 255):
     log[alog[i]] = i
 
+
 # multiply two elements of GF(2^m)
 def mul(a, b):
     if a == 0 or b == 0:
         return 0
     return alog[(log[a & 0xFF] + log[b & 0xFF]) % 255]
+
 
 # substitution box based on F^{-1}(x)
 box = [[0] * 8 for i in range(256)]
@@ -128,6 +130,7 @@ for i in range(4):
     for j in range(4):
         iG[i][j] = AA[i][j + 4]
 
+
 def mul4(a, bs):
     if a == 0:
         return 0
@@ -137,6 +140,7 @@ def mul4(a, bs):
         if b != 0:
             r = r | mul(a, b)
     return r
+
 
 T1 = []
 T2 = []
@@ -193,6 +197,7 @@ del mul
 del mul4
 del cox
 del iG
+
 
 class rijndael:
 
@@ -354,8 +359,10 @@ class rijndael:
             result.append((Si[t[(i + s3) % BC] & 0xFF] ^ tt) & 0xFF)
         return ''.join(map(chr, result))
 
+
 def encrypt(key, block):
     return rijndael(key, len(block)).encrypt(block)
+
 
 def decrypt(key, block):
     return rijndael(key, len(block)).decrypt(block)

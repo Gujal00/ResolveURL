@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import json
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -26,9 +26,6 @@ class VidCloud9Resolver(ResolveUrl):
     name = "vidcloud9.com"
     domains = ['vidcloud9.com']
     pattern = r'(?://|\.)(vidcloud9\.com)/streaming.php\?id=([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

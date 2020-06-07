@@ -1,4 +1,5 @@
 """
+Plugin for ResolveUrl
 Copyright (C) 2017 kodistuff1
 
 This program is free software: you can redistribute it and/or modify
@@ -15,16 +16,17 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json, urllib
-from urllib2 import HTTPError
+import json
+from six.moves import urllib_parse, urllib_error
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
 
+
 class RapidgatorResolver(ResolveUrl):
     name = 'Rapidgator'
     domains = ['rapidgator.net', 'rg.to']
-    pattern = '(?://|\.)(rapidgator\.net|rg\.to)/+file/+([a-z0-9]+)(?=[/?#]|$)'
+    pattern = r'(?://|\.)(rapidgator\.net|rg\.to)/+file/+([a-z0-9]+)(?=[/?#]|$)'
 
     @classmethod
     def _is_enabled(cls):
@@ -56,18 +58,18 @@ class RapidgatorResolver(ResolveUrl):
 
             try:
                 if http == 'GET':
-                    content = self.net.http_GET(self.api_base + method + '?' + urllib.urlencode(data)).content
+                    content = self.net.http_GET(self.api_base + method + '?' + urllib_parse.urlencode(data)).content
                 elif http == 'HEAD':
-                    content = self.net.http_HEAD(self.api_base + method + '?' + urllib.urlencode(data)).content
+                    content = self.net.http_HEAD(self.api_base + method + '?' + urllib_parse.urlencode(data)).content
                 elif http == 'POST':
-                    content = self.net.http_POST(self.api_base + method, urllib.urlencode(data)).content
+                    content = self.net.http_POST(self.api_base + method, urllib_parse.urlencode(data)).content
                 else:
                     raise ResolverError(self.name + ' Bad Request')
 
                 content = json.loads(content)
                 status = int(content['response_status'])
                 response = content['response']
-            except HTTPError as e:
+            except urllib_error.HTTPError as e:
                 status, response = e.code, []
             except ResolverError:
                 raise
@@ -77,7 +79,7 @@ class RapidgatorResolver(ResolveUrl):
             if status == 200:
                 return response
 
-            if session and refresh and status in [401,402]: # only actually seen 401, although 402 seems plausible
+            if session and refresh and status in [401, 402]:  # only actually seen 401, although 402 seems plausible
                 self.refresh_session()
                 continue
 

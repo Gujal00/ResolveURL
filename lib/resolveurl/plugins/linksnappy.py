@@ -1,6 +1,5 @@
 """
-    ResolveURL Kodi module
-    linksnappy plugin
+    Plugin for ResolveURL
     Copyright (C) 2019 twilight0
 
     This program is free software: you can redistribute it and/or modify
@@ -18,14 +17,13 @@
 """
 
 
-import re  #, traceback, sys
-from urllib import urlencode, quote
+import re  # , traceback, sys
+from six.moves import urllib_parse
 import json
 from os.path import join, exists
 from os import remove
 import time
-
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -184,7 +182,7 @@ class LinksnappyResolver(ResolveUrl):
         try:
 
             if self.get_setting('torrents') == 'true':
-                _hosts.extend([u'torrent', u'magnet'])
+                _hosts.extend(['torrent', 'magnet'])
 
             response = self.net.http_GET(filehosts, headers=self.headers).content
 
@@ -194,7 +192,7 @@ class LinksnappyResolver(ResolveUrl):
 
                 raise ResolverError('Server did not return hosts list')
 
-            result = res.get('return').iteritems()
+            result = iter(list(res.get('return').items()))
 
             for h, d in result:
 
@@ -244,7 +242,7 @@ class LinksnappyResolver(ResolveUrl):
 
                 logger.log_debug('Linksnappy.com hosts patterns: {0}'.format(repr(json_object.get('return'))))
 
-            regex_list = [re.compile(i[1:-1]) for i in json_object.get('return').values() if i]
+            regex_list = [re.compile(i[1:-1]) for i in list(json_object.get('return').values()) if i]
 
             return regex_list
 
@@ -298,7 +296,7 @@ class LinksnappyResolver(ResolveUrl):
 
         else:
 
-            media_id = quote(media_id)
+            media_id = urllib_parse.quote_plus(media_id)
 
         try:
 
@@ -339,9 +337,9 @@ class LinksnappyResolver(ResolveUrl):
         try:
 
             if media_id.startswith('magnet:'):
-                response = self.net.http_GET(torrents_addmagnet.format(quote(media_id)), headers=self.headers).content
+                response = self.net.http_GET(torrents_addmagnet.format(urllib_parse.quote_plus(media_id)), headers=self.headers).content
             else:
-                response = self.net.http_GET(torrents_addurl.format(quote(media_id)), headers=self.headers).content
+                response = self.net.http_GET(torrents_addurl.format(urllib_parse.quote_plus(media_id)), headers=self.headers).content
 
             result = json.loads(response)
 
@@ -365,11 +363,11 @@ class LinksnappyResolver(ResolveUrl):
 
             else:
 
-                if result.keys()[0].endswith('.torrent'):
+                if list(result.keys())[0].endswith('.torrent'):
 
-                    torrent_id = result.values()[0].get('torrentid')
+                    torrent_id = list(result.values())[0].get('torrentid')
 
-                    error = result.values()[0].get('error')
+                    error = list(result.values())[0].get('error')
 
                     if error:
 
@@ -400,7 +398,7 @@ class LinksnappyResolver(ResolveUrl):
                     count = 1
                     while self.__start_transfer(torrent_id, folder_id).get('error') is not False:
 
-                        logger.log_debug('Waiting for Linksnappy transfer due to the following status: "{0}"'.format(torrent_id, result.get('error')))
+                        logger.log_debug('Waiting for Linksnappy transfer due to the following status: "{0}"'.format(result.get('error')))
 
                         common.kodi.sleep(3000)
                         count += 1
@@ -528,7 +526,7 @@ class LinksnappyResolver(ResolveUrl):
 
             else:
 
-                response = self.net.http_GET(linkgen.format(quote('{"link":"%s"}' % media_id)), headers=self.headers).content
+                response = self.net.http_GET(linkgen.format(urllib_parse.quote_plus('{"link":"%s"}' % media_id)), headers=self.headers).content
 
             result = json.loads(response)
 
@@ -540,7 +538,7 @@ class LinksnappyResolver(ResolveUrl):
 
                     def _search_tree(d):
 
-                        for k, v in d.items():
+                        for v in list(d.items()):
                             if isinstance(v, dict) and v.get('isVideo') != 'y':
                                 _search_tree(v)
                             else:
@@ -707,7 +705,7 @@ class LinksnappyResolver(ResolveUrl):
 
     def __delete_folder(self):
 
-        folder_id, f_name = self.__list_folders()
+        folder_id = self.__list_folders()
 
         if folder_id != '':
 
@@ -779,7 +777,7 @@ class LinksnappyResolver(ResolveUrl):
                 self.set_setting('username', username)
                 self.set_setting('password', password)
 
-                login_query = '?{0}'.format(urlencode({'username': username, 'password': password}))
+                login_query = '?{0}'.format(urllib_parse.urlencode({'username': username, 'password': password}))
 
             else:
 
@@ -788,7 +786,7 @@ class LinksnappyResolver(ResolveUrl):
         else:
 
             login_query = '?{0}'.format(
-                urlencode({'username': self.get_setting('username'), 'password': self.get_setting('password')})
+                urllib_parse.urlencode({'username': self.get_setting('username'), 'password': self.get_setting('password')})
             )
 
         response = self.net.http_GET(url=''.join([authenticate, login_query]), headers=self.headers).content

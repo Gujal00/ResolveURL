@@ -291,9 +291,11 @@ except NameError:
 try:
     bytes('', 'ascii')
 
-    def strtobytes(x): return bytes(x, 'iso8859-1')
+    def strtobytes(x):
+        return bytes(x, 'iso8859-1')
 
-    def bytestostr(x): return str(x, 'iso8859-1')
+    def bytestostr(x):
+        return str(x, 'iso8859-1')
 except (NameError, TypeError):
     # We get NameError when bytes() does not exist (most Python
     # 2.x versions), and TypeError when bytes() exists but is on
@@ -3148,6 +3150,7 @@ def write_pnm(file, width, height, pixels, meta):
         file.write(struct.pack(fmt, *row))
     file.flush()
 
+
 def color_triple(color):
     """
     Convert a command line colour value to a RGB triple of integers.
@@ -3165,6 +3168,7 @@ def color_triple(color):
         return (int(color[1:5], 16),
                 int(color[5:9], 16),
                 int(color[9:13], 16))
+
 
 def _add_common_options(parser):
     """Call *parser.add_option* for each of the options that are

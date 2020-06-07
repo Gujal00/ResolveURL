@@ -1,6 +1,6 @@
 """
     Plugin for ResolveUrl
-    Copyright (C) 2019 twilight0
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,37 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from lib import helpers
-from resolveurl import common
-from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from resolveurl.plugins.lib import helpers
 
 
-class BrighteonResolver(ResolveUrl):
+class BrighteonResolver(ResolveGeneric):
     name = "brighteon"
     domains = ['brighteon.com']
     pattern = r'(?://|\.)(brighteon\.com)/(?:embed)?/?([\w-]+)'
 
-    def __init__(self):
-        self.net = common.Net()
-
     def get_media_url(self, host, media_id):
-
-        web_url = self.get_url(host, media_id)
-
-        headers = {'User-Agent': common.RAND_UA}
-        html = self.net.http_GET(web_url, headers=headers).content
-
-        try:
-
-            sources = helpers.scrape_sources(
-                html, patterns=[r'source src=[\'"](?P<url>.+?)[\'"].+?x-mpegURL']
-            )
-
-            return helpers.pick_source(sources) + helpers.append_headers(headers)
-
-        except Exception:
-            raise ResolverError("Video not found")
+        return helpers.get_media_url(self.get_url(host, media_id),
+                                     patterns=[r'''source\s*src=['"](?P<url>.+?)['"].+?x-mpegURL'''],
+                                     generic_patterns=False)
 
     def get_url(self, host, media_id):
-
         return self._default_get_url(host, media_id, template='https://www.{host}/embed/{media_id}')

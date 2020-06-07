@@ -19,34 +19,34 @@
 import re
 import json
 import random
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class StreamableResolver(ResolveUrl):
     name = "Streamable"
     domains = ['streamable.com']
-    pattern = '(?://|\.)(streamable\.com)/(?:s/)?([a-zA-Z0-9]+(?:/[a-zA-Z0-9]+)?)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(streamable\.com)/(?:s/)?([a-zA-Z0-9]+(?:/[a-zA-Z0-9]+)?)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search('videoObject\s*=\s*(.*?});', html)
+        match = re.search(r'videoObject\s*=\s*(.*?});', html)
         if match:
-            try: js_data = json.loads(match.group(1))
-            except: js_data = {}
+            try:
+                js_data = json.loads(match.group(1))
+            except:
+                js_data = {}
             streams = js_data.get('files', {})
-            sources = [(stream.get('height', 'Unknown'), stream['url']) for _key, stream in streams.iteritems()]
+            sources = [(stream.get('height', 'Unknown'), stream['url']) for _key, stream in list(streams.items())]
             sources = [(label, 'https:' + stream_url) if stream_url.startswith('//') else (label, stream_url) for label, stream_url in sources]
             sources.sort(key=lambda x: x[0], reverse=True)
-            headers['Cookie'] = 'volume=0.51; muted=false; session={}'.format(self.base36encode(int(str(random.random())[2:16]))) 
-            return helpers.pick_source(sources).replace('&amp;','&') + helpers.append_headers(headers)
-        else:
-            raise ResolverError('JSON Not Found')
+            headers['Cookie'] = 'volume=0.51; muted=false; session={}'.format(self.base36encode(int(str(random.random())[2:16])))
+            return helpers.pick_source(sources).replace('&amp;', '&') + helpers.append_headers(headers)
+
+        raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/s/{media_id}')

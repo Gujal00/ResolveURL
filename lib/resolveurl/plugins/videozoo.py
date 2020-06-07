@@ -1,5 +1,5 @@
 """
-    Kodi resolveurl plugin
+    Plugin for ResolveURL
     Copyright (C) 2014  smokdpi
 
     This program is free software: you can redistribute it and/or modify
@@ -17,21 +17,17 @@
 """
 
 import re
-import urllib
-import urllib2
-from lib import jsunpack
-from urlparse import urlparse
+from resolveurl.plugins.lib import jsunpack
+from six.moves import urllib_parse, urllib_error, urllib_request
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.hmf import HostedMediaFile
 
+
 class VideoZooResolver(ResolveUrl):
     name = "videozoo"
     domains = ["byzoo.org", "playpanda.net", "videozoo.me", "videowing.me", "easyvideo.me", "play44.net", "playbb.me", "video44.net"]
-    pattern = 'http://((?:www\.)*(?:play44|playbb|video44|byzoo|playpanda|videozoo|videowing|easyvideo)\.(?:me|org|net|eu)/(?:embed[/0-9a-zA-Z]*?|gplus|picasa|gogo/)(?:\.php)*)\?.*?((?:vid|video|id|file)=[%0-9a-zA-Z_\-\./]+|.*)[\?&]*.*'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(?:play44|playbb|video44|byzoo|playpanda|videozoo|videowing|easyvideo)\.(?:me|org|net|eu)/(?:embed[/0-9a-zA-Z]*?|gplus|picasa|gogo/)(?:\.php)*)\?.*?((?:vid|video|id|file)=[%0-9a-zA-Z_\-\./]+|.*)[\?&]*.*'
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'http://{host}?vid={media_id}')
@@ -43,28 +39,28 @@ class VideoZooResolver(ResolveUrl):
             'Referer': web_url
         }
         stream_url = ''
-        new_host = urlparse(web_url).netloc
+        new_host = urllib_parse.urlparse(web_url).netloc
         html = self.net.http_GET(web_url, headers=headers).content
         if 'videozoo' not in new_host:
-            r = re.search('(?:playlist:|timer\s*=\s*null;).+?url\s*[:=]+\s*[\'"]+(.+?)[\'"]+', html, re.DOTALL)
+            r = re.search(r'(?:playlist:|timer\s*=\s*null;).+?url\s*[:=]+\s*[\'"]+(.+?)[\'"]+', html, re.DOTALL)
         else:
-            r = re.search('\*/\s+?(eval\(function\(p,a,c,k,e,d\).+)\s+?/\*', html)
+            r = re.search(r'\*/\s+?(eval\(function\(p,a,c,k,e,d\).+)\s+?/\*', html)
             if r:
                 try:
                     r = jsunpack.unpack(r.group(1))
                     if r:
-                        r = re.search('\[{"url":"(.+?)"', r.replace('\\', ''))
+                        r = re.search(r'\[{"url":"(.+?)"', r.replace('\\', ''))
                 except:
                     if r:
-                        re_src = re.search('urlResolvers\|2F(.+?)\|', r.group(1))
-                        re_url = re.search('php\|3D(.+?)\|', r.group(1))
+                        re_src = re.search(r'urlResolvers\|2F(.+?)\|', r.group(1))
+                        re_url = re.search(r'php\|3D(.+?)\|', r.group(1))
                         if re_src and re_url:
                             stream_url = 'http://%s/%s.php?url=%s' % (new_host, re_src.group(1), re_url.group(1))
                             stream_url = self._redirect_test(stream_url)
                         else:
                             raise ResolverError('File not found')
         if r:
-            stream_url = urllib.unquote_plus(r.group(1))
+            stream_url = urllib_parse.unquote_plus(r.group(1))
             if 'http' not in stream_url:
                 stream_url = 'http://' + host + '/' + stream_url.replace('/gplus.php', 'gplus.php').replace('/picasa.php', 'picasa.php')
             stream_url = self._redirect_test(stream_url)
@@ -78,16 +74,16 @@ class VideoZooResolver(ResolveUrl):
             raise ResolverError('File not found')
 
     def _redirect_test(self, url):
-        opener = urllib2.build_opener()
+        opener = urllib_request.build_opener()
         opener.addheaders = [('User-agent', common.IOS_USER_AGENT)]
-        opener.addheaders = [('Referer', urlparse(url).netloc)]
+        opener.addheaders = [('Referer', urllib_parse.urlparse(url).netloc)]
         try:
             resp = opener.open(url)
             if url != resp.geturl():
                 return resp.geturl()
             else:
                 return url
-        except urllib2.HTTPError, e:
+        except urllib_error.HTTPError as e:
             if e.code == 403:
                 if url != e.geturl():
                     return e.geturl()

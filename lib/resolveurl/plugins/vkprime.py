@@ -1,4 +1,4 @@
-'''
+"""
     Plugin for ResolveURL
     Copyright (C) 2018 gujal
 
@@ -14,8 +14,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
-from __resolve_generic__ import ResolveGeneric
+"""
+
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class VkPrimeResolver(ResolveGeneric):

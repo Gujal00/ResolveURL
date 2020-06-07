@@ -1,7 +1,6 @@
 """
-    ResolveURL Kodi module
-    VlareTV plugin
-    Copyright (C) 2019 twilight0
+    Plugin for ResolveUrl
+    Copyright (C) 2019 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,39 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
-from resolveurl.resolver import ResolveUrl
-from lib import helpers
-from resolveurl import common
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class VlareTVResolver(ResolveUrl):
+class VlareTVResolver(ResolveGeneric):
 
     name = "vlare.tv"
     domains = ['vlare.tv']
     pattern = r'(?://|\.)(vlare\.tv)/(?:v|embed)/([\w-]+)(?:/(?:false|true)/(?:false|true)/\d+?)?'
 
-    def __init__(self):
-
-        self.net = common.Net()
-        self.headers = {'User-Agent': common.RAND_UA}
-
-    def get_media_url(self, host, media_id):
-
-        web_url = self.get_url(host, media_id)
-        res = self.net.http_GET(web_url, headers=self.headers)
-
-        sources = re.findall(
-            '''["']file["']:["'](?P<url>https?.+?\.mp4)["'],["']label["']:["'](\d{3,4}p)["']''',
-            res.content
-        )
-
-        sources = [(s[1], s[0]) for s in sources]
-
-        self.headers.update({'Referer': web_url})
-
-        return helpers.pick_source(sources) + helpers.append_headers(self.headers)
-
     def get_url(self, host, media_id):
-
         return self._default_get_url(host, media_id, 'https://{host}/embed/{media_id}')

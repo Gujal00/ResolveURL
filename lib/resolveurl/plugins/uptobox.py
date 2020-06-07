@@ -1,5 +1,5 @@
 """
-    plugin for ResolveURL
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import json
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -28,7 +29,6 @@ class UpToBoxResolver(ResolveUrl):
     pattern = r'(?://|\.)(uptobox.com|uptostream.com)/(?:iframe/)?([0-9A-Za-z_]+)'
 
     def __init__(self):
-        self.net = common.Net()
         self.headers = {'User-Agent': common.RAND_UA}
 
     def get_media_url(self, host, media_id):
@@ -44,7 +44,7 @@ class UpToBoxResolver(ResolveUrl):
                 js_result = cd.start(self.__check_auth, [js_data.get('check_url')])
             if js_result:
                 js_result = js_result.get('data').get('streamLinks')
-                sources = [(key, js_result.get(key).values()[0]) for key in js_result.keys()]
+                sources = [(key, list(js_result.get(key).values())[0]) for key in list(js_result.keys())]
                 return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(self.headers)
 
         raise ResolverError('The requested video was not found or may have been removed.')

@@ -16,13 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import functools
-import log_utils
+from resolveurl.lib import log_utils
 import time
 import pickle
 import hashlib
 import os
 import shutil
-import kodi
+import six
+from resolveurl.lib import kodi
 
 logger = log_utils.Logger.get_logger(__name__)
 
@@ -32,9 +33,10 @@ try:
         os.makedirs(cache_path)
 except Exception as e:
     logger.log('Failed to create cache: %s: %s' % (cache_path, e), log_utils.LOGWARNING)
-    
+
 cache_enabled = kodi.get_setting('use_cache') == 'true'
-    
+
+
 def reset_cache():
     try:
         shutil.rmtree(cache_path)
@@ -42,38 +44,57 @@ def reset_cache():
     except Exception as e:
         logger.log('Failed to Reset Cache: %s' % (e), log_utils.LOGWARNING)
         return False
-    
+
+
 def _get_func(name, args=None, kwargs=None, cache_limit=1):
-    if not cache_enabled: return False, None
+    if not cache_enabled:
+        return False, None
     now = time.time()
     max_age = now - (cache_limit * 60 * 60)
-    if args is None: args = []
-    if kwargs is None: kwargs = {}
+    if args is None:
+        args = []
+    if kwargs is None:
+        kwargs = {}
     full_path = os.path.join(cache_path, _get_filename(name, args, kwargs))
     if os.path.exists(full_path):
         mtime = os.path.getmtime(full_path)
         if mtime >= max_age:
-            with open(full_path, 'r') as f:
-                pickled_result = f.read()
-            # logger.log('Returning cached result: |%s|%s|%s| - modtime: %s max_age: %s age: %ss' % (name, args, kwargs, mtime, max_age, now - mtime), log_utils.LOGDEBUG)
+            if six.PY2:
+                with open(full_path, 'r') as f:
+                    pickled_result = f.read()
+            else:
+                with open(full_path, 'rb') as f:
+                    pickled_result = f.read()
             return True, pickle.loads(pickled_result)
-    
+
     return False, None
-    
+
+
 def _save_func(name, args=None, kwargs=None, result=None):
     try:
-        if args is None: args = []
-        if kwargs is None: kwargs = {}
+        if args is None:
+            args = []
+        if kwargs is None:
+            kwargs = {}
         pickled_result = pickle.dumps(result)
         full_path = os.path.join(cache_path, _get_filename(name, args, kwargs))
-        with open(full_path, 'w') as f:
-            f.write(pickled_result)
+        if six.PY2:
+            with open(full_path, 'w') as f:
+                f.write(pickled_result)
+        else:
+            with open(full_path, 'wb') as f:
+                f.write(pickled_result)
     except Exception as e:
         logger.log('Failure during cache write: %s' % (e), log_utils.LOGWARNING)
 
+
 def _get_filename(name, args, kwargs):
-    arg_hash = hashlib.md5(name).hexdigest() + hashlib.md5(str(args)).hexdigest() + hashlib.md5(str(kwargs)).hexdigest()
+    if six.PY2:
+        arg_hash = hashlib.md5(name).hexdigest() + hashlib.md5(str(args)).hexdigest() + hashlib.md5(str(kwargs)).hexdigest()
+    else:
+        arg_hash = hashlib.md5(name.encode('utf8')).hexdigest() + hashlib.md5(str(args).encode('utf8')).hexdigest() + hashlib.md5(str(kwargs).encode('utf8')).hexdigest()
     return arg_hash
+
 
 def cache_method(cache_limit):
     def wrap(func):
@@ -96,6 +117,7 @@ def cache_method(cache_limit):
                 return result
         return memoizer
     return wrap
+
 
 # do not use this with instance methods the self parameter will cause args to never match
 def cache_function(cache_limit):

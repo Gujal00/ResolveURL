@@ -16,7 +16,7 @@
 """
 
 import json
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -25,9 +25,6 @@ class SaruchResolver(ResolveUrl):
     name = "saruch"
     domains = ["saruch.co"]
     pattern = r'(?://|\.)(saruch\.co)/(?:embed|video)/([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -42,9 +39,10 @@ class SaruchResolver(ResolveUrl):
                 sources.append((item.get('label'), item.get('file')))
             source = helpers.pick_source(helpers.sort_sources_list(sources))
             headers.pop('X-Requested-With')
+            headers.update({"Range": "bytes=0-"})
             de = js_data.get('de')
             en = js_data.get('en')
-            return '{0}&de={1}&en={2}{3}'.format(source, de, en, helpers.append_headers(headers))
+            return '{0}?de={1}&en={2}{3}'.format(source, de, en, helpers.append_headers(headers))
 
         raise ResolverError('Stream not found')
 

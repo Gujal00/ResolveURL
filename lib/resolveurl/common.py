@@ -17,11 +17,11 @@
 """
 import os
 import hashlib
-from lib import log_utils
-from lib.net import Net, get_ua  # @UnusedImport
-from lib import cache  # @UnusedImport
-from lib import kodi
-from lib import pyaes
+from resolveurl.lib import log_utils
+from resolveurl.lib.net import Net, get_ua  # @UnusedImport
+from resolveurl.lib import cache  # @UnusedImport
+from resolveurl.lib import kodi
+from resolveurl.lib import pyaes
 from random import choice
 
 logger = log_utils.Logger.get_logger()
@@ -29,6 +29,7 @@ addon_path = kodi.get_path()
 plugins_path = os.path.join(addon_path, 'lib', 'resolveurl', 'plugins')
 profile_path = kodi.translate_path(kodi.get_profile())
 settings_file = os.path.join(addon_path, 'resources', 'settings.xml')
+settings_path = os.path.join(addon_path, 'resources')
 addon_version = kodi.get_version()
 get_setting = kodi.get_setting
 set_setting = kodi.set_setting

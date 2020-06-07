@@ -20,14 +20,14 @@ import xbmcplugin
 import xbmcgui
 import xbmc
 import xbmcvfs
-import urllib
-import urlparse
+from six.moves import urllib_parse
+import six
 import sys
 import os
 import re
 import time
-import strings
-import CustomProgressDialog
+from resolveurl.lib import strings
+from resolveurl.lib import CustomProgressDialog
 
 addon = xbmcaddon.Addon('script.module.resolveurl')
 get_setting = addon.getSetting
@@ -37,19 +37,19 @@ _log = xbmc.log
 
 
 def get_path():
-    return addon.getAddonInfo('path').decode('utf-8')
+    return addon.getAddonInfo('path') if six.PY3 else addon.getAddonInfo('path').decode('utf-8')
 
 
 def get_profile():
-    return addon.getAddonInfo('profile').decode('utf-8')
+    return addon.getAddonInfo('profile') if six.PY3 else addon.getAddonInfo('profile').decode('utf-8')
 
 
 def translate_path(path):
-    return xbmc.translatePath(path).decode('utf-8')
+    return xbmc.translatePath(path) if six.PY3 else xbmc.translatePath(path).decode('utf-8')
 
 
 def set_setting(id, value):
-    if not isinstance(value, basestring):
+    if not isinstance(value, six.string_types):
         value = str(value)
     addon.setSetting(id, value)
 
@@ -130,7 +130,7 @@ else:
 
 def i18n(string_id):
     try:
-        return addon.getLocalizedString(strings.STRINGS[string_id]).encode('utf-8', 'ignore')
+        return addon.getLocalizedString(strings.STRINGS[string_id]) if six.PY3 else addon.getLocalizedString(strings.STRINGS[string_id]).encode('utf-8', 'ignore')
     except Exception as e:
         _log('Failed String Lookup: %s (%s)' % (string_id, e))
         return string_id
@@ -138,12 +138,12 @@ def i18n(string_id):
 
 def get_plugin_url(queries):
     try:
-        query = urllib.urlencode(queries)
+        query = urllib_parse.urlencode(queries)
     except UnicodeEncodeError:
         for k in queries:
-            if isinstance(queries[k], unicode):
+            if isinstance(queries[k], six.text_type) and six.PY2:
                 queries[k] = queries[k].encode('utf-8')
-        query = urllib.urlencode(queries)
+        query = urllib_parse.urlencode(queries)
 
     return sys.argv[0] + '?' + query
 
@@ -162,7 +162,8 @@ def create_item(queries, label, thumb='', fanart='', is_folder=None, is_playable
 
 
 def add_item(queries, list_item, fanart='', is_folder=None, is_playable=None, total_items=0, menu_items=None, replace_menu=False):
-    if menu_items is None: menu_items = []
+    if menu_items is None:
+        menu_items = []
     if is_folder is None:
         is_folder = False if is_playable else True
 
@@ -172,7 +173,8 @@ def add_item(queries, list_item, fanart='', is_folder=None, is_playable=None, to
         playable = 'true' if is_playable else 'false'
 
     liz_url = get_plugin_url(queries)
-    if fanart: list_item.setProperty('fanart_image', fanart)
+    if fanart:
+        list_item.setProperty('fanart_image', fanart)
     list_item.setInfo('video', {'title': list_item.getLabel()})
     list_item.setProperty('isPlayable', playable)
     list_item.addContextMenuItems(menu_items, replaceItems=replace_menu)
@@ -181,8 +183,9 @@ def add_item(queries, list_item, fanart='', is_folder=None, is_playable=None, to
 
 def parse_query(query):
     q = {'mode': 'main'}
-    if query.startswith('?'): query = query[1:]
-    queries = urlparse.parse_qs(query)
+    if query.startswith('?'):
+        query = query[1:]
+    queries = urllib_parse.parse_qs(query)
     for key in queries:
         if len(queries[key]) == 1:
             q[key] = queries[key][0]
@@ -192,8 +195,10 @@ def parse_query(query):
 
 
 def notify(header=None, msg='', duration=2000, sound=None):
-    if header is None: header = get_name()
-    if sound is None: sound = get_setting('mute_notifications') == 'false'
+    if header is None:
+        header = get_name()
+    if sound is None:
+        sound = get_setting('mute_notifications') == 'false'
     icon_path = os.path.join(get_path(), 'icon.png')
     try:
         xbmcgui.Dialog().notification(header, msg, icon_path, duration, sound)
@@ -231,10 +236,10 @@ def get_current_view():
 class WorkingDialog(object):
     def __init__(self):
         xbmc.executebuiltin('ActivateWindow(busydialog)')
-    
+
     def __enter__(self):
         return self
-    
+
     def __exit__(self, type, value, traceback):
         xbmc.executebuiltin('Dialog.Close(busydialog)')
 
@@ -245,6 +250,9 @@ def has_addon(addon_id):
 
 class ProgressDialog(object):
     def __init__(self, heading, line1='', line2='', line3='', background=False, active=True, timer=0):
+        self.line1 = line1
+        self.line2 = line2
+        self.line3 = line3
         self.begin = time.time()
         self.timer = timer
         self.background = background
@@ -265,50 +273,77 @@ class ProgressDialog(object):
                 pd = CustomProgressDialog.ProgressDialog()
             else:
                 pd = xbmcgui.DialogProgress()
-            pd.create(self.heading, line1, line2, line3)
+            if six.PY2:
+                pd.create(self.heading, line1, line2, line3)
+            else:
+                pd.create(self.heading,
+                          line1 + '\n'
+                          + line2 + '\n'
+                          + line3)
         return pd
-        
+
     def __enter__(self):
         return self
-    
+
     def __exit__(self, type, value, traceback):
         if self.pd is not None:
             self.pd.close()
             del self.pd
-    
+
     def is_canceled(self):
         if self.pd is not None and not self.background:
             return self.pd.iscanceled()
         else:
             return False
-        
+
     def update(self, percent, line1='', line2='', line3=''):
+        if not line1:
+            line1 = self.line1
+        if not line2:
+            line2 = self.line2
+        if not line3:
+            line3 = self.line3
         if self.pd is None and self.timer and (time.time() - self.begin) >= self.timer:
             self.pd = self.__create_dialog(line1, line2, line3)
-            
+
         if self.pd is not None:
             if self.background:
                 msg = line1 + line2 + line3
                 self.pd.update(percent, self.heading, msg)
             else:
-                self.pd.update(percent, line1, line2, line3)
+                if six.PY2:
+                    self.pd.update(percent, line1, line2, line3)
+                else:
+                    self.pd.update(percent,
+                                   line1 + '\n'
+                                   + line2 + '\n'
+                                   + line3)
 
 
 class CountdownDialog(object):
     __INTERVALS = 5
-    
+
     def __init__(self, heading, line1='', line2='', line3='', active=True, countdown=60, interval=5):
         self.heading = heading
         self.countdown = countdown
         self.interval = interval
+        self.line1 = line1
+        self.line2 = line2
         self.line3 = line3
         if active:
             if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
                 pd = CustomProgressDialog.ProgressDialog()
             else:
                 pd = xbmcgui.DialogProgress()
-            if not self.line3: line3 = 'Expires in: %s seconds' % countdown
-            pd.create(self.heading, line1, line2, line3)
+            if not self.line3:
+                line3 = 'Expires in: %s seconds' % countdown
+            if six.PY2:
+                pd.create(self.heading, line1, line2, line3)
+            else:
+                pd.create(self.heading,
+                          line1 + '\n'
+                          + line2 + '\n'
+                          + line3)
             pd.update(100)
             self.pd = pd
         else:
@@ -316,43 +351,59 @@ class CountdownDialog(object):
 
     def __enter__(self):
         return self
-    
+
     def __exit__(self, type, value, traceback):
         if self.pd is not None:
             self.pd.close()
             del self.pd
-    
+
     def start(self, func, args=None, kwargs=None):
-        if args is None: args = []
-        if kwargs is None: kwargs = {}
+        if args is None:
+            args = []
+        if kwargs is None:
+            kwargs = {}
         result = func(*args, **kwargs)
         if result:
             return result
-        
+
         if self.pd is not None:
             start = time.time()
             expires = time_left = self.countdown
             interval = self.interval
             while time_left > 0:
                 for _ in range(CountdownDialog.__INTERVALS):
-                    sleep(interval * 1000 / CountdownDialog.__INTERVALS)
-                    if self.is_canceled(): return
+                    sleep(int(interval * 1000 / CountdownDialog.__INTERVALS))
+                    if self.is_canceled():
+                        return
                     time_left = expires - int(time.time() - start)
-                    if time_left < 0: time_left = 0
-                    progress = time_left * 100 / expires
+                    if time_left < 0:
+                        time_left = 0
+                    progress = int(time_left * 100 / expires)
                     line3 = 'Expires in: %s seconds' % time_left if not self.line3 else ''
                     self.update(progress, line3=line3)
-                    
+
                 result = func(*args, **kwargs)
                 if result:
                     return result
-    
+
     def is_canceled(self):
         if self.pd is None:
             return False
         else:
             return self.pd.iscanceled()
-        
+
     def update(self, percent, line1='', line2='', line3=''):
+        if not line1:
+            line1 = self.line1
+        if not line2:
+            line2 = self.line2
+        if not line3:
+            line3 = self.line3
         if self.pd is not None:
-            self.pd.update(percent, line1, line2, line3)
+            if six.PY2:
+                self.pd.update(percent, line1, line2, line3)
+            else:
+                self.pd.update(percent,
+                               line1 + '\n'
+                               + line2 + '\n'
+                               + line3)

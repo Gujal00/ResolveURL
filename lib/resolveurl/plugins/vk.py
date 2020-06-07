@@ -1,8 +1,6 @@
 """
-VK resolveurl XBMC Addon
-Copyright (C) 2015 tknorris
-
-Version 0.0.1 
+    Plugin for ResolveURL
+    Copyright (C) 2020 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,50 +17,60 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 import re
 import json
-import urllib
-import urlparse
-from lib import helpers
+from six.moves import urllib_parse
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class VKResolver(ResolveUrl):
     name = "VK.com"
     domains = ["vk.com"]
-    pattern = '(?://|\.)(vk\.com)/(?:video_ext\.php\?|video)(.+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(vk\.com)/(?:video_ext\.php\?|video)(.+)'
 
     def get_media_url(self, host, media_id):
-        headers = {
-            'User-Agent': common.EDGE_USER_AGENT
-        }
+        headers = {'User-Agent': common.EDGE_USER_AGENT,
+                   'Referer': 'https://vk.com/',
+                   'Origin': 'https://vk.com'}
 
-        query = urlparse.parse_qs(media_id)
+        query = urllib_parse.parse_qs(media_id)
 
-        try: oid, video_id = query['oid'][0], query['id'][0]
-        except: oid, video_id = re.findall('(.*)_(.*)', media_id)[0]
+        try:
+            oid, video_id = query['oid'][0], query['id'][0]
+        except:
+            oid, video_id = re.findall('(.*)_(.*)', media_id)[0]
 
         sources = self.__get_sources(oid, video_id)
-        sources.sort(key=lambda x: int(x[0]), reverse=True)
+        if sources:
+            sources.sort(key=lambda x: int(x[0]), reverse=True)
+            source = helpers.pick_source(sources)
+            if source:
+                return source + helpers.append_headers(headers)
 
-        source = helpers.pick_source(sources)
-        return source + helpers.append_headers(headers)
         raise ResolverError('No video found')
 
     def __get_sources(self, oid, video_id):
-        sources_url = 'http://vk.com/al_video.php?act=show_inline&al=1&video=%s_%s' % (oid, video_id)
+        sources_url = 'https://vk.com/al_video.php?act=show_inline&al=1&video=%s_%s' % (oid, video_id)
         html = self.net.http_GET(sources_url).content
-        html = re.sub(r'[^\x00-\x7F]+', ' ', html)
-
-        sources = re.findall('(\d+)x\d+.+?(http.+?\.m3u8.+?)n', html)
-
-        if not sources:
-            sources = re.findall('"url(\d+)"\s*:\s*"(.+?)"', html)
-
-        sources = [(i[0], i[1].replace('\\', '')) for i in sources]
-
-        return sources
+        if html.startswith('<!--'):
+            html = html[4:]
+        js_data = json.loads(html)
+        payload = []
+        sources = []
+        for item in js_data.get('payload'):
+            if type(item) == list:
+                payload = item
+        if payload:
+            for item in payload:
+                if type(item) == dict:
+                    js_data = item.get('player').get('params')[0]
+            for item in list(js_data.keys()):
+                if item.startswith('url') and '.mp4' in js_data.get(item):
+                    sources.append((item[3:], js_data.get(item)))
+            if not sources:
+                sources = [('360', js_data.get('hls'))]
+            return sources
+        raise ResolverError('No video found')
 
     def get_url(self, host, media_id):
-        return 'http://vk.com/video_ext.php?%s' % (media_id)
+        return 'https://vk.com/video_ext.php?%s' % (media_id)

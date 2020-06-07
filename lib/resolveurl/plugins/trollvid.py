@@ -1,5 +1,5 @@
 """
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2011 t0mm0
 
     This program is free software: you can redistribute it and/or modify
@@ -18,38 +18,43 @@
 
 import re
 import base64
-import urllib
+from six.moves import urllib_parse
 from resolveurl import common
+from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class TrollVidResolver(ResolveUrl):
     name = 'trollvid.net'
     domains = ['trollvid.net', 'trollvid.io', 'mp4edge.com']
-    pattern = '(?://|\.)(trollvid(?:\.net|\.io)|mp4edge\.com)/(?:embed\.php.file=|embed/|stream/)([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(trollvid(?:\.net|\.io)|mp4edge\.com)/(?:embed\.php.file=|embed/|stream/)([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-
-        html = self.net.http_GET(web_url).content
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        html = self.net.http_GET(web_url, headers=headers).content
         stream_url = None
-        try: stream_url = re.search('url\s*:\s*"(http.+?)"', html).group(1)
-        except: pass
+        try:
+            stream_url = re.search(r'url\s*:\s*"(http.+?)"', html).group(1)
+        except:
+            pass
 
         if not stream_url:
-            try: stream_url = re.search('unescape\(\'(http.+?)\'', html).group(1)
-            except: pass
+            try:
+                stream_url = re.search(r'unescape\(\'(http.+?)\'', html).group(1)
+            except:
+                pass
 
         if not stream_url:
-            try: stream_url = base64.b64decode(re.search('atob\(\'(.+?)\'', html).group(1))
-            except: pass
+            try:
+                stream_url = base64.b64decode(re.search(r'atob\(\'(.+?)\'', html).group(1))
+            except:
+                pass
 
         if not stream_url:
             raise ResolverError('File not found')
 
-        return urllib.unquote_plus(stream_url)
+        return urllib_parse.unquote_plus(stream_url) + helpers.append_headers(headers)
 
     def get_url(self, host, media_id):
         return 'http://trollvid.net/embed/%s' % media_id

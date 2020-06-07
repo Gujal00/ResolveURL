@@ -1,5 +1,5 @@
 """
-vshare.eu resolveurl plugin
+Plugin for ResolveUrl
 Copyright (C) 2017 jsergio
 
 This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import urllib2
 import json
-from lib import helpers
+from six.moves import urllib_error
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -27,10 +27,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VshareEuResolver(ResolveUrl):
     name = "vshare.eu"
     domains = ['vshare.eu']
-    pattern = '(?://|\.)(vshare\.eu)/(?:embed-|)?([0-9a-zA-Z/]+)'
+    pattern = r'(?://|\.)(vshare\.eu)/(?:embed-|)?([0-9a-zA-Z/]+)'
 
     def __init__(self):
-        self.net = common.Net()
         self.headers = {'User-Agent': common.SMR_USER_AGENT}
 
     def get_media_url(self, host, media_id):
@@ -39,7 +38,7 @@ class VshareEuResolver(ResolveUrl):
             result = self.__auth_ip(media_id)
 
         if result:
-            return helpers.pick_source(result.items()) + helpers.append_headers(self.headers)
+            return helpers.pick_source(list(result.items())) + helpers.append_headers(self.headers)
 
         raise ResolverError(i18n('no_ip_authorization'))
 
@@ -53,12 +52,12 @@ class VshareEuResolver(ResolveUrl):
 
     def __check_auth(self, media_id):
         common.logger.log('Checking Auth: %s' % (media_id))
-        url = 'http://vshare.eu/cgi-bin/index_dl.fcgi?op=pair&file_code=%s&check' % (media_id)
+        url = 'https://vshare.eu/cgi-bin/index_dl.fcgi?op=pair&file_code=%s&check' % (media_id)
         try:
             js_result = json.loads(self.net.http_GET(url, headers=self.headers).content)
         except ValueError:
             raise ResolverError('Unusable Authorization Response')
-        except urllib2.HTTPError as e:
+        except urllib_error.HTTPError as e:
             if e.code == 401:
                 js_result = json.loads(str(e.read()))
             else:

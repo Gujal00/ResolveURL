@@ -1,5 +1,5 @@
 """
-    ResolveURL Addon for Kodi
+    Plugin for ResolveURL
     Copyright (C) 2016 t0mm0, tknorris, jsergio
 
     This program is free software: you can redistribute it and/or modify
@@ -15,10 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
-import urllib2
+from six.moves import urllib_error
 import json
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -136,7 +137,7 @@ class RealDebridResolver(ResolveUrl):
                                         elif any(x in status for x in STALLED):
                                             self.__delete_torrent(torrent_id)
                                             raise ResolverError('Real-Debrid: Torrent ID %s has stalled | REASON: %s' % (torrent_id, status))
-                            # xbmc.sleep(1000 * INTERVALS)  # allow api time to generate the stream_link
+
                             media_id = torrent_info.get('links')[0]
                     self.__delete_torrent(torrent_id)
                 if media_id.lower().startswith('magnet:'):
@@ -146,7 +147,7 @@ class RealDebridResolver(ResolveUrl):
             url = '%s/%s' % (rest_base_url, unrestrict_link_path)
             data = {'link': media_id}
             result = self.net.http_POST(url, form_data=data, headers=self.headers).content
-        except urllib2.HTTPError as e:
+        except urllib_error.HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):
                     self.refresh_token()
@@ -183,7 +184,7 @@ class RealDebridResolver(ResolveUrl):
     def __check_cache(self, media_id):
         r = re.search('''magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)''', media_id, re.I)
         if r:
-            _hash, _format = r.group(2).lower(), r.group(1)
+            _hash = r.group(2).lower()
             try:
                 url = '%s/%s/%s' % (rest_base_url, check_cache_path, _hash)
                 result = self.net.http_GET(url, headers=self.headers).content
@@ -277,7 +278,7 @@ class RealDebridResolver(ResolveUrl):
         if result is None:
             return
         return self.__get_token(result['client_id'], result['client_secret'], js_result['device_code'])
-        
+
     def __get_token(self, client_id, client_secret, code):
         try:
             url = '%s/%s' % (oauth_base_url, token_endpoint_path)
@@ -308,7 +309,7 @@ class RealDebridResolver(ResolveUrl):
         self.set_setting('client_secret', '')
         self.set_setting('token', '')
         self.set_setting('refresh', '')
-    
+
     def get_url(self, host, media_id):
         return media_id
 
@@ -321,7 +322,7 @@ class RealDebridResolver(ResolveUrl):
         try:
             url = '%s/%s' % (rest_base_url, hosts_regexes_path)
             js_result = json.loads(self.net.http_GET(url, headers=self.headers).content)
-            regexes = [regex[1:-1].replace('\/', '/').rstrip('\\') for regex in js_result]
+            regexes = [regex[1:-1].replace(r'\/', '/').rstrip('\\') for regex in js_result]
             logger.log_debug('RealDebrid hosters : %s' % regexes)
             hosters = [re.compile(regex, re.I) for regex in regexes]
         except Exception as e:
@@ -352,7 +353,7 @@ class RealDebridResolver(ResolveUrl):
                 return True
             if self.hosters is None:
                 self.hosters = self.get_all_hosters()
-                
+
             for host in self.hosters:
                 # logger.log_debug('RealDebrid checking host : %s' %str(host))
                 if re.search(host, url):
@@ -361,7 +362,7 @@ class RealDebridResolver(ResolveUrl):
         elif host:
             if self.hosts is None:
                 self.hosts = self.get_hosts()
-                
+
             if host.startswith('www.'):
                 host = host.replace('www.', '')
             if any(host in item for item in self.hosts):

@@ -1,5 +1,5 @@
 """
-    plugin in for ResolveUrl
+    Plugin for ResolveUrl
     Copyright (C) 2019 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -17,17 +17,15 @@
 """
 
 import re
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class ViuclipsResolver(ResolveUrl):
     name = "viuclips"
     domains = ["viuclips.net", "veuclips.com"]
     pattern = r'(?://|\.)(v[ie]uclips\.(?:net|com))/(?:embed/)?([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

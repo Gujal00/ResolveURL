@@ -1,5 +1,5 @@
 """
-    Kodi resolveurl plugin
+    Plugin for ResolveURL
     Copyright (C) 2014  smokdpi
 
     This program is free software: you can redistribute it and/or modify
@@ -18,21 +18,21 @@
 
 from resolveurl import common, hmf
 from resolveurl.resolver import ResolveUrl, ResolverError
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 import re
 import xbmc
 import json
-import urllib2
+from six.moves import urllib_error, urllib_parse, urllib_request
+import six
 
 
 class GoogleResolver(ResolveUrl):
     name = "googlevideo"
     domains = ["googlevideo.com", "googleusercontent.com", "get.google.com",
                "plus.google.com", "googledrive.com", "drive.google.com", "docs.google.com", "youtube.googleapis.com", "bp.blogspot.com", "blogger.com"]
-    pattern = 'https?://(.*?(?:\.googlevideo|\.bp\.blogspot|blogger|(?:plus|drive|get|docs)\.google|google(?:usercontent|drive|apis))\.com)/(.*?(?:videoplayback\?|[\?&]authkey|host/)*.+)'
+    pattern = r'https?://(.*?(?:\.googlevideo|\.bp\.blogspot|blogger|(?:plus|drive|get|docs)\.google|google(?:usercontent|drive|apis))\.com)/(.*?(?:videoplayback\?|[\?&]authkey|host/)*.+)'
 
     def __init__(self):
-        self.net = common.Net()
         self.headers = {'User-Agent': common.FF_USER_AGENT}
         self.url_matches = ['redirector.', 'googleusercontent', '.bp.blogspot.com']
         self.itag_map = {'5': '240', '6': '270', '17': '144', '18': '360', '22': '720', '34': '360', '35': '480',
@@ -47,14 +47,16 @@ class GoogleResolver(ResolveUrl):
                          '302': '2160', '303': '1080', '308': '1440', '313': '2160', '315': '2160', '59': '480'}
 
     def __key(self, item):
-        try: return int(re.search('(\d+)', item[0]).group(1))
-        except: return 0
-        
+        try:
+            return int(re.search(r'(\d+)', item[0]).group(1))
+        except:
+            return 0
+
     def get_media_url(self, host, media_id):
         video = None
         web_url = self.get_url(host, media_id)
         if xbmc.getCondVisibility('System.HasAddon(plugin.video.gdrive)') and self.get_setting('use_gdrive'):
-            doc_id = re.search('[-\w]{25,}', web_url)
+            doc_id = re.search(r'[-\w]{25,}', web_url)
             if doc_id:
                 common.kodi.notify(header=None, msg='Resolving with GDRIVE', duration=3000)
                 video = 'plugin://plugin.video.gdrive/?mode=video&amp;instance=gdrive1&amp;filename=%s&amp;content_type=video' % doc_id.group(1)
@@ -89,22 +91,23 @@ class GoogleResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return 'https://%s/%s' % (host, media_id)
-    
+
     def _parse_redirect(self, url, hdrs={}):
-        class NoRedirection(urllib2.HTTPErrorProcessor):
+        class NoRedirection(urllib_request.HTTPErrorProcessor):
             def http_response(self, request, response):
                 return response
 
-        opener = urllib2.build_opener(NoRedirection)
-        opener = urllib2.install_opener(opener)
-        request = urllib2.Request(url, headers=hdrs)
-        try: response = urllib2.urlopen(request)
-        except urllib2.HTTPError as e:
+        opener = urllib_request.build_opener(NoRedirection)
+        urllib_request.install_opener(opener)  # @ big change
+        request = urllib_request.Request(url, headers=hdrs)
+        try:
+            response = urllib_request.urlopen(request)
+        except urllib_error.HTTPError as e:
             if e.code == 429 or e.code == 403:
                 msg = 'Daily view limit reached'
                 common.kodi.notify(header=None, msg=msg, duration=3000)
                 raise ResolverError(msg)
-        response_headers = dict([(item[0].title(), item[1]) for item in response.info().items()])
+        response_headers = dict([(item[0].title(), item[1]) for item in list(response.info().items())])
         cookie = response_headers.get('Set-Cookie', None)
         if cookie:
             self.headers.update({'Cookie': cookie})
@@ -114,7 +117,8 @@ class GoogleResolver(ResolveUrl):
         sources = []
         response = None
         if re.match('https?://get[.]', link):
-            if link.endswith('/'): link = link[:-1]
+            if link.endswith('/'):
+                link = link[:-1]
             vid_id = link.split('/')[-1]
             response = self.net.http_GET(link)
             sources = self.__parse_gget(vid_id, response.content)
@@ -126,22 +130,24 @@ class GoogleResolver(ResolveUrl):
             response = self.net.http_GET(link)
             sources = self._parse_gdocs(response.content)
         elif 'youtube.googleapis.com' in link:
-            cid = re.search('cid=([\w]+)', link)
-            if cid: link = 'https://drive.google.com/file/d/%s/edit' % cid.groups(1)
-            else: raise ResolverError('ID not found')
+            cid = re.search(r'cid=([\w]+)', link)
+            if cid:
+                link = 'https://drive.google.com/file/d/%s/edit' % cid.groups(1)
+            else:
+                raise ResolverError('ID not found')
             response = self.net.http_GET(link)
             sources = self._parse_gdocs(response.content)
         elif 'blogger.com/video.g?token=' in link:
             # Quick hack till I figure the direction to take this plugin
             response = self.net.http_GET(link)
-            source = re.search('''['"]play_url["']\s*:\s*["']([^"']+)''', response.content)
+            source = re.search(r'''['"]play_url["']\s*:\s*["']([^"']+)''', response.content)
             if source:
                 sources = [("Unknown Quality", source.group(1).decode('unicode-escape'))]
         return response, sources
 
     def __parse_gplus(self, html):
         sources = []
-        match = re.search('<c-wiz.+?track:impression,click".*?jsdata\s*=\s*".*?(http[^"]+)"', html, re.DOTALL)
+        match = re.search(r'<c-wiz.+?track:impression,click".*?jsdata\s*=\s*".*?(http[^"]+)"', html, re.DOTALL)
         if match:
             source = match.group(1).replace('&amp;', '&').split(';')[0]
             resolved = hmf.HostedMediaFile(url=source).resolve()
@@ -151,7 +157,7 @@ class GoogleResolver(ResolveUrl):
 
     def __parse_gget(self, vid_id, html):
         sources = []
-        match = re.search('.+return\s+(\[\[.*?)\s*}}', html, re.DOTALL)
+        match = re.search(r'.+return\s+(\[\[.*?)\s*}}', html, re.DOTALL)
         if match:
             try:
                 js = self.parse_json(match.group(1))
@@ -166,7 +172,7 @@ class GoogleResolver(ResolveUrl):
                                                 sources = self.__extract_video(item2)
                                                 if sources:
                                                     return sources
-            except Exception as e:
+            except Exception as _:
                 pass
         return sources
 
@@ -180,11 +186,10 @@ class GoogleResolver(ResolveUrl):
                             for item3 in item2:
                                 if isinstance(item3, list):
                                     for item4 in item3:
-                                        if isinstance(item4, unicode):
+                                        if isinstance(item4, six.text_type) and six.PY2:  # @big change
                                             item4 = item4.encode('utf-8')
-                                            
-                                        if isinstance(item4, basestring):
-                                            item4 = urllib2.unquote(item4).decode('unicode_escape')
+                                        if isinstance(item4, six.string_types) and six.PY2:  # @big change
+                                            item4 = urllib_parse.unquote(item4).decode('unicode_escape')
                                             for match in re.finditer('url=(?P<link>[^&]+).*?&itag=(?P<itag>[^&]+)', item4):
                                                 link = match.group('link')
                                                 itag = match.group('itag')
@@ -196,18 +201,17 @@ class GoogleResolver(ResolveUrl):
 
     def _parse_gdocs(self, html):
         urls = []
-        for match in re.finditer('\[\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\]', html):
+        for match in re.finditer(r'\[\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\]', html):
             key, value = match.groups()
             if key == 'fmt_stream_map':
                 items = value.split(',')
                 for item in items:
                     _source_itag, source_url = item.split('|')
-                    if isinstance(source_url, unicode):
+                    if isinstance(source_url, six.text_type) and six.PY2:  # @big change
                         source_url = source_url.encode('utf-8')
-                        
                     source_url = source_url.decode('unicode_escape')
                     quality = self.itag_map.get(_source_itag, 'Unknown Quality [%s]' % _source_itag)
-                    source_url = urllib2.unquote(source_url)
+                    source_url = urllib_parse.unquote(source_url)
                     urls.append((quality, source_url))
                 return urls
 
@@ -217,7 +221,7 @@ class GoogleResolver(ResolveUrl):
     def parse_json(html):
         if html:
             try:
-                if not isinstance(html, unicode):
+                if not isinstance(html, six.text_type):
                     if html.startswith('\xef\xbb\xbf'):
                         html = html[3:]
                     elif html.startswith('\xfe\xff'):

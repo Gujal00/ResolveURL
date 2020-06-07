@@ -2,7 +2,7 @@
     OVERALL CREDIT TO:
         t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
 
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2011 t0mm0
 
     This program is free software: you can redistribute it and/or modify
@@ -21,8 +21,8 @@
 
 import re
 import json
-from lib import helpers
-from resolveurl import common
+import six
+from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
@@ -31,9 +31,6 @@ class MailRuResolver(ResolveUrl):
     domains = ['mail.ru', 'my.mail.ru', 'm.my.mail.ru', 'videoapi.my.mail.ru', 'api.video.mail.ru']
     # This pattern is starting to becoming unreliable and we may have to rethink it to support all the current urls
     pattern = r'(?://|\.)(mail\.ru)/(?:\w+/)?(?:videos/embed/)?(inbox|mail|embed|mailua|list|bk|v)/(?:([^/]+)/[^.]+/)?(\d+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -47,7 +44,7 @@ class MailRuResolver(ResolveUrl):
                 sources = [(video['key'], video['url']) for video in js_data['videos']]
                 sorted(sources)
                 source = helpers.pick_source(sources)
-                source = source.encode('utf-8')
+                source = source.encode('utf-8') if six.PY2 else source
                 if source.startswith("//"):
                     source = 'http:%s' % source
                 return source + helpers.append_headers({'Cookie': response.get_headers(as_dict=True).get('Set-Cookie', '')})

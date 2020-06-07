@@ -27,6 +27,7 @@ from resolveurl import common
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
+
 class cInputWindow(xbmcgui.WindowDialog):
 
     def __init__(self, *args, **kwargs):
@@ -67,7 +68,7 @@ class cInputWindow(xbmcgui.WindowDialog):
         self.addControl(self.okbutton)
         self.addControl(self.cancelbutton)
 
-        for i in xrange(9):
+        for i in range(9):
             row = i / 3
             col = i % 3
             x_pos = imgX + (pw * col)
@@ -78,7 +79,7 @@ class cInputWindow(xbmcgui.WindowDialog):
             self.chkbutton[i] = xbmcgui.ControlButton(x_pos, y_pos, pw, ph, str(i + 1), font='font1', focusTexture=button_fo, noFocusTexture=button_nofo)
             self.addControl(self.chkbutton[i])
 
-        for i in xrange(9):
+        for i in range(9):
             row_start = (i / 3) * 3
             right = row_start + (i + 1) % 3
             left = row_start + (i - 1) % 3
@@ -110,7 +111,7 @@ class cInputWindow(xbmcgui.WindowDialog):
         self.doModal()
         self.close()
         if not self.cancelled:
-            return [i for i in xrange(9) if self.chkstate[i]]
+            return [i for i in range(9) if self.chkstate[i]]
 
     def onControl(self, control):
         if control == self.okbutton and any(self.chkstate):
@@ -131,6 +132,7 @@ class cInputWindow(xbmcgui.WindowDialog):
             self.cancelled = True
             self.close()
 
+
 class UnCaptchaReCaptcha:
     net = common.Net()
 
@@ -146,7 +148,7 @@ class UnCaptchaReCaptcha:
             if not message:
                 message = re.findall('<div[^>]+class="fbc-imageselect-message-error">(.*?)</div>', html)
             if not message:
-                token = re.findall('"this\.select\(\)">(.*?)</textarea>', html)[0]
+                token = re.findall(r'"this\.select\(\)">(.*?)</textarea>', html)[0]
                 if token:
                     logger.log_debug('Captcha Success: %s' % (token))
                 else:
@@ -156,7 +158,7 @@ class UnCaptchaReCaptcha:
                 message = message[0]
                 payload = payload[0]
 
-            cval = re.findall('name="c"\s+value="([^"]+)', html)[0]
+            cval = re.findall(r'name="c"\s+value="([^"]+)', html)[0]
             captcha_imgurl = 'https://www.google.com%s' % (payload.replace('&amp;', '&'))
             message = re.sub('</?(div|strong)[^>]*>', '', message)
             oSolver = cInputWindow(captcha=captcha_imgurl, msg=message, iteration=iteration)

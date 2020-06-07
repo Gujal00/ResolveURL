@@ -1,5 +1,5 @@
 """
-    resolveurl XBMC Addon
+    Plugin for ResolveUrl
     Copyright (C) 2015 tknorris
 
     This program is free software: you can redistribute it and/or modify
@@ -15,14 +15,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from lib import helpers
-from __resolve_generic__ import ResolveGeneric
+
+from resolveurl.plugins.lib import helpers
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class TusfilesResolver(ResolveGeneric):
     name = "tusfiles"
     domains = ['tusfiles.net', 'tusfiles.com']
-    pattern = '(?://|\.)(tusfiles\.(?:net|com))/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(tusfiles\.(?:net|com))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         direct_url = 'http://%s/%s' % (host, media_id)

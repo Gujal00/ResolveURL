@@ -19,8 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import re
-from lib import helpers
-from __resolve_generic__ import ResolveGeneric
+from resolveurl.plugins.lib import helpers
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class AliezResolver(ResolveGeneric):

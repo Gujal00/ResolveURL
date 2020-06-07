@@ -1,9 +1,10 @@
 *.pyc
 *.pyo
+__pycache__
 *.cookies
 *.DS_Store
 temp/*
-script.module.resolveurl/resources/settings.xml
+settings.xml
 doc/build
 doc/resources
 .project

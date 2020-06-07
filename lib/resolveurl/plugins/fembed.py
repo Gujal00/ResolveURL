@@ -1,5 +1,5 @@
-'''
-    resolveurl Kodi plugin
+"""
+    Plugin for ResolveURL
     Copyright (C) 2018 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -14,10 +14,11 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
+
 import json
 import re
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -28,9 +29,6 @@ class FembedResolver(ResolveUrl):
                "femoload.xyz", "feurl.com", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
                "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com"]
     pattern = r'(?://|\.)((?:fembed|feurl|24hd|vcdn|sharinglink|votrefiles?|femoload|dailyplanet|jplayer|there|gcloud|xstreamcdn|vcdnplay|vidohd|vidsource|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me))/v/([a-zA-Z0-9-]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

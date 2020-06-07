@@ -17,19 +17,15 @@
 """
 
 import re
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VideoMegaResolver(ResolveUrl):
-
     name = "videomega"
     domains = ['videomega.co']
     pattern = r'(?://|\.)(videomega\.co)/(?:e/)?([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

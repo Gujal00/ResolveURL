@@ -1,5 +1,5 @@
 """
-    resolveurl XBMC Addon
+    Plugin for ResolveUrl
     Copyright (C) 2011 t0mm0
 
     This program is free software: you can redistribute it and/or modify
@@ -15,36 +15,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import re
-from lib import helpers
-from lib import jsunpack
+
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class Mp4uploadResolver(ResolveUrl):
     name = "mp4upload"
     domains = ["mp4upload.com"]
-    pattern = '(?://|\.)(mp4upload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(mp4upload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
-                   'Referer': web_url}
+        headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
-
-        r = re.search("script'>(eval.*?)</script", html, re.DOTALL)
-        
-        if r:
-            html = jsunpack.unpack(r.group(1))
-            src = re.search('src\("([^"]+)',html)
-            if src:
-                headers.update({'verifypeer': 'false'})
-                return src.group(1) + helpers.append_headers(headers)
-
+        sources = helpers.scrape_sources(html)
+        if sources:
+            headers.update({'verifypeer': 'false'})
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
         raise ResolverError('Video cannot be located.')
- 
+
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')

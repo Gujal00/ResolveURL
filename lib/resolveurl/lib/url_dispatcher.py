@@ -1,6 +1,7 @@
-import log_utils
+from resolveurl.lib import log_utils
 logger = log_utils.Logger.get_logger(__name__)
 logger.disable()
+
 
 class URL_Dispatcher:
     def __init__(self):
@@ -76,9 +77,11 @@ class URL_Dispatcher:
                     kwargs[arg] = self.__coerce(queries[arg])
                     del unused_args[arg]
 
-        if 'mode' in unused_args: del unused_args['mode']  # delete mode last in case it's used by the target function
+        if 'mode' in unused_args:
+            del unused_args['mode']  # delete mode last in case it's used by the target function
         logger.log('Calling |%s| for mode |%s| with pos args |%s| and kwargs |%s|' % (self.func_registry[mode].__name__, mode, args, kwargs))
-        if unused_args: logger.log('Warning: Arguments |%s| were passed but unused by |%s| for mode |%s|' % (unused_args, self.func_registry[mode].__name__, mode))
+        if unused_args:
+            logger.log('Warning: Arguments |%s| were passed but unused by |%s| for mode |%s|' % (unused_args, self.func_registry[mode].__name__, mode))
         self.func_registry[mode](*args, **kwargs)
 
     # since all params are passed as strings, do any conversions necessary to get good types (e.g. boolean)

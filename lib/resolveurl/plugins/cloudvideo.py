@@ -2,7 +2,7 @@
     OVERALL CREDIT TO:
         t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
 
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2018 jsergio
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from __resolve_generic__ import ResolveGeneric
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class CloudVideoResolver(ResolveGeneric):

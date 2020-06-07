@@ -1,7 +1,6 @@
-# -*- coding: UTF-8 -*-
 """
-    Kodi resolveurl plugin
-    Copyright (C) 2016  alifrezser
+    Plugin for ResolveUrl
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +15,7 @@
 """
 
 import re
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -25,9 +24,6 @@ class VideaResolver(ResolveUrl):
     name = "videa"
     domains = ["videa.hu", "videakid.hu"]
     pattern = r'(?://|\.)((?:videa|videakid)\.hu)/(?:player/?\?v=|player/v/|videok/)(?:.*-|)([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

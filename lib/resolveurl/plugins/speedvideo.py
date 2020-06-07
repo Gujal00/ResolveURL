@@ -1,5 +1,5 @@
-'''
-SpeedVideo.net resolveurl plugin
+"""
+Plugin for ResolveUrl
 Copyright (C) 2014 TheHighway and tknorris
 
 This program is free software: you can redistribute it and/or modify
@@ -14,11 +14,12 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
-from __resolve_generic__ import ResolveGeneric
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+
 
 class SpeedVideoResolver(ResolveGeneric):
     name = "speedvideo"
     domains = ["speedvideo.net"]
-    pattern = '(?://|\.)(speedvideo\.net)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(speedvideo\.net)/(?:embed-)?([0-9a-zA-Z]+)'

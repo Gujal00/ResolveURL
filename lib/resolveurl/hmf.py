@@ -15,10 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import urllib2
-import urlparse
 import re
-import urllib
+import six
+from six.moves import urllib_error, urllib_request, urllib_parse
 import traceback
 import resolveurl
 from resolveurl import common
@@ -114,14 +113,15 @@ class HostedMediaFile:
                 resolver_cache[klass] = klass()
                 resolvers.append(resolver_cache[klass])
         return resolvers
-    
+
     def __top_domain(self, url):
-        elements = urlparse.urlparse(url)
+        elements = urllib_parse.urlparse(url)
         domain = elements.netloc or elements.path
         domain = domain.split('@')[-1].split(':')[0]
-        regex = "(?:www\.)?([\w\-]*\.[\w\-]{2,5}(?:\.[\w\-]{2,5})?)$"
+        regex = r"(?:www\.)?([\w\-]*\.[\w\-]{2,5}(?:\.[\w\-]{2,5})?)$"
         res = re.search(regex, domain)
-        if res: domain = res.group(1)
+        if res:
+            domain = res.group(1)
         domain = domain.lower()
         return domain
 
@@ -147,9 +147,10 @@ class HostedMediaFile:
         """
         Returns the list of resolvers of this :class:`HostedMediaFile`.
         """
-        if validated: self.valid_url()
+        if validated:
+            self.valid_url()
         return self.__resolvers
-        
+
     def resolve(self, include_universal=True, allow_popups=True):
         """
         Resolves this :class:`HostedMediaFile` to a media URL.
@@ -184,13 +185,14 @@ class HostedMediaFile:
                         resolver.login()
                         self._host, self._media_id = resolver.get_host_and_id(self._url)
                         stream_url = resolver.get_media_url(self._host, self._media_id)
-                        if stream_url.startswith("//"): stream_url = 'http:%s' % stream_url
+                        if stream_url.startswith("//"):
+                            stream_url = 'http:%s' % stream_url
                         if stream_url and self.__test_stream(stream_url):
                             self.__resolvers = [resolver]  # Found a working resolver, throw out the others
                             self._valid_url = True
                             return stream_url
             except Exception as e:
-                url = self._url.encode('utf-8') if isinstance(self._url, unicode) else self._url
+                url = self._url.encode('utf-8') if isinstance(self._url, six.text_type) and six.PY2 else self._url
                 common.logger.log_error('%s Error - From: %s Link: %s: %s' % (type(e).__name__, resolver.name, url, e))
                 if resolver == self.__resolvers[-1]:
                     common.logger.log_debug(traceback.format_exc())
@@ -224,7 +226,7 @@ class HostedMediaFile:
                 except:
                     # print sys.exc_info()
                     continue
-                
+
             self.__resolvers = resolvers
             self._valid_url = True if resolvers else False
         return self._valid_url
@@ -237,10 +239,12 @@ class HostedMediaFile:
         Intended to catch stream urls returned by resolvers that would fail to playback
         """
         # parse_qsl doesn't work because it splits elements by ';' which can be in a non-quoted UA
-        try: headers = dict([item.split('=') for item in (stream_url.split('|')[1]).split('&')])
-        except: headers = {}
+        try:
+            headers = dict([item.split('=') for item in (stream_url.split('|')[1]).split('&')])
+        except:
+            headers = {}
         for header in headers:
-            headers[header] = urllib.unquote_plus(headers[header])
+            headers[header] = urllib_parse.unquote_plus(headers[header])
         common.logger.log_debug('Setting Headers on UrlOpen: %s' % headers)
 
         try:
@@ -248,31 +252,34 @@ class HostedMediaFile:
             ssl_context = ssl.create_default_context()
             ssl_context.check_hostname = False
             ssl_context.verify_mode = ssl.CERT_NONE
-            opener = urllib2.build_opener(urllib2.HTTPSHandler(context=ssl_context))
-            urllib2.install_opener(opener)
+            opener = urllib_request.build_opener(urllib_request.HTTPSHandler(context=ssl_context))
+            urllib_request.install_opener(opener)
         except:
             pass
 
         try:
             msg = ''
-            request = urllib2.Request(stream_url.split('|')[0], headers=headers)
+            request = urllib_request.Request(stream_url.split('|')[0], headers=headers)
             # only do a HEAD request. gujal
-            request.get_method = lambda : 'HEAD'
+            request.get_method = lambda: 'HEAD'
             #  set urlopen timeout to 15 seconds
-            http_code = urllib2.urlopen(request, timeout=15).getcode()
-        except urllib2.URLError as e:
+            http_code = urllib_request.urlopen(request, timeout=15).getcode()
+        except urllib_error.HTTPError as e:
+            if isinstance(e, urllib_error.HTTPError):
+                http_code = e.code
+            else:
+                http_code = 600
+        except urllib_error.URLError as e:
+            http_code = 500
             if hasattr(e, 'reason'):
                 # treat an unhandled url type as success
                 if 'unknown url type' in str(e.reason).lower():
                     return True
                 else:
                     msg = e.reason
-                    
-            if isinstance(e, urllib2.HTTPError):
-                http_code = e.code
-            else:
-                http_code = 600
-            if not msg: msg = str(e)
+            if not msg:
+                msg = str(e)
+
         except Exception as e:
             http_code = 601
             msg = str(e)

@@ -21,6 +21,7 @@ import os
 import re
 import abc
 from resolveurl import common
+import six
 
 abstractstaticmethod = abc.abstractmethod
 
@@ -42,10 +43,13 @@ class ResolveUrl(object):
     '''
     Your plugin needs to implement the abstract methods in this interface if
     it wants to be able to resolve URLs
-    
+
     domains: (array) List of domains handled by this plugin. (Use ["*"] for universal resolvers.)
     '''
+    name = 'generic'
     domains = ['localdomain']
+    pattern = None
+    net = common.Net()
 
     @abc.abstractmethod
     def get_media_url(self, host, media_id):
@@ -102,9 +106,9 @@ class ResolveUrl(object):
             True if this plugin thinks it can handle the web_url or host
             otherwise False.
         """
-        if isinstance(host, basestring):
+        if isinstance(host, six.string_types):
             host = host.lower()
-        
+
         if url:
             return re.search(self.pattern, url, re.I) is not None
         else:
@@ -167,9 +171,11 @@ class ResolveUrl(object):
 
     @classmethod
     def _get_priority(cls):
-        try: return int(cls.get_setting('priority'))
-        except: return 100
-    
+        try:
+            return int(cls.get_setting('priority'))
+        except:
+            return 100
+
     @classmethod
     def _is_enabled(cls):
         # default behaviour is enabled is True if resolver is enabled, or has login set to "true", or doesn't have the setting
@@ -180,11 +186,12 @@ class ResolveUrl(object):
             for domain in self.domains:
                 if host in domain:
                     return domain
-        
+
         return host
-    
+
     def _default_get_url(self, host, media_id, template=None):
-        if template is None: template = 'http://{host}/embed-{media_id}.html'
+        if template is None:
+            template = 'http://{host}/embed-{media_id}.html'
         host = self._get_host(host)
         return template.format(host=host, media_id=media_id)
 
@@ -199,7 +206,7 @@ class ResolveUrl(object):
                 old_len = common.file_length(py_path, key)
                 new_len = int(headers.get('Content-Length', 0))
                 py_name = os.path.basename(py_path)
-                
+
                 if old_etag != new_etag or old_len != new_len:
                     common.logger.log('Updating %s: |%s|%s|%s|%s|' % (py_name, old_etag, new_etag, old_len, new_len))
                     self.set_setting('etag', new_etag)
@@ -207,7 +214,7 @@ class ResolveUrl(object):
                     if new_py:
                         if key:
                             new_py = common.decrypt_py(new_py, key)
-                            
+
                         if new_py and 'import' in new_py:
                             with open(py_path, 'w') as f:
                                 f.write(new_py.encode('utf-8'))

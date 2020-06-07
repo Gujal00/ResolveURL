@@ -1,6 +1,9 @@
 """
+    OVERALL CREDIT TO:
+        t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
+
     Plugin for ResolveURL
-    Copyright (C) 2020 gujal
+    Copyright (C) 2011 t0mm0
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,7 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from __resolve_generic__ import ResolveGeneric
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class ViduPlayerResolver(ResolveGeneric):

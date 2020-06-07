@@ -1,9 +1,6 @@
 """
-    OVERALL CREDIT TO:
-        t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
-
-    resolveurl XBMC Addon
-    Copyright (C) 2011 t0mm0
+    Plugin for ResolveURL
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,33 +15,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import re
-from lib import helpers
-from resolveurl import common
-from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.lib import helpers
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class NxloadResolver(ResolveUrl):
+class NxloadResolver(ResolveGeneric):
     name = "nxload"
     domains = ["nxload.com"]
-    pattern = '(?://|\.)(nxload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(nxload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
-        html = self.net.http_GET(web_url, headers=headers).content
-
-        if html:
-            match = re.search('''['"]?sources['"]?\s*:\s*\[(.*?)\]''', html, re.DOTALL)
-            if match:
-                sources = [(source.rsplit('/', 1).pop(1), source) for source in
-                           re.findall('''['"](.*?)["']''', match.group(1), re.DOTALL)]
-                return helpers.pick_source(sources) + helpers.append_headers(headers)
-
-        raise ResolverError("Video not found")
+        return helpers.get_media_url(self.get_url(host, media_id),
+                                     patterns=[r"src:\s*'(?P<url>[^']+)"])
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id)
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')

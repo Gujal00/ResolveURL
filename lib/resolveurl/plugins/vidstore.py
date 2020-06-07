@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 """
-    Kodi resolveurl plugin
+    Plugin for ResolveURL
     Copyright (C) 2017  zlootec
 
     This program is free software: you can redistribute it and/or modify
@@ -18,34 +18,31 @@
 """
 
 import re
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
 
 class VidstoreResolver(ResolveUrl):
     name = "vidstore"
     domains = ["vidstore.me"]
-    pattern = '(?://|\.)(vidstore\.me)/(.+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(vidstore\.me)/(.+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        
+
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
 
-        sources = re.findall('''<source\s+src\s*=\s*['"]([^'"]+).+?label\s*=\s*['"]([^'"]+)''', html, re.DOTALL)
-        if not sources: 
-            raise ResolverError('File not found')
-        sources = [(i[1], i[0]) for i in sources]
-        sources = sorted(sources, key=lambda x: x[0])[::-1]
-        
-        source = 'http://www.%s%s' % (host, helpers.pick_source(sources))
-        headers['Referer'] = web_url
-        source = self.net.http_GET(source, headers=headers).get_url()
-        return source
+        sources = re.findall(r'''<source\s+src\s*=\s*['"]([^'"]+).+?label\s*=\s*['"]([^'"]+)''', html, re.DOTALL)
+        if sources:
+            sources = [(i[1], i[0]) for i in sources]
+            sources = sorted(sources, key=lambda x: x[0], reverse=True)
+            source = 'http://www.%s%s' % (host, helpers.pick_source(sources))
+            headers['Referer'] = web_url
+            source = self.net.http_GET(source, headers=headers).get_url()
+            return source + helpers.append_headers(headers)
+        raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return 'http://www.%s/%s' % (host, media_id)
+        return self._default_get_url(host, media_id, template='https://www.{host}/{media_id}')

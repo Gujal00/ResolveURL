@@ -1,5 +1,5 @@
 """
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2011 t0mm0, JUL1EN094
 
     This program is free software: you can redistribute it and/or modify
@@ -17,13 +17,15 @@
 """
 import re
 import json
-import urllib
+import six
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
+
 
 class MegaDebridResolver(ResolveUrl):
     name = "MegaDebrid"
@@ -44,8 +46,8 @@ class MegaDebridResolver(ResolveUrl):
         common.logger.log('in get_media_url %s : %s' % (host, media_id))
         if self.token is None:
             raise ResolverError('No MD Token Available')
-        
-        url = self.base_url + '?' + urllib.urlencode({'action': 'getLink', 'token': self.token})
+
+        url = self.base_url + '?' + urllib_parse.urlencode({'action': 'getLink', 'token': self.token})
         data = {'link': media_id}
         html = self.net.http_POST(url, form_data=data, headers=self.headers).content
         js_data = json.loads(html)
@@ -60,9 +62,10 @@ class MegaDebridResolver(ResolveUrl):
                 msg = 'MD No Link'
         else:
             msg = js_data.get('response_text', 'Unknown MD Error during resolve')
-        
+
         logger.log_warning(msg)
-        if isinstance(msg, unicode): msg = msg.encode('utf-8')
+        if isinstance(msg, six.text_type) and six.PY2:
+            msg = msg.encode('utf-8')
         raise ResolverError(msg)
 
     def get_url(self, host, media_id):
@@ -74,7 +77,7 @@ class MegaDebridResolver(ResolveUrl):
     @common.cache.cache_method(cache_limit=8)
     def get_hosters(self):
         try:
-            url = self.base_url + '?' + urllib.urlencode({'action': 'getHosters'})
+            url = self.base_url + '?' + urllib_parse.urlencode({'action': 'getHosters'})
             html = self.net.http_GET(url, headers=self.headers).content
             js_data = json.loads(html)
             return [host.lower() for item in js_data['hosters'] for host in item]
@@ -85,7 +88,7 @@ class MegaDebridResolver(ResolveUrl):
     def valid_url(self, url, host):
         if self.hosters is None:
             self.hosters = self.get_hosters()
-            
+
         if url:
             match = re.search('//(.*?)/', url)
             if match:
@@ -93,7 +96,8 @@ class MegaDebridResolver(ResolveUrl):
             else:
                 return False
 
-        if host.startswith('www.'): host = host.replace('www.', '')
+        if host.startswith('www.'):
+            host = host.replace('www.', '')
         logger.log_debug('in valid_url %s : %s' % (url, host))
         if host and any(host in item for item in self.hosters):
             return True
@@ -107,7 +111,7 @@ class MegaDebridResolver(ResolveUrl):
             username = self.get_setting('username')
             password = self.get_setting('password')
             if username and password:
-                url = self.base_url + '?' + urllib.urlencode({'action': 'connectUser', 'login': username, 'password': password})
+                url = self.base_url + '?' + urllib_parse.urlencode({'action': 'connectUser', 'login': username, 'password': password})
                 html = self.net.http_GET(url, headers=self.headers).content
                 js_data = json.loads(html)
                 if js_data.get('response_code') == 'ok':
@@ -119,7 +123,7 @@ class MegaDebridResolver(ResolveUrl):
                 msg = 'No Username/Password'
         except Exception as e:
             msg = str(e)
-        
+
         raise ResolverError('MD Login Failed: %s' % (msg))
 
     @classmethod

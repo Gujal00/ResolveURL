@@ -18,8 +18,7 @@
 
 import re
 import json
-from urllib import quote
-from urllib2 import HTTPError
+from six.moves import urllib_parse, urllib_error
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -74,7 +73,7 @@ class DebridLinkResolver(ResolveUrl):
             url = '{0}/downloader/add'.format(api_url)
             data = {'url': media_id}
             js_data = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
-        except HTTPError as e:
+        except urllib_error.HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):
                     self.refresh_token()
@@ -111,14 +110,14 @@ class DebridLinkResolver(ResolveUrl):
         if media_id.startswith('magnet:'):
             media_id = re.findall('''magnet:.+?urn:[a-zA-Z0-9]+:([a-zA-Z0-9]+)''', media_id.lower(), re.I)[0]
         else:
-            media_id = quote(media_id)
+            media_id = urllib_parse.quote_plus(media_id)
         try:
             url = '{0}/seedbox/cached?url={1}'.format(api_url, media_id)
             result = json.loads(self.net.http_GET(url, headers=self.headers).content)
             if result.get('success', False):
                 if result.get('value', False):
                     return True
-        except HTTPError as e:
+        except urllib_error.HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):
                     self.refresh_token()
@@ -238,7 +237,7 @@ class DebridLinkResolver(ResolveUrl):
                 logger.log_debug('Debrid-Link hosters : {0}'.format(len(hosters)))
             else:
                 logger.log_error('Error getting DL Hosters')
-        except HTTPError as e:
+        except urllib_error.HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):
                     self.refresh_token()
@@ -269,7 +268,7 @@ class DebridLinkResolver(ResolveUrl):
             if js_data.get('success', False):
                 hosts = js_data.get('value')
                 if self.get_setting('torrents') == 'true':
-                    hosts.extend([u'torrent', u'magnet'])
+                    hosts.extend(['torrent', 'magnet'])
                 logger.log_debug('Debrid-Link hosts : {0}'.format(hosts))
             else:
                 logger.log_error('Error getting DL Hosts')
@@ -361,7 +360,7 @@ class DebridLinkResolver(ResolveUrl):
                 activated = True
                 self.set_setting('token', js_data.get('access_token'))
                 self.set_setting('refresh', js_data.get('refresh_token'))
-        except HTTPError as e:
+        except urllib_error.HTTPError as e:
             if e.code == 400:
                 js_data = json.loads(e.read())
                 if js_data.get('error') != 'authorization_pending':

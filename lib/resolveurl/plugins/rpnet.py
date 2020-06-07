@@ -1,5 +1,5 @@
 """
-    resolveurl XBMC Addon
+    Plugin for ResolveURL
     Copyright (C) 2015 tknorris
 
     This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,15 @@
 """
 
 import re
-import urllib
 import json
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
+
 
 class RPnetResolver(ResolveUrl):
     name = "RPnet"
@@ -40,7 +41,7 @@ class RPnetResolver(ResolveUrl):
         username = self.get_setting('username')
         password = self.get_setting('password')
         url = 'https://premium.rpnet.biz/client_api.php'
-        query = urllib.urlencode({'username': username, 'password': password, 'action': 'generate', 'links': media_id})
+        query = urllib_parse.urlencode({'username': username, 'password': password, 'action': 'generate', 'links': media_id})
         url = url + '?' + query
         response = self.net.http_GET(url).content
         response = json.loads(response)
@@ -91,14 +92,15 @@ class RPnetResolver(ResolveUrl):
         if url:
             if self.patterns is None:
                 self.patterns = self.get_all_hosters()
-                
+
             if any(pattern.search(url) for pattern in self.patterns):
                 return True
         elif host:
             if self.hosts is None:
                 self.hosts = self.get_hosts()
-                
-            if host.startswith('www.'): host = host.replace('www.', '')
+
+            if host.startswith('www.'):
+                host = host.replace('www.', '')
             if any(host in item for item in self.hosts):
                 return True
 

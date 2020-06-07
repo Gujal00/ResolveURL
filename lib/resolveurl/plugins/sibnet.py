@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 import re
-from lib import helpers
+from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -25,9 +25,6 @@ class SibnetResolver(ResolveUrl):
     name = 'sibnet'
     domains = ['sibnet.ru']
     pattern = r'(?://|\.)(sibnet\.ru)/(?:shell\.php\?videoid=|.*video)([0-9a-zA-Z]+)'
-
-    def __init__(self):
-        self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

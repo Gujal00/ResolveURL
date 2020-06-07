@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from __resolve_generic__ import ResolveGeneric
-from lib import helpers
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from resolveurl.plugins.lib import helpers
 
 
 class DateMuleResolver(ResolveGeneric):
