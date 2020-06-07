@@ -1,5 +1,5 @@
-'''
-    resolveurl XBMC Addon
+"""
+    Plugin for ResolveURL
     Copyright (C) 2016 Gujal
 
 This program is free software: you can redistribute it and/or modify
@@ -14,16 +14,19 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
-import re, urlparse
+"""
+
+import re
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
+
 class GirlfriendVideosResolver(ResolveUrl):
     name = 'girlfriendvideos'
     domains = ['girlfriendvideos.com']
-    pattern = '(?://|\.)(girlfriendvideos\.com)/(members/[a-z]{1}/\w+/\d+.php)'
+    pattern = r'(?://|\.)(girlfriendvideos\.com)/(members/[a-z]{1}/\w+/\d+.php)'
 
     def __init__(self):
         self.net = common.Net()
@@ -32,17 +35,14 @@ class GirlfriendVideosResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-            
-        if html:
-            try:
-                headers.update({'Referer': web_url})
-                html = html.replace('\\','')
-                pattern = r"""<video src="([^"]+)"""
-                link = re.search(pattern,html)
-                return urlparse.urljoin('http://www.girlfriendvideos.com', link.groups()[0])  + helpers.append_headers(headers)
-            except:
-                raise ResolverError('File not found')
-                
+
+        headers.update({'Referer': web_url})
+        html = html.replace('\\', '')
+        pattern = r"""<video src="([^"]+)"""
+        link = re.search(pattern, html)
+        if link:
+            return urllib_parse.urljoin('http://www.girlfriendvideos.com', link.groups()[0]) + helpers.append_headers(headers)
+
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):

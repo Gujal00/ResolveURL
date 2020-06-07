@@ -1,6 +1,6 @@
-'''
-    resolveurl XBMC Addon
-    Copyright (C) 2016 Gujal
+"""
+    Plugin for ResolveURL
+    Copyright (C) 2016 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,34 +14,27 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
+
 import re
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
+
 class PornDigResolver(ResolveUrl):
     name = 'porndig'
     domains = ['porndig.com']
-    pattern = '(?://|\.)(porndig\.com)/videos/(\d+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(porndig\.com)/videos/(\d+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-            
-        if html:
-            try:
-                iframe_url = re.search("""<iframe.+?src=["'](https://videos\.porndig\.com/player/index/[\d/]+)""", html).groups()[0]
-                
-                return helpers.get_media_url(iframe_url).replace(' ', '%20')
-            
-            except:
-                raise ResolverError('File not found')
-                
+        r = re.search(r"""<iframe.+?src=["'](https://videos\.porndig\.com/player/index/[\d/]+)""", html)
+        if r:
+            return helpers.get_media_url(r.group(1)).replace(' ', '%20')
+
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):

@@ -1,4 +1,7 @@
-'''
+"""
+    Plugin for ResolveURL
+    Copyright (C) 2018 gujal
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -11,17 +14,18 @@
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+
 
 class ImperioPornoResolver(ResolveGeneric):
     name = "imperioporno"
     domains = ['imperioporno.tv']
-    pattern = '(?://|\.)(imperioporno\.tv)/wp-content/plugins/repro/video.php([0-9a-zA-Z?=.&]+)'
-    
+    pattern = r'(?://|\.)(imperioporno\.tv)/wp-content/plugins/repro/video.php([0-9a-zA-Z?=.&]+)'
+
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://www.Imperioporno.tv/wp-content/plugins/repro/video.php{media_id}')
+        return self._default_get_url(host, media_id, template='https://www.{host}/wp-content/plugins/repro/video.php{media_id}')
 
     @classmethod
     def _is_enabled(cls):

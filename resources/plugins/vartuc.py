@@ -1,5 +1,5 @@
-'''
-    vartuc resolver for ResolveURL
+"""
+    Plugin for ResolveURL
     Copyright (C) 2018 holisticdioxide
 
     This program is free software: you can redistribute it and/or modify
@@ -14,19 +14,17 @@
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
+
 class VartucResolver(ResolveUrl):
     name = "vartuc"
     domains = ['vartuc.com', "azblowjobtube.com"]
-    pattern = '(?://|\.)(vartuc\.com|azblowjobtube\.com)/embed/([^"]+)'
-
-    def __init__(self):
-        self.net = common.Net()
+    pattern = r'(?://|\.)(vartuc\.com|azblowjobtube\.com)/embed/([^"]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -39,7 +37,7 @@ class VartucResolver(ResolveUrl):
         js = js.split(";")
         js = [line for line in js if (line.startswith("gh") or line.startswith("irue842")) and '=' in line and '(' not in line and ')' not in line]
         js = "\n".join(js)
-        exec js
+        exec(js)
         try:
             vid = re.compile('src="([^"]+)"', re.DOTALL | re.IGNORECASE).search(irue842).group(1)
             return vid

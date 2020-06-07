@@ -1,4 +1,7 @@
-'''
+"""
+    Plugin for ResolveURL
+    Copyright (C) 2018 gujal
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -11,17 +14,18 @@
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import jsunpack, helpers
+from resolveurl.plugins.lib import helpers
+
 
 class Mega3xResolver(ResolveUrl):
     name = "mega3x"
     domains = ['mega3x.net']
-    pattern = '(?://|\.)(?:www\.)?(mega3x.net)/(?:embed-)?([0-9a-zA-Z]+).html'
+    pattern = r'(?://|\.)(?:www\.)?(mega3x.net)/(?:embed-)?([0-9a-zA-Z]+).html'
 
     def __init__(self):
         self.net = common.Net()
@@ -30,13 +34,10 @@ class Mega3xResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
-        js = re.compile('<script[^>]+>(eval.*?)</sc', re.DOTALL | re.IGNORECASE).search(html).group(1)
-        if jsunpack.detect(js):
-            html += jsunpack.unpack(js)
-        if html:
-            source = re.search(',"(http.*?mp4)"', html, re.I)
-            if source:
-                return source.group(1) + helpers.append_headers(headers)        
+        html = helpers.get_packed_data(html)
+        source = re.search(',"(http.*?mp4)"', html, re.I)
+        if source:
+            return source.group(1) + helpers.append_headers(headers)
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):

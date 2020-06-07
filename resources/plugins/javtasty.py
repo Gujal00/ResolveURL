@@ -1,6 +1,6 @@
-'''
-    resolveurl XBMC Addon
-    Copyright (C) 2016 Gujal
+"""
+    Plugin for ResolveURL
+    Copyright (C) 2016 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,15 +14,17 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
-from resolveurl.plugins.lib import helpers
-from resolveurl.resolver import ResolveUrl, ResolverError
+"""
 
-class JavTastyResolver(ResolveUrl):
+from resolveurl.plugins.lib import helpers
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+
+
+class JavTastyResolver(ResolveGeneric):
     name = 'javtasty'
     domains = ['javtasty.com']
-    pattern = '(?://|\.)(javtasty\.com)/(?:video/|embed/)(\d+)'
-    
+    pattern = r'(?://|\.)(javtasty\.com)/(?:video/|embed/)(\d+)'
+
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id), patterns=['''<(?:filehd|file)>(?P<url>[^<]+)''']).replace(' ', '%20')
 

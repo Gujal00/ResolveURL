@@ -1,6 +1,6 @@
-'''
-    resolveurl XBMC Addon
-    Copyright (C) 2016 Gujal
+"""
+    Plugin for ResolveURL
+    Copyright (C) 2016 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
+
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+
 
 class MadThumbsResolver(ResolveGeneric):
     name = 'madthumbs'
     domains = ['madthumbs.com']
-    pattern = '(?://|\.)(madthumbs\.com)/videos/(.+)'
+    pattern = r'(?://|\.)(madthumbs\.com)/videos/(.+)'
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='http://www.{host}/videos/{media_id}')

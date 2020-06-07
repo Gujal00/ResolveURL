@@ -1,5 +1,5 @@
-'''
-    resolveurl XBMC Addon
+"""
+    Plugin for ResolveURL
     Copyright (C) 2016 Gujal
 
 This program is free software: you can redistribute it and/or modify
@@ -14,13 +14,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
+
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+
 
 class DaftpornResolver(ResolveGeneric):
     name = 'daftporn'
     domains = ['daftporn.com']
-    pattern = '(?://|\.)(daftporn\.com)/([a-zA-Z-]+/[\w-]+\.php)'
+    pattern = r'(?://|\.)(daftporn\.com)/([a-zA-Z-]+/[\w-]+\.php)'
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='http://{host}/{media_id}')
