@@ -23,13 +23,13 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 class AnimeIDHentaiResolver(ResolveGeneric):
     name = 'animeidhentai'
     domains = ['animeidhentai.com']
-    pattern = r'(?://|\.)(animeidhentai\.com)/player/anime\.php\?vid=(.+)'
+    pattern = r'(?://|\.)(animeidhentai\.com)/player/(?:anime\.php\?vid|embed\.php\?data)=(.+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id), patterns=[r'''file:\s*['"](?P<url>[^'"]+)'''])
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/player/anime.php?vid={media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/player/embed.php?data={media_id}')
 
     @classmethod
     def _is_enabled(cls):
