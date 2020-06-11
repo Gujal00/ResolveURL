@@ -38,7 +38,7 @@ from resolveurl.resolver import ResolveUrl
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.plugins import *
 
-common.logger.log_notice('Initializing ResolveURL version: %s' % common.addon_version)
+common.logger.log_debug('Initializing ResolveURL version: %s' % common.addon_version)
 MAX_SETTINGS = 75
 
 PLUGIN_DIRS = []
