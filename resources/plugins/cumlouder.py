@@ -1,9 +1,6 @@
 """
-    OVERALL CREDIT TO:
-        t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
-
     Plugin for ResolveURL
-    Copyright (C) 2011 t0mm0
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,16 +20,16 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.plugins.lib import helpers
 
 
-class DatoPornResolver(ResolveGeneric):
-    name = "datoporn"
-    domains = ['datoporn.com', 'dato.porn', 'datoporn.co']
-    pattern = r'(?://|\.)(datoporn\.com|dato\.porn|datoporn\.co)/(?:embed[/-]|emb.html\?)?([0-9a-zA-Z]+)'
+class CumLouderResolver(ResolveGeneric):
+    name = "cumlouder"
+    domains = ['cumlouder.com']
+    pattern = r'(?://|\.)(cumlouder\.com)/(?:[a-z]+/)?(?:embed/)([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id), patterns=[r'''video_url:\s*'(?P<url>[^']+)'''])
+        return helpers.get_media_url(self.get_url(host, media_id))
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://dato.porn/embed/{media_id}/')
+        return self._default_get_url(host, media_id, template='https://www.{host}/embed/{media_id}/')
 
     @classmethod
     def _is_enabled(cls):
