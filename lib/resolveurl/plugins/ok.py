@@ -17,7 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import json
-import six
 from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
@@ -44,7 +43,7 @@ class OKResolver(ResolveUrl):
             except:
                 pass
             source = helpers.pick_source(sources)
-            source = source.encode('utf-8') if six.PY2 else source
+            source = source.encode('utf-8') if helpers.PY2 else source
             source = source + helpers.append_headers(self.header)
         else:
             source = vids

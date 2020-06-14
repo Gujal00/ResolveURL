@@ -21,7 +21,6 @@
 
 import re
 import json
-import six
 from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -44,7 +43,7 @@ class MailRuResolver(ResolveUrl):
                 sources = [(video['key'], video['url']) for video in js_data['videos']]
                 sorted(sources)
                 source = helpers.pick_source(sources)
-                source = source.encode('utf-8') if six.PY2 else source
+                source = source.encode('utf-8') if helpers.PY2 else source
                 if source.startswith("//"):
                     source = 'http:%s' % source
                 return source + helpers.append_headers({'Cookie': response.get_headers(as_dict=True).get('Set-Cookie', '')})

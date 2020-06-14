@@ -23,6 +23,9 @@ from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.resolver import ResolverError
 
+PY2 = six.PY2
+PY3 = six.PY3
+
 
 def get_hidden(html, form_id=None, index=None, include_submit=True):
     hidden = {}
