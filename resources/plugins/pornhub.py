@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class PornHubResolver(ResolveUrl):
     name = 'pornhub'
     domains = ['pornhub.com']
-    pattern = r'(?://|\.)(pornhub\.com)/view_video\.php\?viewkey=([a-zA-Z0-9]+)'
+    pattern = r'(?://|\.)(pornhub\.com)/(?:view_video\.php\?viewkey=|embed/)([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
