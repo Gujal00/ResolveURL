@@ -17,6 +17,7 @@
 """
 
 import re
+import json
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -31,6 +32,13 @@ class PornHubResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
+        fvars = re.search(r"flashvars(?!')[^{]+([^;]+)", html)
+        if fvars:
+            sources = json.loads(fvars.group(1)).get('mediaDefinitions', [])
+            sources = [(item.get("quality"), item.get("videoUrl")) for item in sources if item.get('format') != "hls" and item.get("videoUrl") != ""]
+            if sources:
+                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+
         vars = re.findall(r'var\s+(.+?)\s*=\s*(.+?);', html)
         links = re.findall(r'quality_(\d+)p\s*=\s*(.+?);', html)
         if links:
@@ -45,7 +53,7 @@ class PornHubResolver(ResolveUrl):
                 link = re.sub(r'\s|\+|\'|\"', '', link)
                 sources.append([source[0], link])
             if sources:
-                return helpers.pick_source(sources)
+                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
