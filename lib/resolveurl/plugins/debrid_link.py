@@ -30,7 +30,7 @@ CLIENT_ID = 'TH7yOa_pgRD1MRyIs6496Q'
 USER_AGENT = 'ResolveURL for Kodi/{0}'.format(common.addon_version)
 FORMATS = common.VIDEO_FORMATS
 
-api_url = 'https://debrid-link.com/api/v2'
+api_url = 'https://debrid-link.fr/api/v2'
 
 
 class DebridLinkResolver(ResolveUrl):
@@ -316,12 +316,23 @@ class DebridLinkResolver(ResolveUrl):
             js_result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
             if js_result.get('access_token', False):
                 self.set_setting('token', js_result.get('access_token'))
-                self.headers.update({'Authorization': 'Bearer {0}'.format(self.get_setting('token'))})
+                self.headers.update({'Authorization': 'Bearer {0}'.format(js_result.get('access_token'))})
                 return True
             else:
                 # empty all auth settings to force a re-auth on next use
                 self.reset_authorization()
                 raise ResolverError('Unable to Refresh Debrid-Link Token')
+        except urllib_error.HTTPError as e:
+            if e.code == 400:
+                js_data = json.loads(e.read())
+                if js_data.get('error') == 'invalid_request':
+                    logger.log_debug('Exception during DL auth: {0}'.format(js_data.get('error')))
+                    # empty all auth settings to force a re-auth on next use
+                    self.reset_authorization()
+                    raise ResolverError('Unknown error during Authorization')
+            else:
+                logger.log_debug('Exception during DL auth: {0}'.format(e))
+                raise ResolverError('Unknown error during Authorization')
         except Exception as e:
             self.reset_authorization()
             logger.log_debug('Debrid-Link Authorization Failed: {0}'.format(e))
