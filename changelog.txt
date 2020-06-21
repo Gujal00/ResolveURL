@@ -1,3 +1,13 @@
-[B]Version 2.1.1 (Jun 7, 2020)[/B]
-- See GitHub for changes
-    - https://github.com/jsergio123/script.module.resolveurl.xxx/commits/master
+Version 2.1.2 (June 21, 2020)
+
+- Resolvers Added:
+    - cumlouder
+ 
+- Resolvers Fixed/Updated:
+    - AnimeIDHentai
+    - Dato.Porn
+    - Pornhub
+    - xHamster
+
+- Resolvers Removed
+    - None
