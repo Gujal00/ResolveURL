@@ -28,6 +28,7 @@ For most cases you probably want to use :func:`resolveurl.resolve` or
 """
 import re
 from six.moves import urllib_parse
+from io import open
 import six
 import sys
 import xbmcvfs
@@ -300,16 +301,16 @@ def _update_settings_xml():
     new_xml.append('</settings>')
 
     try:
-        with open(common.settings_file, 'r') as f:
+        with open(common.settings_file, 'r', encoding='utf-8') as f:
             old_xml = f.read()
     except:
-        old_xml = ''
+        old_xml = u''
 
-    new_xml = '\n'.join(new_xml)
+    new_xml = six.u('\n'.join(new_xml))
     if old_xml != new_xml:
         common.logger.log_debug('Updating Settings XML')
         try:
-            with open(common.settings_file, 'w') as f:
+            with open(common.settings_file, 'w', encoding='utf-8') as f:
                 f.write(new_xml)
         except:
             raise
