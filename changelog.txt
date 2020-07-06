@@ -1,15 +1,12 @@
-Version 5.1.0 (June 7, 2020)
+Version 5.1.2 (July 7, 2020)
 - Code Base Changes:
-    - Change Init logging to debug level
-    - Addtional helper functions
+    - Fix settings.xml writing on non english systems
 
 - Resolvers Added:
-    - Daxab
+    - Vudeo
  
 - Resolvers Fixed/Updated:
     - WStream
-    - FEmbed
-    - Debrid-link
 
 - Resolvers Removed
     - None
