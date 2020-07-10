@@ -1,12 +1,14 @@
-Version 5.1.2 (July 7, 2020)
+Version 5.1.3 (July 10, 2020)
 - Code Base Changes:
-    - Fix settings.xml writing on non english systems
+    - possible Fix for settings.xml writing on XBox
 
 - Resolvers Added:
-    - Vudeo
+    - megogo
+    - oogly
+    - videoapne
  
 - Resolvers Fixed/Updated:
-    - WStream
+    - None
 
 - Resolvers Removed
     - None
