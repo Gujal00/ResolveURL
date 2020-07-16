@@ -309,7 +309,7 @@ def _update_settings_xml():
     except:
         old_xml = u''
 
-    new_xml = six.u('\n'.join(new_xml))
+    new_xml = six.ensure_text('\n'.join(new_xml))
     if old_xml != new_xml:
         common.logger.log_debug('Updating Settings XML')
         try:
