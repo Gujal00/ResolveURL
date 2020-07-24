@@ -31,7 +31,10 @@ class MixdropResolver(ResolveUrl):
                    'Referer': 'https://{}/'.format(host),
                    'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-
+        r = re.search(r'location\s*=\s*"([^"]+)', html)
+        if r:
+            web_url = 'https://{0}{1}'.format(host, r.group(1))
+            html = self.net.http_GET(web_url, headers=headers).content
         if '(p,a,c,k,e,d)' in html:
             html = helpers.get_packed_data(html)
         r = re.search(r'(?:vsr|wurl|surl)[^=]*=\s*"([^"]+)', html)
