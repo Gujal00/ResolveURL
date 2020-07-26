@@ -19,7 +19,7 @@ import re
 import xbmcgui
 from resolveurl.plugins.lib import jsunpack
 import six
-from six.moves import urllib_parse
+from six.moves import urllib_parse, urllib_request
 from resolveurl import common
 from resolveurl.resolver import ResolverError
 
@@ -295,3 +295,15 @@ def fun_decode(vu, lc, hr='16'):
             vup[7] = uhash + nchash
         vu = '/'.join(vup[2:]) + '&rnd={}'.format(int(time.time() * 1000))
     return vu
+
+
+def get_redirect_url(url, headers={}):
+    class NoRedirection(urllib_request.HTTPErrorProcessor):
+        def http_response(self, request, response):
+            return response
+
+    opener = urllib_request.build_opener(NoRedirection, urllib_request.HTTPHandler)
+    urllib_request.install_opener(opener)
+    request = urllib_request.Request(url, headers=headers)
+    response = urllib_request.urlopen(request)
+    return response.geturl()
