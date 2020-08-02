@@ -22,7 +22,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 class NxloadResolver(ResolveGeneric):
     name = "nxload"
     domains = ["nxload.com"]
-    pattern = r'(?://|\.)(nxload\.com)/(?:v/|embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(nxload\.com)/(?:v/|embed[-/])?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
