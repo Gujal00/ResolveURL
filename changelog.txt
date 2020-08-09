@@ -1,12 +1,14 @@
-Version 5.1.4 (July 25, 2020)
+Version 5.1.5 (August 09, 2020)
 - Code Base Changes:
-    - additional encoding fixes for settings.xml
+    - None
 
 - Resolvers Added:
-    - voe.sx
+    - Streamtape
+    - Cloud9
+    - Aparat
  
 - Resolvers Fixed/Updated:
-    - mixdrop
+    - playtube
     - nxload
 
 - Resolvers Removed
