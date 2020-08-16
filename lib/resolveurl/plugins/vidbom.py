@@ -32,10 +32,9 @@ class VidBomResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://vidbem.com/'}
         html = self.net.http_GET(web_url, headers=headers).content
-
         html = html.encode('utf-8') if helpers.PY2 else html
         aa_text = re.search(r"""(ﾟωﾟﾉ\s*=\s*/｀ｍ´\s*）\s*ﾉ.+?;)\s*</script""", html, re.I)
-        common.logger.log('@@@@AA text: {0}'.format(repr(aa_text.group(0))))
+
         if aa_text:
             aa_decoded = aadecode.decode(aa_text.group(1))
             sources = helpers.scrape_sources(aa_decoded)
