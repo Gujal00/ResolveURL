@@ -1,15 +1,14 @@
-Version 5.1.5 (August 09, 2020)
+Version 5.1.6 (August 16, 2020)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - Streamtape
-    - Cloud9
-    - Aparat
+    - Doodstream
+    - Vidup
+    - Vidbom
  
 - Resolvers Fixed/Updated:
-    - playtube
-    - nxload
+    - vidstreaming
 
 - Resolvers Removed
     - None
