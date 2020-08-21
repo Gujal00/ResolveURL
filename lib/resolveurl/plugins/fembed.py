@@ -27,8 +27,8 @@ class FembedResolver(ResolveUrl):
     name = "fembed"
     domains = ["fembed.com", "anime789.com", "24hd.club", "vcdn.io", "sharinglink.club", "votrefiles.club", "there.to",
                "femoload.xyz", "feurl.com", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
-               "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com"]
-    pattern = r'(?://|\.)((?:fembed|feurl|24hd|anime789|vcdn|sharinglink|votrefiles?|femoload|dailyplanet|jplayer|there|gcloud|xstreamcdn|vcdnplay|vidohd|vidsource|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me))/v/([a-zA-Z0-9-]+)'
+               "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com", "fcdn.stream"]
+    pattern = r'(?://|\.)((?:fembed|feurl|24hd|anime789|[fv]cdn|sharinglink|votrefiles?|femoload|dailyplanet|jplayer|there|gcloud|xstreamcdn|vcdnplay|vidohd|vidsource|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me|stream))/v/([a-zA-Z0-9-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
