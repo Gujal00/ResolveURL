@@ -29,16 +29,28 @@ class AparatResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'Referer': web_url, 'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
+        headers.update({'Referer': web_url})
+
+        match = re.search(r'Video is processing now\.', html)
+        if match:
+            raise ResolverError('Video is still processing. Try later')
 
         match = re.search(r'&hash=([^&]+)', html)
         if match:
             web_url = 'https://{0}/dl?op=download_orig&id={1}&mode=o&hash={2}'.format(host, media_id, match.group(1))
-            html = self.net.http_GET(web_url, headers=headers).content
-            r = re.search(r'<a\s*href="([^"]+)[^>]+>Direct', html)
+            html2 = self.net.http_GET(web_url, headers=headers).content
+            r = re.search(r'<a\s*href="([^"]+)[^>]+>Direct', html2)
             if r:
-                return r.group(1) + helpers.append_headers({'User-Agent': common.FF_USER_AGENT})
+                return r.group(1) + helpers.append_headers(headers)
+
+        match = re.search(r'src:\s*"([^"]+)', html)
+        if match:
+            html2 = self.net.http_GET(match.group(1), headers=headers).content
+            sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).+\n(?!#)(?P<url>[^\n]+)', html2, re.IGNORECASE)
+            if sources:
+                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
