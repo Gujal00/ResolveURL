@@ -28,12 +28,11 @@ class AniStreamResolver(ResolveUrl):
     domains = ["ani-stream.com"]
     pattern = r'(?://|\.)(ani-stream\.com)/(?:embed-)?([0-9a-zA-Z-]+)'
 
-
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'base64,([^"]+)',html)
+        r = re.search(r'base64,([^"]+)', html)
         if r:
             html = base64.b64decode(r.group(1)).decode('utf-8')
             sources = helpers.scrape_sources(html)
