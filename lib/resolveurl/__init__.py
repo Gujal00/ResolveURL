@@ -36,7 +36,7 @@ from resolveurl import common
 from resolveurl.hmf import HostedMediaFile
 from resolveurl.resolver import ResolveUrl
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins import *
+from resolveurl.plugins import *  # NOQA
 
 common.logger.log_debug('Initializing ResolveURL version: %s' % common.addon_version)
 MAX_SETTINGS = 75

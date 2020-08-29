@@ -19,7 +19,7 @@ plaintext = r.decrypt(ciphertext)
 
 If any strings are of the wrong length a ValueError is thrown
 """
-
+# flake8: noqa
 # ported from the Java reference code by Bram Cohen, April 2001
 # this code is public domain, unless someone makes
 # an intellectual property claim against the reference

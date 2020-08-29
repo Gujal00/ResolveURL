@@ -27,15 +27,18 @@ def decode(text):
             .replace("(+", "(")
         char = re.sub(r'\((\d)\)', r'\1', char)
 
-        c = "";
+        c = ""
         subchar = ""
         for v in char:
             c += v
             try:
-                x = c; subchar += str(eval(x)); c = ""
+                x = c
+                subchar += str(eval(x))
+                c = ""
             except:
                 pass
-        if subchar != '': txt += subchar + "|"
+        if subchar != '':
+            txt += subchar + "|"
     txt = txt[:-1].replace('+', '')
 
     txt_result = "".join([chr(int(n, 8)) for n in txt.split('|')])
@@ -49,12 +52,14 @@ def toStringCases(txt_result):
     if ".toString(" in txt_result:
         if "+(" in txt_result:
             m3 = True
-            try: sum_base = "+" + re.search(".toString...(\d+).", txt_result, re.DOTALL).groups(1)
-            except: sum_base = ""
-            txt_pre_temp = re.findall("..(\d),(\d+).", txt_result, re.DOTALL)
+            try:
+                sum_base = "+" + re.search(r".toString...(\d+).", txt_result, re.DOTALL).groups(1)
+            except:
+                sum_base = ""
+            txt_pre_temp = re.findall(r"..(\d),(\d+).", txt_result, re.DOTALL)
             txt_temp = [(n, b) for b, n in txt_pre_temp]
         else:
-            txt_temp = re.findall('(\d+)\.0.\w+.([^\)]+).', txt_result, re.DOTALL)
+            txt_temp = re.findall(r'(\d+)\.0.\w+.([^\)]+).', txt_result, re.DOTALL)
         for numero, base in txt_temp:
             code = toString(int(numero), eval(base + sum_base))
             if m3:

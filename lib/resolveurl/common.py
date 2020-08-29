@@ -18,8 +18,8 @@
 import os
 import hashlib
 from resolveurl.lib import log_utils
-from resolveurl.lib.net import Net, get_ua  # @UnusedImport
-from resolveurl.lib import cache  # @UnusedImport
+from resolveurl.lib.net import Net, get_ua  # @UnusedImport  # NOQA
+from resolveurl.lib import cache  # @UnusedImport  # NOQA
 from resolveurl.lib import kodi
 from resolveurl.lib import pyaes
 from random import choice

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding=utf-8
+# flake8: noqa
 #
 # png.py - PNG encoder/decoder in pure Python
 #
@@ -1527,7 +1528,7 @@ class Writer(object):
             def line():
                 scanline = array('B', infile.read(row_bytes))
                 return scanline
-        for y in range(self.height):
+        for _ in range(self.height):
             yield line()
 
     def array_scanlines(self, pixels):
@@ -1538,7 +1539,7 @@ class Writer(object):
         # Values per row
         vpr = self.width * self.planes
         stop = 0
-        for y in range(self.height):
+        for _ in range(self.height):
             start = stop
             stop = start + vpr
             yield pixels[start:stop]
