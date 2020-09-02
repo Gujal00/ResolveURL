@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class Cloud9Resolver(ResolveUrl):
     name = "cloud9"
     domains = ["cloud9.to"]
-    pattern = r'(?://|\.)(cloud9\.to)/embed/([0-9a-zA-Z-]+)'
+    pattern = r'(?://|\.)(cloud9\.to)/embed/([0-9a-zA-Z-_]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
