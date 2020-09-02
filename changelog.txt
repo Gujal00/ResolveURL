@@ -1,17 +1,21 @@
-Version 5.1.6 (August 16, 2020)
+Version 5.1.7 (September 3, 2020)
 - Code Base Changes:
-    - None
+    - Flake8 linting
 
 - Resolvers Added:
-    - Doodstream
-    - Vidup
-    - Vidbom
+    - None
  
 - Resolvers Fixed/Updated:
-    - vidstreaming
+    - Anistream
+    - Aparat
+    - Cloud9
+    - Cloudb
+    - FEmbed
+    - GoUnlimited
+    - Vidoza
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - None
+    - Greek
