@@ -223,7 +223,7 @@ class PremiumizeMeResolver(ResolveUrl):
                         # self.__delete_folder()
                         raise ResolverError('Transfer ID %s has stalled' % transfer_id)
             common.kodi.sleep(1000 * interval)  # allow api time to generate the stream_link
-        self.__delete_transfer(transfer_id)  # just in case __clear_finished() doesnt work
+        # self.__delete_transfer(transfer_id)  # just in case __clear_finished() doesnt work
 
         return
 
