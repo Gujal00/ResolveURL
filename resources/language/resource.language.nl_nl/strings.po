@@ -276,3 +276,7 @@ msgstr "Debrid-Link Autorisatie Reset"
 msgctxt "#33064"
 msgid "Debrid-Link Resolver Authorized"
 msgstr "Debrid-Link Resolver Geauthoriseerd"
+
+msgctxt "#33065"
+msgid "Clear Finished torrents from account"
+msgstr "Wis voltooide torrents van account"

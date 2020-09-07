@@ -263,3 +263,7 @@ msgstr "Debrid-Link autorizáció törölve"
 msgctxt "#33064"
 msgid "Debrid-Link Resolver Authorized"
 msgstr "Debrid-Link Resolver autorizáció sikeres"
+
+msgctxt "#33065"
+msgid "Clear Finished torrents from account"
+msgstr "Kész torrentek törlése a számláról"

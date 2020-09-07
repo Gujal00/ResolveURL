@@ -264,3 +264,15 @@ msgstr "Επισκεφθείτε αυτόν τον σύνδεσμο: [B][COLOR b
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
 msgstr "Καταχωρίστε τον κωδικό PIN ως [B][COLOR blue]{0}[/COLOR][/B] και, στη συνέχεια, κάντε κλικ στην επιλογή 'Σύνδεση λογαριασμού'"
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorization Reset"
+msgstr "Επαναφορά εξουσιοδότησης Debrid-Link"
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorized"
+msgstr "Εξουσιοδοτημένο πρόγραμμα ανάλυσης Debrid-Link"
+
+msgctxt "#33065"
+msgid "Clear Finished torrents from account"
+msgstr "Εκκαθάριση ολοκληρωμένων torrents από λογαριασμό"

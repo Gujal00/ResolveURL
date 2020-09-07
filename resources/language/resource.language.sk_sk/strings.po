@@ -272,3 +272,7 @@ msgstr "Debrid-Link resolver resetovaný"
 msgctxt "#33064"
 msgid "Debrid-Link Resolver Authorized"
 msgstr "Debrid-Link resolver autorizovaný"
+
+msgctxt "#33065"
+msgid "Clear Finished torrents from account"
+msgstr "Vymazať hotové torrenty z účtu"

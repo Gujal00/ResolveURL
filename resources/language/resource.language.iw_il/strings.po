@@ -273,4 +273,8 @@ msgstr "איפוס הרשאה ל-Debrid-Link"
 
 msgctxt "#33064"
 msgid "Debrid-Link Resolver Authorized"
-msgstr "הרשאה ל-Debrid-Link Resolver"
+msgstr "Debrid-Link מורשה פותר"
+
+msgctxt "#33065"
+msgid "Clear Finished torrents from account"
+msgstr "נקה טורנטים מוגמרים מחשבון"

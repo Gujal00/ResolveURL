@@ -81,5 +81,6 @@ STRINGS = {
     'upto_link': 33061,
     'upto_pair': 33062,
     'dl_auth_reset': 33063,
-    'dl_authorized': 33064
+    'dl_authorized': 33064,
+    'clear_finished': 33065
 }

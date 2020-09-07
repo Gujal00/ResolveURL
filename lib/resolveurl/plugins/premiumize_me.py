@@ -72,7 +72,8 @@ class PremiumizeMeResolver(ResolveUrl):
             torrent = True
             logger.log_debug('Premiumize.me: initiating transfer to cloud for %s' % media_id)
             self.__initiate_transfer(media_id)
-            self.__clear_finished()
+            if self.get_setting('clear_finished') == 'true':
+                self.__clear_finished()
             # self.__delete_folder()
 
         link = self.__direct_dl(media_id, torrent=torrent)
@@ -368,6 +369,7 @@ class PremiumizeMeResolver(ResolveUrl):
         xml = super(cls, cls).get_settings_xml()
         xml.append('<setting id="%s_torrents" type="bool" label="%s" default="true"/>' % (cls.__name__, i18n('torrents')))
         xml.append('<setting id="%s_cached_only" enable="eq(-1,true)" type="bool" label="%s" default="false" />' % (cls.__name__, i18n('cached_only')))
+        xml.append('<setting id="%s_clear_finished" enable="eq(-2,true)" type="bool" label="%s" default="false" />' % (cls.__name__, i18n('clear_finished')))
         xml.append('<setting id="%s_auth" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=auth_pm)"/>' % (cls.__name__, i18n('auth_my_account')))
         xml.append('<setting id="%s_reset" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_pm)"/>' % (cls.__name__, i18n('reset_my_auth')))
         xml.append('<setting id="%s_token" visible="false" type="text" default=""/>' % cls.__name__)
