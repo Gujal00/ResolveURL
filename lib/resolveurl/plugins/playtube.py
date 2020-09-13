@@ -30,7 +30,8 @@ class PlayTubeResolver(ResolveGeneric):
                                      patterns=[r'''sources\s*:\s*\["(?P<url>[^"]+)''',
                                                r'''file:\s*"(?P<url>[^"]+)'''],
                                      generic_patterns=False,
-                                     result_blacklist=['dl', '.srt', '.vtt'])
+                                     result_blacklist=['dl', '.srt', '.vtt'],
+                                     referer=False)
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')

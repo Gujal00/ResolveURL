@@ -208,7 +208,8 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
     if cookie:
         headers.update({'Cookie': cookie})
     html = response.content
-
+    if not referer:
+        headers.update({'Referer': url})
     source_list = scrape_sources(html, result_blacklist, scheme, patterns, generic_patterns)
     source = pick_source(source_list)
     return source + append_headers(headers)
