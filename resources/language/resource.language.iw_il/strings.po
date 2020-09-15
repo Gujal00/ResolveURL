@@ -278,3 +278,11 @@ msgstr "Debrid-Link מורשה פותר"
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
 msgstr "נקה טורנטים מוגמרים מחשבון"
+
+msgctxt "#33066"
+msgid "minutes"
+msgstr "דקות"
+
+msgctxt "#33067"
+msgid "hours"
+msgstr "שעה (ות"

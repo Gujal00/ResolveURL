@@ -275,3 +275,11 @@ msgstr "Debrid-Link Resolver autorisiert"
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
 msgstr "Beende fertige Torrents vom Konto"
+
+msgctxt "#33066"
+msgid "minutes"
+msgstr "Protokoll"
+
+msgctxt "#33067"
+msgid "hours"
+msgstr "Std"

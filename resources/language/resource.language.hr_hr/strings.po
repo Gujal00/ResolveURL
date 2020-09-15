@@ -281,3 +281,11 @@ msgstr "Debrid-Link razrješitelj ovjeren"
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
 msgstr "Izbriši gotove bujice s računa"
+
+msgctxt "#33066"
+msgid "minutes"
+msgstr "minuta"
+
+msgctxt "#33067"
+msgid "hours"
+msgstr "sati"

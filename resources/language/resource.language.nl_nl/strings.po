@@ -280,3 +280,11 @@ msgstr "Debrid-Link Resolver Geauthoriseerd"
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
 msgstr "Wis voltooide torrents van account"
+
+msgctxt "#33066"
+msgid "minutes"
+msgstr "minuten"
+
+msgctxt "#33067"
+msgid "hours"
+msgstr "uren"

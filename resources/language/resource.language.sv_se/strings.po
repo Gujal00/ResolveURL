@@ -275,3 +275,11 @@ msgstr "Debrid-Link Resolver auktorisering"
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
 msgstr "Rensa färdiga torrenter från konto"
+
+msgctxt "#33066"
+msgid "minutes"
+msgstr "minuter"
+
+msgctxt "#33067"
+msgid "hours"
+msgstr "timmar"
