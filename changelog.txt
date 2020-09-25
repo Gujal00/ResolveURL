@@ -1,16 +1,15 @@
-Version 5.1.9 (September 19, 2020)
+Version 5.1.10 (September 25, 2020)
 - Code Base Changes:
-    - Add referer to final url for embeds without referer
+    - LOGNOTICE deprecated in Matrix
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
     - Linksnappy
-    - Playtube
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - All supported languages for additional strings required by linksnappy resolver
+    - None
