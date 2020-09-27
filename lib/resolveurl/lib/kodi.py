@@ -45,7 +45,7 @@ def get_profile():
 
 
 def translate_path(path):
-    return xbmc.translatePath(path) if six.PY3 else xbmc.translatePath(path).decode('utf-8')
+    return xbmcvfs.translatePath(path) if six.PY3 else xbmc.translatePath(path).decode('utf-8')
 
 
 def set_setting(id, value):

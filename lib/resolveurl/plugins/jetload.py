@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class JetloadResolver(ResolveUrl):
     name = 'jetload'
-    domains = ['jetload.net', 'jetload.tv', 'jetload.to']
+    domains = ['jetload.net', 'jetload.to']
     pattern = r'(?://|\.)(jetload\.(?:net|tv|to))/(?:[a-zA-Z]/|.*?embed\.php\?u=)?([0-9a-zA-Z]+)'
 
     def __init__(self):
