@@ -34,10 +34,11 @@ class StreamTapeResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
-        html = self.net.http_GET(web_url, headers=headers).content
-        src = re.search('"videolink"[^>]+>([^<]+)', html)
+        r = self.net.http_GET(web_url, headers=headers)
+        src = re.search(r'"videolink"\).+?"([^"]+)', r.content)
         if src:
             src_url = 'https:' + src.group(1) if src.group(1).startswith('//') else src.group(1)
+            src_url += '&stream=1'
             return helpers.get_redirect_url(src_url, headers) + helpers.append_headers(headers)
         raise ResolverError('Video cannot be located.')
 
