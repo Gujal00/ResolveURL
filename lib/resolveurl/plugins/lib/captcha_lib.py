@@ -28,9 +28,9 @@ net = common.Net()
 IMG_FILE = 'captcha_img.gif'
 
 
-def get_response(img,x=450,y=0,w=400,h=130):
+def get_response(img):
     try:
-        img = xbmcgui.ControlImage(x, y, w, h, img)
+        img = xbmcgui.ControlImage(450, 0, 400, 130, img)
         wdlg = xbmcgui.WindowDialog()
         wdlg.addControl(img)
         wdlg.show()
@@ -43,21 +43,11 @@ def get_response(img,x=450,y=0,w=400,h=130):
         return solution
 
 
-def write_img(url=None,bin=None):
-    img = os.path.join(common.profile_path, IMG_FILE)
-    if url:
-        bin = net.http_GET(url).content.encode()
-    with open(img, 'wb') as file:
-        discard = file.write(bin)
-    return img
-
-
-def do_captcha(html, base_url=None):
+def do_captcha(html):
     solvemedia = re.search('<iframe[^>]+src="((?:https?:)?//api.solvemedia.com[^"]+)', html)
     recaptcha = re.search(r'<script\s+type="text/javascript"\s+src="(http://www.google.com[^"]+)', html)
     recaptcha_v2 = re.search('data-sitekey="([^"]+)', html)
     xfilecaptcha = re.search(r'<img\s+src="([^"]+/captchas/[^"]+)', html)
-    ccapimg = re.search('key=([^"]+)"', html)
 
     if solvemedia:
         return do_solvemedia_captcha(solvemedia.group(1))
@@ -67,8 +57,6 @@ def do_captcha(html, base_url=None):
         return do_recaptcha_v2(recaptcha_v2.group(1))
     elif xfilecaptcha:
         return do_xfilecaptcha(xfilecaptcha.group(1))
-    elif ccapimg and base_url:
-        return {'secimgkey': ccapimg.group(1), 'secimginp': do_ccapimg_captcha(base_url + 'ccapimg?key=' + ccapimg.group(1))}
     else:
         captcha = re.compile(r"left:(\d+)px;padding-top:\d+px;'>&#(.+?);<").findall(html)
         result = sorted(captcha, key=lambda ltr: int(ltr[0]))
@@ -88,6 +76,11 @@ def do_solvemedia_captcha(captcha_url):
         'adcopy_challenge': ''  # set to blank just in case not found; avoids exception on return
     }
     data.update(helpers.get_hidden(html), include_submit=False)
+    captcha_img = os.path.join(common.profile_path, IMG_FILE)
+    try:
+        os.remove(captcha_img)
+    except:
+        pass
 
     # Check for alternate puzzle type - stored in a div
     alt_frame = re.search('<div><iframe src="(/papi/media[^"]+)', html)
@@ -95,11 +88,9 @@ def do_solvemedia_captcha(captcha_url):
         html = net.http_GET("http://api.solvemedia.com%s" % alt_frame.group(1)).content
         alt_puzzle = re.search(r'<div\s+id="typein">\s*<img\s+src="data:image/png;base64,([^"]+)', html, re.DOTALL)
         if alt_puzzle:
-            captcha_img = write_img(bin=base64.b64decode(alt_puzzle.group(1)))
-        else:
-           raise Exception('captcha_error')
+            open(captcha_img, 'wb').write(alt_puzzle.group(1).decode('base64'))
     else:
-        captcha_img = write_img("http://api.solvemedia.com%s" % re.search('<img src="(/papi/media[^"]+)"', html).group(1))
+        open(captcha_img, 'wb').write(net.http_GET("http://api.solvemedia.com%s" % re.search('<img src="(/papi/media[^"]+)"', html).group(1)).content)
 
     solution = get_response(captcha_img)
     data['adcopy_response'] = solution
@@ -137,9 +128,3 @@ def do_xfilecaptcha(captcha_url):
         captcha_url = 'http:' + captcha_url
     solution = get_response(captcha_url)
     return {'code': solution}
-
-
-def do_ccapimg_captcha(captcha_url):
-    common.logger.log_debug('CCapImg Captcha: %s' % captcha_url)
-    captcha_img = write_img(captcha_url)
-    return get_response(captcha_img)
