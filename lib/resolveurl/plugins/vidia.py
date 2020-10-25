@@ -36,6 +36,7 @@ class VidiaResolver(ResolveUrl):
                                          result_blacklist=['.m3u8'])
 
         if sources:
+            headers.update({'verifypeer': 'false'})
             return helpers.pick_source(sources) + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
