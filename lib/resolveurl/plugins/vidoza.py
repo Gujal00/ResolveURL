@@ -28,7 +28,8 @@ class VidozaResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
                                      patterns=[r'''["']?\s*(?:file|src)\s*["']?\s*[:=,]?\s*["'](?P<url>[^"']+)(?:[^}>\]]+)["']?\s*res\s*["']?\s*[:=]\s*["']?(?P<label>[^"',]+)'''],
-                                     generic_patterns=False).replace(' ', '%20')
+                                     generic_patterns=False,
+                                     referer=False).replace(' ', '%20')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
