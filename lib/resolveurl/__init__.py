@@ -308,6 +308,7 @@ def _update_settings_xml():
                 old_xml = f.read()
     except:
         old_xml = u''
+    old_xml = six.ensure_text(old_xml)
 
     new_xml = six.ensure_text('\n'.join(new_xml))
     if old_xml != new_xml:
