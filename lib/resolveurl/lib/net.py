@@ -328,8 +328,8 @@ class HttpResponse:
     """
     This class represents a resoponse from an HTTP request.
 
-    The content is examined and every attempt is made to properly encode it to
-    Unicode.
+    The content is examined and every attempt is made to properly decode it to
+    Unicode unless the nodecode property flag is set to True.
 
     .. seealso::
         :meth:`Net.http_GET`, :meth:`Net.http_HEAD` and :meth:`Net.http_POST`
@@ -345,6 +345,7 @@ class HttpResponse:
             to :func:`urllib2.urlopen`.
         """
         self._response = response
+        self._nodecode = False
 
     @property
     def content(self):
@@ -355,6 +356,9 @@ class HttpResponse:
                 html = gzip.GzipFile(fileobj=six.BytesIO(html)).read()
         except:
             pass
+
+        if self._nodecode:
+            return html
 
         try:
             content_type = self._response.headers['content-type']
@@ -390,3 +394,12 @@ class HttpResponse:
         a redirect was followed.
         """
         return self._response.geturl()
+
+    def nodecode(self, nodecode):
+        """
+        Sets whether or not content returns decoded text
+        nodecode (bool): Set to ``True`` to allow content to return undecoded data
+        suitable to write to a binary file
+        """
+        self._nodecode = bool(nodecode)
+        return self
