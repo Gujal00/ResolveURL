@@ -55,7 +55,7 @@ class GoogleResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         video = None
         web_url = self.get_url(host, media_id)
-        if xbmc.getCondVisibility('System.HasAddon(plugin.video.gdrive)') and self.get_setting('use_gdrive'):
+        if xbmc.getCondVisibility('System.HasAddon(plugin.video.gdrive)') and self.get_setting('GoogleResolver_use_gdrive'):
             doc_id = re.search(r'[-\w]{25,}', web_url)
             if doc_id:
                 common.kodi.notify(header=None, msg='Resolving with GDRIVE', duration=3000)
@@ -126,7 +126,8 @@ class GoogleResolver(ResolveUrl):
             response = self.net.http_GET(link)
             sources = self.__parse_gplus(response.content)
         elif 'drive.google' in link or 'docs.google' in link:
-            link = link.replace("/preview", "/edit")
+            link = re.findall('/file/.*?/([^/]+)', link)[0]
+            link = 'https://drive.google.com/get_video_info?docid=' + link
             response = self.net.http_GET(link)
             sources = self._parse_gdocs(response.content)
         elif 'youtube.googleapis.com' in link:
@@ -142,7 +143,7 @@ class GoogleResolver(ResolveUrl):
             response = self.net.http_GET(link)
             source = re.search(r'''['"]play_url["']\s*:\s*["']([^"']+)''', response.content)
             if source:
-                sources = [("Unknown Quality", source.group(1).decode('unicode-escape'))]
+                sources = [("Unknown Quality", source.group(1).decode('unicode-escape') if six.PY2 else source.group(1))]
         return response, sources
 
     def __parse_gplus(self, html):
@@ -172,7 +173,7 @@ class GoogleResolver(ResolveUrl):
                                                 sources = self.__extract_video(item2)
                                                 if sources:
                                                     return sources
-            except Exception as _:
+            except Exception as e:
                 pass
         return sources
 
@@ -189,7 +190,7 @@ class GoogleResolver(ResolveUrl):
                                         if isinstance(item4, six.text_type) and six.PY2:  # @big change
                                             item4 = item4.encode('utf-8')
                                         if isinstance(item4, six.string_types) and six.PY2:  # @big change
-                                            item4 = urllib_parse.unquote(item4).decode('unicode_escape')
+                                            item4 = urllib_parse.unquote(item4).decode('unicode_escape') if six.PY2 else urllib_parse.unquote(item4)
                                             for match in re.finditer('url=(?P<link>[^&]+).*?&itag=(?P<itag>[^&]+)', item4):
                                                 link = match.group('link')
                                                 itag = match.group('itag')
@@ -201,19 +202,19 @@ class GoogleResolver(ResolveUrl):
 
     def _parse_gdocs(self, html):
         urls = []
-        for match in re.finditer(r'\[\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\]', html):
-            key, value = match.groups()
-            if key == 'fmt_stream_map':
-                items = value.split(',')
-                for item in items:
-                    _source_itag, source_url = item.split('|')
-                    if isinstance(source_url, six.text_type) and six.PY2:  # @big change
-                        source_url = source_url.encode('utf-8')
-                    source_url = source_url.decode('unicode_escape')
-                    quality = self.itag_map.get(_source_itag, 'Unknown Quality [%s]' % _source_itag)
-                    source_url = urllib_parse.unquote(source_url)
-                    urls.append((quality, source_url))
-                return urls
+        if 'error' in html:
+            raise ResolverError('File not found')
+        value = urllib_parse.unquote(re.findall('fmt_stream_map=([^&]+)', html)[0])
+        items = value.split(',')
+        for item in items:
+            _source_itag, source_url = item.split('|')
+            if isinstance(source_url, six.text_type) and six.PY2:  # @big change
+                source_url = source_url.decode('unicode_escape').encode('utf-8')
+            # source_url = source_url.decode('unicode_escape')
+            quality = self.itag_map.get(_source_itag, 'Unknown Quality [%s]' % _source_itag)
+            source_url = urllib_parse.unquote(source_url)
+            urls.append((quality, source_url))
+        return urls
 
         return urls
 

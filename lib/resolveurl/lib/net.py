@@ -384,9 +384,16 @@ class HttpResponse:
         """Returns headers returned by the server.
         If as_dict is True, headers are returned as a dictionary otherwise a list"""
         if as_dict:
-            return dict([(item[0].title(), item[1]) for item in list(self._response.info().items())])
+            hdrs = {}
+            for item in list(self._response.info().items()):
+                if item[0].title() not in list(hdrs.keys()):
+                    hdrs.update({item[0].title(): item[1]})
+                else:
+                    hdrs.update({item[0].title(): ','.join([hdrs[item[0].title()], item[1]])})
+            # return dict([(item[0].title(), item[1]) for item in list(self._response.info().items())])
+            return hdrs
         else:
-            return self._response.info()._headers
+            return self._response.info()._headers if six.PY3 else [(x.split(':')[0].strip(), x.split(':')[1].strip()) for x in self._response.info().headers]
 
     def get_url(self):
         """
