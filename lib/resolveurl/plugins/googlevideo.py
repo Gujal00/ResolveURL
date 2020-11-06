@@ -20,10 +20,12 @@ from resolveurl import common, hmf
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.plugins.lib import helpers
 import re
-import xbmc
+from kodi_six import xbmc, xbmcaddon
+import xbmcvfs
 import json
 from six.moves import urllib_error, urllib_parse, urllib_request
 import six
+import sqlite3
 
 
 class GoogleResolver(ResolveUrl):
@@ -55,11 +57,23 @@ class GoogleResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         video = None
         web_url = self.get_url(host, media_id)
-        if xbmc.getCondVisibility('System.HasAddon(plugin.video.gdrive)') and self.get_setting('GoogleResolver_use_gdrive'):
+
+        if xbmc.getCondVisibility('System.HasAddon(plugin.googledrive)') and self.get_setting('use_gdrive') == "true":
+            addon = xbmcaddon.Addon('plugin.googledrive')
+            if six.PY3:
+                db = xbmcvfs.translatePath(addon.getAddonInfo('profile')) + 'accounts.db'
+            else:
+                db = xbmc.translatePath(addon.getAddonInfo('profile')) + 'accounts.db'
+            conn = sqlite3.connect(db)
+            c = conn.cursor()
+            c.execute("SELECT key FROM store;")
+            driveid = c.fetchone()[0]
+            conn.close()
+
             doc_id = re.search(r'[-\w]{25,}', web_url)
             if doc_id:
-                common.kodi.notify(header=None, msg='Resolving with GDRIVE', duration=3000)
-                video = 'plugin://plugin.video.gdrive/?mode=video&amp;instance=gdrive1&amp;filename=%s&amp;content_type=video' % doc_id.group(1)
+                common.kodi.notify(header=None, msg='Resolving with Google Drive', duration=3000)
+                video = 'plugin://plugin.googledrive/?action=play&content_type=video&driveid={0}&item_id={1}'.format(driveid, doc_id.group(0))
 
         if not video:
             response, video_urls = self._parse_google(web_url)
@@ -173,7 +187,7 @@ class GoogleResolver(ResolveUrl):
                                                 sources = self.__extract_video(item2)
                                                 if sources:
                                                     return sources
-            except Exception as e:
+            except:
                 pass
         return sources
 
@@ -203,14 +217,14 @@ class GoogleResolver(ResolveUrl):
     def _parse_gdocs(self, html):
         urls = []
         if 'error' in html:
-            raise ResolverError('File not found')
+            reason = urllib_parse.unquote_plus(re.findall('reason=([^&]+)', html)[0])
+            raise ResolverError(reason)
         value = urllib_parse.unquote(re.findall('fmt_stream_map=([^&]+)', html)[0])
         items = value.split(',')
         for item in items:
             _source_itag, source_url = item.split('|')
             if isinstance(source_url, six.text_type) and six.PY2:  # @big change
                 source_url = source_url.decode('unicode_escape').encode('utf-8')
-            # source_url = source_url.decode('unicode_escape')
             quality = self.itag_map.get(_source_itag, 'Unknown Quality [%s]' % _source_itag)
             source_url = urllib_parse.unquote(source_url)
             urls.append((quality, source_url))
@@ -240,5 +254,5 @@ class GoogleResolver(ResolveUrl):
     @classmethod
     def get_settings_xml(cls):
         xml = super(cls, cls).get_settings_xml()
-        xml.append('<setting id="%s_use_gdrive" type="bool" label="Use external GDrive addon if installed" default="false"/>' % (cls.__name__))
+        xml.append('<setting id="%s_use_gdrive" type="bool" label="Use external Googledrive addon if installed" default="false"/>' % (cls.__name__))
         return xml

@@ -15,10 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import xbmcaddon
-import xbmcplugin
-import xbmcgui
-import xbmc
+from kodi_six import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 import xbmcvfs
 from six.moves import urllib_parse
 import six
@@ -37,15 +34,15 @@ _log = xbmc.log
 
 
 def get_path():
-    return addon.getAddonInfo('path') if six.PY3 else addon.getAddonInfo('path').decode('utf-8')
+    return addon.getAddonInfo('path')
 
 
 def get_profile():
-    return addon.getAddonInfo('profile') if six.PY3 else addon.getAddonInfo('profile').decode('utf-8')
+    return addon.getAddonInfo('profile')
 
 
 def translate_path(path):
-    return xbmcvfs.translatePath(path) if six.PY3 else xbmc.translatePath(path).decode('utf-8')
+    return xbmcvfs.translatePath(path) if six.PY3 else xbmc.translatePath(path)
 
 
 def set_setting(id, value):
