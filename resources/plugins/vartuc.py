@@ -18,6 +18,7 @@
 
 import re
 from resolveurl import common
+from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
@@ -28,21 +29,19 @@ class VartucResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        self.headers = {'User-Agent': common.RAND_UA,
-                        'Referer': web_url}
-        html = self.net.http_GET(web_url, headers=self.headers).content
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'Referer': 'https://{0}/'.format(host)}
+        html = self.net.http_GET(web_url, headers=headers).content
         js_link = re.compile("src='(/kt_player/.*?)'", re.DOTALL | re.IGNORECASE).search(html).group(1)
-        js_path = 'https://' + self.domains[0] + js_link + '&ver=x'
-        js = self.net.http_GET(js_path, headers=self.headers).content
-        js = js.split(";")
-        js = [line for line in js if (line.startswith("gh") or line.startswith("irue842")) and '=' in line and '(' not in line and ')' not in line]
-        js = "\n".join(js)
-        exec(js)
-        try:
-            vid = re.compile('src="([^"]+)"', re.DOTALL | re.IGNORECASE).search(irue842).group(1)
-            return vid
-        except (AttributeError, NameError):
-            raise ResolverError('Video not found')
+        js_path = 'https://{0}{1}'.format(host, js_link)
+        js = self.net.http_GET(js_path, headers=headers).content
+        gvars = re.findall(r'(g\w{4}=".")', js)
+        vurl = re.search(r'video_url:([^,]+)', js)
+        if vurl:
+            for gvar in gvars:
+                exec(gvar)
+            return eval(vurl.group(1)) + helpers.append_headers(headers)
+        raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
