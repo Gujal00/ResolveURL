@@ -19,13 +19,12 @@
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from six.moves import urllib_request, urllib_error
 
 
 class StreamzResolver(ResolveUrl):
     name = "streamz"
-    domains = ['streamz.cc', "streamz.vg"]
-    pattern = r'(?://|\.)(streamz\.(?:cc|vg))/([0-9a-zA-Z]+)'
+    domains = ['streamz.cc', "streamz.vg", "streamzz.to"]
+    pattern = r'(?://|\.)(streamzz?\.(?:cc|vg|to))/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
 
@@ -38,25 +37,10 @@ class StreamzResolver(ResolveUrl):
 
         if sources:
             headers.update({'Referer': web_url})
-            return self._redirect_test(helpers.pick_source(sources)) + helpers.append_headers(headers)
-        else:
-            raise ResolverError("Video not found")
+            return helpers.get_redirect_url(helpers.pick_source(sources).replace('getIink', 'getlink'), headers) + helpers.append_headers(headers)
+
+        raise ResolverError("Video not found")
 
     def get_url(self, host, media_id):
 
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
-
-    def _redirect_test(self, url):
-        opener = urllib_request.build_opener()
-        opener.addheaders = [('User-agent', common.CHROME_USER_AGENT)]
-        try:
-            resp = opener.open(url)
-            if url != resp.geturl():
-                return resp.geturl()
-            else:
-                return url
-        except urllib_error.HTTPError as e:
-            if e.code == 403:
-                if url != e.geturl():
-                    return e.geturl()
-            raise ResolverError('File not found')
+        return self._default_get_url(host, media_id, template='https://streamz.vg/{media_id}')

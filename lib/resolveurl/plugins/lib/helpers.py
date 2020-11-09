@@ -299,12 +299,7 @@ def fun_decode(vu, lc, hr='16'):
 
 
 def get_redirect_url(url, headers={}):
-    class NoRedirection(urllib_request.HTTPErrorProcessor):
-        def http_response(self, request, response):
-            return response
-
-    opener = urllib_request.build_opener(NoRedirection, urllib_request.HTTPHandler)
-    urllib_request.install_opener(opener)
     request = urllib_request.Request(url, headers=headers)
+    request.get_method = lambda: 'HEAD'
     response = urllib_request.urlopen(request)
     return response.geturl()
