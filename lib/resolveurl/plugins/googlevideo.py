@@ -20,8 +20,7 @@ from resolveurl import common, hmf
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.plugins.lib import helpers
 import re
-from kodi_six import xbmc, xbmcaddon
-import xbmcvfs
+from kodi_six import xbmc, xbmcaddon, xbmcvfs
 import json
 from six.moves import urllib_error, urllib_parse, urllib_request
 import six
