@@ -1,15 +1,14 @@
-Version 5.1.13 (November 7, 2020)
+Version 5.1.14 (November 17, 2020)
 - Code Base Changes:
-    - Captcha_lib improvements
-    - Fix some Unicode warnings
-    - Fix fetching cookies from response headers
+    - None
 
 - Resolvers Added:
-    - StreamSB
+    - Letsupload
  
 - Resolvers Fixed/Updated:
-    - Googlevideo plugin now uses GoogleDrive addon instead of Gdrive
-    - Vidoza
+    - FEmbed
+    - Streamz
+    - Streamtape
 
 - Resolvers Removed
     - None
