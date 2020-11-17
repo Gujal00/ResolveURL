@@ -35,7 +35,7 @@ class StreamTapeResolver(ResolveUrl):
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
         r = self.net.http_GET(web_url, headers=headers)
-        src = re.search(r'"videolink"\).+?"([^"]+)', r.content)
+        src = re.search(r"videolink'.+?innerHTML']='([^']+)", r.content)
         if src:
             src_url = 'https:' + src.group(1) if src.group(1).startswith('//') else src.group(1)
             src_url += '&stream=1'
