@@ -16,7 +16,8 @@
 """
 import re
 import sys
-from six.moves import urllib_parse
+import six
+from six.moves import urllib_parse, range
 import string
 
 
@@ -115,7 +116,7 @@ class JSUnfuck(object):
                 break
 
     def repl_uniqs(self, uniqs):
-        for key, value in list(uniqs.items()):
+        for key, value in six.iteritems(uniqs):
             if key in self.js:
                 if value == 1:
                     self.__handle_tostring()
