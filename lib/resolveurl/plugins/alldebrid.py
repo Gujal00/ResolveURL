@@ -108,10 +108,10 @@ class AllDebridResolver(ResolveUrl):
         url = '{0}/magnet/instant?agent={1}&apikey={2}&magnets[]={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), media_id.lower())
         result = self.net.http_GET(url, headers=self.headers).content
         result = json.loads(result)
-        if result.get('status', False) == "success":
+        if result.get('status') == "success":
             magnets = result.get('data').get('magnets')
             for magnet in magnets:
-                if media_id == magnet.get('magnet') or media_id == magnet.get('hash'):
+                if media_id.lower() == magnet.get('magnet').lower() or media_id.lower() == magnet.get('hash').lower():
                     response = magnet.get('instant', False)
                     return response
 
@@ -337,5 +337,5 @@ class AllDebridResolver(ResolveUrl):
         return cls.get_setting('enabled') == 'true' and cls.get_setting('token')
 
     @classmethod
-    def isUniversal(self):
+    def isUniversal(cls):
         return True
