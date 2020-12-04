@@ -144,15 +144,14 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
             match = r.groupdict()
             stream_url = match['url'].replace('&amp;', '&')
             file_name = urllib_parse.urlparse(stream_url[:-1]).path.split('/')[-1] if stream_url.endswith("/") else urllib_parse.urlparse(stream_url).path.split('/')[-1]
-            blocked = not file_name or any(item in file_name.lower() for item in _blacklist)
+            label = match.get('label', file_name)
+            if label is None:
+                label = file_name
+            blocked = not file_name or any(item in file_name.lower() for item in _blacklist) or any(item in label for item in _blacklist)
             if stream_url.startswith('//'):
                 stream_url = scheme + ':' + stream_url
             if '://' not in stream_url or blocked or (stream_url in streams) or any(stream_url == t[1] for t in source_list):
                 continue
-
-            label = match.get('label', file_name)
-            if label is None:
-                label = file_name
             labels.append(label)
             streams.append(stream_url)
 
