@@ -224,7 +224,6 @@ class HostedMediaFile:
                     if resolver.valid_url(self._url, self._domain):
                         resolvers.append(resolver)
                 except:
-                    # print sys.exc_info()
                     continue
 
             self.__resolvers = resolvers

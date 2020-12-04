@@ -30,8 +30,7 @@ import re
 from six.moves import urllib_parse
 import six
 import sys
-import xbmcvfs
-import xbmcgui
+from kodi_six import xbmcvfs, xbmcgui
 from resolveurl import common
 from resolveurl.hmf import HostedMediaFile
 from resolveurl.resolver import ResolveUrl
