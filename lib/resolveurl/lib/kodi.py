@@ -126,7 +126,7 @@ else:
 
 def i18n(string_id):
     try:
-        return addon.getLocalizedString(strings.STRINGS[string_id])
+        return six.ensure_str(addon.getLocalizedString(strings.STRINGS[string_id]))
     except Exception as e:
         _log('Failed String Lookup: %s (%s)' % (string_id, e))
         return string_id
