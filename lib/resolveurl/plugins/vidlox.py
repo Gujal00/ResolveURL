@@ -36,7 +36,7 @@ class VidloxResolver(ResolveUrl):
 
         _srcs = re.search(r'sources\s*:\s*\[(.+?)\]', html)
         if _srcs:
-            srcs = helpers.scrape_sources(_srcs.group(1), patterns=['''["'](?P<url>http[^"']+)'''], result_blacklist=['.mp4'])
+            srcs = helpers.scrape_sources(_srcs.group(1), patterns=['''["'](?P<url>http[^"']+)'''])
             if srcs:
                 headers.update({'Referer': web_url})
                 return helpers.pick_source(srcs) + helpers.append_headers(headers)
