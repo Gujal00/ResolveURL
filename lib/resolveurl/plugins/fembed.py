@@ -25,10 +25,11 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class FembedResolver(ResolveUrl):
     name = "fembed"
-    domains = ["fembed.com", "anime789.com", "24hd.club", "vcdn.io", "sharinglink.club", "votrefiles.club", "there.to",
-               "femoload.xyz", "feurl.com", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live", "femax20.com",
-               "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com", "fcdn.stream", "sexhd.co"]
-    pattern = r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|votrefiles?|femoload|dailyplanet|jplayer|there|sexhd|gcloud|xstreamcdn|vcdnplay|vidohd|vidsource|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co))/v/([a-zA-Z0-9-]+)'
+    domains = ["fembed.com", "anime789.com", "24hd.club", "vcdn.io", "sharinglink.club", "votrefiles.club",
+               "femoload.xyz", "feurl.com", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
+               "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com", "fcdn.stream",
+               "mediashore.org", "there.to", "femax20.com", "sexhd.co"]
+    pattern = r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|votrefiles?|femoload|dailyplanet|jplayer|there|sexhd|gcloud|mediashore|xstreamcdn|vcdnplay|vidohd|vidsource|zidiplay)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co|org))/v/([a-zA-Z0-9-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
