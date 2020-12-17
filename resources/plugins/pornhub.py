@@ -32,28 +32,33 @@ class PornHubResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        fvars = re.search(r"flashvars(?!')[^{]+([^;]+)", html)
+        sources = []
+        fvars = re.search(r"qualityItems[^\[]+([^;]+)", html)
         if fvars:
-            sources = json.loads(fvars.group(1)).get('mediaDefinitions', [])
-            sources = [(item.get("quality"), item.get("videoUrl")) for item in sources if item.get('format') != "hls" and item.get("videoUrl") != ""]
-            if sources:
-                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+            try:
+                sources = json.loads(fvars.group(1))
+                sources = [(src.get('text'), src.get('url')) for src in sources if src.get('url')]
+            except:
+                pass
 
-        vars = re.findall(r'var\s+(.+?)\s*=\s*(.+?);', html)
-        links = re.findall(r'quality_(\d+)p\s*=\s*(.+?);', html)
-        if links:
-            sources = []
-            for source in links:
-                link = [i.strip() for i in source[1].split('+')]
-                link = [i for i in link if i.startswith('*/')]
-                link = [re.sub(r'^\*/', '', i) for i in link]
-                link = [(i, [x[1] for x in vars if x[0] == i]) for i in link]
-                link = [i[1][0] if i[1] else i[0] for i in link]
+        if not sources:
+            sections = re.findall(r'(var\sra[a-z0-9]+=.+?);flash', html)
+            for section in sections:
+                pvars = re.findall(r'var\s(ra[a-z0-9]+)=([^;]+)', section)
+                link = re.findall(r'var\smedia_\d+=([^;]+)', section)[0]
+                link = re.sub(r"/\*.+?\*/", '', link)
+                for key, value in pvars:
+                    link = re.sub(key, value, link)
+                link = link.replace('"', '').split('+')
+                link = [i.strip() for i in link]
                 link = ''.join(link)
-                link = re.sub(r'\s|\+|\'|\"', '', link)
-                sources.append([source[0], link])
-            if sources:
-                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+                if 'hls' not in link:
+                    r = re.findall(r'(\d+p)', link, re.I)
+                    qual = r[0] if r else 'auto'
+                    sources.append((qual, link))
+
+        if sources:
+            return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
