@@ -1,12 +1,17 @@
-Version 5.1.17 (December 07, 2020)
+Version 5.1.18 (December 19, 2020)
 - Code Base Changes:
-    - Regression error with PY2
+    - None
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - None 
+    - Dailymotion
+    - Fembed
+    - Streamz
+    - Upstream
+    - Vidlox
+    - Youdbox 
 
 - Resolvers Removed
     - None
