@@ -32,6 +32,7 @@ class HDvidResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         sources = helpers.scrape_sources(html)
         if sources:
+            headers.update({'verifypeer': 'false'})
             return helpers.pick_source(sources) + helpers.append_headers(headers)
         raise ResolverError('Video cannot be located.')
 
