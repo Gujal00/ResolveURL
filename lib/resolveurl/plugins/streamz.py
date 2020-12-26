@@ -40,6 +40,7 @@ class StreamzResolver(ResolveUrl):
             headers.update({'Referer': web_url})
             vurl = helpers.pick_source(sources)
             vurl = re.sub('get[a-zA-Z]{4}-', 'getlink-', vurl)
+            vurl = re.sub('get[a-zA-Z]{5}-', 'getlink-', vurl)
             return helpers.get_redirect_url(vurl, headers) + helpers.append_headers(headers)
 
         raise ResolverError("Video not found")
