@@ -10,3 +10,4 @@ doc/resources
 .settings
 .idea
 *~
+.vscode
