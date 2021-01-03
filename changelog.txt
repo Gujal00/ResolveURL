@@ -1,4 +1,4 @@
-Version 5.1.18 (December 19, 2020)
+Version 5.1.19 (January 3, 2021)
 - Code Base Changes:
     - None
 
@@ -6,12 +6,10 @@ Version 5.1.18 (December 19, 2020)
     - None
  
 - Resolvers Fixed/Updated:
-    - Dailymotion
-    - Fembed
+    - HDVid
+    - Playtube
     - Streamz
-    - Upstream
-    - Vidlox
-    - Youdbox 
+    - StreamTape
 
 - Resolvers Removed
     - None
