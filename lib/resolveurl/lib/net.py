@@ -19,6 +19,7 @@ import random
 from six.moves import http_cookiejar
 import gzip
 import re
+import json
 import six
 from six.moves import urllib_request, urllib_parse
 import socket
@@ -216,7 +217,7 @@ class Net:
         """
         return self._fetch(url, headers=headers, compression=compression)
 
-    def http_POST(self, url, form_data, headers={}, compression=True):
+    def http_POST(self, url, form_data, headers={}, compression=True, jdata=False):
         """
         Perform an HTTP POST request.
 
@@ -236,7 +237,7 @@ class Net:
             An :class:`HttpResponse` object containing headers and other
             meta-information about the page and the page content.
         """
-        return self._fetch(url, form_data, headers=headers, compression=compression)
+        return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata)
 
     def http_HEAD(self, url, headers={}):
         """
@@ -284,7 +285,7 @@ class Net:
         response = urllib_request.urlopen(request)
         return HttpResponse(response)
 
-    def _fetch(self, url, form_data={}, headers={}, compression=True):
+    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False):
         """
         Perform an HTTP GET or POST request.
 
@@ -307,7 +308,9 @@ class Net:
         """
         req = urllib_request.Request(url)
         if form_data:
-            if isinstance(form_data, six.string_types):
+            if jdata:
+                form_data = json.dumps(form_data)
+            elif isinstance(form_data, six.string_types):
                 form_data = form_data
             else:
                 form_data = urllib_parse.urlencode(form_data, True)
@@ -318,6 +321,8 @@ class Net:
             req.add_header(key, headers[key])
         if compression:
             req.add_header('Accept-Encoding', 'gzip')
+        if jdata:
+            req.add_header('Content-Type', 'application/json')
         host = req.host if six.PY3 else req.get_host()
         req.add_unredirected_header('Host', host)
         response = urllib_request.urlopen(req, timeout=15)
