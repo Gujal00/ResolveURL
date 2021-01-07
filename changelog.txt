@@ -1,14 +1,11 @@
-Version 5.1.19 (January 3, 2021)
+Version 5.1.20 (January 7, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - k2s
  
 - Resolvers Fixed/Updated:
-    - HDVid
-    - Playtube
-    - Streamz
     - StreamTape
 
 - Resolvers Removed
