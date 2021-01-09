@@ -30,16 +30,22 @@ class PornHubResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': 'https://www.{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers=headers).content
         sources = []
-        fvars = re.search(r"qualityItems[^\[]+([^;]+)", html)
-        if fvars:
-            try:
-                sources = json.loads(fvars.group(1))
-                sources = [(src.get('text'), src.get('url')) for src in sources if src.get('url')]
-            except:
-                pass
+
+        qvars = re.search(r'qualityItems_[^\[]+(.+?)";', html)
+        if qvars:
+            sources = json.loads(qvars.group(1).replace('\\', ''))
+            sources = [(src.get('text'), src.get('url')) for src in sources if src.get('url')]
+
+        if not sources:
+            fvars = re.search(r'flashvars_\d+\s*=\s*(.+?);\s', html)
+            if fvars:
+                sources = json.loads(fvars.group(1)).get('mediaDefinitions')
+                sources = [(src.get('quality'), src.get('videoUrl')) for src in sources if
+                           type(src.get('quality')) is not list and src.get('videoUrl')]
 
         if not sources:
             sections = re.findall(r'(var\sra[a-z0-9]+=.+?);flash', html)
@@ -52,12 +58,13 @@ class PornHubResolver(ResolveUrl):
                 link = link.replace('"', '').split('+')
                 link = [i.strip() for i in link]
                 link = ''.join(link)
-                if 'hls' not in link:
+                if 'urlset' not in link:
                     r = re.findall(r'(\d+p)', link, re.I)
-                    qual = r[0] if r else 'auto'
-                    sources.append((qual, link))
+                    if r:
+                        sources.append((r[0], link))
 
         if sources:
+            headers.update({'Origin': 'https://www.{0}'.format(host)})
             return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
