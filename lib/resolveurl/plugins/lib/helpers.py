@@ -310,7 +310,7 @@ def girc(page_data, url, co):
     Copyright (C) 2021 ADDON-LAB, KAR10S
     """
     net = common.Net()
-    hdrs = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0',
+    hdrs = {'User-Agent': common.FF_USER_AGENT,
             'Referer': url}
     rurl = 'https://www.google.com/recaptcha/api.js'
     aurl = 'https://www.google.com/recaptcha/api2/anchor'
