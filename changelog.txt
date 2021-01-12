@@ -1,15 +1,19 @@
-Version 5.1.20 (January 7, 2021)
+Version 5.1.21 (January 12, 2021)
 - Code Base Changes:
-    - None
+    - helpers
 
 - Resolvers Added:
-    - k2s
+    - evoload
+    - gamovideo
+    - videos.sh
  
 - Resolvers Fixed/Updated:
-    - StreamTape
+    - tvlogy
+    - speedwatch
 
 - Resolvers Removed
-    - None
+    - jetload
+    - vidup
 
 - Languages Added/Updated
     - None
