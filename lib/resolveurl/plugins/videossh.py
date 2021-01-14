@@ -27,7 +27,7 @@ class VideosShResolver(ResolveGeneric):
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''src:\s*["'](?P<url>[^'"]+)'''],
+                                     patterns=[r'''(?:src|file):\s*["'](?P<url>[^'"]+)'''],
                                      generic_patterns=False)
 
     def get_url(self, host, media_id):
