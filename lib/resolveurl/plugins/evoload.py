@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class EvoLoadResolver(ResolveUrl):
     name = "evoload"
     domains = ["evoload.io"]
-    pattern = r'(?://|\.)(evoload\.io)/(?:e|f)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(evoload\.io)/(?:e|f|v)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         surl = 'https://evoload.io/SecurePlayer'
