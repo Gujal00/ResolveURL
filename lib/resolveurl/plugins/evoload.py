@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
+import json
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -42,10 +42,11 @@ class EvoLoadResolver(ResolveUrl):
             headers.update({'Origin': rurl[:-1],
                             'X-XSRF-TOKEN': ''})
             shtml = self.net.http_POST(surl, form_data=edata, headers=headers, jdata=True).content
-            r = re.search('"src":"([^"]+)', shtml)
-            if r:
+            r = json.loads(shtml).get('stream')
+            surl = r.get('backup') if r.get('backup') else r.get('src')
+            if surl:
                 headers.pop('X-XSRF-TOKEN')
-                return r.group(1) + helpers.append_headers(headers)
+                return surl + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
