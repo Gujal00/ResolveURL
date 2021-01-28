@@ -1,15 +1,15 @@
-Version 5.1.22 (January 18, 2021)
+Version 5.1.23 (January 29, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - jetload
+    - vidcloud
+    - speedostream
  
 - Resolvers Fixed/Updated:
-    - videossh
-    - voe.sx
     - evoload
-    - doodstream
+    - streamz
+    - debridlink
 
 - Resolvers Removed
     - None
