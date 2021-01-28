@@ -1,10 +1,10 @@
-Version 2.1.8 (January 12, 2021)
+Version 2.1.9 (January 29, 2021)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - pornhub
+    - voyeurhit
 
 - Resolvers Removed
     - None
