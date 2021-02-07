@@ -17,6 +17,7 @@
 """
 
 import re
+import random
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -28,8 +29,11 @@ class TVLogyResolver(ResolveUrl):
     pattern = r'(?://|\.)((?:hls\.)?tvlogy\.to)/(?:embed/|watch\.php\?v=|player/index.php\?data=)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
+        embeds = ['http://bestarticles.me/', 'http://tellygossips.net/']
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'Referer': random.choice(embeds)}
+
         html = self.net.http_GET(web_url, headers=headers).content
 
         if 'Not Found' in html:
