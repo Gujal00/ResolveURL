@@ -27,7 +27,7 @@ class xvideosResolver(ResolveGeneric):
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''setVideo(?:Url)?(?P<label>(?:HLS|High|Low))\(['"](?P<url>[^"']+)''']).replace(' ', '%20')
+                                     patterns=[r'''setVideo(?:Url)?(?P<label>(?:HLS|UrlHigh|UrlLow))\(['"](?P<url>[^"']+)''']).replace(' ', '%20')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://www.{host}/embedframe/{media_id}')
