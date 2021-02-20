@@ -1,12 +1,12 @@
-Version 5.1.24 (February 9, 2021)
+Version 5.1.25 (February 20, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - megaup.net
+    - None
  
 - Resolvers Fixed/Updated:
-    - gofile
+    - fembed
     - tvlogy
 
 
