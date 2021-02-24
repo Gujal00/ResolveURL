@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2016 Gujal
+    Copyright (C) 2016 gujal
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,23 +32,19 @@ class DRTuberResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-
-        try:
-            params = "".join([x.replace("' + '", "") for x in self.between(html, "params += '", "';")])
-            vkey = params.split('=')[-1]
-            m = hashlib.md5()
-            m.update(vkey + 'PT6l13umqV8K827')
-            params += '&pkey=%s' % m.hexdigest()
-            params = urllib_parse.unquote(params)
-            url = 'http://www.drtuber.com/player_config/?' + params
-            sources_html = self.net.http_GET(url, headers=headers).content
-            if sources_html:
-                sources = helpers.scrape_sources(sources_html, patterns=[r"""video_file>\<\!\[CDATA\[(?P<url>[^\]]+)"""])
-                if sources:
-                    return helpers.pick_source(sources) + helpers.append_headers(headers)
-            raise ResolverError('File not found')
-        except:
-            raise ResolverError('File not found')
+        params = "".join([x.replace("' + '", "") for x in self.between(html, "params += '", "';")])
+        vkey = params.split('=')[-1]
+        m = hashlib.md5()
+        m.update((vkey + 'PT6l13umqV8K827').encode('utf-8'))
+        params += '&pkey={0}'.format(m.hexdigest())
+        params = urllib_parse.unquote(params)
+        url = 'https://www.{0}/player_config/?{1}'.format(host, params)
+        sources_html = self.net.http_GET(url, headers=headers).content
+        if sources_html:
+            sources = helpers.scrape_sources(sources_html, patterns=[r"""video_file>\<\!\[CDATA\[(?P<url>[^\]]+)"""])
+            if sources:
+                return helpers.pick_source(sources) + helpers.append_headers(headers)
+        raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://www.{host}/embed/{media_id}')
