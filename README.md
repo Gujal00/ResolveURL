@@ -6,7 +6,6 @@ Include the script in your addon.xml
 
 ```xml
 <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.resolveurl" version="5.0.00"/>
 </requires>
 ```
