@@ -37,14 +37,21 @@ class NinjaStreamResolver(ResolveUrl):
         r = re.search(r'v-bind:stream="([^"]+)', html)
         if r:
             data = json.loads(r.group(1).replace('&quot;', '"'))
-            murl = data.get('host') + data.get('hash') + '/index.m3u8'
+            murl = self.decode(data.get('host')) + data.get('hash') + '/index.m3u8'
             html = self.net.http_GET(murl, headers=headers).content
             sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).*\n(?!#)(?P<url>[^\n]+)', html, re.IGNORECASE)
             if sources:
                 stream_url = urllib_parse.urljoin(murl, helpers.pick_source(helpers.sort_sources_list(sources)))
+                headers.update({'Referer': web_url, 'Origin': 'https://{0}'.format(host)})
                 return stream_url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/watch/{media_id}')
+
+    def decode(self, host):
+        s = ''
+        for n in range(len(host)):
+            s += chr(ord(host[n]) ^ ord('2'))
+        return s
