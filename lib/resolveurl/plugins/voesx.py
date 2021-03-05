@@ -27,7 +27,7 @@ class VoeResolver(ResolveGeneric):
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''mp4":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
+                                     patterns=[r'''(?:mp4|hls)":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
                                      generic_patterns=False)
 
     def get_url(self, host, media_id):
