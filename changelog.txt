@@ -1,14 +1,16 @@
-Version 5.1.25 (February 20, 2021)
+Version 5.1.26 (March 13, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - lbry.tv
+    - odysee.com
+    - cocoscope
  
 - Resolvers Fixed/Updated:
-    - fembed
-    - tvlogy
-
+    - ninjastream
+    - youtube
+    - voe.sx
 
 - Resolvers Removed
     - None
