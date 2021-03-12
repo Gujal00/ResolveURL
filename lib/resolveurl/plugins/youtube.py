@@ -36,3 +36,6 @@ class YoutubeResolver(ResolveUrl):
         xml = super(cls, cls).get_settings_xml()
         xml.append('<setting label="This plugin calls the youtube addon -change settings there." type="lsep" />')
         return xml
+
+    def get_url(self, host, media_id):
+        return 'https://www.youtube.com/get_video_info?html5=1&video_id=%s' % media_id
