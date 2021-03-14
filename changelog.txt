@@ -1,16 +1,12 @@
-Version 5.1.26 (March 13, 2021)
+Version 5.1.27 (March 14, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - lbry.tv
-    - odysee.com
-    - cocoscope
+    - vidmojo
  
 - Resolvers Fixed/Updated:
-    - ninjastream
-    - youtube
-    - voe.sx
+    - None
 
 - Resolvers Removed
     - None
