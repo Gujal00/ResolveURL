@@ -294,6 +294,9 @@ class HostedMediaFile:
 
         return int(http_code) < 400 or int(http_code) == 504
 
+    def __bool__(self):
+        return self.__nonzero__()
+
     def __nonzero__(self):
         if self._valid_url is None:
             return self.valid_url()
