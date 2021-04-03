@@ -1,12 +1,12 @@
-Version 5.1.27 (March 14, 2021)
+Version 5.1.28 (April 3, 2021)
 - Code Base Changes:
-    - None
+    - HostedMediaFile add __bool__ for python 3
 
 - Resolvers Added:
-    - vidmojo
+    - streamoupload
  
 - Resolvers Fixed/Updated:
-    - None
+    - fembed
 
 - Resolvers Removed
     - None
