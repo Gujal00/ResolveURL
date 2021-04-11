@@ -23,8 +23,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class ClipWatchingResolver(ResolveUrl):
     name = "clipwatching"
-    domains = ['clipwatching.com']
-    pattern = r'(?://|\.)(clipwatching\.com)/(?:embed-)?(\w+)'
+    domains = ['clipwatching.com', 'highstream.tv']
+    pattern = r'(?://|\.)((?:clipwatching\.com|highstream.tv))/(?:embed-)?(\w+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
