@@ -23,9 +23,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamzResolver(ResolveUrl):
-    name = "streamz"
-    domains = ['streamz.cc', "streamz.vg", "streamzz.to"]
-    pattern = r'(?://|\.)(streamzz?\.(?:cc|vg|to))/([0-9a-zA-Z]+)'
+    name = 'streamz'
+    domains = ['streamz.cc', 'streamz.vg', 'streamzz.to', 'streamz.ws']
+    pattern = r'(?://|\.)(streamzz?\.(?:cc|vg|to|ws))/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
 
@@ -44,7 +44,7 @@ class StreamzResolver(ResolveUrl):
                 vurl = re.sub('get[a-zA-Z]{5}-', 'getlink-', vurl)
                 return helpers.get_redirect_url(vurl, headers) + helpers.append_headers(headers)
 
-        raise ResolverError("Video not found or removed")
+        raise ResolverError('Video not found or removed')
 
     def get_url(self, host, media_id):
 
