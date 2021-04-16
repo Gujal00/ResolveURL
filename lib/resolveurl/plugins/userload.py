@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.plugins.lib import helpers, jsunhunt
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -29,26 +29,34 @@ class UserLoadResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
+        blurl = 'https://{0}/api/assets/userload/js/form.framework.js'.format(host)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         html = helpers.get_packed_data(html)
-        r1 = re.search(r'cdbadffabaac\s*=\s*"([^"]+)', html)
-        r2 = re.search(r'fcaecbefcaec\s*=\s*"([^"]+)', html)
-        if r1 and r2:
-            api_url = 'https://{0}/api/dline/'.format(host)
-            data = {
-                'hawk': r1.group(1),
-                'eye': r2.group(1)
-            }
-            headers.update({
-                'X-Requested-With': 'XMLHttpRequest',
-                'Origin': 'https://{0}'.format(host),
-                'Referer': web_url
-            })
-            stream_url = self.net.http_POST(api_url, data, headers=headers).content
-            headers.pop('X-Requested-With')
-            stream_url = helpers.get_redirect_url(stream_url, headers)
-            return stream_url + helpers.append_headers(headers)
+        bl = self.net.http_GET(blurl, headers=headers).content
+        if jsunhunt.detect(bl):
+            bl = jsunhunt.unhunt(bl)
+        b1 = re.search(r'url:\s*"([^"]+)', bl)
+        b2 = re.search(r'data:\s*{([^}]+)', bl)
+        if b1 and b2:
+            bd = re.findall(r'"([^"]+)":\s*([^,\s]+)', b2.group(1))
+            data = {}
+            for key, var in bd:
+                r = re.search(r'{0}\s*=\s*"([^"]+)'.format(var), html)
+                if r:
+                    data.update({key: r.group(1)})
+
+            if data:
+                api_url = 'https://{0}{1}'.format(host, b1.group(1))
+                headers.update({
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Origin': 'https://{0}'.format(host),
+                    'Referer': web_url
+                })
+                stream_url = self.net.http_POST(api_url, data, headers=headers).content
+                headers.pop('X-Requested-With')
+                stream_url = helpers.get_redirect_url(stream_url, headers)
+                return stream_url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
