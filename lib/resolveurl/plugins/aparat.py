@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class AparatResolver(ResolveUrl):
     name = "aparat"
-    domains = ['aparat.cam']
-    pattern = r'(?://|\.)(aparat\.cam)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['aparat.cam', 'wolfstream.tv']
+    pattern = r'(?://|\.)((?:aparat\.cam|wolfstream\.tv))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -39,7 +39,7 @@ class AparatResolver(ResolveUrl):
 
         match = re.search(r'&hash=([^&]+)', html)
         if match:
-            web_url = 'https://{0}/dl?op=download_orig&id={1}&mode=o&hash={2}'.format(host, media_id, match.group(1))
+            web_url = 'https://wolfstream.tv/dl?op=download_orig&id={0}&mode=o&hash={1}'.format(media_id, match.group(1))
             html2 = self.net.http_GET(web_url, headers=headers).content
             r = re.search(r'<a\s*href="([^"]+)[^>]+>Direct', html2)
             if r:
@@ -55,4 +55,4 @@ class AparatResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, 'https://{host}/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, 'https://wolfstream.tv/embed-{media_id}.html')
