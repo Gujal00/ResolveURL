@@ -23,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class HDvidResolver(ResolveUrl):
     name = 'HDvid'
-    domains = ['hdvid.tv']
+    domains = ['hdvid.tv', 'hdvid.fun']
     pattern = r'(?://|\.)(hdvid\.(?:tv|fun))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
