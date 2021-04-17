@@ -45,7 +45,7 @@ class AparatResolver(ResolveUrl):
             if r:
                 return r.group(1) + helpers.append_headers(headers)
 
-        match = re.search(r'src:\s*"([^"]+)', html)
+        match = re.search(r'(?:src|file):\s*"([^"]+)', html)
         if match:
             html2 = self.net.http_GET(match.group(1), headers=headers).content
             sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).+\n(?!#)(?P<url>[^\n]+)', html2, re.IGNORECASE)
