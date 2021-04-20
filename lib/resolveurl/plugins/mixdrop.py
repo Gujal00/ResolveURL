@@ -22,8 +22,8 @@ from resolveurl.plugins.lib import helpers
 
 class MixdropResolver(ResolveUrl):
     name = "mixdrop"
-    domains = ["mixdrop.co", "mixdrop.to"]
-    pattern = r'(?://|\.)(mixdrop\.[ct]o)/(?:f|e)/(\w+)'
+    domains = ["mixdrop.co", "mixdrop.to", "mixdrop.sx"]
+    pattern = r'(?://|\.)(mixdrop\.(?:co|to|sx))/(?:f|e)/(\w+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
