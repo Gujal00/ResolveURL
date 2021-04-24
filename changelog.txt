@@ -1,12 +1,18 @@
-Version 5.1.28 (April 3, 2021)
+Version 5.1.29 (April 24, 2021)
 - Code Base Changes:
-    - HostedMediaFile add __bool__ for python 3
+    - update Firefox UA
 
 - Resolvers Added:
-    - streamoupload
+    - userload
  
 - Resolvers Fixed/Updated:
-    - fembed
+    - ninjastream
+    - clipwatching
+    - streamz
+    - aparat
+    - mixdrop
+    - hdvid
+    - cloud.mail.ru
 
 - Resolvers Removed
     - None
