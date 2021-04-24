@@ -42,10 +42,13 @@ class NinjaStreamResolver(ResolveUrl):
         html = self.net.http_POST(api_url, data, headers=headers, jdata=True).content
         r = json.loads(html).get('result').get('playlist')
         if r:
-            data = json.loads(r)
-            ct = data.get('ct')
-            salt = codecs.decode(data.get('s'), 'hex')
-            murl = json.loads(jscrypto.decode(ct, '2021', salt))
+            if '{' in r:
+                data = json.loads(r)
+                ct = data.get('ct', False)
+                salt = codecs.decode(data.get('s'), 'hex')
+                murl = json.loads(jscrypto.decode(ct, '2021', salt))
+            else:
+                murl = r
             headers.pop('X-Requested-With')
             html = self.net.http_GET(murl, headers=headers).content
             sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).*\n(?!#)(?P<url>[^\n]+)', html, re.IGNORECASE)
