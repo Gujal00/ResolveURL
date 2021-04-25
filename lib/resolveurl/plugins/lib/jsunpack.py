@@ -1,6 +1,7 @@
 """
-    resolveurl XBMC Addon
-    Copyright (C) 2018 jsergio
+    ResolveUrl Kodi Addon
+    Copyright (C) 2013 Bstrdsmkr
+    Additional fixes by mortael, jairoxyz
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,13 +33,37 @@
 """
 
 import re
+import six
 
 PRIORITY = 1
 
 
 def detect(source):
+    global beginstr
+    global endstr
+    beginstr = ""
+    endstr = ""
+    begin_offset = -1
     """Detects whether `source` is P.A.C.K.E.R. coded."""
-    return source.replace(' ', '').startswith('eval(function(p,a,c,k,e,')
+    mystr = re.search(
+        r"eval[ ]*\([ ]*function[ ]*\([ ]*p[ ]*,[ ]*a[ ]*,[ ]*c["
+        r" ]*,[ ]*k[ ]*,[ ]*e[ ]*,[ ]*",
+        source,
+    )
+    if mystr:
+        begin_offset = mystr.start()
+        beginstr = source[:begin_offset]
+    if begin_offset != -1:
+        """ Find endstr"""
+        source_end = source[begin_offset:]
+        if source_end.split("')))", 1)[0] == source_end:
+            try:
+                endstr = source_end.split("}))", 1)[1]
+            except IndexError:
+                endstr = ""
+        else:
+            endstr = source_end.split("')))", 1)[1]
+    return mystr is not None
 
 
 def unpack(source):
@@ -56,10 +81,13 @@ def unpack(source):
     def lookup(match):
         """Look up symbols in the synthetic symtab."""
         word = match.group(0)
-        word2 = symtab[int(word)] if radix == 1 else symtab[unbase(word)]
-        return word2 or word
+        return symtab[int(word)] if radix == 1 else symtab[unbase(word)] or word
 
-    source = re.sub(r'\b\w+\b', lookup, payload)
+    payload = payload.replace("\\\\", "\\").replace("\\'", "'")
+    if six.PY2:
+        source = re.sub(r"\b\w+\b", lookup, payload)
+    else:
+        source = re.sub(r"\b\w+\b", lookup, payload, flags=re.ASCII)
     return _replacestrings(source)
 
 
@@ -88,6 +116,8 @@ def _filterargs(source):
 
 
 def _replacestrings(source):
+    global beginstr
+    global endstr
     """Strip string lookup table (list) and replace values in source."""
     match = re.search(r'var *(_\w+)\=\["(.*?)"\];', source, re.DOTALL)
 
@@ -99,16 +129,19 @@ def _replacestrings(source):
         for index, value in enumerate(lookup):
             source = source.replace(variable % index, '"%s"' % value)
         return source[startpoint:]
-    return source
+    return beginstr + source + endstr
 
 
 class Unbaser(object):
     """Functor for a given base. Will efficiently convert
     strings to natural numbers."""
+
     ALPHABET = {
-        62: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        95: (' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-             '[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~')
+        62: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        95: (
+            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+        ),
     }
 
     def __init__(self, base):
@@ -128,7 +161,8 @@ class Unbaser(object):
             try:
                 self.dictionary = dict(
                     (cipher, index) for index, cipher in enumerate(
-                        self.ALPHABET[base]))
+                        self.ALPHABET[base])
+                )
             except KeyError:
                 raise TypeError('Unsupported base encoding.')
 

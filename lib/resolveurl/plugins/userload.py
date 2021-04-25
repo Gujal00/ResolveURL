@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class UserLoadResolver(ResolveUrl):
     name = "UserLoad"
     domains = ['userload.co']
-    pattern = r'(?://|\.)(userload\.co)/f/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(userload\.co)/(?:e|f)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -33,6 +33,7 @@ class UserLoadResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         html = helpers.get_packed_data(html)
+        headers.update({'Referer': web_url})
         bl = self.net.http_GET(blurl, headers=headers).content
         if jsunhunt.detect(bl):
             bl = jsunhunt.unhunt(bl)
@@ -50,8 +51,7 @@ class UserLoadResolver(ResolveUrl):
                 api_url = 'https://{0}{1}'.format(host, b1.group(1))
                 headers.update({
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Origin': 'https://{0}'.format(host),
-                    'Referer': web_url
+                    'Origin': 'https://{0}'.format(host)
                 })
                 stream_url = self.net.http_POST(api_url, data, headers=headers).content
                 headers.pop('X-Requested-With')
@@ -61,4 +61,4 @@ class UserLoadResolver(ResolveUrl):
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/f/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
