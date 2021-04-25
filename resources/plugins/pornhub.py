@@ -35,9 +35,9 @@ class PornHubResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         sources = []
 
-        qvars = re.search(r'qualityItems_[^\[]+(.+?)";', html)
+        qvars = re.search(r'qualityItems_[^\[]+([^;]+)', html)
         if qvars:
-            sources = json.loads(qvars.group(1).replace('\\', ''))
+            sources = json.loads(qvars.group(1))
             sources = [(src.get('text'), src.get('url')) for src in sources if src.get('url')]
 
         if not sources:
