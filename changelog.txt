@@ -1,10 +1,10 @@
-Version 2.1.12 (March 13, 2021)
+Version 2.1.13 (April 28, 2021)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - drtuber
+    - pornhub
 
 - Resolvers Removed
     - None
