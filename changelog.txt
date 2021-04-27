@@ -1,18 +1,14 @@
-Version 5.1.29 (April 24, 2021)
+Version 5.1.30 (April 28, 2021)
 - Code Base Changes:
-    - update Firefox UA
+    - update jsunpack to handle non ascii strings
 
 - Resolvers Added:
-    - userload
+    - sendfox
+    - sbembed
+    - rumble
  
 - Resolvers Fixed/Updated:
-    - ninjastream
-    - clipwatching
-    - streamz
-    - aparat
-    - mixdrop
-    - hdvid
-    - cloud.mail.ru
+    - userload
 
 - Resolvers Removed
     - None
