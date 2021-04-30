@@ -39,7 +39,7 @@ class VideobinResolver(ResolveUrl):
             srcs = helpers.scrape_sources(_srcs.group(1), patterns=['''["'](?P<url>http[^"']+)'''], result_blacklist=['.m3u8'])
             if srcs:
                 headers.update({'Referer': web_url})
-                return helpers.pick_source(srcs) + helpers.append_headers(headers)
+                return helpers.pick_source(srcs).replace('https:', 'http:') + helpers.append_headers(headers)
 
         raise ResolverError('Unable to locate link')
 
