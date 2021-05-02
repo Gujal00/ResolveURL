@@ -33,36 +33,16 @@
 """
 
 import re
-import six
-
-PRIORITY = 1
+from six import PY2
 
 
 def detect(source):
-    global beginstr
-    global endstr
-    beginstr = ""
-    endstr = ""
-    begin_offset = -1
     """Detects whether `source` is P.A.C.K.E.R. coded."""
     mystr = re.search(
         r"eval[ ]*\([ ]*function[ ]*\([ ]*p[ ]*,[ ]*a[ ]*,[ ]*c["
         r" ]*,[ ]*k[ ]*,[ ]*e[ ]*,[ ]*",
         source,
     )
-    if mystr:
-        begin_offset = mystr.start()
-        beginstr = source[:begin_offset]
-    if begin_offset != -1:
-        """ Find endstr"""
-        source_end = source[begin_offset:]
-        if source_end.split("')))", 1)[0] == source_end:
-            try:
-                endstr = source_end.split("}))", 1)[1]
-            except IndexError:
-                endstr = ""
-        else:
-            endstr = source_end.split("')))", 1)[1]
     return mystr is not None
 
 
@@ -84,40 +64,27 @@ def unpack(source):
         return symtab[int(word)] if radix == 1 else symtab[unbase(word)] or word
 
     payload = payload.replace("\\\\", "\\").replace("\\'", "'")
-    if six.PY2:
+    if PY2:
         source = re.sub(r"\b\w+\b", lookup, payload)
     else:
-        source = re.sub(r"\b\w+\b", lookup, payload, flags=re.ASCII)
+        source = re.sub(r"\b\w+\b", lookup, payload, flags=re.ASCII)  # PY3 matches UNICODE chars
     return _replacestrings(source)
 
 
 def _filterargs(source):
     """Juice from a source file the four args needed by decoder."""
-    juicers = [
-        (r"}\('(.*)', *(\d+|\[\]), *(\d+), *'(.*)'\.split\('\|'\), *(\d+), *(.*)\)\)"),
-        (r"}\('(.*)', *(\d+|\[\]), *(\d+), *'(.*)'\.split\('\|'\)"),
-    ]
-    for juicer in juicers:
-        args = re.search(juicer, source, re.DOTALL)
-        if args:
-            a = args.groups()
-            if a[1] == "[]":
-                a = list(a)
-                a[1] = 62
-                a = tuple(a)
-            try:
-                return a[0], a[3].split('|'), int(a[1]), int(a[2])
-            except ValueError:
-                raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
+    argsregex = (r"}\s*\('(.*)',\s*(.*?),\s*(\d+),\s*'(.*?)'\.split\('\|'\)")
+    args = re.search(argsregex, source, re.DOTALL).groups()
 
-    # could not find a satisfying regex
-    raise UnpackingError(
-        'Could not make sense of p.a.c.k.e.r data (unexpected code structure)')
+    try:
+        payload, radix, count, symtab = args
+        radix = 36 if not radix.isdigit() else int(radix)
+        return payload, symtab.split('|'), radix, int(count)
+    except ValueError:
+        raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
 
 
 def _replacestrings(source):
-    global beginstr
-    global endstr
     """Strip string lookup table (list) and replace values in source."""
     match = re.search(r'var *(_\w+)\=\["(.*?)"\];', source, re.DOTALL)
 
@@ -129,40 +96,34 @@ def _replacestrings(source):
         for index, value in enumerate(lookup):
             source = source.replace(variable % index, '"%s"' % value)
         return source[startpoint:]
-    return beginstr + source + endstr
+    return source
 
 
 class Unbaser(object):
     """Functor for a given base. Will efficiently convert
     strings to natural numbers."""
-
     ALPHABET = {
-        62: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        95: (
-            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-        ),
+        62: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        95: (r' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+             r'[\]^_`abcdefghijklmnopqrstuvwxyz{|}~')
     }
 
     def __init__(self, base):
         self.base = base
 
-        # fill elements 37...61, if necessary
-        if 36 < base < 62:
-            if not hasattr(self.ALPHABET, self.ALPHABET[62][:base]):
-                self.ALPHABET[base] = self.ALPHABET[62][:base]
-        # attrs = self.ALPHABET
-        # print ', '.join("%s: %s" % item for item in attrs.items())
         # If base can be handled by int() builtin, let it do it for us
         if 2 <= base <= 36:
             self.unbase = lambda string: int(string, base)
         else:
+            if base < 62:
+                self.ALPHABET[base] = self.ALPHABET[62][0:base]
+            elif 62 < base < 95:
+                self.ALPHABET[base] = self.ALPHABET[95][0:base]
             # Build conversion dictionary cache
             try:
                 self.dictionary = dict(
                     (cipher, index) for index, cipher in enumerate(
-                        self.ALPHABET[base])
-                )
+                        self.ALPHABET[base]))
             except KeyError:
                 raise TypeError('Unsupported base encoding.')
 
