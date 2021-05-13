@@ -23,7 +23,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 class SBEmbedResolver(ResolveGeneric):
     name = "sbembed"
     domains = ["sbembed.com"]
-    pattern = r'(?://|\.)(sbembed\.com)/(?:e|play)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(sbembed\.com)/(?:embed-|e|play)/?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
