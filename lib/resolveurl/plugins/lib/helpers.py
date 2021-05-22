@@ -195,8 +195,10 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
     result_blacklist = list(set(result_blacklist + ['.smil']))  # smil(not playable) contains potential sources, only blacklist when called from here
     net = common.Net()
     headers = {'User-Agent': common.RAND_UA}
+    u = urllib_parse.urlparse(url)
+    rurl = '{0}://{1}/'.format(u.scheme, u.netloc)
     if referer:
-        headers.update({'Referer': url})
+        headers.update({'Referer': rurl})
     response = net.http_GET(url, headers=headers)
     response_headers = response.get_headers(as_dict=True)
     cookie = response_headers.get('Set-Cookie', None)
@@ -204,7 +206,8 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
         headers.update({'Cookie': cookie})
     html = response.content
     if not referer:
-        headers.update({'Referer': url})
+        headers.update({'Referer': rurl})
+    headers.update({'Origin': rurl[:-1]})
     source_list = scrape_sources(html, result_blacklist, scheme, patterns, generic_patterns)
     source = pick_source(source_list)
     return source + append_headers(headers)

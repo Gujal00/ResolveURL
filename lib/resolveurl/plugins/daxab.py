@@ -44,14 +44,15 @@ class DaxabResolver(ResolveUrl):
         params = re.search(r'video:\s*([^;]+)', html)
         if params:
             params = params.group(1)
-            id = re.findall(r'cdn_id:\s*"([^"]+)', params)[0]
-            id1, id2 = id.split('_')
-            server = re.findall(r'server:\s*"([^"]+)', params)[0][::-1]
-            server = base64.b64decode(server.encode('ascii')).decode('ascii')
-            sources = json.loads(re.findall(r'cdn_files:\s*([^}]+})', params)[0])
-            sources = [(key[4:], 'https://{0}/videos/{1}/{2}/{3}'.format(server, id1, id2, sources[key].replace('.', '.mp4?extra=')))
-                       for key in list(sources.keys())]
-            return helpers.pick_source(sorted(sources, reverse=True)) + helpers.append_headers(headers)
+            id = re.search(r'cdn_id:\s*"([^"]+)', params)
+            if id:
+                id1, id2 = id.group(1).split('_')
+                server = re.findall(r'server:\s*"([^"]+)', params)[0][::-1]
+                server = base64.b64decode(server.encode('ascii')).decode('ascii')
+                sources = json.loads(re.findall(r'cdn_files:\s*([^}]+})', params)[0])
+                sources = [(key[4:], 'https://{0}/videos/{1}/{2}/{3}'.format(server, id1, id2, sources[key].replace('.', '.mp4?extra=')))
+                           for key in list(sources.keys())]
+                return helpers.pick_source(sorted(sources, reverse=True)) + helpers.append_headers(headers)
 
         raise ResolverError('No playable video found.')
 
