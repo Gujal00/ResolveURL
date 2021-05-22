@@ -1,14 +1,15 @@
-Version 5.1.30 (April 28, 2021)
+Version 5.1.31 (May 22, 2021)
 - Code Base Changes:
-    - update jsunpack to handle non ascii strings
+    - None
 
 - Resolvers Added:
-    - sendfox
-    - sbembed
-    - rumble
+    - None
  
 - Resolvers Fixed/Updated:
-    - userload
+    - videobin
+    - sbembed
+    - playtube
+    - daxab
 
 - Resolvers Removed
     - None
