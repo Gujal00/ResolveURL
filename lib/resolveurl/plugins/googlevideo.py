@@ -229,8 +229,6 @@ class GoogleResolver(ResolveUrl):
             urls.append((quality, source_url))
         return urls
 
-        return urls
-
     @staticmethod
     def parse_json(html):
         if html:
