@@ -26,26 +26,26 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class DoodStreamResolver(ResolveUrl):
     name = "doodstream"
-    domains = ['dood.watch', 'doodstream.com', 'dood.to', 'dood.so']
-    pattern = r'(?://|\.)(dood(?:stream)?\.(?:com|watch|to|so))/(?:d|e)/([0-9a-zA-Z]+)'
+    domains = ['dood.watch', 'doodstream.com', 'dood.to', 'dood.so', 'dood.cx']
+    pattern = r'(?://|\.)(dood(?:stream)?\.(?:com|watch|to|so|cx))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': 'https://{0}/'.format(host)}
 
         html = self.net.http_GET(web_url, headers=headers).content
         match = re.search(r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''', html, re.DOTALL)
         if match:
             token = match.group(2)
-            url = 'https://dood.to' + match.group(1)
-            headers.update({'Referer': web_url})
+            url = 'https://{0}{1}'.format(host, match.group(1))
             html = self.net.http_GET(url, headers=headers).content
             return self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://dood.to/e/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
 
     def dood_decode(self, data):
         t = string.ascii_letters + string.digits
