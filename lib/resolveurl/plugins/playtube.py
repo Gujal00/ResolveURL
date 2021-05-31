@@ -41,9 +41,16 @@ class PlayTubeResolver(ResolveUrl):
                     'hash': r.group(3)}
             headers.update({'Referer': url[:-2],
                             'Origin': url[:-3]})
-            resp = self.net.http_POST(url, form_data=data, headers=headers).content
-            resp = json.loads(resp)[0]
-            source = helpers.tear_decode(resp.get('file'), resp.get('seed'))
+
+            vfile = seed = None
+            tries = 0
+            while tries < 3 and vfile is None and seed is None:
+                resp = self.net.http_POST(url, form_data=data, headers=headers).content
+                resp = json.loads(resp)[0]
+                vfile = resp.get('file')
+                seed = resp.get('seed')
+                tries += 1
+            source = helpers.tear_decode(vfile, seed)
             if source:
                 return source + helpers.append_headers(headers)
         raise ResolverError('File not found')
