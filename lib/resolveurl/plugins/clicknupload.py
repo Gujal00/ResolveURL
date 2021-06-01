@@ -41,15 +41,16 @@ class ClickNUploadResolver(ResolveUrl):
             html = self.net.http_POST(web_url, data, headers=headers).content
             r = re.search(r'''class="downloadbtn"[^>]+onClick\s*=\s*\"window\.open\('([^']+)''', html)
             if r:
+                headers.update({'verifypeer': 'false'})
                 return r.group(1) + helpers.append_headers(headers)
 
-            common.kodi.sleep(1000)
+            common.kodi.sleep(10000)
             tries = tries + 1
 
         raise ResolverError('Unable to locate link')
 
     def get_url(self, host, media_id):
-        return 'https://clicknupload.co/%s' % media_id
+        return self._default_get_url(host, media_id, template='https://clicknupload.co/{media_id}')
 
     @classmethod
     def isPopup(self):
