@@ -42,9 +42,9 @@ class ClickNUploadResolver(ResolveUrl):
             r = re.search(r'''class="downloadbtn"[^>]+onClick\s*=\s*\"window\.open\('([^']+)''', html)
             if r:
                 headers.update({'verifypeer': 'false'})
-                return r.group(1) + helpers.append_headers(headers)
+                return r.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
-            common.kodi.sleep(10000)
+            common.kodi.sleep(12000)
             tries = tries + 1
 
         raise ResolverError('Unable to locate link')
