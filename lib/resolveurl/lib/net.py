@@ -193,6 +193,16 @@ class Net:
                     handlers += [urllib_request.HTTPSHandler(context=ctx)]
             except:
                 pass
+        elif six.PY2 or 'android' in kodi.py_ver.lower():
+            try:
+                import ssl
+                ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
+                if self._http_debug:
+                    handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
+                else:
+                    handlers += [urllib_request.HTTPSHandler(context=ctx)]
+            except:
+                pass
 
         opener = urllib_request.build_opener(*handlers)
         urllib_request.install_opener(opener)
