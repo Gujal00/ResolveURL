@@ -1,21 +1,15 @@
-Version 5.1.32 (June 01, 2021)
+Version 5.1.33 (June 05, 2021)
 - Code Base Changes:
-    - None
+    - Drop to TLS1.1 on Android
 
 - Resolvers Added:
-    - itemfix
-    - streamingcommunity
-    - vidmx
+    - None
  
 - Resolvers Fixed/Updated:
-    - doodstream
     - clicknupload
-    - playtube
-    - daxab
-    - keep2share
 
 - Resolvers Removed
-    - liveleak
+    - None
 
 - Languages Added/Updated
     - None
