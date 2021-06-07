@@ -21,7 +21,7 @@ import gzip
 import re
 import json
 import six
-from six.moves import urllib_request, urllib_parse
+from six.moves import urllib_request, urllib_parse, urllib_error
 import socket
 import time
 from resolveurl.lib import kodi
@@ -160,7 +160,7 @@ class Net:
         """Returns user agent string."""
         return self._user_agent
 
-    def _update_opener(self):
+    def _update_opener(self, drop_tls_level=False):
         """
         Builds and installs a new opener to be used by all future calls to
         :func:`urllib2.urlopen`.
@@ -193,7 +193,8 @@ class Net:
                     handlers += [urllib_request.HTTPSHandler(context=ctx)]
             except:
                 pass
-        elif six.PY2 or 'android' in kodi.py_ver.lower():
+
+        if drop_tls_level:
             try:
                 import ssl
                 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
@@ -335,7 +336,13 @@ class Net:
             req.add_header('Content-Type', 'application/json')
         host = req.host if six.PY3 else req.get_host()
         req.add_unredirected_header('Host', host)
-        response = urllib_request.urlopen(req, timeout=15)
+        try:
+            response = urllib_request.urlopen(req, timeout=15)
+        except urllib_error.HTTPError as e:
+            if e.code == 403:
+                self._update_opener(drop_tls_level=True)
+            response = urllib_request.urlopen(req, timeout=15)
+
         return HttpResponse(response)
 
 

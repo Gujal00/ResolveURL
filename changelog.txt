@@ -1,12 +1,12 @@
-Version 5.1.33 (June 05, 2021)
+Version 5.1.34 (June 08, 2021)
 - Code Base Changes:
-    - Drop to TLS1.1 on Android
+    - Drop to TLS1.1 if necessary for cloudflaressl
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - clicknupload
+    - None
 
 - Resolvers Removed
     - None
