@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class UserLoadResolver(ResolveUrl):
     name = "UserLoad"
     domains = ['userload.co']
-    pattern = r'(?://|\.)(userload\.co)/(?:e|f)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(userload\.co)/(?:e|f|embed)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
