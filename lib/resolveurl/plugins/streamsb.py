@@ -1,5 +1,6 @@
 """
     Plugin for ResolveUrl
+    Copyright (C) 2020 gujal
     Copyright (C) 2020 groggyegg
 
     This program is free software: you can redistribute it and/or modify
@@ -22,13 +23,16 @@ from resolveurl.plugins.lib import helpers
 
 class StreamSBResolver(ResolveGeneric):
     name = "streamsb"
-    domains = ['streamsb.net']
-    pattern = r'(?://|\.)(streamsb\.net)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ["sbembed.com", "sbplay.org", "sbvideo.net", "streamsb.net"]
+    pattern = r'(?://|\.)((?:stream)?sb(?:embed|play|video)?\.(?:com|net|org))/(?:embed-|e|play)/?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''sources:\s*\[{file:\s*"(?P<url>[^"]+)'''],
-                                     generic_patterns=False)
+                                     patterns=[r'''sources\s*:\s*\["(?P<url>[^"]+)''',
+                                               r'''(?:file|src):\s*"(?P<url>[^"]+)'''],
+                                     generic_patterns=False,
+                                     result_blacklist=['dl', '.srt', '.vtt'],
+                                     referer=False)
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://{host}/play/{media_id}')
