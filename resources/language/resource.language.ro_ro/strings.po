@@ -285,3 +285,11 @@ msgstr "minute"
 msgctxt "#33067"
 msgid "hours"
 msgstr "ore"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Resetare rezolver Uptobox"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Rezolver Uptobox autorizat"

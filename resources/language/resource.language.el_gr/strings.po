@@ -284,3 +284,11 @@ msgstr "λεπτά"
 msgctxt "#33067"
 msgid "hours"
 msgstr "ώρες"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Επαναφορά έγκρισης Uptobox"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Ο επιλυτής Uptobox έχει εγκριθεί"

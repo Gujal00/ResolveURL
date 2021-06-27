@@ -284,3 +284,11 @@ msgstr ""
 msgctxt "#33067"
 msgid "hours"
 msgstr ""
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr ""
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr ""

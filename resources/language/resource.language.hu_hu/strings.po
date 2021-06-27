@@ -275,3 +275,11 @@ msgstr "percek"
 msgctxt "#33067"
 msgid "hours"
 msgstr "órák"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Uptobox autorizáció törölve"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Uptobox Resolver autorizáció sikeres"

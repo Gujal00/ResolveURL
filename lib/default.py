@@ -34,7 +34,8 @@ def __enum(**enums):
 MODES = __enum(
     AUTH_PM='auth_pm', RESET_PM='reset_pm', AUTH_RD='auth_rd', RESET_RD='reset_rd',
     AUTH_AD='auth_ad', RESET_AD='reset_ad', AUTH_LS='auth_ls', RESET_LS='reset_ls',
-    AUTH_DL='auth_dl', RESET_DL='reset_dl', RESET_CACHE='reset_cache'
+    AUTH_DL='auth_dl', RESET_DL='reset_dl', AUTH_UB='auth_ub', RESET_UB='reset_ub',
+    RESET_CACHE='reset_cache'
 )
 
 
@@ -93,6 +94,25 @@ def reset_ad():
     ad = alldebrid.AllDebridResolver()
     ad.reset_authorization()
     kodi.notify(msg=kodi.i18n('ad_auth_reset'), duration=5000)
+
+
+@url_dispatcher.register(MODES.AUTH_UB)
+def auth_ub():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or authorize won't work for some reason
+    from resolveurl.plugins import uptobox
+    if uptobox.UpToBoxResolver().authorize_resolver():
+        kodi.notify(msg=kodi.i18n('ub_authorized'), duration=5000)
+
+
+@url_dispatcher.register(MODES.RESET_UB)
+def reset_ub():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or reset won't work for some reason
+    from resolveurl.plugins import uptobox
+    ub = uptobox.UpToBoxResolver()
+    ub.reset_authorization()
+    kodi.notify(msg=kodi.i18n('ub_auth_reset'), duration=5000)
 
 
 @url_dispatcher.register(MODES.RESET_CACHE)

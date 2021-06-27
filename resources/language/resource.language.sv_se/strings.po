@@ -283,3 +283,11 @@ msgstr "minuter"
 msgctxt "#33067"
 msgid "hours"
 msgstr "timmar"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Nollställ Uptobox auktorisering"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Uptobox Resolver auktorisering"

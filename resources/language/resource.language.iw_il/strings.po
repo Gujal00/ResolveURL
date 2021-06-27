@@ -286,3 +286,11 @@ msgstr "דקות"
 msgctxt "#33067"
 msgid "hours"
 msgstr "שעה (ות"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "איפוס הרשאה ל-Uptobox"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Uptobox מורשה פותר"

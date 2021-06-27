@@ -271,11 +271,11 @@ msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Acco
 msgstr "Unesite PIN kao [B][COLOR blue]{0}[/COLOR][/B], a zatim kliknite 'Poveži račun'"
 
 msgctxt "#33063"
-msgid "Debrid-Link Authorization Reset"
+msgid "Debrid-Link Authorisation Reset"
 msgstr "Debrid-Link razrješitelj vraćen na izvorno"
 
 msgctxt "#33064"
-msgid "Debrid-Link Resolver Authorized"
+msgid "Debrid-Link Resolver Authorised"
 msgstr "Debrid-Link razrješitelj ovjeren"
 
 msgctxt "#33065"
@@ -289,3 +289,11 @@ msgstr "minuta"
 msgctxt "#33067"
 msgid "hours"
 msgstr "sati"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Uptobox razrješitelj vraćen na izvorno"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Uptobox razrješitelj ovjeren"

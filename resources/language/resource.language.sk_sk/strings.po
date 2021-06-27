@@ -284,3 +284,11 @@ msgstr "minút"
 msgctxt "#33067"
 msgid "hours"
 msgstr "hodín"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Uptobox resolver resetovaný"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Uptobox resolver autorizovaný"

@@ -270,7 +270,7 @@ msgstr "Autorización de Debrid-Link Autorizada"
 
 msgctxt "#33064"
 msgid "Debrid-Link Resolver Authorized"
-msgstr "Debrid-Link Resolver Resolver Autorizado"
+msgstr "Debrid-Link Resolver Autorizado"
 
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
@@ -283,3 +283,11 @@ msgstr "minutos"
 msgctxt "#33067"
 msgid "hours"
 msgstr "horas"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Autorización de Uptobox Autorizada"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Uptobox Resolver Autorizado"

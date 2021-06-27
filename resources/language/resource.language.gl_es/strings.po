@@ -265,11 +265,11 @@ msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Acco
 msgstr "Introduza o PIN como [B][COLOR blue]{0}[/COLOR][/B] e logo fai clic en 'Conta de ligazón'"
 
 msgctxt "#33063"
-msgid "Debrid-Link Authorization Reset"
+msgid "Debrid-Link Authorisation Reset"
 msgstr "Resetear Autorización Debrid-Link"
 
 msgctxt "#33064"
-msgid "Debrid-Link Resolver Authorized"
+msgid "Debrid-Link Resolver Authorised"
 msgstr "Procesador Debrid-Link Autorizado"
 
 msgctxt "#33065"
@@ -283,3 +283,11 @@ msgstr "minutos"
 msgctxt "#33067"
 msgid "hours"
 msgstr "horas"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Resetear Autorización Uptobox"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Procesador Ubtobox Autorizado"
