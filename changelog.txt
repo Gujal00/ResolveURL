@@ -1,15 +1,19 @@
-Version 5.1.34 (June 08, 2021)
+Version 5.1.35 (July 02, 2021)
 - Code Base Changes:
-    - Drop to TLS1.1 if necessary for cloudflaressl
+    - None
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - None
+    - Uptobox Premium support
+    - streamsb
+    - doodstream
+    - userload
+    - streamingcommunity
 
 - Resolvers Removed
-    - None
+    - sbembed
 
 - Languages Added/Updated
     - None
