@@ -1,4 +1,4 @@
-Version 2.1.14 (July 02, 2021)
+Version 2.1.15 (July 02, 2021)
 
 - Resolvers Added:
     - None
