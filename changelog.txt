@@ -1,19 +1,16 @@
-Version 5.1.35 (July 02, 2021)
+Version 5.1.36 (July 02, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - UpVideo
+    - VUpload
  
 - Resolvers Fixed/Updated:
-    - Uptobox Premium support
-    - streamsb
-    - doodstream
-    - userload
-    - streamingcommunity
+    - clicknupload
 
 - Resolvers Removed
-    - sbembed
+    - None
 
 - Languages Added/Updated
     - None
