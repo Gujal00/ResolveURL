@@ -197,7 +197,9 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
     headers = {'User-Agent': common.RAND_UA}
     u = urllib_parse.urlparse(url)
     rurl = '{0}://{1}/'.format(u.scheme, u.netloc)
-    if referer:
+    if isinstance(referer, six.text_type):
+        headers.update({'Referer': referer})
+    elif referer:
         headers.update({'Referer': rurl})
     response = net.http_GET(url, headers=headers)
     response_headers = response.get_headers(as_dict=True)

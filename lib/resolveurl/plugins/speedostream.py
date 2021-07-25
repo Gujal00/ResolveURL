@@ -23,12 +23,17 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 class SpeedoStreamResolver(ResolveGeneric):
     name = "speedostream"
     domains = ["speedostream.com"]
-    pattern = r'(?://|\.)(speedostream\.com)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(speedostream\.com)/(?:embed-)?([^\n]+)'
 
     def get_media_url(self, host, media_id):
+        if '|' in media_id:
+            media_id, referer = media_id.split('|')
+        else:
+            referer = True
         return helpers.get_media_url(self.get_url(host, media_id),
                                      patterns=[r'''sources\s*:\s*\[{file:\s*"(?P<url>[^"]+)'''],
-                                     generic_patterns=False)
+                                     generic_patterns=False,
+                                     referer=referer)
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}')
