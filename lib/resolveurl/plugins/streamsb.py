@@ -23,8 +23,8 @@ from resolveurl.plugins.lib import helpers
 
 class StreamSBResolver(ResolveGeneric):
     name = "streamsb"
-    domains = ["sbembed.com", "sbplay.org", "sbvideo.net", "streamsb.net"]
-    pattern = r'(?://|\.)((?:stream)?sb(?:embed|play|video)?\.(?:com|net|org))/(?:embed-|e|play)/?([0-9a-zA-Z]+)'
+    domains = ["sbembed.com", "sbembed1.com", "sbplay.org", "sbvideo.net", "streamsb.net"]
+    pattern = r'(?://|\.)((?:stream)?sb(?:embed\d?|play|video)?\.(?:com|net|org))/(?:embed-|e|play)/?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
