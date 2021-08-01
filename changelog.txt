@@ -1,13 +1,16 @@
-Version 5.1.36 (July 02, 2021)
+Version 5.1.37 (Aug 01, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - UpVideo
-    - VUpload
+    - gogostream
+    - streamani
  
 - Resolvers Fixed/Updated:
-    - clicknupload
+    - Speedostream
+    - Fembed
+    - Streamsb
+    - upvideo
 
 - Resolvers Removed
     - None
