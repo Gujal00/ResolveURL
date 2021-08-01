@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UpVideoResolver(ResolveUrl):
     name = "upvideo.to"
-    domains = ['upvideo.to', 'videoloca.xyz', 'tnaket.xyz', 'makaveli.xyz']
-    pattern = r'(?://|\.)((?:upvideo|videoloca|makaveli|tnaket)\.(?:to|xyz))/(?:e|v)/([0-9a-zA-Z]+)'
+    domains = ['upvideo.to', 'videoloca.xyz', 'tnaket.xyz', 'makaveli.xyz', 'highload.to']
+    pattern = r'(?://|\.)((?:upvideo|videoloca|makaveli|tnaket|highload)\.(?:to|xyz))/(?:e|v|f)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
