@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
+import re, json
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -29,23 +29,20 @@ class EvoLoadResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         surl = 'https://evoload.io/SecurePlayer'
-        domain = 'aHR0cHM6Ly9ldm9sb2FkLmlvOjQ0Mw..'
         web_url = self.get_url(host, media_id)
         rurl = 'https://{0}/'.format(host)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': rurl}
         html = self.net.http_GET(web_url, headers).content
-        token = helpers.girc(html, rurl, domain)
-        if token:
-            edata = {'code': media_id,
-                     'token': token}
-            headers.update({'Origin': rurl[:-1],
-                            'X-XSRF-TOKEN': ''})
-            shtml = self.net.http_POST(surl, form_data=edata, headers=headers, jdata=True).content
-            r = json.loads(shtml).get('stream')
+        passe = re.search('<div id="captcha_pass" value="(.+?)"></div>', html).group(1)
+        headers.update({'Origin': rurl[:-1]})
+        crsv = self.net.http_GET('https://csrv.evosrv.com/captcha?m412548', headers).content
+        post = {"code": media_id, "csrv_token": crsv, "pass": passe, "token": "ok"}
+        shtml = self.net.http_POST(surl, form_data=post, headers=headers, jdata=True).content
+        r = json.loads(shtml).get('stream')
+        if r:
             surl = r.get('backup') if r.get('backup') else r.get('src')
             if surl:
-                headers.pop('X-XSRF-TOKEN')
                 return surl + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
