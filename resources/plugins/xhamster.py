@@ -22,8 +22,10 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class xHamsterResolver(ResolveGeneric):
     name = 'xhamster'
-    domains = ['xhamster.com', 'xhamster2.com', 'xhamster12.desi']
-    pattern = r'(?://|\.)(xhamster1?2?\.(?:com|desi))/.+[/\-=](\w+)'
+    domains = ['xhamster.com', 'xhamster.desi']
+    domains += ['xhamster{0}.com'.format(x) for x in range(1, 50)]
+    domains += ['xhamster{0}.desi'.format(x) for x in range(1, 16)]
+    pattern = r'(?://|\.)(xhamster\d?\d?\.(?:com|desi))/.+[/\-=](\w+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
