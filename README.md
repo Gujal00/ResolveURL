@@ -8,7 +8,8 @@ Adult Resolver Extension for SMR
 ```python
 import resolveurl, xbmc, xbmcvfs
 xxx_plugins_path = 'special://home/addons/script.module.resolveurl.xxx/resources/plugins/'
-if xbmcvfs.exists(xxx_plugins_path): resolveurl.add_plugin_dirs(xbmc.translatePath(xxx_plugins_path))
+if xbmcvfs.exists(xxx_plugins_path):
+    resolveurl.add_plugin_dirs(xbmc.translatePath(xxx_plugins_path))
 
 url = resolveurl.resolve(url)
 ```
