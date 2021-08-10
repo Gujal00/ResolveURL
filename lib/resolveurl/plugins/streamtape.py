@@ -20,6 +20,7 @@ import re
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+from six.moves import urllib_error
 
 
 class StreamTapeResolver(ResolveUrl):
@@ -34,10 +35,17 @@ class StreamTapeResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
-        r = self.net.http_GET(web_url, headers=headers)
-        src = re.search(r'''ById\('vi.+?=\s*["']([^"']+)['"].+?["']([^"']+)''', r.content)
+        try:
+            r = self.net.http_GET(web_url, headers=headers)
+        except urllib_error.HTTPError:
+            raise ResolverError('Video deleted or removed.')
+            return
+        src = re.search(r'''ById\('vi.+?=\s*["']([^"']+)['"].+?["']([^"']+)['"]([^<;]*)''', r.content)
         if src:
-            src_url = 'https:{0}{1}&stream=1'.format(src.group(1), src.group(2))
+            part2 = src.group(2)
+            if 'substring' in src.group(3):
+                part2 = part2[int(src.group(3).split('(')[1][:-1]):]
+            src_url = 'https:{0}{1}&stream=1'.format(src.group(1), part2)
             return helpers.get_redirect_url(src_url, headers) + helpers.append_headers(headers)
         raise ResolverError('Video cannot be located.')
 
