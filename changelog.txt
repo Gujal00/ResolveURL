@@ -1,16 +1,16 @@
-Version 5.1.37 (Aug 01, 2021)
+Version 5.1.38 (Aug 12, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - gogostream
-    - streamani
+    - None
  
 - Resolvers Fixed/Updated:
-    - Speedostream
-    - Fembed
+    - Evoload
+    - Vidbom
     - Streamsb
-    - upvideo
+    - streamtape
+    - gamovideo
 
 - Resolvers Removed
     - None
