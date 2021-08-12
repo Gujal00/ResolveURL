@@ -32,7 +32,7 @@ class GamoVideoResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {'User-Agent': common.FF_USER_AGENT}
         r = self.net.http_GET(web_url, headers=headers)
         cookie = ''
         for item in r.get_headers(as_dict=True)['Set-Cookie'].split('GMT,'):
