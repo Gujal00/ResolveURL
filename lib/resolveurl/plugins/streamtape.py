@@ -36,16 +36,20 @@ class StreamTapeResolver(ResolveUrl):
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
         try:
-            r = self.net.http_GET(web_url, headers=headers)
+            r = self.net.http_GET(web_url, headers=headers).content
         except urllib_error.HTTPError:
             raise ResolverError('Video deleted or removed.')
             return
-        src = re.search(r'''ById\('vi.+?=\s*["']([^"']+)['"].+?["']([^"']+)['"]([^<;]*)''', r.content)
+        src = re.search(r'''ById\('vi.+?=\s*(["'][^;<]+)''', r)
         if src:
-            part2 = src.group(2)
-            if 'substring' in src.group(3):
-                part2 = part2[int(src.group(3).split('(')[1][:-1]):]
-            src_url = 'https:{0}{1}&stream=1'.format(src.group(1), part2)
+            src_url = ''
+            parts = src.group(1).split('+')
+            for part in parts:
+                p1 = re.findall(r'''['"]([^'"]*)''', part)[0]
+                p2 = int(part.split(".substring(")[-1][:-1]) if 'substring' in part else 0
+                src_url += p1[p2:]
+            src_url += '&stream=1'
+            src_url = 'https:' + src_url if src_url.startswith('//') else src_url
             return helpers.get_redirect_url(src_url, headers) + helpers.append_headers(headers)
         raise ResolverError('Video cannot be located.')
 
