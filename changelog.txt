@@ -1,16 +1,15 @@
-Version 5.1.38 (Aug 12, 2021)
+Version 5.1.39 (Aug 19, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - VideoVard
  
 - Resolvers Fixed/Updated:
-    - Evoload
-    - Vidbom
     - Streamsb
     - streamtape
-    - gamovideo
+    - Vupload
+    - youdbox
 
 - Resolvers Removed
     - None
