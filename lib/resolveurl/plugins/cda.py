@@ -41,6 +41,10 @@ class CdaResolver(ResolveUrl):
             if match:
                 js_data = json.loads(match.group(1))
                 return self.cda_decode(js_data.get('video').get('file')) + helpers.append_headers(headers)
+        match = re.search(r"player_data='([^']+)", html)
+        if match:
+            js_data = json.loads(match.group(1))
+            return self.cda_decode(js_data.get('video').get('file')) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
@@ -54,6 +58,7 @@ class CdaResolver(ResolveUrl):
         a = a.replace("_CXD", "")
         a = a.replace("_QWE", "")
         a = a.replace("_Q5", "")
+        a = a.replace("_IKSDE", "")
         a = urllib_parse.unquote(a)
         a = ''.join([chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char for char in a])
         a = a.replace(".cda.mp4", "")
