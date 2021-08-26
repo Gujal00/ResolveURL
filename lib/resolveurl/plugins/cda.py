@@ -37,11 +37,11 @@ class CdaResolver(ResolveUrl):
         if match:
             qdata = json.loads(match.group(1)).get('video', {}).get('qualities')
             sources = [(q, '?wersja={0}'.format(q)) for q in qdata.keys()]
-            html = self.net.http_GET(web_url + helpers.pick_source(helpers.sort_sources_list(sources)), headers=headers).content
-            match = re.search(r"player_data='([^']+)", html)
-            if match:
-                js_data = json.loads(match.group(1))
-                return self.cda_decode(js_data.get('video').get('file')) + helpers.append_headers(headers)
+            if len(sources) > 1:
+                html = self.net.http_GET(web_url + helpers.pick_source(helpers.sort_sources_list(sources)), headers=headers).content
+                match = re.search(r"player_data='([^']+)", html)
+            src = json.loads(match.group(1)).get('video').get('file')
+            return self.cda_decode(src) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
