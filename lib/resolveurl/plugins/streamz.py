@@ -40,12 +40,10 @@ class StreamzResolver(ResolveUrl):
             if sources:
                 headers.update({'Referer': web_url})
                 vurl = helpers.pick_source(sources)
-                vurl = re.sub('get[0-9a-zA-Z]{4}-', 'getlink-', vurl)
-                vurl = re.sub('get[0-9a-zA-Z]{5}-', 'getlink-', vurl)
+                vurl = re.sub('get[0-9a-zA-Z]{4,5}-', 'getlink-', vurl)
                 return helpers.get_redirect_url(vurl, headers) + helpers.append_headers(headers)
 
         raise ResolverError('Video not found or removed')
 
     def get_url(self, host, media_id):
-
         return self._default_get_url(host, media_id, template='https://streamzz.to/{media_id}')
