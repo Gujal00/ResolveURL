@@ -41,10 +41,10 @@ class UpVideoResolver(ResolveUrl):
             html = re.findall('<head>(.+?)</head>', html, re.DOTALL)[0]
             html = jsunhunt.unhunt(html)
 
-        r = re.search(r'var\s*ebdbcdbeffbe\s*=\s*"([^"]+)', html)
+        r = re.search(r'var\s*feabfedffbec\s*=\s*"([^"]+)', html)
         if r:
-            surl = r.group(1).replace('MDZhYTRhMDViOWZkNzlkZjE5ODAzNDNkYTljY2ZkZmU', '')
-            surl = surl.replace('NzU1ODRlMDM3NGIzZjk1NTIxZGUzZTQ3MDRiOTNjOTY=', '')
+            surl = r.group(1).replace('OTcyNWVkZTcyOGFjMDk4NTJjYTExOTU3NjNlYWQzMTA', '')
+            surl = surl.replace('NDQ1Y2ZjMmQ1YzViMzFiMDlhNmM5NmIxYjdkYzdhYmQ=', '')
             surl = base64.b64decode(surl).decode('utf-8')
             return surl.replace(' ', '%20') + helpers.append_headers(headers)
 
