@@ -1,4 +1,4 @@
-Version 5.1.40 (Sep 04, 2021)
+Version 5.1.41 (Sep 09, 2021)
 - Code Base Changes:
     - None
 
@@ -6,9 +6,7 @@ Version 5.1.40 (Sep 04, 2021)
     - None
  
 - Resolvers Fixed/Updated:
-    - CDA
-    - FEmbed
-    - Streamz
+    - StreamTape
     - UpVideo
 
 - Resolvers Removed
