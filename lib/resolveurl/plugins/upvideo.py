@@ -41,12 +41,23 @@ class UpVideoResolver(ResolveUrl):
             html = re.findall('<head>(.+?)</head>', html, re.DOTALL)[0]
             html = jsunhunt.unhunt(html)
 
-        r = re.search(r'var\s*feabfedffbec\s*=\s*"([^"]+)', html)
-        if r:
-            surl = r.group(1).replace('OTcyNWVkZTcyOGFjMDk4NTJjYTExOTU3NjNlYWQzMTA', '')
-            surl = surl.replace('NDQ1Y2ZjMmQ1YzViMzFiMDlhNmM5NmIxYjdkYzdhYmQ=', '')
-            surl = base64.b64decode(surl).decode('utf-8')
-            return surl.replace(' ', '%20') + helpers.append_headers(headers)
+        aurl = 'https://{0}/assets/js/tabber.js'.format(host)
+        ahtml = self.net.http_GET(aurl, headers=headers).content
+        if jsunhunt.detect(ahtml):
+            pass
+        else:
+            aurl = 'https://{0}/assets/js/master.js'.format(host)
+            ahtml = self.net.http_GET(aurl, headers=headers).content
+
+        if jsunhunt.detect(ahtml):
+            ahtml = jsunhunt.unhunt(ahtml)
+            var, rep1, rep2 = re.findall(r'''var\s*res\s*=\s*([^.]+)\.replace\("([^"]+).+?replace\("([^"]+)''', ahtml, re.DOTALL)[0]
+            r = re.search(r'var\s*{0}\s*=\s*"([^"]+)'.format(var), html)
+            if r:
+                surl = r.group(1).replace(rep1, '')
+                surl = surl.replace(rep2, '')
+                surl = base64.b64decode(surl).decode('utf-8')
+                return surl.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError("Video not found")
 
