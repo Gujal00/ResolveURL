@@ -18,6 +18,7 @@
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
+
 class ItemFixResolver(ResolveGeneric):
     name = "itemfix"
     domains = ["itemfix.com"]
