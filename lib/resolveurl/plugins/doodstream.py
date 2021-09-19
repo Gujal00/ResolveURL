@@ -34,7 +34,13 @@ class DoodStreamResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://{0}/'.format(host)}
 
-        html = self.net.http_GET(web_url, headers=headers).content
+        r = self.net.http_GET(web_url, headers=headers)
+        if r.get_url() != web_url:
+            host = re.findall(r'(?://|\.)([^/]+)', r.get_url())[0]
+            web_url = self.get_url(host, media_id)
+        headers.update({'Referer': web_url})
+
+        html = r.content
         match = re.search(r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''', html, re.DOTALL)
         if match:
             token = match.group(2)
