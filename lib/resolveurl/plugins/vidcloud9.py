@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
-import base64
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -25,25 +23,19 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidCloud9Resolver(ResolveUrl):
     name = "vidcloud9.com"
-    domains = ['vidcloud9.com', 'vidnode.net']
-    pattern = r'(?://|\.)((?:vidcloud9|vidnode)\.(?:com|net))/(?:streaming|load)\.php\?id=([0-9a-zA-Z]+)'
+    domains = ['vidcloud9.com', 'vidnode.net', 'vidnext.net', 'vidembed.net', 'vidembed.cc']
+    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|vidembed)\.(?:com|net|cc))/(?:streaming|load(?:server)?)\.php\?id=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Referer': 'https://{0}/'.format(host),
-                   'X-Requested-With': 'XMLHttpRequest'}
-        js_data = json.loads(self.net.http_GET(web_url, headers=headers).content)
-        sources = js_data.get('source', None)
+                   'Referer': 'https://vidembed.cc/'}
+        html = self.net.http_GET(web_url, headers=headers).content
+        sources = helpers.scrape_sources(html)
         if sources:
-            sources = [(source.get('label'), source.get('file')) for source in sources]
-            headers.pop('X-Requested-With')
-            source = helpers.pick_source(helpers.sort_sources_list(sources))
-            if 'goto.php' in source:
-                source = source.split('url=')[1]
-                source = base64.b64decode(source[:10] + source[53:]).decode('ascii')
-            return source + helpers.append_headers(headers)
+            headers.update({'Origin': 'https://vidembed.cc'})
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://vidcloud9.com/ajax.php?id={media_id}')
+        return self._default_get_url(host, media_id, template='https://vidembed.cc/loadserver.php?id={media_id}')
