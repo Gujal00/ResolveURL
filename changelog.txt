@@ -1,15 +1,13 @@
-Version 5.1.42 (Sep 19, 2021)
+Version 5.1.43 (Sep 20, 2021)
 - Code Base Changes:
-    - Fix basestring check in helper
-
+    - None
 - Resolvers Added:
-    - filerio
-    - brupload
-    - fastdrive
-    - pandafiles
+    - None
  
 - Resolvers Fixed/Updated:
-    - FEmbed
+    - doodstream
+    - streamtape
+    - vidcloud9
 
 - Resolvers Removed
     - None
