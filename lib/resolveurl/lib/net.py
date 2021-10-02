@@ -178,10 +178,12 @@ class Net:
         try:
             import platform
             node = platform.node().lower()
+            node_os = platform.system()
         except:
             node = ''
+            node_os = ''
 
-        if not self._ssl_verify or node == 'xboxone':
+        if not self._ssl_verify or node == 'xboxone' or (node_os == "Windows" and kodi.py_info > (3, 6, 0)):
             try:
                 import ssl
                 ctx = ssl.create_default_context()

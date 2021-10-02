@@ -31,6 +31,7 @@ show_settings = addon.openSettings
 sleep = xbmc.sleep
 _log = xbmc.log
 py_ver = sys.version
+py_info = sys.version_info
 
 
 def get_path():
