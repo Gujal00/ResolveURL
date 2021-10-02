@@ -29,8 +29,8 @@ class FembedResolver(ResolveUrl):
                "femoload.xyz", "feurl.com", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
                "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com", "fcdn.stream",
                "mediashore.org", "there.to", "femax20.com", "sexhd.co", "viplayer.cc", "mrdhan.com",
-               "embedsito.com", "dutrag.com", "youvideos.ru", "streamm4u.club"]
-    pattern = r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefiles?|femoload|dailyplanet|jplayer|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru))/(?:v|f)/([a-zA-Z0-9-]+)'
+               "embedsito.com", "dutrag.com", "youvideos.ru", "streamm4u.club", "moviepl.xyz"]
+    pattern = r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefiles?|femoload|dailyplanet|jplayer|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru))/(?:v|f)/([a-zA-Z0-9-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
