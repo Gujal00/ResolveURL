@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import random
 import base64
-import re
+# import re
 import json
 from Cryptodome.Cipher import AES
 from Cryptodome.Util import Padding
@@ -30,7 +30,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VidCloud9Resolver(ResolveUrl):
     name = "vidcloud9.com"
     domains = ['vidcloud9.com', 'vidnode.net', 'vidnext.net', 'vidembed.net', 'vidembed.cc']
-    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|vidembed)\.(?:com|net|cc))/(?:streaming|load(?:server)?)\.php\?id=([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|vidembed)\.(?:com|net|cc))/(?:streaming|embedplus|load(?:server)?)(?:\.php)?\?id=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
