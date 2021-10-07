@@ -18,10 +18,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import random
 import base64
-# import re
 import json
-from Cryptodome.Cipher import AES
-from Cryptodome.Util import Padding
+from resolveurl.lib import pyaes
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -39,8 +37,9 @@ class VidCloud9Resolver(ResolveUrl):
 
         key = '25746538592938496764662879833288'.encode('utf8')
         iv = self.f_random(16)
-        encryptor = AES.new(key, AES.MODE_CBC, iv.encode('utf8'))
-        eid = encryptor.encrypt(Padding.pad(media_id.encode('utf8'), AES.block_size))
+        encryptor = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv.encode('utf8')))
+        eid = encryptor.feed(media_id)
+        eid += encryptor.feed()
         url = 'https://vidembed.cc' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
             + '&refer=none&time=' + self.f_random(2) + iv + self.f_random(2)
         headers.update({"X-Requested-With": "XMLHttpRequest"})

@@ -45,9 +45,9 @@ class StreamCommunityResolver(ResolveUrl):
     def get_token(self, a):
         import time
         import base64
-        from Cryptodome.Hash import MD5
+        from hashlib import md5
         t = int(time.time() + 172800)
         s = '{0}{1} Yc8U6r8KjAKAepEA'.format(t, a)
-        c = base64.b64encode(MD5.new(s.encode('utf-8')).digest()).decode('utf-8')
+        c = base64.b64encode(md5(s.encode('utf-8')).digest()).decode('utf-8')
         c = c.replace('=', '').replace('+', '-').replace('/', '_')
         return '?token={0}&expires={1}'.format(c, t)
