@@ -1,13 +1,13 @@
-Version 5.1.44 (Oct 3, 2021)
+Version 5.1.45 (Oct 7, 2021)
 - Code Base Changes:
-    - Handle X.509 certificate alternate path error on Windows Python 3
+    - Handle X.509 certificate alternate path error using certifi
+
 - Resolvers Added:
-    - costv
+    - None
  
 - Resolvers Fixed/Updated:
-    - doodstream
-    - fembed
-    - streamsb
+    - streamingcommunity
+    - vidbom
     - vidcloud9
 
 - Resolvers Removed
