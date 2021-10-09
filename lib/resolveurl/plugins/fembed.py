@@ -28,9 +28,9 @@ class FembedResolver(ResolveUrl):
     domains = ["fembed.com", "anime789.com", "24hd.club", "vcdn.io", "sharinglink.club", "votrefiles.club",
                "femoload.xyz", "feurl.com", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
                "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com", "fcdn.stream",
-               "mediashore.org", "there.to", "femax20.com", "sexhd.co", "viplayer.cc", "mrdhan.com",
+               "mediashore.org", "there.to", "femax20.com", "sexhd.co", "viplayer.cc", "mrdhan.com", "votrefilms.xyz",
                "embedsito.com", "dutrag.com", "youvideos.ru", "streamm4u.club", "moviepl.xyz"]
-    pattern = r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefiles?|femoload|dailyplanet|jplayer|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru))/(?:v|f)/([a-zA-Z0-9-]+)'
+    pattern = r'(?://|\.)((?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|femoload|dailyplanet|jplayer|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl)\.(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru))/(?:v|f)/([a-zA-Z0-9-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
