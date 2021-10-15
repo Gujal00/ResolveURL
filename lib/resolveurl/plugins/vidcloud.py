@@ -19,8 +19,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class VidCloudResolver(ResolveGeneric):
     name = 'vidcloud'
-    domains = ['vidcloud.co', 'vidcloud.pro', 'vidcloud.is']
-    pattern = r'(?://|\.)(vidcloud\.(?:co|pro|is))/(?:embed\d/|v/|player\?fid=)([0-9a-zA-Z?&=]+)'
+    domains = ['vidcloud.co', 'vidcloud.pro', 'vidcloud.is', 'vidcloud.fun']
+    pattern = r'(?://|\.)(vidcloud\.(?:co|pro|is|fun))/(?:embed\d/|v/|player\?fid=)([0-9a-zA-Z?&=]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
