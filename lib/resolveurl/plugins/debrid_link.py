@@ -38,7 +38,6 @@ class DebridLinkResolver(ResolveUrl):
     domains = ["*"]
 
     def __init__(self):
-        self.net = common.Net()
         self.hosters = None
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT, 'Authorization': 'Bearer {0}'.format(self.get_setting('token'))}
@@ -114,8 +113,9 @@ class DebridLinkResolver(ResolveUrl):
             url = '{0}/seedbox/cached?url={1}'.format(api_url, media_id)
             result = json.loads(self.net.http_GET(url, headers=self.headers).content)
             if result.get('success', False):
-                if media_id in list(result.get('value').keys()):
-                    return True
+                if isinstance(result.get('value'), dict):
+                    if media_id in list(result.get('value').keys()):
+                        return True
         except urllib_error.HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):
