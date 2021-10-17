@@ -1,18 +1,14 @@
-Version 5.1.46 (Oct 16, 2021)
+Version 5.1.47 (Oct 17, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - gomoplayer
-    - peertube
-    - playhd
-    - streamlare
+    - None
  
 - Resolvers Fixed/Updated:
+    - debridlink
     - fembed
-    - streamingcommunity
     - streamsb
-    - voe.sx
     - vidcloud
 
 - Resolvers Removed
