@@ -24,8 +24,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamCommunityResolver(ResolveUrl):
     name = "streamcommunity"
-    domains = ['streamingcommunity.xyz', 'streamingcommunity.one', 'streamingcommunity.video']
-    pattern = r'(?://|\.)(streamingcommunity\.(?:one|xyz|video))/watch/(\d+(?:\?e=)?\d+)'
+    domains = ['streamingcommunity.xyz', 'streamingcommunity.one', 'streamingcommunity.vip', 'streamingcommunity.work',
+                'streamingcommunity.name', 'streamingcommunity.video', 'streamingcommunity.live']
+    pattern = r'(?://|\.)(streamingcommunity\.(?:one|xyz|video|vip|work|name|live))/watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
