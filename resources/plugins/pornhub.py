@@ -41,13 +41,6 @@ class PornHubResolver(ResolveUrl):
             sources = [(src.get('text'), src.get('url')) for src in sources if src.get('url')]
 
         if not sources:
-            fvars = re.search(r'flashvars_\d+\s*=\s*(.+?);\s', html)
-            if fvars:
-                sources = json.loads(fvars.group(1)).get('mediaDefinitions')
-                sources = [(src.get('quality'), src.get('videoUrl')) for src in sources if
-                           type(src.get('quality')) is not list and src.get('videoUrl')]
-
-        if not sources:
             sections = re.findall(r'(var\sra[a-z0-9]+=.+?);flash', html)
             for section in sections:
                 pvars = re.findall(r'var\s(ra[a-z0-9]+)=([^;]+)', section)
@@ -62,6 +55,13 @@ class PornHubResolver(ResolveUrl):
                     r = re.findall(r'(\d+p)', link, re.I)
                     if r:
                         sources.append((r[0], link))
+
+        if not sources:
+            fvars = re.search(r'flashvars_\d+\s*=\s*(.+?);\s', html)
+            if fvars:
+                sources = json.loads(fvars.group(1)).get('mediaDefinitions')
+                sources = [(src.get('quality'), src.get('videoUrl')) for src in sources if
+                           type(src.get('quality')) is not list and src.get('videoUrl')]
 
         if sources:
             headers.update({'Origin': 'https://www.{0}'.format(host)})
