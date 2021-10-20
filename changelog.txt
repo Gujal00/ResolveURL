@@ -1,10 +1,10 @@
-Version 2.1.16 (August 04, 2021)
+Version 2.1.17 (October 20, 2021)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - xhamster
+    - pornhub
 
 - Resolvers Removed
     - None
