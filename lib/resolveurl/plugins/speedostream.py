@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from resolveurl.plugins.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from six.moves import urllib_parse
 
 
 class SpeedoStreamResolver(ResolveGeneric):
@@ -26,8 +27,9 @@ class SpeedoStreamResolver(ResolveGeneric):
     pattern = r'(?://|\.)(speedostream\.com)/(?:embed-)?([^\n]+)'
 
     def get_media_url(self, host, media_id):
-        if '|' in media_id:
-            media_id, referer = media_id.split('|')
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
         else:
             referer = True
         return helpers.get_media_url(self.get_url(host, media_id),

@@ -31,15 +31,14 @@ class DaxabResolver(ResolveUrl):
     pattern = r'(?://|\.)(daxab\.com)/player/([^\n]+)'
 
     def get_media_url(self, host, media_id):
-        if '|' in media_id:
-            media_id, referer = media_id.split('|')
-            r = urllib_parse.urlparse(referer)
-            referer = '{0}://{1}/'.format(r.scheme, r.netloc)
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
         else:
             referer = False
         web_url = self.get_url(host, media_id)
         if not referer:
-            referer = 'https://{0}/'.format(host)
+            referer = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': referer}
         html = self.net.http_GET(web_url, headers=headers).content
