@@ -35,13 +35,11 @@ class StreamzResolver(ResolveUrl):
 
         if '<b>File not found, sorry!</b>' not in html:
             html += helpers.get_packed_data(html)
-            sources = helpers.scrape_sources(html)
-
-            if sources:
-                headers.update({'Referer': web_url})
-                vurl = helpers.pick_source(sources)
-                vurl = re.sub('get[0-9a-zA-Z]{4,5}-', 'getlink-', vurl)
-                return helpers.get_redirect_url(vurl, headers) + helpers.append_headers(headers)
+            v = re.search(r"player\s*=\s*.*?'([^']+)", html)
+            if v:
+                vurl = re.search(r'''{0}".+?src:\s*'([^']+)'''.format(v.group(1)), html)
+                if vurl:
+                    return helpers.get_redirect_url(vurl.group(1), headers) + helpers.append_headers(headers)
 
         raise ResolverError('Video not found or removed')
 
