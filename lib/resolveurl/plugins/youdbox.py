@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class YouDBoxResolver(ResolveUrl):
     name = "youdbox"
-    domains = ['youdbox.com', 'youdbox.net']
-    pattern = r'(?://|\.)(youdbox\.(?:com|net))/(?:embed-)?(\w+)'
+    domains = ['youdbox.com', 'youdbox.net', 'youdbox.org']
+    pattern = r'(?://|\.)(youdbox\.(?:com|net|org))/(?:embed-)?(\w+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
