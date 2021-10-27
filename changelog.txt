@@ -1,15 +1,16 @@
-Version 5.1.48 (Oct 22, 2021)
+Version 5.1.49 (Oct 28, 2021)
 - Code Base Changes:
-    - updated unpacker
-    - update timeout handling
+    - None
 
 - Resolvers Added:
-    - videoslala.com
-    - videoslala.net
+    - videoo
  
 - Resolvers Fixed/Updated:
+    - fembed
     - streamingcommunity
-    - streamsb
+    - streamtape
+    - streamz
+    - youdbox
 
 - Resolvers Removed
     - None
