@@ -25,8 +25,8 @@ from six.moves import urllib_error
 
 class StreamTapeResolver(ResolveUrl):
     name = "streamtape"
-    domains = ['streamtape.com', 'strtape.cloud']
-    pattern = r'(?://|\.)(str(?:eam)?tape\.(?:com|cloud))/(?:e|v)/([0-9a-zA-Z]+)'
+    domains = ['streamtape.com', 'strtape.cloud', 'streamtape.net']
+    pattern = r'(?://|\.)(str(?:eam)?tape\.(?:com|cloud|net))/(?:e|v)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
