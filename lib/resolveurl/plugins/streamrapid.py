@@ -27,7 +27,7 @@ import json
 class StreamRapidResolver(ResolveUrl):
     name = "streamrapid"
     domains = ['streamrapid.ru']
-    pattern = r'(?://|\.)(streamrapid\.ru)/embed-4/([^\n]+)'
+    pattern = r'(?://|\.)(streamrapid\.ru)/embed-([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -35,8 +35,6 @@ class StreamRapidResolver(ResolveUrl):
             referer = urllib_parse.urljoin(referer, '/')
         else:
             referer = False
-        if '?' in media_id:
-            media_id = media_id.split('?')[0]
         web_url = self.get_url(host, media_id)
         rurl = urllib_parse.urljoin(web_url, '/')
         if not referer:
@@ -46,22 +44,24 @@ class StreamRapidResolver(ResolveUrl):
                    'Referer': referer}
         html = self.net.http_GET(web_url, headers).content
         token = helpers.girc(html, rurl, domain)
-        if token:
-            number = re.findall(r"recaptchaNumber\s*=\s*'(\d+)", html)
-            if number:
-                surl = 'https://streamrapid.ru/ajax/embed-4/getSources'
-                data = {'_number': number[0],
-                        'id': media_id,
-                        '_token': token}
-                headers.update({'X-Requested-With': 'XMLHttpRequest'})
-                shtml = self.net.http_GET('{0}?{1}'.format(surl, urllib_parse.urlencode(data)), headers=headers).content
-                sources = json.loads(shtml).get('sources')
-                if sources:
-                    source = sources[0].get('file')
-                    headers.pop('X-Requested-With')
-                    return source + helpers.append_headers(headers)
+        number = re.findall(r"recaptchaNumber\s*=\s*'(\d+)", html)
+        if token and number:
+            eid, media_id = media_id.split('/')
+            surl = 'https://streamrapid.ru/ajax/embed-{0}/getSources'.format(eid)
+            if '?' in media_id:
+                media_id = media_id.split('?')[0]
+            data = {'_number': number[0],
+                    'id': media_id,
+                    '_token': token}
+            headers.update({'X-Requested-With': 'XMLHttpRequest'})
+            shtml = self.net.http_GET('{0}?{1}'.format(surl, urllib_parse.urlencode(data)), headers=headers).content
+            sources = json.loads(shtml).get('sources')
+            if sources:
+                source = sources[0].get('file')
+                headers.pop('X-Requested-With')
+                return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-4/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}')
