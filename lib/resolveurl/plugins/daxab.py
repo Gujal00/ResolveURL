@@ -51,8 +51,11 @@ class DaxabResolver(ResolveUrl):
             if ids:
                 id1, id2 = ids.group(1).split('_')
                 sources = json.loads(re.findall(r'cdn_files:\s*([^}]+})', params)[0])
-                sources = [(key[4:], 'https://{0}/videos/{1}/{2}/{3}'.format(server, id1, id2, sources[key].replace('.', '.mp4?extra=')))
-                           for key in list(sources.keys())]
+                sources = [
+                    (key[4:], 'https://{0}/videos/{1}/{2}/{3}'.format(
+                        server, id1, id2, sources[key].replace('.', '.mp4?extra=')))
+                    for key in list(sources.keys())
+                ]
             else:
                 vid = re.findall(r'id:\s*"([^"]+)', params)[0]
                 ekeys = json.loads(re.findall(r'quality":\s*([^}]+})', params)[0])

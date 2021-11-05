@@ -34,8 +34,10 @@ class FembedResolver(ResolveUrl):
     pattern = r'(?://|\.)(' \
               r'(?:fembed|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|' \
               r'femoload|asianclub|dailyplanet|[jf]player|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|' \
-              r'vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl|vidcloud|diasfem)\.' \
-              r'(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru|tv|fun|info))/(?:v|f)/([a-zA-Z0-9-]+)'
+              r'vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl|vidcloud|' \
+              r'diasfem)\.' \
+              r'(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru|tv|fun|info))' \
+              r'/(?:v|f)/([a-zA-Z0-9-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
