@@ -70,7 +70,7 @@ class DaxabResolver(ResolveUrl):
                 vhtml = self.net.http_GET(vurl, headers=headers).content
                 sources = json.loads(vhtml).get('response').get('items')[0].get('files')
                 sources = [(key[4:], sources[key] + '&videos={0}&extra_key={1}&videos={0}'.format(vid, ekeys[key[4:]]))
-                           for key in list(sources.keys())]
+                           for key in list(sources.keys()) if key[4:] in ekeys.keys()]
 
             source = helpers.pick_source(sorted(sources, reverse=True))
             if 'extra_key' in source:
