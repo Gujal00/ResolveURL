@@ -24,9 +24,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VivosxResolver(ResolveUrl):
-    name = "vivosx"
-    domains = ["vivo.sx"]
-    pattern = r'(?://|\.)(vivo\.sx)/(?:embed/)?([0-9a-zA-Z]+)'
+    name = 'vivosx'
+    domains = ['vivo.sx', 'vivo.st']
+    pattern = r'(?://|\.)(vivo\.(?:sx|st))/(?:embed/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
