@@ -53,8 +53,12 @@ class UpToBoxResolver(ResolveUrl):
                     self.set_setting('premium', 'true')
             if js_result:
                 js_result = js_result.get('data').get('streamLinks')
-                sources = [(key, list(js_result.get(key).values())[0]) for key in list(js_result.keys())]
-                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(self.headers)
+                if isinstance(js_result, list):
+                    sources = [(key, list(js_result.get(key).values())[0]) for key in list(js_result.keys())]
+                    source = helpers.pick_source(helpers.sort_sources_list(sources))
+                else:
+                    source = js_result.get('src')
+                return source + helpers.append_headers(self.headers)
 
         raise ResolverError('The requested video was not found or may have been removed.')
 
