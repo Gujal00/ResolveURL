@@ -39,6 +39,9 @@ class FembedResolver(ResolveUrl):
               r'(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru|tv|fun|info))' \
               r'/(?:v|f)/([a-zA-Z0-9-]+)'
 
+    def __init__(self):
+        self.net = common.Net(ssl_verify=False)
+
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
@@ -62,6 +65,7 @@ class FembedResolver(ResolveUrl):
                 sources = helpers.sort_sources_list(sources)
                 rurl = helpers.pick_source(sources)
                 str_url = self.net.http_HEAD(rurl, headers=headers).get_url()
+                headers.update({'verifypeer': 'false'})
                 return str_url + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
