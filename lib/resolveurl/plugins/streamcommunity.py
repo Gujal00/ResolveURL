@@ -26,8 +26,8 @@ class StreamCommunityResolver(ResolveUrl):
     name = "streamcommunity"
     domains = ['streamingcommunity.xyz', 'streamingcommunity.one', 'streamingcommunity.vip',
                'streamingcommunity.work', 'streamingcommunity.name', 'streamingcommunity.video',
-               'streamingcommunity.live', 'streamingcommunity.tv', 'streamingcommunity.space']
-    pattern = r'(?://|\.)(streamingcommunity\.(?:one|xyz|video|vip|work|name|live|tv|space))/watch/(\d+(?:\?e=)?\d+)'
+               'streamingcommunity.live', 'streamingcommunity.tv', 'streamingcommunity.space', 'streamingcommunity.art']
+    pattern = r'(?://|\.)(streamingcommunity\.(?:one|xyz|video|vip|work|name|live|tv|space|art))/watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
