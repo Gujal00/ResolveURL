@@ -1,20 +1,20 @@
-Version 5.1.50 (Nov 06, 2021)
+Version 5.1.51 (Nov 20, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - streamrapid
+    - None
  
 - Resolvers Fixed/Updated:
+    - daxab
     - fembed
-    - gomoplayer
-    - hdvid
     - streamingcommunity
     - streamtape
-    - vupload
+    - uptobox
+    - vivosx
 
 - Resolvers Removed
-    - cocoscope
+    - None
 
 - Languages Added/Updated
     - None
