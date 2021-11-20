@@ -30,12 +30,12 @@ class FembedResolver(ResolveUrl):
                "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com", "fcdn.stream",
                "mediashore.org", "there.to", "femax20.com", "sexhd.co", "viplayer.cc", "mrdhan.com", "votrefilms.xyz",
                "embedsito.com", "dutrag.com", "youvideos.ru", "streamm4u.club", "moviepl.xyz", "asianclub.tv",
-               "vidcloud.fun", "fplayer.info", "diasfem.com", "fembad.org"]
+               "vidcloud.fun", "fplayer.info", "diasfem.com", "fembad.org", "moviemaniac.org"]
     pattern = r'(?://|\.)(' \
               r'(?:femb[ae]d|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|' \
               r'femoload|asianclub|dailyplanet|[jf]player|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|' \
               r'vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl|vidcloud|' \
-              r'diasfem)\.' \
+              r'diasfem|moviemaniac)\.' \
               r'(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru|tv|fun|info))' \
               r'/(?:v|f)/([a-zA-Z0-9-]+)'
 
