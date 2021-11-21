@@ -80,7 +80,9 @@ class RealDebridResolver(ResolveUrl):
                             while status == 'magnet_conversion' and _TIMEOUT > 0:
                                 cd.update(_TIMEOUT, line1=line1, line3=line3)
                                 if cd.is_canceled():
-                                    self.__delete_torrent(torrent_id)
+                                    keep_transfer = common.kodi.yesnoDialog('Continue trying transferring to Real-Debrid Cloud in the background?', heading=heading)
+                                    if not keep_transfer:
+                                        self.__delete_torrent(torrent_id)
                                     raise ResolverError('Real-Debrid: Torrent ID %s canceled by user' % torrent_id)
                                 elif any(x in status for x in STALLED):
                                     self.__delete_torrent(torrent_id)
@@ -132,7 +134,9 @@ class RealDebridResolver(ResolveUrl):
                                         logger.log_debug(line3)
                                         pd.update(int(float(torrent_info.get('progress'))), line1=line1, line3=line3)
                                         if pd.is_canceled():
-                                            self.__delete_torrent(torrent_id)
+                                            keep_transfer = common.kodi.yesnoDialog('Keep transferring to Real-Debrid Cloud in the background?', heading=heading)
+                                            if not keep_transfer:
+                                                self.__delete_torrent(torrent_id)
                                             raise ResolverError('Real-Debrid: Torrent ID %s canceled by user' % torrent_id)
                                         elif any(x in status for x in STALLED):
                                             self.__delete_torrent(torrent_id)

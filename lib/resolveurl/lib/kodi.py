@@ -231,6 +231,12 @@ def get_current_view():
                 return view
 
 
+def yesnoDialog(message, heading=get_name(), nolabel='', yeslabel=''):
+    if kodi_version() >= 19.0:
+        return xbmcgui.Dialog().yesno(heading, message, nolabel, yeslabel)
+    return xbmcgui.Dialog().yesno(heading, message, '', '', nolabel, yeslabel)
+
+
 class WorkingDialog(object):
     def __init__(self):
         xbmc.executebuiltin('ActivateWindow(busydialog)')
