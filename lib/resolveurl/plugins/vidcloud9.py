@@ -26,23 +26,23 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VidCloud9Resolver(ResolveUrl):
-    name = "vidcloud9.com"
-    domains = ['vidcloud9.com', 'vidnode.net', 'vidnext.net', 'vidembed.net', 'vidembed.cc']
-    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|vidembed)\.(?:com|net|cc))/(?:streaming|embedplus|load(?:server)?)(?:\.php)?\?id=([0-9a-zA-Z]+)'
+    name = 'vidcloud9.com'
+    domains = ['vidcloud9.com', 'vidnode.net', 'vidnext.net', 'vidembed.net', 'vidembed.cc', 'vidembed.io']
+    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|vidembed)\.(?:com|net|cc|io))/(?:streaming|embedplus|load(?:server)?)(?:\.php)?\?id=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Referer': 'https://vidembed.cc/'}
+                   'Referer': 'https://vidembed.io/'}
 
         key = '25746538592938496764662879833288'.encode('utf8')
         iv = self.f_random(16)
         encryptor = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv.encode('utf8')))
         eid = encryptor.feed(media_id)
         eid += encryptor.feed()
-        url = 'https://vidembed.cc' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
+        url = 'https://vidembed.io' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
             + '&refer=none&time=' + self.f_random(2) + iv + self.f_random(2)
-        headers.update({"X-Requested-With": "XMLHttpRequest"})
+        headers.update({'X-Requested-With': 'XMLHttpRequest'})
         js_data = json.loads(self.net.http_GET(url, headers=headers).content)
         sources = js_data.get('source', None)
         if sources:
@@ -52,17 +52,17 @@ class VidCloud9Resolver(ResolveUrl):
             return source + helpers.append_headers(headers)
 
         # Try Beta Server if no sources found with earlier method
-        headers.pop("X-Requested-With")
+        headers.pop('X-Requested-With')
         html = self.net.http_GET(web_url, headers=headers).content
         sources = helpers.scrape_sources(html)
         if sources:
-            headers.update({'Origin': 'https://vidembed.cc'})
+            headers.update({'Origin': 'https://vidembed.io'})
             return helpers.pick_source(sources) + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://vidembed.cc/loadserver.php?id={media_id}')
+        return self._default_get_url(host, media_id, template='https://vidembed.io/loadserver.php?id={media_id}')
 
     def f_random(self, x):
         stime = ''
