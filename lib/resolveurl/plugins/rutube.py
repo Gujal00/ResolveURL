@@ -31,20 +31,28 @@ class RuTubeResolver(ResolveUrl):
         headers = {'User-Agent': common.FF_USER_AGENT}
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
-        json_data = json.loads(html).get('video_balancer', {})
+        html = json.loads(html)
+        url = ''
+        json_data = html.get('video_balancer')
         if json_data:
-            url = json_data.get('m3u8', None)
-            if url:
-                headers.update({'Origin': 'http://rutube.ru'})
-                mbtext = self.net.http_GET(url, headers=headers).content
-                sources = re.findall('RESOLUTION=(?P<label>[^x]+).+\n(?P<url>[^?]+)', mbtext, re.IGNORECASE)
-                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+            url = json_data.get('m3u8')
+            if not url:
+                json_url = json_data.get('json')
+                html = self.net.http_GET(json_url, headers=headers).content
+                js_data = json.loads(html)
+                if js_data.get('results', False):
+                    return js_data.get('results')[0] + helpers.append_headers(headers)
 
-            json_url = json_data.get('json')
-            html = self.net.http_GET(json_url, headers=headers).content
-            js_data = json.loads(html)
-            if js_data.get('results', False):
-                return js_data.get('results')[0] + helpers.append_headers(headers)
+        if not url:
+            json_data = html.get('live_streams')
+            if json_data:
+                url = json_data.get('hls')[0].get('url')
+
+        if url:
+            headers.update({'Origin': 'http://rutube.ru'})
+            mbtext = self.net.http_GET(url, headers=headers).content
+            sources = re.findall(r'RESOLUTION=\d+x(?P<label>\d+).*\n(?P<url>[^?\n]+)', mbtext, re.IGNORECASE)
+            return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('No playable video found.')
 
