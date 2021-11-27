@@ -231,10 +231,8 @@ def get_current_view():
                 return view
 
 
-def yesnoDialog(message, heading=get_name(), nolabel='', yeslabel=''):
-    if kodi_version() >= 19.0:
-        return xbmcgui.Dialog().yesno(heading, message, nolabel, yeslabel)
-    return xbmcgui.Dialog().yesno(heading, message, '', '', nolabel, yeslabel)
+def yesnoDialog(heading=get_name(), line1='', line2='', line3='', nolabel='', yeslabel=''):
+    return xbmcgui.Dialog().yesno(heading, line1 + '[CR]' + line2 + '[CR]' + line3, nolabel=nolabel, yeslabel=yeslabel)
 
 
 class WorkingDialog(object):

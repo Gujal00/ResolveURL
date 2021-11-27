@@ -80,9 +80,11 @@ class RealDebridResolver(ResolveUrl):
                             while status == 'magnet_conversion' and _TIMEOUT > 0:
                                 cd.update(_TIMEOUT, line1=line1, line3=line3)
                                 if cd.is_canceled():
-                                    keep_transfer = common.kodi.yesnoDialog('Continue trying transferring to Real-Debrid Cloud in the background?[CR]'\
-                                                                            'You may have to select desired file(s) on real-debrid.com/torrents at this stage',
-                                                                            heading=heading)
+                                    keep_transfer = common.kodi.yesnoDialog(
+                                        heading,
+                                        'Continue trying transferring to Real-Debrid Cloud in the background?',
+                                        'You may have to select desired file(s) on real-debrid.com/torrents at this stage'
+                                    )
                                     if not keep_transfer:
                                         self.__delete_torrent(torrent_id)
                                     raise ResolverError('Real-Debrid: Torrent ID %s canceled by user' % torrent_id)
@@ -136,7 +138,10 @@ class RealDebridResolver(ResolveUrl):
                                         logger.log_debug(line3)
                                         pd.update(int(float(torrent_info.get('progress'))), line1=line1, line3=line3)
                                         if pd.is_canceled():
-                                            keep_transfer = common.kodi.yesnoDialog('Keep transferring to Real-Debrid Cloud in the background?', heading=heading)
+                                            keep_transfer = common.kodi.yesnoDialog(
+                                                heading,
+                                                'Keep transferring to Real-Debrid Cloud in the background?'
+                                            )
                                             if not keep_transfer:
                                                 self.__delete_torrent(torrent_id)
                                             raise ResolverError('Real-Debrid: Torrent ID %s canceled by user' % torrent_id)
