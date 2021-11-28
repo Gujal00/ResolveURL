@@ -16,20 +16,40 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import re
 from resolveurl.plugins.lib import helpers
+from resolveurl import common
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class SuperVideoResolver(ResolveGeneric):
+class SuperVideoResolver(ResolveUrl):
     name = "supervideo.tv"
     domains = ['supervideo.tv']
-    pattern = r'(?://|\.)(supervideo\.tv)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(supervideo\.tv)/(?:embed-|e/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''file:\s*"(?P<url>[^"]+)",\s*label:\s*"(?P<label>[^"]+)'''],
-                                     generic_patterns=False,
-                                     result_blacklist=['.m3u8'])
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': 'https://{0}/'.format(host)}
+        html = self.net.http_GET(web_url, headers=headers).content
+        source = re.search(r"download_video.+?'o','([^']+)", html)
+        if source:
+            dl_url = 'https://{0}/dl?op=download_orig&id={1}&mode=o&hash={2}'.format(host, media_id, source.group(1))
+            html2 = self.net.http_GET(dl_url, headers=headers).content
+            r = re.search(r'btn_direct-download"\s*href="([^"]+)', html2)
+            if r:
+                return r.group(1) + helpers.append_headers(headers)
+
+        pdata = helpers.get_packed_data(html)
+        if pdata:
+            html = pdata
+        sources = helpers.scrape_sources(html,
+                                         patterns=[r'''{\s*file:\s*"(?P<url>[^"]+)"\s*}'''],
+                                         generic_patterns=False)
+        if sources:
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
+
+        raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
