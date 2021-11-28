@@ -38,7 +38,7 @@ has_addon = kodi.has_addon
 i18n = kodi.i18n
 
 # Supported video formats
-VIDEO_FORMATS = ['.aac', '.asf', '.avi', '.flv', '.m4a', '.m4v', '.mka', '.mkv', '.mp4', '.mpeg', '.nut', '.ogg']
+VIDEO_FORMATS = kodi.supported_video_extensions()
 
 # RAND_UA = get_ua()
 IE_USER_AGENT = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'

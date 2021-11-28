@@ -75,6 +75,13 @@ def kodi_version():
     return float(xbmcaddon.Addon('xbmc.addon').getAddonInfo('version')[:4])
 
 
+def supported_video_extensions():
+    supported_video_extensions = xbmc.getSupportedMedia('video').split('|')
+    unsupported = ['.url', '.zip', '.rar', '.001', '.7z', '.tar.gz', '.tar.bz2',
+                   '.tar.xz', '.tgz', '.tbz2', '.gz', '.bz2', '.xz', '.tar']
+    return [i for i in supported_video_extensions if i not in unsupported]
+
+
 def open_settings():
     return addon.openSettings()
 
