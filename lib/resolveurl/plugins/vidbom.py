@@ -26,7 +26,7 @@ class VidBomResolver(ResolveUrl):
     name = "vidbom"
     domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org',
                'myviid.com', 'myviid.net', 'myvid.com',
-               'vidshare.com', 'vedsharr.com', 'vedshar.com']
+               'vidshare.com', 'vedsharr.com', 'vedshar.com', 'vedshare.com']
     pattern = r'(?://|\.)((?:v[ie]d[bp][oe]?m|myvii?d|v[ei]dshar[er]?)\.(?:com|net|org))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
@@ -41,7 +41,7 @@ class VidBomResolver(ResolveUrl):
             aa_decoded = aadecode.decode(aa_text.group(1))
             sources = helpers.scrape_sources(aa_decoded)
         else:
-            sources = helpers.scrape_sources(html, patterns=[r'''sources:\s*\[{src:\s*"(?P<url>[^"]+)'''])
+            sources = helpers.scrape_sources(html, patterns=[r'''sources:\s*\[{(?:src|file):\s*"(?P<url>[^"]+)'''])
 
         if sources:
             headers.update({'Referer': web_url})
