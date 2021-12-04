@@ -19,6 +19,7 @@
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+import re
 
 
 class PandaFilesResolver(ResolveUrl):
@@ -33,16 +34,16 @@ class PandaFilesResolver(ResolveUrl):
                    'Origin': rurl[:-1],
                    'Referer': rurl}
         data = {
-            'op': 'download1',
+            'op': 'download2',
             'usr_login': '',
             'id': media_id,
             'referer': rurl,
             'method_free': 'Free Download'
         }
         html = self.net.http_POST(web_url, form_data=data, headers=headers).content
-        sources = helpers.scrape_sources(html)
-        if sources:
-            return helpers.pick_source(sources) + helpers.append_headers(headers)
+        source = re.search(r'id="direct_link">\s*<a\s*href="([^"]+)', html)
+        if source:
+            return source.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
