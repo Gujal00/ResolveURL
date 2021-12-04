@@ -1,25 +1,25 @@
-Version 5.1.52 (Nov 27, 2021)
+Version 5.1.53 (Dec 05, 2021)
 - Code Base Changes:
-    - Add yesnodialog
+    - update supported video extensions
 
 - Resolvers Added:
-    - rovideo
-    - send
+    - peertube
+    - streamhub
+    - vtube
  
 - Resolvers Fixed/Updated:
-    - fembed
-    - mixdrop
-    - rutube
-    - realdebrid
+    - lbry
+    - pandafiles
+    - streamingcommunity
     - streamsb
-    - streamtape
-    - vidcloud9
-    - vidmoly
+    - supervideo
+    - tvlogy
+    - vidbom
+    - vudeo
     - vupload
 
 - Resolvers Removed
-    - thevid
-    - trollvid
+    - None
 
 - Languages Added/Updated
     - None
