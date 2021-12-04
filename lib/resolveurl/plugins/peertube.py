@@ -24,18 +24,24 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class PeerTubeResolver(ResolveUrl):
     name = "peertube"
-    domains = ["peertube.uno"]
-    pattern = r'(?://|\.)(peertube\.uno)/videos/(?:embed|watch)/([0-9a-f-]+)'
+    domains = ["peertube.tv","peertube.co.uk","peertube.uno"]
+    pattern = r'(?://|\.)(peertube\.(?:tv|co\.uk|uno))/(?:videos/)?(?:embed|watch|w)/([0-9a-zA-Z-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers).content
-        item = json.loads(html).get('streamingPlaylists')
-        if item:
-            return item[0].get('playlistUrl') + helpers.append_headers(headers)
+        json_loaded = json.loads(html)
 
+        playlists = json_loaded.get('streamingPlaylists')
+        if playlists:
+            return playlists[0].get('playlistUrl') + helpers.append_headers(headers)
+
+        files = json_loaded.get('files')
+        if files:
+            return files[0].get('fileUrl') + helpers.append_headers(headers)
+        
         raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
