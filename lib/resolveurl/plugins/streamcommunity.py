@@ -36,7 +36,7 @@ class StreamCommunityResolver(ResolveUrl):
         match = re.search(r'''<video-player.+?scws_id[^\d]+(\d+)''', html, re.DOTALL)
         if match:
             scws_id = match.group(1)
-            headers.update({'Referer': 'https://streamingcommunity.video/'})
+            headers.update({'Referer': 'https://streamingcommunity.art/'})
             html = self.net.http_GET('https://scws.xyz/videos/' + scws_id, headers=headers).content
             a = json.loads(html).get('client_ip')
             url = 'https://scws.xyz/master/{0}?{1}'.format(scws_id, self.get_token(a))
@@ -45,7 +45,7 @@ class StreamCommunityResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://streamingcommunity.video/watch/{media_id}')
+        return self._default_get_url(host, media_id, template='https://streamingcommunity.art/watch/{media_id}')
 
     def get_token(self, a):
         import time
