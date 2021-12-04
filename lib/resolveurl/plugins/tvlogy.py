@@ -18,6 +18,7 @@
 
 import re
 import random
+import base64
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -29,7 +30,7 @@ class TVLogyResolver(ResolveUrl):
     pattern = r'(?://|\.)((?:hls\.|flow\.)?tvlogy\.to)/(?:embed/|watch\.php\?v=|player/index.php\?data=)?([0-9a-zA-Z/]+)'
 
     def get_media_url(self, host, media_id):
-        embeds = ['http://bestarticles.me/', 'http://tellygossips.net/']
+        embeds = ['http://bestarticles.me/', 'http://tellygossips.net/', 'http://tvarticles.org/']
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': random.choice(embeds)}
@@ -42,6 +43,7 @@ class TVLogyResolver(ResolveUrl):
         if 'Video is processing' in html:
             raise ResolverError('File still being processed')
 
+        html += helpers.get_packed_data(html)
         packed = re.search(r"JuicyCodes\.Run\((.+?)\)", html, re.I)
         if packed:
             from base64 import b64decode
@@ -49,12 +51,16 @@ class TVLogyResolver(ResolveUrl):
             packed = b64decode(packed.encode('ascii'))
             html += '%s</script>' % packed.decode('latin-1').strip()
 
-        source = helpers.scrape_sources(html)
+        source = helpers.scrape_sources(html, patterns=[r'''"file":\s*"(?P<url>[^"]+\.(?:m3u8|mp4|txt))"'''])
         if source:
             headers.update({'Referer': web_url, 'Accept': '*/*'})
             vsrv = re.search(r'//(\d+)/', source[0][1])
             if vsrv:
                 source = re.sub(r"//\d+/", "//{0}/".format(host), source[0][1]) + '?s={0}&d='.format(vsrv.group(1))
+                disk = re.findall(r'videoDisk":\s*"([^"]+)', html)
+                if disk:
+                    disk = base64.b64encode(disk[0].encode('utf-8')).decode('utf-8')
+                    source += disk
             else:
                 source = source[0][1]
             html = self.net.http_GET(source, headers=headers).content
