@@ -26,7 +26,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class StreamSBResolver(ResolveUrl):
     name = "streamsb"
     domains = ["sbembed.com", "sbembed1.com", "sbplay.org", "sbvideo.net", "streamsb.net", "sbplay.one",
-               "cloudemb.com", "playersb.com", "tubesb.com", "sbplay1.com", "embedsb.com", "watchsb.com"]
+               "cloudemb.com", "playersb.com", "tubesb.com", "sbplay1.com", "embedsb.com", "watchsb.com",
+               "sbplay2.com"]
     pattern = r'(?://|\.)((?:watch|embed|tube|player|cloudemb|stream)?s?b?(?:embed\d?|play\d?|video)?\.' \
               r'(?:com|net|org|one))/(?:embed-|e/|play/|d/)?([0-9a-zA-Z]+)'
 
