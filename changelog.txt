@@ -1,22 +1,19 @@
-Version 5.1.53 (Dec 05, 2021)
+Version 5.1.54 (Dec 12, 2021)
 - Code Base Changes:
-    - update supported video extensions
+    - None
 
 - Resolvers Added:
-    - peertube
-    - streamhub
-    - vtube
+    - hexupload
+    - hxfile
+    - racaty
  
 - Resolvers Fixed/Updated:
-    - lbry
-    - pandafiles
+    - fembed
+    - myfeminist
     - streamingcommunity
     - streamsb
-    - supervideo
-    - tvlogy
     - vidbom
-    - vudeo
-    - vupload
+    - vlalanet
 
 - Resolvers Removed
     - None
