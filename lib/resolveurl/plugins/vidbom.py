@@ -24,10 +24,10 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidBomResolver(ResolveUrl):
     name = "vidbom"
-    domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org',
+    domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org', 'vadbom.com',
                'myviid.com', 'myviid.net', 'myvid.com',
-               'vidshare.com', 'vedsharr.com', 'vedshar.com', 'vedshare.com']
-    pattern = r'(?://|\.)((?:v[ie]d[bp][oe]?m|myvii?d|v[ei]dshar[er]?)\.(?:com|net|org))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
+               'vidshare.com', 'vedsharr.com', 'vedshar.com', 'vedshare.com', 'vadshar.com']
+    pattern = r'(?://|\.)((?:v[aie]d[bp][oe]?m|myvii?d|v[aei]dshar[er]?)\.(?:com|net|org))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
