@@ -1,19 +1,15 @@
-Version 5.1.54 (Dec 12, 2021)
+Version 5.1.55 (Dec 25, 2021)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - hexupload
-    - hxfile
-    - racaty
+    - uploadflix
  
 - Resolvers Fixed/Updated:
-    - fembed
+    - doodstream
     - myfeminist
-    - streamingcommunity
-    - streamsb
-    - vidbom
-    - vlalanet
+    - sendvid
+    - tusfiles
 
 - Resolvers Removed
     - None
