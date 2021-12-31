@@ -20,7 +20,7 @@ import re
 import base64
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
-from resolveurl.resolver import ResolveUrl
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VoeResolver(ResolveUrl):
@@ -30,8 +30,7 @@ class VoeResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
-                   'Referer': 'https://{0}/'.format(host)}
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'uttf0\((\[[^)]+)', html)
         if r:
@@ -39,9 +38,15 @@ class VoeResolver(ResolveUrl):
             r = base64.b64decode(''.join(r)[::-1].encode('utf8')).decode('utf8')
             return r + helpers.append_headers(headers)
 
-        return helpers.get_media_url(web_url,
-                                     patterns=[r'''hls":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
-                                     generic_patterns=False)
+        sources = helpers.scrape_sources(
+            html,
+            patterns=[r'''hls":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
+            generic_patterns=False
+        )
+        if sources:
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
+
+        raise ResolverError('No video found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
