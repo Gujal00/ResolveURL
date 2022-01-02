@@ -23,7 +23,7 @@ from resolveurl.plugins.lib import helpers
 class StreamHubResolver(ResolveGeneric):
     name = 'streamhub'
     domains = ['streamhub.to']
-    pattern = r'(?://|\.)(streamhub\.to)/(?:e/|d/)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(streamhub\.to)/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
