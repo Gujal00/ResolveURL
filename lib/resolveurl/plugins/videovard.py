@@ -24,8 +24,8 @@ import json
 
 class VideoVardResolver(ResolveUrl):
     name = "videovard"
-    domains = ["videovard.sx"]
-    pattern = r'(?://|\.)(videovard\.sx)/[ved]/([0-9a-zA-Z]+)'
+    domains = ["videovard.sx", "videovard.to"]
+    pattern = r'(?://|\.)(videovard\.(?:sx|to))/[ved]/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
