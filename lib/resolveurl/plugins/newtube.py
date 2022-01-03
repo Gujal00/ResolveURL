@@ -24,7 +24,7 @@ class NewtubeResolver(ResolveGeneric):
 
     name = "newtube.app"
     domains = ['newtube.app']
-    pattern = r'(?://|\.)(newtube\.app)/(?:user/\w+|embed)/(\w+)'
+    pattern = r'(?://|\.)(newtube\.app)/(?:user/)?(?:embed/|\w+)/(\w+)'
 
     def get_media_url(self, host, media_id):
 
