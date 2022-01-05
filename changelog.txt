@@ -1,18 +1,24 @@
-Version 5.1.55 (Dec 25, 2021)
+Version 5.1.56 (Jan 5, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - uploadflix
+    - avideo
+    - duckstream
  
 - Resolvers Fixed/Updated:
-    - doodstream
-    - myfeminist
-    - sendvid
-    - tusfiles
+    - fembed
+    - newtube
+    - ok.ru
+    - streamhub
+    - streamtape
+    - vidbom
+    - videovard
+    - voe.sx
+    - youdbox
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - None
+    - Norwegian
