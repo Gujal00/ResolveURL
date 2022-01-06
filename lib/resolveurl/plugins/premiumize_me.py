@@ -215,8 +215,13 @@ class PremiumizeMeResolver(ResolveUrl):
                     logger.log_debug(line3)
                     pd.update(int(float(transfer_info.get('progress')) * 100), line1=line1, line3=line3)
                     if pd.is_canceled():
-                        self.__delete_transfer(transfer_id)
-                        # self.__delete_folder()
+                        keep_transfer = common.kodi.yesnoDialog(
+                            heading='ResolveURL Premiumize Transfer',
+                            line1='Keep transferring to Premiumize Cloud in the background?'
+                        )
+                        if not keep_transfer:
+                            self.__delete_transfer(transfer_id)
+                            # self.__delete_folder()
                         raise ResolverError('Transfer ID %s canceled by user' % transfer_id)
                     elif transfer_info.get('status') == 'stalled':  # not sure on this value
                         self.__delete_transfer(transfer_id)
