@@ -31,24 +31,25 @@ class FastdriveResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        rurl = 'https://{0}/'.format(host)
+        rurl = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': rurl}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search("href='([^']+).+?GET LINK", html)
+        r = re.search(r"btn--primary'\s*href='([^']+)", html)
         if r:
+            common.kodi.sleep(7000)
             g = self.net.http_GET(r.group(1), headers=headers)
-            html = g.content
-            gp = urllib_parse.urlparse(g.get_url())
-            data = helpers.get_hidden(html)
+            ghtml = g.content
+            gurl = g.get_url()
+            data = helpers.get_hidden(ghtml)
             headers.update({
-                'Origin': '{0}://{1}'.format(gp.scheme, gp.netloc),
-                'Referer': g.get_url(),
+                'Origin': urllib_parse.urljoin(gurl, '/')[:-1],
+                'Referer': gurl,
                 'X-Requested-With': 'XMLHttpRequest'
             })
-            purl = re.findall('<form.+?action="([^"]+)', html)[0]
+            purl = re.findall('<form.+?action="([^"]+)', ghtml)[0]
             if purl.startswith('/'):
-                purl = '{0}://{1}{2}'.format(gp.scheme, gp.netloc, purl)
+                purl = urllib_parse.urljoin(gurl, purl)
             common.kodi.sleep(5000)
             html = self.net.http_POST(purl, form_data=data, headers=headers).content
             jd = json.loads(html)
