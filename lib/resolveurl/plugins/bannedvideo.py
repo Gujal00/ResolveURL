@@ -22,8 +22,8 @@ from resolveurl.plugins.lib import helpers
 
 class BannedVideoResolver(ResolveGeneric):
     name = "banned.video"
-    domains = ['banned.video', 'freeworldnews.tv']
-    pattern = r'(?://|\.)(freeworldnews\.tv|banned\.video)/(?:watch\?id=|embed/)([0-9a-f]+)'
+    domains = ['banned.video', 'freeworldnews.tv', 'electionnight.news']
+    pattern = r'(?://|\.)(freeworldnews\.tv|banned\.video|electionnight\.news)/(?:watch\?id=|embed/)([0-9a-f]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
