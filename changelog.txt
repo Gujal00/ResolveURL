@@ -1,24 +1,20 @@
-Version 5.1.56 (Jan 5, 2022)
+Version 5.1.57 (Jan 14, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - avideo
-    - duckstream
+    - bannedvideo
+    - turboviplay
  
 - Resolvers Fixed/Updated:
+    - doodstream
+    - fastdrive
     - fembed
-    - newtube
-    - ok.ru
-    - streamhub
-    - streamtape
-    - vidbom
-    - videovard
-    - voe.sx
-    - youdbox
+    - premiumize
+    - vidcloud9
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - Norwegian
+    - None
