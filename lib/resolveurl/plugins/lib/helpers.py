@@ -317,7 +317,7 @@ def girc(page_data, url, co):
             'Referer': url}
     rurl = 'https://www.google.com/recaptcha/api.js'
     aurl = 'https://www.google.com/recaptcha/api2'
-    key = re.search(r'src="{0}\?.*?render=([^"]+)'.format(rurl), page_data)
+    key = re.search(r'(?:src="{0}\?.*?render|data-sitekey)="?([^"]+)'.format(rurl), page_data)
     if key:
         key = key.group(1)
         rurl = '{0}?render={1}'.format(rurl, key)
