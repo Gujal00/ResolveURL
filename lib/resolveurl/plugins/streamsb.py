@@ -18,6 +18,7 @@
 """
 
 import re
+import base64
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -44,7 +45,7 @@ class StreamSBResolver(ResolveUrl):
             code, mode, hash = eval(helpers.pick_source(sources))
             dl_url = 'https://{0}/dl?op=download_orig&id={1}&mode={2}&hash={3}'.format(host, code, mode, hash)
             html = self.net.http_GET(dl_url, headers=headers).content
-            domain = 'aHR0cHM6Ly9zdHJlYW1zYi5uZXQ6NDQz'
+            domain = base64.b64encode((rurl[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '')
             token = helpers.girc(html, rurl, domain)
             if token:
                 payload = helpers.get_hidden(html)
