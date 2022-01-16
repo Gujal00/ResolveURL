@@ -1,17 +1,15 @@
-Version 5.1.57 (Jan 14, 2022)
+Version 5.1.58 (Jan 16, 2022)
 - Code Base Changes:
-    - None
+    - helpers
 
 - Resolvers Added:
-    - bannedvideo
-    - turboviplay
+    - None
  
 - Resolvers Fixed/Updated:
-    - doodstream
-    - fastdrive
+    - avideo
     - fembed
-    - premiumize
-    - vidcloud9
+    - streamingcommunity
+    - streamsb
 
 - Resolvers Removed
     - None
