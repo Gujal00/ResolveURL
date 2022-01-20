@@ -22,15 +22,15 @@ from resolveurl.plugins.lib import helpers
 
 class AnonFilesResolver(ResolveGeneric):
     name = 'anonfiles.com'
-    domains = ['anonfiles.com']
-    pattern = r'(?://|\.)(anonfiles\.com)/([0-9a-zA-Z]+)'
+    domains = ['anonfiles.com', 'bayfiles.com']
+    pattern = r'(?://|\.)((?:bay|anon)files\.com)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
                                      patterns=[r'(?s)id="download-url".+?href="(?P<url>[^"]+)'],
                                      generic_patterns=False,
                                      referer=False,
-                                     result_blacklist=['.zip', '.rar'])
+                                     result_blacklist=['.zip', '.rar']).replace(' ', '%20')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
