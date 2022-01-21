@@ -16,38 +16,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
+import json
+import base64
 from six.moves import urllib_parse
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-import re
-import json
 
 
 class StreamRapidResolver(ResolveUrl):
     name = "streamrapid"
-    domains = ['streamrapid.ru']
-    pattern = r'(?://|\.)(streamrapid\.ru)/embed-([^\n]+)'
+    domains = ['streamrapid.ru', 'rabbitstream.net']
+    pattern = r'(?://|\.)((?:rabbitstream|streamrapid)\.(?:ru|net))/embed-([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
             referer = urllib_parse.urljoin(referer, '/')
         else:
-            referer = False
+            # Needs to be hard coded for now if nothing is passed in.
+            referer = 'https://streamrapid.ru/'
         web_url = self.get_url(host, media_id)
         rurl = urllib_parse.urljoin(web_url, '/')
-        if not referer:
-            referer = rurl
-        domain = 'aHR0cHM6Ly9zdHJlYW1yYXBpZC5ydTo0NDM.'
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': referer}
         html = self.net.http_GET(web_url, headers).content
+        domain = base64.b64encode((rurl[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '.')
         token = helpers.girc(html, rurl, domain)
         number = re.findall(r"recaptchaNumber\s*=\s*'(\d+)", html)
         if token and number:
             eid, media_id = media_id.split('/')
-            surl = 'https://streamrapid.ru/ajax/embed-{0}/getSources'.format(eid)
+            surl = '{}/ajax/embed-{}/getSources'.format(rurl[:-1], eid)
             if '?' in media_id:
                 media_id = media_id.split('?')[0]
             data = {'_number': number[0],
