@@ -20,9 +20,9 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class EnterVideoResolver(ResolveGeneric):
-    name = "entervideo"
-    domains = ['entervideo.net', 'eplayvid.com']
+    name = 'entervideo'
+    domains = ['entervideo.net', 'eplayvid.com', 'eplayvid.net']
     pattern = r'(?://|\.)((?:entervideo|eplayvid)\.(?:com|net))/(?:watch/)?([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://eplayvid.com/watch/{media_id}')
+        return self._default_get_url(host, media_id, template='http://eplayvid.net/watch/{media_id}')
