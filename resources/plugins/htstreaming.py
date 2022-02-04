@@ -17,6 +17,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
+import json
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -25,25 +27,38 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class HTStreamingResolver(ResolveUrl):
     name = 'htstreaming'
     domains = ['htstreaming.com']
-    pattern = r'(?://|\.)(htstreaming\.com)/player/index\.php\?data=([0-9a-f]+)'
+    pattern = r'(?://|\.)(htstreaming\.com)/(?:player|video)/(?:index\.php\?data=)?([0-9a-f]+)'
 
     def get_media_url(self, host, media_id):
-        headers = {'User-Agent': common.RAND_UA}
         web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        vurl, svr = re.findall('videoUrl":"([^"]+)","videoServer":"([^"]+)', html)[0]
-        headers.update({'Referer': web_url,
-                        'Accept': '*/*'})
-        eurl = 'https://{0}{1}?s={2}&d='.format(host, vurl.replace('\\', ''), svr)
-        ehtml = self.net.http_GET(eurl, headers=headers).content
-        sources = re.findall(r'Resolution=\d+x(\d+)\n([^\n]+)', ehtml, re.IGNORECASE)
-        if sources:
-            return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+        eurl = self.get_url2(host, media_id)
+        headers.update({
+            'Referer': web_url,
+            'Origin': urllib_parse.urljoin(web_url, '/')[:-1],
+            'X-Requested-With': 'XMLHttpRequest'
+        })
+        html = self.net.http_POST(eurl, form_data="hash={0}".format(media_id), headers=headers).content
+        vurl = json.loads(html).get('videoSource')
+        if vurl:
+            headers.pop('Origin')
+            headers.pop('X-Requested-With')
+            headers.update({'Accept': '*/*'})
+            ehtml = self.net.http_GET(vurl, headers=headers).content
+            sources = re.findall(r'Resolution=\d+x(\d+).+\n([^\n]+)', ehtml, re.IGNORECASE)
+            if sources:
+                cookies = self.net.get_cookies(True)
+                headers.update({'Cookie': 'fireplayer={0}'.format(cookies.get('fireplayer'))})
+                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/player/index.php?data={media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/video/{media_id}')
+
+    def get_url2(self, host, media_id):
+        return self._default_get_url(host, media_id, template='https://{host}/player/index.php?data={media_id}&do=getVideo')
 
     @classmethod
     def _is_enabled(cls):
