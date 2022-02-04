@@ -14,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -26,6 +25,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+settings.xml
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VSCode
+.vscode
+
+# Mac Spotlight
+*.DS_Store
