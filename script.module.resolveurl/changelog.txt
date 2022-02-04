@@ -1,21 +1,19 @@
-Version 5.1.59 (Jan 24, 2022)
+Version 5.1.60 (February 5, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - anonfiles/bayfiles
-    - filesim
+    - streamruby
+    - filesfm
+    - uploadever
  
 - Resolvers Fixed/Updated:
     - avideo
-    - bannedvideo
-    - fembed
-    - streamrapid
-    - streamsb
-    - streamtape
+    - entervideo
+    - streamingcommunity
 
 - Resolvers Removed
-    - None
+    - duckstream
 
 - Languages Added/Updated
     - None
