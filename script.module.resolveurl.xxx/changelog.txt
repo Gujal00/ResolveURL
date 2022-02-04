@@ -1,10 +1,10 @@
-Version 2.1.17 (October 20, 2021)
+Version 2.1.18 (February 5, 2022)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - pornhub
+    - htstreaming
 
 - Resolvers Removed
     - None
