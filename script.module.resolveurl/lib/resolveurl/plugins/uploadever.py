@@ -42,7 +42,7 @@ class UploadEverResolver(ResolveUrl):
             'method_premium': ''
         }
         url = self.net.http_POST(web_url, form_data=payload, headers=headers).get_url()
-        if url:
+        if url and url != web_url:
             return url + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
