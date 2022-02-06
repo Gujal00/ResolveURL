@@ -36,6 +36,7 @@ class FuqerResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         source = re.search(r'''<file>\s*([^<\s*]+)''', html)
         if source:
+            headers.update({'verifypeer': 'false'})
             return source.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
