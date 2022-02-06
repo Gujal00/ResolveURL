@@ -1,6 +1,6 @@
-# ResolveURL
+# ResolveURL for Kodi
 
-Fork of UrlResolver by eldorados, tknorris and jsergio123
+Fork of UrlResolver for XBMC/Kodi by t0mm0, eldorados, tknorris and jsergio123
 
 I am in no way responsible for the urls being resolved by 3rd parties. This script only resolves video content from legitimate file lockers without prejudice. If this script is being used by 3rd parties to resolve content that you feel infringes upon your Intellectual Property then please take your complaints to the actual website or developer linking to such content and not me. This script in no way searches for any content whatsoever.
 
@@ -36,7 +36,7 @@ if resolveurl.HostedMediaFile(url):
 
 Adult Resolver Extension for ResolveURL
 
-Include the script in your addon.xml
+Include both the scripts in your addon.xml
 
 ```xml
 <requires>
@@ -45,8 +45,7 @@ Include the script in your addon.xml
 </requires>
 ```
 
-1. Import SMR and the XXX SMR Extension to your addon.
-2. Call the resolveurl from your addon to resolve the XXX hosts.
+Call the resolveurl from your addon to resolve the XXX hosts.
 
 ```python
 import resolveurl
