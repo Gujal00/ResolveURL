@@ -30,7 +30,7 @@ class SpankbangResolver(ResolveGeneric):
                                      patterns=[r'''source\s*src[=]?['"](?P<url>[^'"]+)''']).replace(' ', '%20').split('|')[0]
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}/embed/')
+        return self._default_get_url(host, media_id, template='https://{host}/{media_id}/video/')
 
     @classmethod
     def _is_enabled(cls):
