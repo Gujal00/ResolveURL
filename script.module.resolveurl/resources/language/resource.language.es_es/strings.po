@@ -22,19 +22,19 @@ msgstr "Autorización para Transmitir OpenLoad"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
-msgstr "Autorización necesaria para reproducir este video"
+msgstr "Para reproducir este video se necesita autorización"
 
 msgctxt "#33002"
 msgid "Visit the link below to authorize the devices on your network:"
-msgstr "Visita este link para autorizar este dispositivo en tu network:"
+msgstr "Visita este link para autorizar este dispositivo en tu red:"
 
 msgctxt "#33003"
 msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
-msgstr "[B][COLOR blue]%s[/COLOR][/B] entonces has click en 'Pair'"
+msgstr "[B][COLOR blue]%s[/COLOR][/B] debes hacer click en 'Pair'"
 
 msgctxt "#33004"
 msgid "No OpenLoad Authorization"
-msgstr "No hay Autorización para OpenLoad"
+msgstr "No tienes Autorización para OpenLoad"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"
@@ -42,39 +42,39 @@ msgstr "Actualizar resolver automáticamente"
 
 msgctxt "#33006"
 msgid "Auto-Update Url"
-msgstr "Auto-Actualizar URL"
+msgstr "Actualizar automáticamente la URL"
 
 msgctxt "#33007"
 msgid "Decryption Key"
-msgstr "Descripción"
+msgstr "clave de cifrado"
 
 msgctxt "#33008"
 msgid "TheVideo.me Stream Authorization"
-msgstr "Autorización para Transmitir TheVideo.me"
+msgstr "Es necesaria Autorización para TheVideo.me"
 
 msgctxt "#33009"
 msgid "VidUP.me Stream Authorization"
-msgstr "Autorización para Transmitir VidUP.me"
+msgstr "Es necesaria Autorización para VidUP.me"
 
 msgctxt "#33010"
 msgid "Enable Universal Resolvers"
-msgstr "Activar Resolver Universales"
+msgstr "Activar los Resolver genéricos"
 
 msgctxt "#33011"
 msgid "Automatically pick best quality"
-msgstr "Elegir mejor calidad automáticamente"
+msgstr "Seleccionar la mejor calidad automáticamente"
 
 msgctxt "#33012"
 msgid "Use Function Cache"
-msgstr "Usar Función de Cache"
+msgstr "Usar la función de Cache"
 
 msgctxt "#33013"
 msgid "Reset Function Cache"
-msgstr "Reiniciar Función de Cache"
+msgstr "Reiniciar la función de Cache"
 
 msgctxt "#33014"
 msgid "Universal Resolvers"
-msgstr "Resolvers Universales"
+msgstr "Resolvers genéricos"
 
 msgctxt "#33015"
 msgid "Resolvers"
@@ -94,7 +94,7 @@ msgstr "Real-Debrid Resolver Autorizado"
 
 msgctxt "#33019"
 msgid "Real-Debrid Authorization Reset"
-msgstr "Autorización de Real-Debrid Autorizada"
+msgstr "Reiniciar la Autorización de Real-Debrid"
 
 msgctxt "#33020"
 msgid "Cache Reset"
@@ -102,7 +102,7 @@ msgstr "Cache Reiniciada"
 
 msgctxt "#33021"
 msgid "Cache Reset Failed"
-msgstr "Error Reiniciando Cache"
+msgstr "Error al reiniciar la Cache"
 
 msgctxt "#33022"
 msgid "login"
@@ -122,7 +122,7 @@ msgstr "Usar HTTPS"
 
 msgctxt "#33026"
 msgid "Customer ID"
-msgstr "Identificación de Cliente"
+msgstr "Identificación de Usuario"
 
 msgctxt "#33027"
 msgid "PIN"
@@ -130,7 +130,7 @@ msgstr "PIN"
 
 msgctxt "#33028"
 msgid "Choose Primary Link Automatically"
-msgstr "Elegir Link Principal Automáticamente"
+msgstr "Seleccionar el Link Principal Automáticamente"
 
 msgctxt "#33029"
 msgid "(Re)Authorize My Account"
@@ -138,7 +138,7 @@ msgstr "(Re)Autorizar Mi Cuenta"
 
 msgctxt "#33030"
 msgid "Reset My Authorization"
-msgstr "Reiniciar Mi Autorización"
+msgstr "Reinicializar Mi Autorización"
 
 msgctxt "#33031"
 msgid "Resolver Auto-Updated"
@@ -146,7 +146,7 @@ msgstr "Resolver Actualizado Automáticamente"
 
 msgctxt "#33032"
 msgid "Type the letters in the image"
-msgstr "Introduce las letras en la imagen"
+msgstr "Introduce las letras de la imagen"
 
 msgctxt "#33033"
 msgid "Captcha Error"
@@ -154,19 +154,19 @@ msgstr "Error de Captcha"
 
 msgctxt "#33034"
 msgid "Choose the link"
-msgstr "Elige el link"
+msgstr "Selecciona el link"
 
 msgctxt "#33035"
 msgid "No link selected"
-msgstr "Ningún link seleccionado"
+msgstr "No has seleccionado ningún link."
 
 msgctxt "#33036"
 msgid "No Video Link Found"
-msgstr "Ningún link de video encontrado"
+msgstr "No se ha encontrado ningún link al video"
 
 msgctxt "#33037"
 msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
-msgstr "Ronda de Captcha: %s [I](Normalmente 2 Rondas)[/I]"
+msgstr "Introduce el Captcha: %s [I](Normalmente 2 intentos)[/I]"
 
 msgctxt "#33038"
 msgid "Cancel"
@@ -178,31 +178,31 @@ msgstr "OK"
 
 msgctxt "#33040"
 msgid "IP Stream Authorization Pairing"
-msgstr "Combinando IP con Autorización de Transmisión"
+msgstr "Autorizando el emparejando de IP para Transmisión"
 
 msgctxt "#33041"
 msgid "No IP Authorization"
-msgstr "IP No Autorizada"
+msgstr "la IP no está Autorizada"
 
 msgctxt "#33043"
 msgid "Vshare.eu Stream Authorization"
-msgstr "Autorización para Transmitir Vshare.eu"
+msgstr "Autorización el stream de Vshare.eu"
 
 msgctxt "#33044"
 msgid "Flashx Stream Authorization"
-msgstr "Autorización para Transmitir Flashx"
+msgstr "Autorización el stream de Flashx"
 
 msgctxt "#33045"
 msgid "AllDebrid Authorization Reset"
-msgstr "Autorización de AllDebrid Autorizada"
+msgstr "Autorización de AllDebrid inicializada"
 
 msgctxt "#33046"
 msgid "AllDebrid Resolver Authorized"
-msgstr "AllDebrid Resolver Autorizado"
+msgstr "Resolver AllDebrid Autorizado"
 
 msgctxt "#33047"
 msgid "Enable PopUps"
-msgstr "Habilitar ventanas emergentes"
+msgstr "Permitir ventanas emergentes"
 
 msgctxt "#33048"
 msgid "API Key"
@@ -210,7 +210,7 @@ msgstr "Clave API"
 
 msgctxt "#33049"
 msgid "Torrent Support"
-msgstr "Soporte de torrent"
+msgstr "Soporte de Torrents"
 
 msgctxt "#33050"
 msgid "Cached torrents only"
@@ -218,7 +218,7 @@ msgstr "Torrents en caché solamente"
 
 msgctxt "#33051"
 msgid "Premiumize Authorization Reset"
-msgstr "Autorización de Premiumize Autorizada"
+msgstr "Autorización de Premiumize Inicializada"
 
 msgctxt "#33052"
 msgid "Premiumize Resolver Authorized"
@@ -226,7 +226,7 @@ msgstr "Premiumize Resolver Autorizado"
 
 msgctxt "#33053"
 msgid "Linksnappy Authorization Reset"
-msgstr "Autorización de Linksnappy Autorizada"
+msgstr "Autorización de Linksnappy Inicializada"
 
 msgctxt "#33054"
 msgid "Linksnappy Resolver Authorized"
@@ -238,7 +238,7 @@ msgstr "Velocidad de descarga:"
 
 msgctxt "#33056"
 msgid "Peers:"
-msgstr "Compañeros:"
+msgstr "Peers:"
 
 msgctxt "#33057"
 msgid "seconds"
@@ -246,15 +246,15 @@ msgstr "segundos"
 
 msgctxt "#33058"
 msgid "Cached filehosts only"
-msgstr "Solo hosts de archivos en caché"
+msgstr "Solo hosts almacenados en caché"
 
 msgctxt "#33059"
 msgid "JetLoad Stream Authorization"
-msgstr "Autorización para Transmitir JetLoad"
+msgstr "JetLoad Autorizado "
 
 msgctxt "#33060"
 msgid "Uptobox Stream Authorization"
-msgstr "Autorización para Transmitir Uptobox"
+msgstr "Uptobox Autorizado"
 
 msgctxt "#33061"
 msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
@@ -262,11 +262,11 @@ msgstr "Visita este enlace: [B][COLOR blue]{0}[/COLOR][/B]"
 
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Ingrese el PIN como [B][COLOR blue]{0}[/COLOR][/B] y luego haga clic en 'Link Account'"
+msgstr "Introduce el PIN como [B][COLOR blue]{0}[/COLOR][/B] y luego haz clic en 'Link Account' (enlazar cuenta)"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"
-msgstr "Autorización de Debrid-Link Autorizada"
+msgstr "Reiniciar autorización a Debrid-Link "
 
 msgctxt "#33064"
 msgid "Debrid-Link Resolver Authorized"
@@ -274,7 +274,7 @@ msgstr "Debrid-Link Resolver Autorizado"
 
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
-msgstr "Borrar torrents terminados de la cuenta"
+msgstr "Borrar los Torrents que han finalizado de tu cuenta"
 
 msgctxt "#33066"
 msgid "minutes"
@@ -286,7 +286,7 @@ msgstr "horas"
 
 msgctxt "#33068"
 msgid "Uptobox Authorisation Reset"
-msgstr "Autorización de Uptobox Autorizada"
+msgstr "Autorización de Uptobox reiniciada"
 
 msgctxt "#33069"
 msgid "Uptobox Resolver Authorised"
