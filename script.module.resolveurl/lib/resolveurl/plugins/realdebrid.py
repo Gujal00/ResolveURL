@@ -163,15 +163,12 @@ class RealDebridResolver(ResolveUrl):
                 data = {'link': media_id}
                 result = self.net.http_POST(url, form_data=data, headers=self.headers).content
             else:
-                resolved_links = []
+                unresolved_links = []
                 for index, link in enumerate(torrent_info.get('links')):
-                    data = {'link': link}
-                    result = self.net.http_POST(url, form_data=data, headers=self.headers).content
-                    resolved_link = self.__get_link(json.loads(result))[0]
                     # remove leading /
                     filename = re.sub('^/', '', torrent_info.get('files')[index]['path'])
-                    resolved_links.append({'name': filename, 'link': resolved_link})
-                return resolved_links
+                    unresolved_links.append({'name': filename, 'link': link})
+                return unresolved_links
         except urllib_error.HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):
