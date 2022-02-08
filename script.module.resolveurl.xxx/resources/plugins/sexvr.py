@@ -33,7 +33,7 @@ class SexVRResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'''<source\s*src=['"]([^"']+)''', html, re.DOTALL)
         if r:
-            headers.update({'Referer': web_url})
+            headers.update({'Referer': web_url, 'verifypeer': 'false'})
             return r.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
