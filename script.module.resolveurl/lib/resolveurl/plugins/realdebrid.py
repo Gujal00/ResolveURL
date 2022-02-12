@@ -59,7 +59,7 @@ class RealDebridResolver(ResolveUrl):
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
 
-    def get_media_url(self, host, media_id, retry=False, cached_only=False, resolve_all=False):
+    def get_media_url(self, host, media_id, retry=False, cached_only=False, return_all=False):
         try:
             self.headers.update({'Authorization': 'Bearer %s' % self.get_setting('token')})
             if media_id.lower().startswith('magnet:'):
@@ -101,7 +101,7 @@ class RealDebridResolver(ResolveUrl):
                             self.__delete_torrent(torrent_id)
                             raise ResolverError('Real-Debrid Error: MAGNET Conversion exceeded time limit')
                     if status == 'waiting_files_selection':
-                        if not resolve_all:
+                        if not return_all:
                             _videos = []
                             for _file in torrent_info.get('files'):
                                 if any(_file.get('path').lower().endswith(x) for x in FORMATS):
@@ -159,7 +159,7 @@ class RealDebridResolver(ResolveUrl):
                     raise ResolverError('Real-Debrid Error: Failed to transfer torrent to/from the cloud')
 
             url = '%s/%s' % (rest_base_url, unrestrict_link_path)
-            if not resolve_all:
+            if not return_all:
                 data = {'link': media_id}
                 result = self.net.http_POST(url, form_data=data, headers=self.headers).content
             else:

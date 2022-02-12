@@ -62,7 +62,7 @@ class HostedMediaFile:
         must pass either ``url`` or ``host`` AND ``media_id``.
     """
 
-    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None, include_popups=None, resolve_all=False):
+    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None, include_popups=None, return_all=False):
         """
         Args:
             url (str): a URL to a web page that represents a piece of media.
@@ -75,7 +75,7 @@ class HostedMediaFile:
         self._host = host
         self._media_id = media_id
         self._valid_url = None
-        self._resolve_all = resolve_all
+        self._return_all = return_all
         self.title = title if title else self._host
 
         if self._url:
@@ -185,8 +185,8 @@ class HostedMediaFile:
                         common.logger.log_debug('Resolving using %s plugin' % resolver.name)
                         resolver.login()
                         self._host, self._media_id = resolver.get_host_and_id(self._url)
-                        stream_url = resolver.get_media_url(self._host, self._media_id, resolve_all=self._resolve_all)
-                        if self._resolve_all:
+                        stream_url = resolver.get_media_url(self._host, self._media_id, return_all=self._return_all)
+                        if self._return_all:
                             self.__resolvers = [resolver]
                             self._valid_url = True
                             return stream_url
