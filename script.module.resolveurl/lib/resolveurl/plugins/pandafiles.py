@@ -43,6 +43,7 @@ class PandaFilesResolver(ResolveUrl):
         html = self.net.http_POST(web_url, form_data=data, headers=headers).content
         source = re.search(r'id="direct_link">\s*<a\s*href="([^"]+)', html)
         if source:
+            headers.update({'verifypeer': 'false'})
             return source.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
