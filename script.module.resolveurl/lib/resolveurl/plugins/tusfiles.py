@@ -42,7 +42,7 @@ class TusfilesResolver(ResolveUrl):
             'method_premium': ''
         }
         resp = self.net.http_POST(web_url, form_data=payload, headers=headers).get_url()
-        if resp:
+        if resp != web_url:
             return resp + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
