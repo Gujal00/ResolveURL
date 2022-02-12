@@ -122,7 +122,8 @@ class RealDebridResolver(ResolveUrl):
                             torrent_info = self.__torrent_info(torrent_id)
                             status = torrent_info.get('status')
                             if not status == 'downloaded':
-                                file_size = round(float(_video.get('bytes')) / (1000 ** 3), 2)
+                                file_size = torrent_info.get('bytes') if return_all else _video.get('bytes')
+                                file_size = round(float(file_size) / (1000 ** 3), 2)
                                 if cached:
                                     line2 = 'Getting torrent from the Real-Debrid Cloud'
                                 else:
