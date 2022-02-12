@@ -59,7 +59,7 @@ class RealDebridResolver(ResolveUrl):
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
 
-    def get_media_url(self, host, media_id, retry=False, cached_only=False):
+    def get_media_url(self, host, media_id, retry=False, cached_only=False, return_all=False):
         try:
             self.headers.update({'Authorization': 'Bearer %s' % self.get_setting('token')})
             if media_id.lower().startswith('magnet:'):
@@ -101,17 +101,20 @@ class RealDebridResolver(ResolveUrl):
                             self.__delete_torrent(torrent_id)
                             raise ResolverError('Real-Debrid Error: MAGNET Conversion exceeded time limit')
                     if status == 'waiting_files_selection':
-                        _videos = []
-                        for _file in torrent_info.get('files'):
-                            if any(_file.get('path').lower().endswith(x) for x in FORMATS):
-                                _videos.append(_file)
-                        try:
-                            _video = max(_videos, key=lambda x: x.get('bytes'))
-                            file_id = _video.get('id', 0)
-                        except ValueError:
-                            self.__delete_torrent(torrent_id)
-                            raise ResolverError('Real-Debrid Error: Failed to locate largest video file')
-                        file_selected = self.__select_file(torrent_id, file_id)
+                        if not return_all:
+                            _videos = []
+                            for _file in torrent_info.get('files'):
+                                if any(_file.get('path').lower().endswith(x) for x in FORMATS):
+                                    _videos.append(_file)
+                            try:
+                                _video = max(_videos, key=lambda x: x.get('bytes'))
+                                file_id = _video.get('id', 0)
+                            except ValueError:
+                                self.__delete_torrent(torrent_id)
+                                raise ResolverError('Real-Debrid Error: Failed to locate largest video file')
+                            file_selected = self.__select_file(torrent_id, file_id)
+                        else:
+                            file_selected = self.__select_file(torrent_id, 'all')
                         if not file_selected:
                             self.__delete_torrent(torrent_id)
                             raise ResolverError('Real-Debrid Error: Failed to select file')
@@ -156,8 +159,16 @@ class RealDebridResolver(ResolveUrl):
                     raise ResolverError('Real-Debrid Error: Failed to transfer torrent to/from the cloud')
 
             url = '%s/%s' % (rest_base_url, unrestrict_link_path)
-            data = {'link': media_id}
-            result = self.net.http_POST(url, form_data=data, headers=self.headers).content
+            if not return_all:
+                data = {'link': media_id}
+                result = self.net.http_POST(url, form_data=data, headers=self.headers).content
+            else:
+                unresolved_links = []
+                for index, link in enumerate(torrent_info.get('links')):
+                    # remove leading /
+                    filename = re.sub('^/', '', torrent_info.get('files')[index]['path'])
+                    unresolved_links.append({'name': filename, 'link': link})
+                return unresolved_links
         except urllib_error.HTTPError as e:
             if not retry and e.code == 401:
                 if self.get_setting('refresh'):

@@ -94,7 +94,7 @@ def relevant_resolvers(domain=None, include_universal=None, include_popups=None,
     return relevant
 
 
-def resolve(web_url):
+def resolve(web_url, return_all=False):
     """
     Resolve a web page to a media stream.
 
@@ -124,7 +124,7 @@ def resolve(web_url):
         If the ``web_url`` could be resolved, a string containing the direct
         URL to the media file, if not, returns ``False``.
     """
-    source = HostedMediaFile(url=web_url)
+    source = HostedMediaFile(url=web_url, return_all=return_all)
     return source.resolve()
 
 
