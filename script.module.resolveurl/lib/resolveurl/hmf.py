@@ -185,11 +185,13 @@ class HostedMediaFile:
                         common.logger.log_debug('Resolving using %s plugin' % resolver.name)
                         resolver.login()
                         self._host, self._media_id = resolver.get_host_and_id(self._url)
-                        stream_url = resolver.get_media_url(self._host, self._media_id, return_all=self._return_all)
-                        if self._return_all:
+                        if self._return_all and resolver.isUniversal():
+                            url_list = resolver.get_media_url(self._host, self._media_id, return_all=self._return_all)
                             self.__resolvers = [resolver]
                             self._valid_url = True
-                            return stream_url
+                            return url_list
+                        else:
+                            stream_url = resolver.get_media_url(self._host, self._media_id)
                         if stream_url.startswith("//"):
                             stream_url = 'http:%s' % stream_url
                         if stream_url and self.__test_stream(stream_url):
