@@ -101,11 +101,11 @@ class RealDebridResolver(ResolveUrl):
                             self.__delete_torrent(torrent_id)
                             raise ResolverError('Real-Debrid Error: MAGNET Conversion exceeded time limit')
                     if status == 'waiting_files_selection':
+                        _videos = []
+                        for _file in torrent_info.get('files'):
+                            if any(_file.get('path').lower().endswith(x) for x in FORMATS):
+                                _videos.append(_file)
                         if not return_all:
-                            _videos = []
-                            for _file in torrent_info.get('files'):
-                                if any(_file.get('path').lower().endswith(x) for x in FORMATS):
-                                    _videos.append(_file)
                             try:
                                 _video = max(_videos, key=lambda x: x.get('bytes'))
                                 file_id = _video.get('id', 0)
@@ -114,7 +114,8 @@ class RealDebridResolver(ResolveUrl):
                                 raise ResolverError('Real-Debrid Error: Failed to locate largest video file')
                             file_selected = self.__select_file(torrent_id, file_id)
                         else:
-                            file_selected = self.__select_file(torrent_id, 'all')
+                            files_ids = ','.join([str(v['id']) for v in _videos])
+                            file_selected = self.__select_file(torrent_id, files_ids)
                         if not file_selected:
                             self.__delete_torrent(torrent_id)
                             raise ResolverError('Real-Debrid Error: Failed to select file')
@@ -164,10 +165,10 @@ class RealDebridResolver(ResolveUrl):
                 data = {'link': media_id}
                 result = self.net.http_POST(url, form_data=data, headers=self.headers).content
             else:
+                files = [file for file in torrent_info.get('files') if file['selected']]
                 unresolved_links = []
                 for index, link in enumerate(torrent_info.get('links')):
-                    # remove leading /
-                    filename = re.sub('^/', '', torrent_info.get('files')[index]['path'])
+                    filename = re.sub('^/', '', files[index]['path'])
                     unresolved_links.append({'name': filename, 'link': link})
                 return unresolved_links
         except urllib_error.HTTPError as e:
