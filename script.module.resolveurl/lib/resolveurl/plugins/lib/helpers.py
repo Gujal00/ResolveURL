@@ -351,6 +351,19 @@ def girc(page_data, url, co):
     return ''
 
 
+def xor_string(encurl, key):
+    """
+    Code adapted from https://github.com/vb6rocod/utils/
+    Copyright (C) 2019 vb6rocod
+    """
+    import base64
+    strurl = base64.b64decode(encurl).decode('utf-8')
+    surl = ''
+    for i in range(len(strurl)):
+        surl += chr(ord(strurl[i]) ^ ord(key[i % len(key)]))
+    return surl
+
+
 def tear_decode(data_file, data_seed):
     from ctypes import c_int32 as i32
     import re

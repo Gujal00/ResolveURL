@@ -35,12 +35,10 @@ class StreamLareResolver(ResolveUrl):
                    'X-Requested-With': 'XMLHttpRequest'}
         data = {'id': media_id}
         html = self.net.http_POST(api_url, headers=headers, form_data=data, jdata=True).content
-        items = json.loads(html).get('result')
-        sources = [('540p' if item == 'Original' else item, items.get(item).get('src')) for item in items.keys()]
-        if sources:
+        source = json.loads(html).get('result', {}).get('Original', {}).get('src')
+        if source:
             headers.pop('X-Requested-With')
-            sources.sort(key=lambda x: int(x[0][:-1]), reverse=True)
-            return helpers.pick_source(sources) + helpers.append_headers(headers)
+            return helpers.xor_string(source, '3') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
