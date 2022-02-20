@@ -31,4 +31,4 @@ class VidMolyResolver(ResolveGeneric):
                                      result_blacklist=['.mpd'])
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://vidmoly.to/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://vidmoly.me/{media_id}.html')
