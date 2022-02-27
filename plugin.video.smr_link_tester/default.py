@@ -193,7 +193,10 @@ def edit_link(index, path):
 @url_dispatcher.register(MODES.PLAY_LINK, ['link'])
 def play_link(link):
     logger.log('Playing Link: |%s|' % (link), log_utils.LOGDEBUG)
-    hmf = resolveurl.HostedMediaFile(url=link)
+    if link.endswith('$$all'):
+        hmf = resolveurl.HostedMediaFile(url=link, return_all=True)
+    else:
+        hmf = resolveurl.HostedMediaFile(url=link)
     if not hmf:
         logger.log('Indirect hoster_url not supported by smr: %s' % (link))
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
@@ -201,7 +204,15 @@ def play_link(link):
     logger.log('Link Supported: |%s|' % (link), log_utils.LOGDEBUG)
 
     try:
-        stream_url = hmf.resolve()
+        if link.endswith('$$all'):
+            allfiles = hmf.resolve()
+            names = [x.get('name') for x in allfiles]
+            item = xbmcgui.Dialog().select('Select file to play', names, preselect=0)
+            stream_url = allfiles[item].get('link')
+            if resolveurl.HostedMediaFile(stream_url):
+                stream_url = resolveurl.resolve(stream_url)
+        else:
+            stream_url = hmf.resolve()
         if not stream_url or not isinstance(stream_url, string_types):
             try:
                 msg = stream_url.msg
@@ -214,12 +225,13 @@ def play_link(link):
         except:
             msg = link
         kodi.notify('Resolve Failed: %s' % (msg), duration=7500)
+        print(msg)
         return False
 
     logger.log('Link Resolved: |%s|%s|' % (link, stream_url), log_utils.LOGDEBUG)
 
     listitem = xbmcgui.ListItem(path=stream_url)
-    listitem.setContentLookup(False)
+    # listitem.setContentLookup(False)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
 
 
