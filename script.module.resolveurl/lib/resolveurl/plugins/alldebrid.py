@@ -46,7 +46,7 @@ class AllDebridResolver(ResolveUrl):
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
 
-    def get_media_url(self, host, media_id, cached_only=False):
+    def get_media_url(self, host, media_id, cached_only=False, return_all=False):
         try:
             if media_id.lower().startswith('magnet:'):
                 r = re.search('''magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)''', media_id, re.I)
@@ -63,11 +63,17 @@ class AllDebridResolver(ResolveUrl):
                             self.__initiate_transfer(transfer_id)
 
                     transfer_info = self.__list_transfer(transfer_id)
-                    sources = [(link.get('size'), link.get('link'))
-                               for link in transfer_info.get('links')
-                               if any(link.get('filename').lower().endswith(x) for x in FORMATS)]
-                    media_id = max(sources)[1]
-                    self.__delete_transfer(transfer_id)
+                    if return_all:
+                        sources = [{'name': link.get('filename').split('/')[-1], 'link': link.get('link')}
+                                   for link in transfer_info.get('links')
+                                   if any(link.get('filename').lower().endswith(x) for x in FORMATS)]
+                        return sources
+                    else:
+                        sources = [(link.get('size'), link.get('link'))
+                                   for link in transfer_info.get('links')
+                                   if any(link.get('filename').lower().endswith(x) for x in FORMATS)]
+                        media_id = max(sources)[1]
+                        self.__delete_transfer(transfer_id)
 
             url = '{0}/link/unlock?agent={1}&apikey={2}&link={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), urllib_parse.quote_plus(media_id))
             result = self.net.http_GET(url, headers=self.headers).content
@@ -171,7 +177,12 @@ class AllDebridResolver(ResolveUrl):
                         logger.log_debug(line3)
                         pd.update(progress, line1=line1, line3=line3)
                         if pd.is_canceled():
-                            self.__delete_transfer(transfer_id)
+                            keep_transfer = common.kodi.yesnoDialog(
+                                heading='ResolveURL AllDebrid Transfer',
+                                line1='Keep transferring to AllDebrid Cloud in the background?'
+                            )
+                            if not keep_transfer:
+                                self.__delete_transfer(transfer_id)
                             raise ResolverError('Transfer ID {0} :: Canceled by user'.format(transfer_id))
                         elif 5 <= transfer_info.get('statusCode') <= 10:
                             self.__delete_transfer(transfer_id)

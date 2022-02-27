@@ -58,7 +58,7 @@ class PremiumizeMeResolver(ResolveUrl):
         self.net = common.Net()
         self.headers = {'User-Agent': USER_AGENT, 'Authorization': 'Bearer %s' % self.get_setting('token')}
 
-    def get_media_url(self, host, media_id, cached_only=False):
+    def get_media_url(self, host, media_id, cached_only=False, return_all=False):
         torrent = False
         cached = self.__check_cache(media_id)
         media_id_lc = media_id.lower()
@@ -76,10 +76,13 @@ class PremiumizeMeResolver(ResolveUrl):
                 self.__clear_finished()
             # self.__delete_folder()
 
-        link = self.__direct_dl(media_id, torrent=torrent)
-        if link is not None:
-            logger.log_debug('Premiumize.me: Resolved to %s' % link)
-            return link + helpers.append_headers(self.headers)
+        link = self.__direct_dl(media_id, torrent=torrent, return_all=return_all)
+        if link:
+            if return_all:
+                return link
+            else:
+                logger.log_debug('Premiumize.me: Resolved to %s' % link)
+                return link + helpers.append_headers(self.headers)
 
         raise ResolverError('Link Not Found')
 
@@ -232,7 +235,7 @@ class PremiumizeMeResolver(ResolveUrl):
 
         return
 
-    def __direct_dl(self, media_id, torrent=False):
+    def __direct_dl(self, media_id, torrent=False, return_all=False):
         try:
             data = urllib_parse.urlencode({'src': media_id})
             response = self.net.http_POST(direct_dl_path, form_data=data, headers=self.headers).content
@@ -240,13 +243,19 @@ class PremiumizeMeResolver(ResolveUrl):
             if 'status' in result:
                 if result.get('status') == 'success':
                     if torrent:
-                        _videos = [(int(item.get('size')), item.get('link')) for item in result.get("content")
-                                   if any(item.get('path').lower().endswith(x)
-                                          for x in FORMATS)]
-                        try:
-                            return max(_videos)[1]
-                        except ValueError:
-                            raise ResolverError('Failed to locate largest video file')
+                        if return_all:
+                            sources = [{'name': link.get('path').split('/')[-1], 'link': link.get('link')}
+                                       for link in result.get("content")
+                                       if any(link.get('path').lower().endswith(x) for x in FORMATS)]
+                            return sources
+                        else:
+                            _videos = [(int(item.get('size')), item.get('link'))
+                                       for item in result.get("content")
+                                       if any(item.get('path').lower().endswith(x) for x in FORMATS)]
+                            try:
+                                return max(_videos)[1]
+                            except ValueError:
+                                raise ResolverError('Failed to locate largest video file')
                     else:
                         return result.get('location', None)
                 else:
