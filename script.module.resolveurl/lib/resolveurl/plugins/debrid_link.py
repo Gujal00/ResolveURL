@@ -42,7 +42,7 @@ class DebridLinkResolver(ResolveUrl):
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT, 'Authorization': 'Bearer {0}'.format(self.get_setting('token'))}
 
-    def get_media_url(self, host, media_id, retry=False, cached_only=False):
+    def get_media_url(self, host, media_id, retry=False, cached_only=False, return_all=False):
         try:
             if media_id.lower().startswith('magnet:') or '.torrent' in media_id.lower():
                 if self.__check_cache(media_id):
@@ -60,6 +60,11 @@ class DebridLinkResolver(ResolveUrl):
 
                 if transfer_id:
                     transfer_info = self.__list_transfer(transfer_id)
+                    if return_all:
+                        sources = [{'name': link.get('name').split('/')[-1], 'link': link.get('downloadUrl')}
+                                   for link in transfer_info.get('files')
+                                   if any(link.get('name').lower().endswith(x) for x in FORMATS)]
+                        return sources
                     sources = [(item.get('size'), item.get('downloadUrl'))
                                for item in transfer_info.get('files')
                                if any(item.get('name').lower().endswith(x) for x in FORMATS)]
@@ -191,9 +196,13 @@ class DebridLinkResolver(ResolveUrl):
                         logger.log_debug(line3)
                         pd.update(progress, line3=line3)
                         if pd.is_canceled():
-                            self.__delete_transfer(transfer_id)
+                            keep_transfer = common.kodi.yesnoDialog(
+                                heading='ResolveURL Debrid-Link Transfer',
+                                line1='Keep transferring to Debrid-Link Cloud in the background?'
+                            )
+                            if not keep_transfer:
+                                self.__delete_transfer(transfer_id)
                             raise ResolverError('Transfer ID {0} :: Canceled by user'.format(transfer_id))
-
             return
 
         except Exception as e:
