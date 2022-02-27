@@ -1,10 +1,17 @@
-Version 2.1.18 (February 5, 2022)
+Version 2.1.19 (February 27, 2022)
 
 - Resolvers Added:
-    - None
+    - porngo
+    - pornone
+    - xfreehd
  
 - Resolvers Fixed/Updated:
-    - htstreaming
+    - bitporno
+    - fuqer
+    - gfsvideos
+    - perfectgirls
+    - spankbang
+    - sexvr
 
 - Resolvers Removed
     - None
