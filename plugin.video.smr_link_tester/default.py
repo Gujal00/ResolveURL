@@ -208,6 +208,8 @@ def play_link(link):
             allfiles = hmf.resolve()
             names = [x.get('name') for x in allfiles]
             item = xbmcgui.Dialog().select('Select file to play', names, preselect=0)
+            if item == -1:
+                return False
             stream_url = allfiles[item].get('link')
             if resolveurl.HostedMediaFile(stream_url):
                 stream_url = resolveurl.resolve(stream_url)
