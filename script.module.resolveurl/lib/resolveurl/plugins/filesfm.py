@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class FilesFMResolver(ResolveUrl):
     name = 'files.fm'
-    domains = ['files.fm']
-    pattern = r'(?://|\.)(files\.fm)/f/([0-9a-zA-Z]+)'
+    domains = ['files.fm', 'file.fm']
+    pattern = r'(?://|\.)(files?\.fm)/f/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
