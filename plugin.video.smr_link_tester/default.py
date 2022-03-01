@@ -194,7 +194,7 @@ def edit_link(index, path):
 def play_link(link):
     logger.log('Playing Link: |%s|' % (link), log_utils.LOGDEBUG)
     if link.endswith('$$all'):
-        hmf = resolveurl.HostedMediaFile(url=link, return_all=True)
+        hmf = resolveurl.HostedMediaFile(url=link[:-5], return_all=True)
     else:
         hmf = resolveurl.HostedMediaFile(url=link)
     if not hmf:
@@ -208,6 +208,8 @@ def play_link(link):
             allfiles = hmf.resolve()
             names = [x.get('name') for x in allfiles]
             item = xbmcgui.Dialog().select('Select file to play', names, preselect=0)
+            if item == -1:
+                return False
             stream_url = allfiles[item].get('link')
             if resolveurl.HostedMediaFile(stream_url):
                 stream_url = resolveurl.resolve(stream_url)
@@ -225,7 +227,6 @@ def play_link(link):
         except:
             msg = link
         kodi.notify('Resolve Failed: %s' % (msg), duration=7500)
-        print(msg)
         return False
 
     logger.log('Link Resolved: |%s|%s|' % (link, stream_url), log_utils.LOGDEBUG)
