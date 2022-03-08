@@ -35,7 +35,7 @@ class FourTubeResolver(ResolveUrl):
         url_id, quals = re.findall(pattern, html)[0]
         quals = quals.replace(',', '+')
         headers.update({'Referer': web_url, 'Origin': host})
-        post_url = 'https://tkn.kodicdn.com/0000000%s/desktop/%s' % (url_id, quals)
+        post_url = 'https://token.4tube.com/0000000%s/desktop/%s' % (url_id, quals)
         html = self.net.http_POST(post_url, headers=headers, form_data='').content
         sources = helpers.scrape_sources(html, patterns=[r"""['"](?P<label>\d+)['"]:{[\w":,]+token['"]:['"](?P<url>[^'"]+)"""])
         if sources:
