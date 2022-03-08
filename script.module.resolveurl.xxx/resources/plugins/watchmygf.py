@@ -43,9 +43,13 @@ class WatchMyGFResolver(ResolveUrl):
             web_url = self.get_url(host, media_id)
 
         html2 = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''video_url:\s*['"]([^"']+)''', html2, re.DOTALL)
-        if r:
-            return r.group(1) + helpers.append_headers(headers)
+        source = re.search(r'''video_url:\s*['"]([^"']+)''', html2, re.DOTALL)
+        if source:
+            url = source.group(1)
+            if url.startswith('function/'):
+                lcode = re.findall(r"license_code:\s*'([^']+)", html2)[0]
+                url = helpers.fun_decode(url, lcode)
+            return url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
