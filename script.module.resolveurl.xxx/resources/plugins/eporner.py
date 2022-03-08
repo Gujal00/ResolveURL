@@ -26,14 +26,14 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class EpornerResolver(ResolveUrl):
     name = 'eporner'
     domains = ['eporner.com']
-    pattern = r'(?://|\.)(eporner\.com)/[\w\-]+/([a-zA-Z0-9]+)'
+    pattern = r'(?://|\.)(eporner\.com)/(?:video-|embed/)([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
 
-        pattern = r"""{\s*vid:\s*'([^']+)',\s*hash\s*:\s*["\']([\da-f]{32})"""
+        pattern = r"""vid\s*=\s*'([^']+)';\s*[\w*\.]+hash\s*=\s*["\']([\da-f]{32})"""
         id, hash = re.findall(pattern, html)[0]
         hash_code = ''.join((self.encode_base_n(int(hash[lb:lb + 8], 16), 36) for lb in range(0, 32, 8)))
         load_url = 'https://www.eporner.com/xhr/video/%s?hash=%s&device=generic&domain=www.eporner.com&fallback=false&embed=false&supportedFormats=mp4' % (id, hash_code)
@@ -44,7 +44,7 @@ class EpornerResolver(ResolveUrl):
         if len(sources) > 1:
             try:
                 sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])), reverse=True)
-            except:
+            except Exception:
                 common.logger.log_debug(r'Scrape sources sort failed |int(re.sub("\D", "", x[0])|')
             return helpers.pick_source(sources) + helpers.append_headers(headers)
 
