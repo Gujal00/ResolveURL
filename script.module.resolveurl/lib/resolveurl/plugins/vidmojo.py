@@ -24,8 +24,8 @@ from six.moves import urllib_parse
 
 class VidMojoResolver(ResolveUrl):
     name = "vidmojo"
-    domains = ['vidmojo.net']
-    pattern = r'(?://|\.)(vidmojo\.net)/(?:embed-)?([^\n]+)'
+    domains = ['vidmojo.net', 'vidflare.net', 'embedojo.com']
+    pattern = r'(?://|\.)((?:vid(?:mojo|flare)|embedojo)\.(?:net|com))/(?:embed-)?([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -40,7 +40,7 @@ class VidMojoResolver(ResolveUrl):
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': referer}
         response = self.net.http_GET(web_url, headers=headers).content
-        srcs = helpers.scrape_sources(response, patterns=[r'''file:\s*"(?P<url>[^"]+)'''])
+        srcs = helpers.scrape_sources(response, patterns=[r'''file:\s*"(?P<url>http[^"]+)'''], result_blacklist=['.jpg'], generic_patterns=False)
         if srcs:
             headers.update({'Referer': web_url})
             return helpers.pick_source(sorted(srcs, reverse=True)) + helpers.append_headers(headers)
