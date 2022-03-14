@@ -59,15 +59,15 @@ class StreamSBResolver(ResolveUrl):
                 r = re.search('href="([^"]+)">Direct', req)
                 if r:
                     return r.group(1) + helpers.append_headers(headers)
-        else:
-            eurl = self.get_embedurl(host, media_id)
-            headers.update({'watchsb': 'streamsb'})
-            html = self.net.http_GET(eurl, headers=headers).content
-            data = json.loads(html).get("stream_data", {})
-            strurl = data.get('file') or data.get('backup')
-            if strurl:
-                headers.pop('watchsb')
-                return strurl + helpers.append_headers(headers)
+
+        eurl = self.get_embedurl(host, media_id)
+        headers.update({'watchsb': 'streamsb'})
+        html = self.net.http_GET(eurl, headers=headers).content
+        data = json.loads(html).get("stream_data", {})
+        strurl = data.get('file') or data.get('backup')
+        if strurl:
+            headers.pop('watchsb')
+            return strurl + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
