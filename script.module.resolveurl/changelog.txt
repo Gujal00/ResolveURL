@@ -1,29 +1,21 @@
-Version 5.1.61 (February 27, 2022)
+Version 5.1.62 (March 14, 2022)
 - Code Base Changes:
-    - Add return_all function for torrents
-    - update supported video formats
+    - None
 
 - Resolvers Added:
-    - mvidoo
-    - vipss
+    - tubeload
+    - zplayer
  
 - Resolvers Fixed/Updated:
-    - alldebrid
-    - debridlink
-    - mixdrop
-    - pandafiles
-    - premiumize
-    - realdebrid
+    - fembed
+    - filesfm
     - streamingcommunity
-    - streamlare
-    - streamruby
     - streamsb
-    - tusfiles
-    - uploadever
-    - vidmoly
+    - vidcloud9
+    - vidmojo
 
 - Resolvers Removed
-    - jetload
+    - None
 
 - Languages Added/Updated
     - None
