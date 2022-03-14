@@ -1,17 +1,15 @@
-Version 2.1.19 (February 27, 2022)
+Version 2.1.20 (March 14, 2022)
 
 - Resolvers Added:
-    - porngo
-    - pornone
-    - xfreehd
+    - porntrex
  
 - Resolvers Fixed/Updated:
-    - bitporno
-    - fuqer
-    - gfsvideos
-    - perfectgirls
-    - spankbang
-    - sexvr
+    - eporner
+    - fourtube
+    - hclips
+    - tube8
+    - watchmygf
+    - youporn
 
 - Resolvers Removed
     - None
