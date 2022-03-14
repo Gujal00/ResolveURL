@@ -30,12 +30,9 @@ class TubeloadResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        rurl = 'https://{}/'.format(host)
-        headers = {
-            'Referer': rurl,
-            'User-Agent': common.FF_USER_AGENT
-        }
+        headers = {'User-Agent': common.CHROME_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
+        headers.update({'Referer': web_url})
         if 'NOT FOUND' in html or 'Sorry' in html:
             raise ResolverError('File Removed')
 
@@ -43,15 +40,21 @@ class TubeloadResolver(ResolveUrl):
             html = re.findall('<head>(.*?)</head>', html, re.S)[0]
             html = jsunhunt.unhunt(html)
 
-        source = re.search(r'var\s*adbbdddffbad\s*=\s*"([^"]+)', html)
-        if source:
-            headers.update({'Origin': rurl[:-1], 'verifypeer': 'false'})
-            url = source.group(1).replace('MzY3Y2E4NTAzNmQ5NDkzN2FiNTQzZTBiNmI4YTIwYzg', '')
-            url = url.replace('NjYxOWU2OTNmZWQ0M2I3ZTFhM2U4NTc4Y2NhZmY3NmM=', '')
-            url = base64.b64decode(url).decode('utf-8')
-            return url + helpers.append_headers(headers)
+        aurl = 'https://{0}/assets/js/main.min.js'.format(host)
+        ahtml = self.net.http_GET(aurl, headers=headers).content
 
-        raise ResolverError('File Not Found')
+        if jsunhunt.detect(ahtml):
+            ahtml = jsunhunt.unhunt(ahtml)
+            var, rep1, rep2 = re.findall(r'''var\s*res\s*=\s*([^.]+)\.replace\("([^"]+).+?replace\("([^"]+)''', ahtml, re.DOTALL)[0]
+            r = re.search(r'var\s*{0}\s*=\s*"([^"]+)'.format(var), html)
+            if r:
+                surl = r.group(1).replace(rep1, '')
+                surl = surl.replace(rep2, '')
+                surl = base64.b64decode(surl).decode('utf-8')
+                headers.update({'verifypeer': 'false'})
+                return surl.replace(' ', '%20') + helpers.append_headers(headers)
+
+        raise ResolverError("Video not found")
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
