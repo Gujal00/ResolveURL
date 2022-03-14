@@ -43,13 +43,19 @@ class TubeloadResolver(ResolveUrl):
             html = re.findall('<head>(.*?)</head>', html, re.S)[0]
             html = jsunhunt.unhunt(html)
 
-        source = re.search(r'var\s*adbbdddffbad\s*=\s*"([^"]+)', html)
-        if source:
-            headers.update({'Origin': rurl[:-1], 'verifypeer': 'false'})
-            url = source.group(1).replace('MzY3Y2E4NTAzNmQ5NDkzN2FiNTQzZTBiNmI4YTIwYzg', '')
-            url = url.replace('NjYxOWU2OTNmZWQ0M2I3ZTFhM2U4NTc4Y2NhZmY3NmM=', '')
-            url = base64.b64decode(url).decode('utf-8')
-            return url + helpers.append_headers(headers)
+        jurl = 'https://{}/assets/js/main.min.js'.format(host)
+        jhtml = self.net.http_GET(jurl, headers=headers).content
+
+        if jsunhunt.detect(jhtml):
+            jhtml = jsunhunt.unhunt(jhtml)
+            var, rep1, rep2 = re.findall(r'''var\s*res\s*=\s*([^.]+)\.replace\("([^"]+).+?replace\("([^"]+)''', jhtml, re.S)[0]
+            source = re.search(r'var\s*{0}\s*=\s*"([^"]+)'.format(var), html)
+            if source:
+                headers.update({'Origin': rurl[:-1], 'verifypeer': 'false'})
+                url = source.group(1).replace(rep1, '')
+                url = url.replace(rep2, '')
+                url = base64.b64decode(url).decode('utf-8')
+                return url + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found')
 
