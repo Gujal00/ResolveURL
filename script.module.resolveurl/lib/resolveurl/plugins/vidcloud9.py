@@ -35,31 +35,28 @@ class VidCloud9Resolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Referer': 'https://vidembed.me/'}
+                   'Referer': web_url}
 
-        key = '25746538592938496764662879833288'.encode('utf8')
-        iv = self.f_random(16)
+        key = '25742532592138496744665879883281'.encode('utf8')
+        iv = '9225679083961858'
         encryptor = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv.encode('utf8')))
         eid = encryptor.feed(media_id)
         eid += encryptor.feed()
-        url = 'https://vidembed.me' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
-            + '&refer=none&time=' + self.f_random(2) + iv + self.f_random(2)
+        url = 'https://vidembed.io' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
+            + '&c=aaaaaaaa&refer=none&alias={0}'.format(media_id)
         headers.update({'X-Requested-With': 'XMLHttpRequest'})
-        js_data = json.loads(self.net.http_GET(url, headers=headers).content)
-        sources = js_data.get('source', None)
-        if sources:
-            sources = [(source.get('label'), source.get('file')) for source in sources]
-            headers.pop('X-Requested-With')
-            source = helpers.pick_source(helpers.sort_sources_list(sources))
-            return source + helpers.append_headers(headers)
-
-        # Try Beta Server if no sources found with earlier method
-        headers.pop('X-Requested-With')
-        html = self.net.http_GET(web_url, headers=headers).content
-        sources = helpers.scrape_sources(html)
-        if sources:
-            headers.update({'Origin': 'https://vidembed.me'})
-            return helpers.pick_source(sources) + helpers.append_headers(headers)
+        js_data = json.loads(self.net.http_GET(url, headers=headers).content).get('data', None)
+        if js_data:
+            ct = base64.b64decode(js_data)
+            decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv.encode('utf8')))
+            ddata = decryptor.feed(ct)
+            ddata += decryptor.feed()
+            sources = json.loads(ddata.decode('utf-8').replace('\\', '')).get('source')
+            if sources:
+                sources = [(source.get('label').replace(' ', ''), source.get('file')) for source in sources if source.get('label') != 'Auto']
+                headers.pop('X-Requested-With')
+                source = helpers.pick_source(helpers.sort_sources_list(sources))
+                return source + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
