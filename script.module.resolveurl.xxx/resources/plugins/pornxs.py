@@ -16,20 +16,16 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class PornXSResolver(ResolveGeneric):
     name = 'pornxs'
     domains = ['pornxs.com']
-    pattern = r'(?://|\.)(pornxs\.com)/(?:[a-zA-Z-\.\?]+)(?:/|=)(\d+)'
-
-    def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id), patterns=[r'''id=['"]player['"]\s*href=['"](?P<url>[^'"]+)''']).replace(' ', '%20')
+    pattern = r'(?://|\.)(pornxs\.com)/(?:[a-zA-Z-\.\?]+)?(?:/|=)?(\d+)'
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://embed.{host}/embed.php?id={media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
 
     @classmethod
     def _is_enabled(cls):
