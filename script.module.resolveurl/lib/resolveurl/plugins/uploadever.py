@@ -23,8 +23,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UploadEverResolver(ResolveUrl):
     name = 'uploadever'
-    domains = ['uploadever.com']
-    pattern = r'(?://|\.)(uploadever\.com)/([0-9a-zA-Z]+)'
+    domains = ['uploadever.com', 'uploadever.in']
+    pattern = r'(?://|\.)(uploadever\.(?:com|in))/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -42,10 +42,10 @@ class UploadEverResolver(ResolveUrl):
             'method_premium': ''
         }
         url = self.net.http_POST(web_url, form_data=payload, headers=headers).get_url()
-        if url and url != web_url:
+        if url != web_url:
             return url + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
+        return self._default_get_url(host, media_id, template='https://uploadever.in/{media_id}')
