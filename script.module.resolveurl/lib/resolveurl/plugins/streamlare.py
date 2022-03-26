@@ -29,16 +29,23 @@ class StreamLareResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        api_url = 'https://streamlare.com/api/video/get'
+        api_durl = 'https://streamlare.com/api/video/download/get'
+        api_surl = 'https://streamlare.com/api/video/stream/get'
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': web_url,
                    'X-Requested-With': 'XMLHttpRequest'}
         data = {'id': media_id}
-        html = self.net.http_POST(api_url, headers=headers, form_data=data, jdata=True).content
-        source = json.loads(html).get('result', {}).get('Original', {}).get('src')
+        html = self.net.http_POST(api_durl, headers=headers, form_data=data, jdata=True).content
+        source = json.loads(html).get('result', {}).get('Original', {}).get('url')
         if source:
             headers.pop('X-Requested-With')
-            return helpers.xor_string(source, '3') + helpers.append_headers(headers)
+            return source + helpers.append_headers(headers)
+        else:
+            html = self.net.http_POST(api_surl, headers=headers, form_data=data, jdata=True).content
+            source = json.loads(html).get('result', {}).get('file')
+            if source:
+                headers.pop('X-Requested-With')
+                return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
