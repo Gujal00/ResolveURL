@@ -35,14 +35,14 @@ class StreamLareResolver(ResolveUrl):
                    'Referer': web_url,
                    'X-Requested-With': 'XMLHttpRequest'}
         data = {'id': media_id}
-        html = self.net.http_POST(api_durl, headers=headers, form_data=data, jdata=True).content
-        source = json.loads(html).get('result', {}).get('Original', {}).get('url')
+        html = self.net.http_POST(api_surl, headers=headers, form_data=data, jdata=True).content
+        source = json.loads(html).get('result', {}).get('file')
         if source:
             headers.pop('X-Requested-With')
             return source + helpers.append_headers(headers)
         else:
-            html = self.net.http_POST(api_surl, headers=headers, form_data=data, jdata=True).content
-            source = json.loads(html).get('result', {}).get('file')
+            html = self.net.http_POST(api_durl, headers=headers, form_data=data, jdata=True).content
+            source = json.loads(html).get('result', {}).get('Original', {}).get('url')
             if source:
                 headers.pop('X-Requested-With')
                 return source + helpers.append_headers(headers)
