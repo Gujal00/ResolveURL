@@ -48,7 +48,7 @@ class UpToBoxResolver(ResolveUrl):
                 line3 = i18n('upto_pair').format(js_data.get('pin'))
                 with common.kodi.CountdownDialog(heading, line1, line2, line3, True, js_data.get('expired_in'), 10) as cd:
                     js_result = cd.start(self.__check_auth, [js_data.get('check_url')])
-                if js_result.get('data').get('token'):
+                if js_result and js_result.get('data', {}).get('token'):
                     self.set_setting('token', js_result.get('data').get('token'))
                     self.set_setting('premium', 'true')
             if js_result:
