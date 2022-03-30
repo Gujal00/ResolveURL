@@ -270,14 +270,22 @@ def _update_settings_xml():
         '\t\t<setting id="current_ua" label="current_ua" type="text" visible="false" default=""/>',
         '\t\t<setting id="addon_debug" label="addon_debug" type="bool" visible="false" default="false"/>',
         '\t</category>',
-        '\t<category label="%s">' % (common.i18n('universal_resolvers'))]
+        '\t<category label="%s 1">' % (common.i18n('universal_resolvers'))]
 
+    i = 0
+    cat_count = 2
     resolvers = relevant_resolvers(include_universal=True, include_disabled=True)
     resolvers = sorted(resolvers, key=lambda x: x.name.upper())
     for resolver in resolvers:
         if resolver.isUniversal():
             new_xml.append('\t\t<setting label="%s" type="lsep"/>' % resolver.name)
             new_xml += ['\t\t' + line for line in resolver.get_settings_xml()]
+            i += 1
+        if i > 4:
+            new_xml.append('\t</category>')
+            new_xml.append('\t<category label="%s %s">' % (common.i18n('universal_resolvers'), cat_count))
+            cat_count += 1
+            i = 0            
     new_xml.append('\t</category>')
     new_xml.append('\t<category label="%s 1">' % (common.i18n('resolvers')))
 

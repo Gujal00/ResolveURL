@@ -65,27 +65,27 @@
 			<orientation>vertical</orientation>
 			<control type="label" id="10">
 				<width>520</width>
-				<height>25</height>
+				<height>100</height>
 				<label></label>
 				<font>font12</font>
-				<wrapmultiline>false</wrapmultiline>
+				<wrapmultiline>true</wrapmultiline>
 				<label></label>
 				<textcolor>white</textcolor>
 				<shadowcolor>black</shadowcolor>
 			</control>
 			<control type="label" id="11">
 				<width>520</width>
-				<height>25</height>
+				<height>15</height>
 				<label></label>
 				<font>font12</font>
-				<wrapmultiline>false</wrapmultiline>
+				<wrapmultiline>true</wrapmultiline>
 				<label></label>
 				<textcolor>white</textcolor>
 				<shadowcolor>black</shadowcolor>
 			</control>
 			<control type="label" id="12">
 				<width>520</width>
-				<height>25</height>
+				<height>15</height>
 				<label></label>
 				<font>font12</font>
 				<wrapmultiline>true</wrapmultiline>
@@ -112,7 +112,7 @@
 			<aligny>center</aligny>
 			<label>$ADDON[script.module.resolveurl 33038]</label>
 			<font>font12_title</font>
-            <visible>String.StartsWith(System.BuildVersion, 17)|String.StartsWith(System.BuildVersion, 18)</visible>
+            <visible>String.StartsWith(System.BuildVersion, 17)|String.StartsWith(System.BuildVersion, 18)|String.StartsWith(System.BuildVersion, 19)</visible>
 		</control>
         <control type="button" id="200">
             <description>Cancel Button (Jarvis)</description>
