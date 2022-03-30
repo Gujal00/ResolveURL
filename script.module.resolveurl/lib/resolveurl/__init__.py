@@ -38,7 +38,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.plugins import *  # NOQA
 
 common.logger.log_debug('Initializing ResolveURL version: %s' % common.addon_version)
-MAX_SETTINGS = 75
+MAX_SETTINGS = 60
 
 PLUGIN_DIRS = []
 host_cache = {}
@@ -285,7 +285,7 @@ def _update_settings_xml():
             new_xml.append('\t</category>')
             new_xml.append('\t<category label="%s %s">' % (common.i18n('universal_resolvers'), cat_count))
             cat_count += 1
-            i = 0            
+            i = 0
     new_xml.append('\t</category>')
     new_xml.append('\t<category label="%s 1">' % (common.i18n('resolvers')))
 
