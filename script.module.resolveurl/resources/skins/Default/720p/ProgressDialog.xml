@@ -65,7 +65,7 @@
 			<orientation>vertical</orientation>
 			<control type="label" id="10">
 				<width>520</width>
-				<height>50</height>
+				<height>36</height>
 				<label></label>
 				<font>font12</font>
 				<wrapmultiline>true</wrapmultiline>
@@ -96,7 +96,7 @@
 		</control>
 		<control type="progress" id="20">
 			<left>40</left>
-			<top>165</top>
+			<top>175</top>
 			<width>530</width>
 			<height>24</height>
 			<texture></texture>
@@ -105,7 +105,7 @@
 		<control type="button" id="200">
 			<description>Cancel Button (Krypton)</description>
 			<left>195</left>
-			<top>185</top>
+			<top>183</top>
 			<width>220</width>
 			<height>90</height>
 			<align>center</align>
