@@ -65,7 +65,7 @@
 			<orientation>vertical</orientation>
 			<control type="label" id="10">
 				<width>520</width>
-				<height>100</height>
+				<height>50</height>
 				<label></label>
 				<font>font12</font>
 				<wrapmultiline>true</wrapmultiline>
