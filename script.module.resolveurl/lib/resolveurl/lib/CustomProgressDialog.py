@@ -22,7 +22,7 @@ from resolveurl.lib import log_utils
 
 logger = log_utils.Logger.get_logger(__name__)
 addon = xbmcaddon.Addon('script.module.resolveurl')
-DIALOG_XML = 'ProgressDialog.xml'
+DIALOG_XML = 'ProgressDialog.xml' if six.PY2 else 'ProgressDialog2.xml'
 
 
 class ProgressDialog(object):
