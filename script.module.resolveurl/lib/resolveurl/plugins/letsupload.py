@@ -23,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class LetsUploadResolver(ResolveUrl):
-    name = "letsupload.io"
+    name = 'letsupload.io'
     domains = ['letsupload.io', 'letsupload.org']
     pattern = r'(?://|\.)(letsupload\.(?:io|org))/([0-9a-zA-Z]+)'
 
@@ -34,14 +34,17 @@ class LetsUploadResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r"href='([^']+)'>download\s*now", html)
-        if r:
-            common.kodi.sleep(3000)
-            headers.update({'Referer': web_url})
-            html = self.net.http_GET(r.group(1), headers=headers).content
-            f = re.search(r'href="([^"]+)', html)
-            if f:
-                return f.group(1) + helpers.append_headers(headers)
+        r = re.search(r'''onclick="window\.location\s*=\s*'([^']+)''', html)
+        if not r:
+            raise ResolverError('File Removed')
+        headers.update({'Referer': web_url})
+        html = self.net.http_GET(r.group(1), headers=headers).content
+        file_id = re.search(r'showFileInformation\((\d+)', html)
+        if file_id:
+            durl = 'https://{}/account/direct_download/{}'.format(host, file_id.group(1))
+            url = self.net.http_GET(durl, headers=headers).get_url()
+            if url != durl:
+                return url + helpers.append_headers(headers)
         raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
