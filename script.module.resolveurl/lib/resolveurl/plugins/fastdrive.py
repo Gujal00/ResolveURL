@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
 import re
+import base64
 from six.moves import urllib_parse
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
@@ -37,25 +37,10 @@ class FastdriveResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r"btn--primary'\s*href='([^']+)", html)
         if r:
-            common.kodi.sleep(7000)
-            g = self.net.http_GET(r.group(1), headers=headers)
-            ghtml = g.content
-            gurl = g.get_url()
-            data = helpers.get_hidden(ghtml)
-            headers.update({
-                'Origin': urllib_parse.urljoin(gurl, '/')[:-1],
-                'Referer': gurl,
-                'X-Requested-With': 'XMLHttpRequest'
-            })
-            purl = re.findall('<form.+?action="([^"]+)', ghtml)[0]
-            if purl.startswith('/'):
-                purl = urllib_parse.urljoin(gurl, purl)
             common.kodi.sleep(5000)
-            html = self.net.http_POST(purl, form_data=data, headers=headers).content
-            jd = json.loads(html)
-            if jd.get('status') == "success":
-                headers.pop('X-Requested-With')
-                return jd.get('url') + helpers.append_headers(headers)
+            query = urllib_parse.parse_qsl(urllib_parse.urlparse(r.group(1)).query)
+            source = base64.b64decode(query[0][1]).decode('utf-8')
+            return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
