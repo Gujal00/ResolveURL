@@ -43,6 +43,7 @@ class RacatyResolver(ResolveUrl):
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         url = re.search(r'id="uniqueExpirylink"\s*href="([^"]+)', html)
         if url:
+            headers.update({'verifypeer': 'false'})
             return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
