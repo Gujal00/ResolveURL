@@ -50,27 +50,28 @@ class FembedResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         r = self.net.http_GET(web_url, headers=headers)
-        if r.get_url() != web_url:
-            host = re.findall(r'(?://|\.)([^/]+)', r.get_url())[0]
-            web_url = self.get_url(host, media_id)
-        headers.update({'Referer': web_url})
-        api_url = 'https://{0}/api/source/{1}'.format(host, media_id)
-        r = self.net.http_POST(api_url, form_data={'r': '', 'd': host}, headers=headers)
-        if r.get_url() != api_url:
-            api_url = 'https://www.{0}/api/source/{1}'.format(host, media_id)
+        if 'this video is unavailable' not in r.content:
+            if r.get_url() != web_url:
+                host = re.findall(r'(?://|\.)([^/]+)', r.get_url())[0]
+                web_url = self.get_url(host, media_id)
+            headers.update({'Referer': web_url})
+            api_url = 'https://{0}/api/source/{1}'.format(host, media_id)
             r = self.net.http_POST(api_url, form_data={'r': '', 'd': host}, headers=headers)
-        js_result = r.content
+            if r.get_url() != api_url:
+                api_url = 'https://www.{0}/api/source/{1}'.format(host, media_id)
+                r = self.net.http_POST(api_url, form_data={'r': '', 'd': host}, headers=headers)
+            js_result = r.content
 
-        if js_result:
-            js_data = json.loads(js_result)
-            if js_data.get('success'):
-                sources = [(i.get('label'), i.get('file')) for i in js_data.get('data') if i.get('type') == 'mp4']
-                common.logger.log(sources)
-                sources = helpers.sort_sources_list(sources)
-                rurl = helpers.pick_source(sources)
-                str_url = self.net.http_HEAD(rurl, headers=headers).get_url()
-                headers.update({'verifypeer': 'false'})
-                return str_url + helpers.append_headers(headers)
+            if js_result:
+                js_data = json.loads(js_result)
+                if js_data.get('success'):
+                    sources = [(i.get('label'), i.get('file')) for i in js_data.get('data') if i.get('type') == 'mp4']
+                    common.logger.log(sources)
+                    sources = helpers.sort_sources_list(sources)
+                    rurl = helpers.pick_source(sources)
+                    str_url = self.net.http_HEAD(rurl, headers=headers).get_url()
+                    headers.update({'verifypeer': 'false'})
+                    return str_url + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
