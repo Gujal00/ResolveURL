@@ -66,7 +66,6 @@ class FembedResolver(ResolveUrl):
                 js_data = json.loads(js_result)
                 if js_data.get('success'):
                     sources = [(i.get('label'), i.get('file')) for i in js_data.get('data') if i.get('type') == 'mp4']
-                    common.logger.log(sources)
                     sources = helpers.sort_sources_list(sources)
                     rurl = helpers.pick_source(sources)
                     str_url = self.net.http_HEAD(rurl, headers=headers).get_url()
