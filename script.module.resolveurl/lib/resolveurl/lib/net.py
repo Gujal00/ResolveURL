@@ -42,6 +42,7 @@ RAND_UAS = ['Mozilla/5.0 ({win_ver}{feature}; rv:{br_ver}) Gecko/20100101 Firefo
             'Mozilla/5.0 ({win_ver}{feature}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{br_ver} Safari/537.36',
             'Mozilla/5.0 ({win_ver}{feature}; Trident/7.0; rv:{br_ver}) like Gecko',
             'Mozilla/5.0 (compatible; MSIE {br_ver}; {win_ver}{feature}; Trident/6.0)']
+CERT_FILE = kodi.translate_path('special://xbmc/system/certs/cacert.pem')
 
 
 def get_ua():
@@ -160,7 +161,7 @@ class Net:
         """Returns user agent string."""
         return self._user_agent
 
-    def _update_opener(self, drop_tls_level=False):
+    def _update_opener(self):
         """
         Builds and installs a new opener to be used by all future calls to
         :func:`urllib2.urlopen`.
@@ -196,10 +197,7 @@ class Net:
         else:
             try:
                 import ssl
-                import certifi
-                ctx = ssl.create_default_context(cafile=certifi.where())
-                if drop_tls_level:
-                    ctx.protocol = ssl.PROTOCOL_TLSv1_1
+                ctx = ssl.create_default_context(cafile=CERT_FILE)
                 if self._http_debug:
                     handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
                 else:
@@ -341,9 +339,26 @@ class Net:
         try:
             response = urllib_request.urlopen(req, timeout=15)
         except urllib_error.HTTPError as e:
-            if e.code == 403:
-                self._update_opener(drop_tls_level=True)
-            response = urllib_request.urlopen(req, timeout=15)
+            if e.code == 403 and 'cloudflare' in e.hdrs.get('Expect-CT', ''):
+                import ssl
+                ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+                handlers = [urllib_request.HTTPSHandler(context=ctx)]
+                opener = urllib_request.build_opener(*handlers)
+                try:
+                    response = opener.open(req, timeout=15)
+                except urllib_error.HTTPError as e:
+                    if e.code == 403:
+                        ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
+                        handlers = [urllib_request.HTTPSHandler(context=ctx)]
+                        opener = urllib_request.build_opener(*handlers)
+                        try:
+                            response = opener.open(req, timeout=15)
+                        except urllib_error.HTTPError as e:
+                            response = e
+                    else:
+                        response = e
+            else:
+                response = e
 
         return HttpResponse(response)
 
