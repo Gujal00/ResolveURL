@@ -295,7 +295,7 @@ class RealDebridResolver(ResolveUrl):
         js_result = json.loads(self.net.http_GET(url, headers=self.headers).content)
         line1 = 'Go to URL: %s' % (js_result['verification_url'])
         line2 = 'When prompted enter: %s' % (js_result['user_code'])
-        with common.kodi.CountdownDialog('Resolve URL Real Debrid Authorization', line1, line2, countdown=120, interval=js_result['interval']) as cd:
+        with common.kodi.CountdownDialog('Resolve URL Real Debrid Authorization', line1, line2, countdown=js_result['expires_in'], interval=js_result['interval']) as cd:
             result = cd.start(self.__check_auth, [js_result['device_code']])
 
         # cancelled
