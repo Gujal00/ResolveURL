@@ -1,24 +1,20 @@
-Version 5.1.63 (April 02, 2022)
+Version 5.1.64 (April 10, 2022)
 - Code Base Changes:
-    - Fix overlay progress dialog not showing line 3 on Kodi19
-    - Fix unreachable items in settings
+    - Fix overlay progress dialog
+    - Remove certifi dependency
 
 - Resolvers Added:
-    - mightyupload
-    - uploadbaz
-    - uploadraja
+    - None
  
 - Resolvers Fixed/Updated:
-    - avideo
-    - clicknupload
+    - dood
+    - fastdrive
     - fembed
-    - k2s
-    - streamingcommunity
-    - streamlare
-    - streamsb
-    - tubeload
-    - uploadever
-    - uptobox
+    - letsupload
+    - racaty
+    - realdebrid
+    - send
+    - streamruby
 
 - Resolvers Removed
     - None
