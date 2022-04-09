@@ -355,10 +355,6 @@ class Net:
                             response = opener.open(req, timeout=15)
                         except urllib_error.HTTPError as e:
                             response = e
-                    else:
-                        response = e
-            else:
-                response = e
 
         return HttpResponse(response)
 
