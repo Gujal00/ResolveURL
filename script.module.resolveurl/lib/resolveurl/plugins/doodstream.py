@@ -48,6 +48,9 @@ class DoodStreamResolver(ResolveUrl):
         if match:
             url = 'https://{0}{1}'.format(host, match.group(1))
             html = self.net.http_GET(url, headers=headers).content
+        else:
+            url = web_url.replace('/d/', '/e/')
+            html = self.net.http_GET(url, headers=headers).content
 
         match = re.search(r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''', html, re.DOTALL)
         if match:
