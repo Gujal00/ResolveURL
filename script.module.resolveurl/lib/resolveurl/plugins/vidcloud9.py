@@ -28,8 +28,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VidCloud9Resolver(ResolveUrl):
     name = 'vidcloud9.com'
     domains = ['vidcloud9.com', 'vidnode.net', 'vidnext.net', 'vidembed.net', 'vidembed.cc', 'vidembed.io',
-               'vidembed.me']
-    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|vidembed)\.(?:com|net|cc|io|me))/' \
+               'vidembed.me', 'membed.net']
+    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|(?:vid|m)embed)\.(?:com|net|cc|io|me))/' \
               r'(?:streaming|embedplus|load(?:server)?)(?:\.php)?\?id=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
@@ -42,7 +42,7 @@ class VidCloud9Resolver(ResolveUrl):
         encryptor = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv.encode('utf8')))
         eid = encryptor.feed(media_id)
         eid += encryptor.feed()
-        url = 'https://vidembed.io' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
+        url = 'https://membed.net' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
             + '&c=aaaaaaaa&refer=none&alias={0}'.format(media_id)
         headers.update({'X-Requested-With': 'XMLHttpRequest'})
         js_data = json.loads(self.net.http_GET(url, headers=headers).content).get('data', None)
@@ -61,7 +61,7 @@ class VidCloud9Resolver(ResolveUrl):
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://vidembed.me/loadserver.php?id={media_id}')
+        return self._default_get_url(host, media_id, template='https://membed.net/loadserver.php?id={media_id}')
 
     def f_random(self, x):
         stime = ''
