@@ -28,7 +28,8 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.work', 'streamingcommunity.name', 'streamingcommunity.video',
                'streamingcommunity.live', 'streamingcommunity.tv', 'streamingcommunity.space',
                'streamingcommunity.art', 'streamingcommunity.fun', 'streamingcommunity.website',
-               'streamingcommunity.host', 'streamingcommunity.site', 'streamingcommunity.bond', 'streamingCommunity.icu', 'streamcommunity.bar'] 
+               'streamingcommunity.host', 'streamingcommunity.site', 'streamingcommunity.bond',
+               'streamingCommunity.icu', 'streamcommunity.bar']
     pattern = r'(?://|\.)(streamingcommunity\.(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar))/watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
@@ -38,7 +39,7 @@ class StreamCommunityResolver(ResolveUrl):
         match = re.search(r'''<video-player.+?scws_id[^\d]+(\d+)''', html, re.DOTALL)
         if match:
             scws_id = match.group(1)
-            headers.update({'Referer': 'https://streamingcommunity.bar/'})
+            headers.update({'Referer': web_url})
             html = self.net.http_GET('https://scws.xyz/videos/' + scws_id, headers=headers).content
             a = json.loads(html).get('client_ip')
             url = 'https://scws.xyz/master/{0}?{1}'.format(scws_id, self.get_token(a))
