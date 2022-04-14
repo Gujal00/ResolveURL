@@ -42,7 +42,12 @@ class UploadEverResolver(ResolveUrl):
             'method_free': '',
             'method_premium': ''
         }
-        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
+        r = self.net.http_POST(web_url, form_data=payload, headers=headers)
+        url = r.get_url()
+        if url != web_url:
+            return url + helpers.append_headers(headers)
+
+        html = r.content
         url = re.search(r'btn\s*btn-dow"\s*href="(http[^"]+)', html)
         if url:
             return url.group(1) + helpers.append_headers(headers)
