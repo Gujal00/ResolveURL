@@ -16,10 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
 from resolveurl.plugins.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-import re
 
 
 class PandaFilesResolver(ResolveUrl):
@@ -41,7 +41,7 @@ class PandaFilesResolver(ResolveUrl):
             'method_free': 'Free Download'
         }
         html = self.net.http_POST(web_url, form_data=data, headers=headers).content
-        source = re.search(r'id="direct_link">\s*<a\s*href="([^"]+)', html)
+        source = re.search(r'id="direct_link".*?href="([^"]+)', html, re.S)
         if source:
             headers.update({'verifypeer': 'false'})
             return source.group(1) + helpers.append_headers(headers)
