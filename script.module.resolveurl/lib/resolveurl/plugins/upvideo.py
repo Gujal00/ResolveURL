@@ -25,8 +25,10 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UpVideoResolver(ResolveUrl):
     name = "upvideo.to"
-    domains = ['upvideo.to', 'videoloca.xyz', 'tnaket.xyz', 'makaveli.xyz', 'highload.to']
-    pattern = r'(?://|\.)((?:upvideo|videoloca|makaveli|tnaket|highload)\.(?:to|xyz))/(?:e|v|f)/([0-9a-zA-Z]+)'
+    domains = ['upvideo.to', 'videoloca.xyz', 'tnaket.xyz', 'makaveli.xyz',
+               'highload.to', 'embedo.co']
+    pattern = r'(?://|\.)((?:upvideo|videoloca|makaveli|tnaket|highload|embedo)\.' \
+              r'(?:to|xyz|co))/(?:e|v|f)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -51,12 +53,16 @@ class UpVideoResolver(ResolveUrl):
 
         if jsunhunt.detect(ahtml):
             ahtml = jsunhunt.unhunt(ahtml)
-            var, rep1, rep2 = re.findall(r'''var\s*res\s*=\s*([^.]+)\.replace\("([^"]+).+?replace\("([^"]+)''', ahtml, re.DOTALL)[0]
+            var, rep1, rep2 = re.findall(
+                r'''var\s*res\s*=\s*([^.]+)\.replace\("([^"]+).+?replace\("([^"]+)''',
+                ahtml, re.DOTALL)[0]
             r = re.search(r'var\s*{0}\s*=\s*"([^"]+)'.format(var), html)
             if r:
                 surl = r.group(1).replace(rep1, '')
                 surl = surl.replace(rep2, '')
                 surl = base64.b64decode(surl).decode('utf-8')
+                if host.split('.')[0] == 'embedo':
+                    headers.update({'verifypeer': 'false'})
                 return surl.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError("Video not found")
