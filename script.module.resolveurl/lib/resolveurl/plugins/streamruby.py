@@ -32,7 +32,7 @@ class StreamRubyResolver(ResolveUrl):
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
         html += helpers.get_packed_data(html)
-        master_url = re.search(r'''sources:\s*\[(?:{src:|{file:)?\s*['"](?P<url>[^'"]+)''', html)
+        master_url = re.search(r'''sources:\s*\[(?:{src:|{file:)?\s*['"]([^'"]+)''', html)
         if master_url:
             rurl = 'https://{}/'.format(host)
             headers.update({'Origin': rurl[:-1], 'Referer': rurl})
