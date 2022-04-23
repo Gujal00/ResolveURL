@@ -23,8 +23,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class HDvidResolver(ResolveUrl):
     name = 'HDvid'
-    domains = ['hdvid.tv', 'hdvid.fun', 'vidhdthe.online']
-    pattern = r'(?://|\.)((?:hdvid|vidhdthe)\.(?:tv|fun|online))/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['hdvid.tv', 'hdvid.fun', 'vidhdthe.online', 'hdvid.website']
+    pattern = r'(?://|\.)((?:hdvid|vidhdthe)\.(?:tv|fun|online|website))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -37,4 +37,4 @@ class HDvidResolver(ResolveUrl):
         raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://hdvid.fun/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://hdvid.tv/embed-{media_id}.html')
