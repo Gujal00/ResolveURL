@@ -44,4 +44,6 @@ class VlalaNetResolver(ResolveUrl):
         raise ResolverError('No playable video found.')
 
     def get_url(self, host, media_id):
+        if media_id.endswith('-mp4'):
+            return self._default_get_url(host, media_id, template='https://cdn1.{host}/embed/{media_id}')
         return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
