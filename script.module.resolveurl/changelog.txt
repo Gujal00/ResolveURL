@@ -1,20 +1,21 @@
-Version 5.1.65 (April 15, 2022)
+Version 5.1.66 (April 25, 2022)
 - Code Base Changes:
-    - raise on http error
+    - None
 
 - Resolvers Added:
-    - jawcloud
+    - uploadingsite
  
 - Resolvers Fixed/Updated:
     - dood
-    - pandafiles
-    - realdebrid
+    - gofile
+    - hdvid
     - streamcommunity
-    - uploadever
-    - vidcloud9
+    - streamruby
+    - upvideo
+    - vlalanet
 
 - Resolvers Removed
-    - None
+    - jawcloud
 
 - Languages Added/Updated
     - None
