@@ -29,8 +29,8 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.live', 'streamingcommunity.tv', 'streamingcommunity.space',
                'streamingcommunity.art', 'streamingcommunity.fun', 'streamingcommunity.website',
                'streamingcommunity.host', 'streamingcommunity.site', 'streamingcommunity.bond',
-               'streamingCommunity.icu', 'streamingcommunity.bar']
-    pattern = r'(?://|\.)(streamingcommunity\.(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar))/watch/(\d+(?:\?e=)?\d+)'
+               'streamingCommunity.icu', 'streamingcommunity.bar', 'streamingcommunity.top']
+    pattern = r'(?://|\.)(streamingcommunity\.(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar|top))/watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -48,7 +48,7 @@ class StreamCommunityResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://streamingcommunity.bar/watch/{media_id}')
+        return self._default_get_url(host, media_id, template='https://streamingcommunity.top/watch/{media_id}')
 
     def get_token(self, a):
         import time
