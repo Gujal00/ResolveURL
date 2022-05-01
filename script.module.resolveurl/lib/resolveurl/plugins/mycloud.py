@@ -1,6 +1,7 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2016  script.module.resolveurl
+    Copyright (C) 2016 script.module.resolveurl
+    Copyright (C) 2022 shellc0de
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -9,38 +10,20 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import string
-from random import choice
-from resolveurl.plugins.lib import helpers
-from resolveurl import common
-from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class MycloudResolver(ResolveUrl):
-    name = "mycloud"
-    domains = ["mycloud.to", "mcloud.to"]
-    pattern = r'(?://|\.)(my?cloud\.to)/embed/([\S]+)'
-
-    def get_media_url(self, host, media_id):
-        web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA, 'Referer': 'https://www1.putlockertv.se/'}
-        html = self.net.http_GET(web_url, headers=headers).content
-
-        if html:
-            sources = helpers.scrape_sources(html)
-            if sources:
-                headers.update({'Referer': web_url})
-                return helpers.pick_source(sources) + helpers.append_headers(headers)
-
-        raise ResolverError("Unable to locate video")
+class MycloudResolver(ResolveGeneric):
+    name = 'mycloud'
+    domains = ['mycloud.to', 'mcloud.to', 'vizcloud.digital']
+    pattern = r'(?://|\.)((?:my?|viz)cloud\.(?:to|digital))/(?:embed|e)/([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://mcloud.to/embed/{media_id}?ui=%s' % ''.join(
-            choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(24)))
+        return self._default_get_url(host, media_id, template='https://{host}/info/{media_id}')
