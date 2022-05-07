@@ -16,13 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class PixelDrainResolver(ResolveUrl):
-    name = 'pixeldrain'
+    name = 'PixelDrain'
     domains = ['pixeldrain.com']
     pattern = r'(?://|\.)(pixeldrain\.com)/(?:u|l)/([0-9a-zA-Z\-]+)'
 

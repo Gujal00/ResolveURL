@@ -19,12 +19,12 @@
 import json
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class DailymotionResolver(ResolveUrl):
-    name = 'dailymotion'
+    name = 'Dailymotion'
     domains = ['dailymotion.com', 'dai.ly']
     pattern = r'(?://|\.)(dailymotion\.com|dai\.ly)(?:/(?:video|embed|sequence|swf)(?:/video)?)?/([0-9a-zA-Z]+)'
 

@@ -17,12 +17,12 @@
 """
 
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UploadBazResolver(ResolveUrl):
-    name = 'uploadbaz'
+    name = 'UploadBaz'
     domains = ['uploadbaz.me']
     pattern = r'(?://|\.)(uploadbaz\.me)/([0-9a-zA-Z]+)'
 

@@ -20,7 +20,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class PlayHDResolver(ResolveGeneric):
-    name = 'playhd'
+    name = 'PlayHD'
     domains = ['playhd.one', 'playdrive.xyz']
     pattern = r'(?://|\.)(play(?:hd|drive)\.(?:one|xyz))/e/([0-9a-zA-Z]+)'
 

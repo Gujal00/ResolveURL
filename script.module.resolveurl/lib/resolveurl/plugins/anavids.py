@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class AnaVidsResolver(ResolveUrl):
-    name = "anavids.com"
+    name = "AnaVids"
     domains = ['anavids.com']
     pattern = r'(?://|\.)(anavids\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

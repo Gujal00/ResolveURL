@@ -17,7 +17,7 @@
 """
 
 import re
-from resolveurl.plugins.lib import jsunpack
+from resolveurl.lib import jsunpack
 from six.moves import urllib_parse, urllib_error, urllib_request
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -25,7 +25,7 @@ from resolveurl.hmf import HostedMediaFile
 
 
 class VideoZooResolver(ResolveUrl):
-    name = "videozoo"
+    name = "VideoZoo"
     domains = ["byzoo.org", "playpanda.net", "videozoo.me", "videowing.me", "easyvideo.me", "play44.net", "playbb.me", "video44.net"]
     pattern = r'(?://|\.)(?:play44|playbb|video44|byzoo|playpanda|videozoo|videowing|easyvideo)\.(?:me|org|net|eu)/(?:embed[/0-9a-zA-Z]*?|gplus|picasa|gogo/)(?:\.php)*)\?.*?((?:vid|video|id|file)=[%0-9a-zA-Z_\-\./]+|.*)[\?&]*.*'
 

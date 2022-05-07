@@ -16,13 +16,13 @@
 """
 
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class SaruchResolver(ResolveUrl):
-    name = "saruch"
+    name = "Saruch"
     domains = ["saruch.co"]
     pattern = r'(?://|\.)(saruch\.co)/(?:embed|video)/([0-9a-zA-Z]+)'
 

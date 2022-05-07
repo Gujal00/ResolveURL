@@ -18,14 +18,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import json
 from six.moves import urllib_error
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class VshareEuResolver(ResolveUrl):
-    name = "vshare.eu"
+class VShareResolver(ResolveUrl):
+    name = "VShare"
     domains = ['vshare.eu']
     pattern = r'(?://|\.)(vshare\.eu)/(?:embed-|)?([0-9a-zA-Z/]+)'
 

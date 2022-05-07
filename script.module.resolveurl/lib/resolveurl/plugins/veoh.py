@@ -18,13 +18,13 @@
 
 import json
 from six.moves import urllib_error, urllib_request
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VeohResolver(ResolveUrl):
-    name = "veoh"
+    name = "Veoh"
     domains = ["veoh.com"]
     pattern = r'(?://|\.)(veoh\.com)/(?:watch/|.+?permalinkId=)?([0-9a-zA-Z/]+)'
 

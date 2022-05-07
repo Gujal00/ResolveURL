@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class StreamWireResolver(ResolveGeneric):
-    name = "streamwire"
+    name = "StreamWire"
     domains = ['streamwire.net']
     pattern = r'(?://|\.)(streamwire\.net)/(?:embed-|e/)?([0-9a-zA-Z]+)'
 

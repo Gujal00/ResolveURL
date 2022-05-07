@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class VidozaResolver(ResolveGeneric):
-    name = 'vidoza'
+    name = 'Vidoza'
     domains = ['vidoza.net', 'vidoza.co']
     pattern = r'(?://|\.)(vidoza\.(?:net|co))/(?:embed-)?([0-9a-zA-Z]+)'
 

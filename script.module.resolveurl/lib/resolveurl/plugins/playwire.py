@@ -21,12 +21,12 @@
 
 import re
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class PlayWireResolver(ResolveUrl):
-    name = "playwire"
+    name = "PlayWire"
     domains = ["playwire.com"]
     pattern = r'(?://|\.)(config\.playwire\.com)/(.+?)/(?:zeus|player)\.json'
     pattern2 = r'(?://|\.)(cdn\.playwire\.com.+?\d+)/(?:config|embed)/(\d+)'

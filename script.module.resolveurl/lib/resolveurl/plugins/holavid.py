@@ -16,13 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class HolaVidResolver(ResolveUrl):
-    name = "holavid"
+    name = "HolaVid"
     domains = ['holavid.com']
     pattern = r'(?://|\.)(holavid\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

@@ -19,13 +19,13 @@ import re
 import random
 import string
 import time
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class DoodStreamResolver(ResolveUrl):
-    name = "doodstream"
+    name = "DoodStream"
     domains = ['dood.watch', 'doodstream.com', 'dood.to', 'dood.so', 'dood.cx', 'dood.la', 'dood.ws',
                'dood.sh', 'doodstream.co', 'dood.pm']
     pattern = r'(?://|\.)(dood(?:stream)?\.(?:com?|watch|to|s[ho]|cx|la|ws|pm))/(?:d|e)/([0-9a-zA-Z]+)'

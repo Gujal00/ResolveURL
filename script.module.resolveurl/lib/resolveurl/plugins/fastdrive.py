@@ -19,13 +19,13 @@
 import re
 import base64
 from six.moves import urllib_parse
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class FastdriveResolver(ResolveUrl):
-    name = "fastdrive"
+class FastDriveResolver(ResolveUrl):
+    name = "FastDrive"
     domains = ['fastdrive.io']
     pattern = r'(?://|\.)(fastdrive\.io)/([0-9a-zA-Z]+)'
 

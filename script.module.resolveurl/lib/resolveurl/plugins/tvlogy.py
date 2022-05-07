@@ -19,13 +19,13 @@
 import re
 import random
 import base64
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class TVLogyResolver(ResolveUrl):
-    name = "tvlogy.to"
+    name = "TVLogy"
     domains = ["tvlogy.to"]
     pattern = r'(?://|\.)((?:hls\.|flow\.)?tvlogy\.to)/(?:embed/|watch\.php\?v=|player/index.php\?data=)?([0-9a-zA-Z/]+)'
 

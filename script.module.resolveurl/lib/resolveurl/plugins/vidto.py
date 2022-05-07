@@ -20,7 +20,7 @@
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class VidtoResolver(ResolveGeneric):
-    name = "vidto"
+class VidToResolver(ResolveGeneric):
+    name = "VidTo"
     domains = ["vidto.me", "vidto.se"]
     pattern = r'(?://|\.)(vidto\.[sm]e)/(?:embed-)?([0-9a-zA-Z]+)'

@@ -17,7 +17,7 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -30,7 +30,7 @@ except ImportError:
 
 
 class TwitchResolver(ResolveUrl):
-    name = 'twitch'
+    name = 'Twitch'
     domains = ['twitch.tv']
     pattern = r'https?://(?:www\.)?(twitch\.tv)/(.+?)(?:\?|$)'
     exclusion_pattern = r'^https?://(?:www\.)?twitch\.tv/(?:directory|user|p|jobs|store|login|products|search|.+?/profile|videos/all)(?:[?/].*)?$'

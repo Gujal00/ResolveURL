@@ -18,13 +18,13 @@
 
 import re
 import base64
-from resolveurl.plugins.lib import helpers, jsunhunt
+from resolveurl.lib import helpers, jsunhunt
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UpVideoResolver(ResolveUrl):
-    name = "upvideo.to"
+    name = "UpVideo"
     domains = ['upvideo.to', 'videoloca.xyz', 'tnaket.xyz', 'makaveli.xyz',
                'highload.to', 'embedo.co']
     pattern = r'(?://|\.)((?:upvideo|videoloca|makaveli|tnaket|highload|embedo)\.' \

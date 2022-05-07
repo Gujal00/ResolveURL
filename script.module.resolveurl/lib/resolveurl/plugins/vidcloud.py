@@ -13,12 +13,12 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class VidCloudResolver(ResolveGeneric):
-    name = 'vidcloud'
+    name = 'VidCloud'
     domains = ['vidcloud.co', 'vidcloud.pro', 'vidcloud.is']
     pattern = r'(?://|\.)(vidcloud\.(?:co|pro|is))/(?:embed\d/|v/|player\?fid=)([0-9a-zA-Z?&=]+)'
 

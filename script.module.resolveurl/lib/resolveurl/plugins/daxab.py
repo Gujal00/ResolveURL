@@ -19,14 +19,14 @@
 import re
 import base64
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl import common
 from six.moves import urllib_parse
 
 
 class DaxabResolver(ResolveUrl):
-    name = "daxab"
+    name = "Daxab"
     domains = ["daxab.com"]
     pattern = r'(?://|\.)(daxab\.com)/player/([^\n]+)'
 

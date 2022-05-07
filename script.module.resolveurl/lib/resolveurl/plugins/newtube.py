@@ -17,12 +17,12 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
-class NewtubeResolver(ResolveGeneric):
+class NewTubeResolver(ResolveGeneric):
 
-    name = "newtube.app"
+    name = "NewTube"
     domains = ['newtube.app']
     pattern = r'(?://|\.)(newtube\.app)/(?:user/)?(?:embed/|\w+)/(\w+)'
 

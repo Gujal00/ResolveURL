@@ -22,7 +22,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class ViduPlayerResolver(ResolveGeneric):
-    name = "viduplayer"
+    name = "ViduPlayer"
     domains = ['viduplayer.com']
     pattern = r'(?://|\.)(viduplayer\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

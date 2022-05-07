@@ -17,13 +17,13 @@
 """
 
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamLareResolver(ResolveUrl):
-    name = "streamlare"
+    name = "StreamLare"
     domains = ["streamlare.com"]
     pattern = r'(?://|\.)(streamlare\.com)/(?:e|v)/([0-9A-Za-z]+)'
 

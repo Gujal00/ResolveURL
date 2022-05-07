@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class FastplayResolver(ResolveUrl):
-    name = 'fastplay.sx'
+class FastPlayResolver(ResolveUrl):
+    name = 'FastPlay'
     domains = ['fastplay.sx', 'fastplay.cc', 'fastplay.to']
     pattern = r'(?://|\.)(fastplay\.(?:sx|cc|to))/(?:flash-|embed-)?([0-9a-zA-Z]+)'
 

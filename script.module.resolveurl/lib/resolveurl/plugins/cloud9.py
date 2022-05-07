@@ -17,13 +17,13 @@
 """
 
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class Cloud9Resolver(ResolveUrl):
-    name = "cloud9"
+    name = "Cloud9"
     domains = ["cloud9.to"]
     pattern = r'(?://|\.)(cloud9\.to)/embed/([0-9a-zA-Z-_]+)'
 

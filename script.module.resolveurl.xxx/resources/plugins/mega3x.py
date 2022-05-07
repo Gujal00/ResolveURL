@@ -19,7 +19,7 @@
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class Mega3xResolver(ResolveUrl):

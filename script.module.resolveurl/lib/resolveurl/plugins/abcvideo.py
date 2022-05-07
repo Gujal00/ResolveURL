@@ -17,13 +17,13 @@
 """
 
 from six.moves import urllib_parse
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class ABCVideoResolver(ResolveUrl):
-    name = "abcvideo"
+    name = "ABCVideo"
     domains = ['abcvideo.cc']
     pattern = r'(?://|\.)(abcvideo\.cc)/(?:embed-)?([0-9a-zA-Z]+)'
 

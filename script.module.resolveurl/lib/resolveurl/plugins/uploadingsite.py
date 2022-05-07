@@ -17,12 +17,12 @@
 """
 
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UploadingSiteResolver(ResolveUrl):
-    name = 'uploadingsite'
+    name = 'UploadingSite'
     domains = ['uploadingsite.com']
     pattern = r'(?://|\.)(uploadingsite\.com)/([0-9a-zA-Z]+)'
 

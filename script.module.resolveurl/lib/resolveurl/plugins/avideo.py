@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class AVideoResolver(ResolveGeneric):
-    name = 'avideo'
+    name = 'AVideo'
     domains = ['avideo.host']
     pattern = r'(?://|\.)(avideo\.host)/(?:embed-|e/|d/|v/)?(\w+)'
 

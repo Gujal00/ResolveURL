@@ -16,8 +16,8 @@
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class SteamaniResolver(ResolveGeneric):
-    name = "streamani"
+class StreamAniResolver(ResolveGeneric):
+    name = "StreamAni"
     domains = ['streamani.net']
     pattern = r'(?://|\.)(streamani\.net)/(?:streaming|embed|load|ajax)\.php\?id=([a-zA-Z0-9]+)'
 

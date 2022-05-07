@@ -17,14 +17,14 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
-from resolveurl.plugins.lib import jsunpack
+from resolveurl.lib import helpers
+from resolveurl.lib import jsunpack
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamtyResolver(ResolveUrl):
-    name = "streamty"
+    name = "Streamty"
     domains = ["streamty.com"]
     pattern = r'(?://|\.)(streamty\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

@@ -17,13 +17,13 @@
 """
 import re
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VipSSResolver(ResolveUrl):
-    name = "vipss"
+    name = "VipSS"
     domains = ['vipss.club']
     pattern = r'(?://|\.)(vipss\.club)/([a-zA-Z0-9]+)'
 

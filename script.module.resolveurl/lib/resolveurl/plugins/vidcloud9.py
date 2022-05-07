@@ -20,13 +20,13 @@ import random
 import base64
 import json
 from resolveurl.lib import pyaes
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VidCloud9Resolver(ResolveUrl):
-    name = 'vidcloud9.com'
+    name = 'VidCloud9'
     domains = ['vidcloud9.com', 'vidnode.net', 'vidnext.net', 'vidembed.net', 'vidembed.cc', 'vidembed.io',
                'vidembed.me', 'membed.net']
     pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|(?:vid|m)embed)\.(?:com|net|cc|io|me))/' \

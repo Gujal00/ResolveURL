@@ -18,13 +18,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import re
 import json
 from six.moves import urllib_parse
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VKResolver(ResolveUrl):
-    name = "VK.com"
+    name = "VK"
     domains = ["vk.com"]
     pattern = r'(?://|\.)(vk\.com)/(?:video_ext\.php\?|video)(.+)'
 

@@ -17,11 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class VidMXResolver(ResolveGeneric):
-    name = "vidmx"
+    name = "VidMX"
     domains = ['vidmx.xyz']
     pattern = r'(?://|\.)(vidmx\.xyz)/(?:embed-)?([0-9a-zA-Z]+)'
 

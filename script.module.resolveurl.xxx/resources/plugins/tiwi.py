@@ -26,7 +26,7 @@ Also, inputstream.adaptive needs to be installed and enabled.
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 

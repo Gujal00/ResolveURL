@@ -17,11 +17,11 @@
 '''
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class DateMuleResolver(ResolveGeneric):
-    name = "datemule"
+    name = "DateMule"
     domains = ["datemule.co", "datemule.com"]
     pattern = r'(?://|\.)(datemule\.(?:co|com))/watch/(?:featured/)?([\w-]+)'
 

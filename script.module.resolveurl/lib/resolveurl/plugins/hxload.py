@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 import re
 import base64
 from resolveurl import common
@@ -24,7 +24,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class HXLoadResolver(ResolveUrl):
-    name = "hxload"
+    name = "HXLoad"
     domains = ["hxload.to", "hxload.co", "hxload.io"]
     pattern = r'(?://|\.)(hxload\.(?:to|co|io))/(?:embed/|\?e=)?([0-9a-zA-Z]+)'
 

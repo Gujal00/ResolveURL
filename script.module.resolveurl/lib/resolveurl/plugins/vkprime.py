@@ -19,8 +19,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class VkPrimeResolver(ResolveGeneric):
-    name = 'vkprime'
+class VKPrimeResolver(ResolveGeneric):
+    name = 'VKPrime'
     domains = ["vkprime.com"]
     pattern = r'(?://|\.)(vkprime\.com)/(?:embed-)?([a-zA-Z0-9]+)'
 

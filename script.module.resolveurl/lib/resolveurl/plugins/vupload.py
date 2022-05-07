@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class VUploadResolver(ResolveGeneric):
-    name = 'vupload'
+    name = 'VUpload'
     domains = ['vupload.com']
     pattern = r'(?://|\.)(vupload\.com)/(?:embed-|e/|v/)?([0-9A-Za-z]+)'
 

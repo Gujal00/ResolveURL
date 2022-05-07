@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class UsersCloudResolver(ResolveGeneric):
-    name = "userscloud"
+    name = "UsersCloud"
     domains = ["userscloud.com"]
     pattern = r'(?://|\.)(userscloud\.com)/(?:embed-|embed/)?([0-9a-zA-Z/]+)'
 

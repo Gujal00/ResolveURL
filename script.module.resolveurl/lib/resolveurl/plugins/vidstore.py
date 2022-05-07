@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """
     Plugin for ResolveURL
     Copyright (C) 2017  zlootec
@@ -18,13 +17,13 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class VidstoreResolver(ResolveUrl):
-    name = "vidstore"
+class VidStoreResolver(ResolveUrl):
+    name = "VidStore"
     domains = ["vidstore.me"]
     pattern = r'(?://|\.)(vidstore\.me)/(.+)'
 

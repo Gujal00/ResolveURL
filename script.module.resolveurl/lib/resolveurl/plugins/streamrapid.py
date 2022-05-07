@@ -21,14 +21,14 @@ import json
 import base64
 import random
 from six.moves import urllib_parse
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.lib import websocket
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamRapidResolver(ResolveUrl):
-    name = "streamrapid"
+    name = "StreamRapid"
     domains = ['streamrapid.ru', 'rabbitstream.net']
     pattern = r'(?://|\.)((?:rabbitstream|streamrapid)\.(?:ru|net))/embed-([^\n]+)'
 

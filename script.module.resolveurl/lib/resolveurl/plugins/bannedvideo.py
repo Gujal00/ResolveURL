@@ -17,11 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class BannedVideoResolver(ResolveGeneric):
-    name = "banned.video"
+    name = "BannedVideo"
     domains = ['banned.video', 'freeworldnews.tv', 'electionnight.news', 'futurenews.news',
                'battleplan.news']
     pattern = r'(?://|\.)((?:freeworldnews|banned|electionnight|futurenews|battleplan)\.' \

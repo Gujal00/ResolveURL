@@ -22,13 +22,13 @@ import base64
 import hashlib
 import json
 import time
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class TunePkResolver(ResolveUrl):
-    name = "tune.pk"
+    name = "TunePk"
     domains = ["tune.pk", "tune.video"]
     pattern = r'(?://|\.)(tune\.(?:video|pk))/(?:player|video|play)/(?:[\w\.\?]+=)?(\d+)'
 

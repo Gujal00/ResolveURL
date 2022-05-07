@@ -17,13 +17,13 @@
 """
 import re
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamCommunityResolver(ResolveUrl):
-    name = "streamcommunity"
+    name = "StreamCommunity"
     domains = ['streamingcommunity.xyz', 'streamingcommunity.one', 'streamingcommunity.vip',
                'streamingcommunity.work', 'streamingcommunity.name', 'streamingcommunity.video',
                'streamingcommunity.live', 'streamingcommunity.tv', 'streamingcommunity.space',

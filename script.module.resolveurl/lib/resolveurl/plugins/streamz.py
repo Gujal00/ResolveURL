@@ -17,13 +17,13 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class StreamzResolver(ResolveUrl):
-    name = 'streamz'
+class StreamZResolver(ResolveUrl):
+    name = 'StreamZ'
     domains = ['streamz.cc', 'streamz.vg', 'streamzz.to', 'streamz.ws']
     pattern = r'(?://|\.)(streamzz?\.(?:cc|vg|to|ws))/([0-9a-zA-Z]+)'
 

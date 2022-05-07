@@ -19,12 +19,12 @@
 import re
 import json
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VideoSeyredResolver(ResolveUrl):
-    name = "videoseyred"
+    name = "VideoSeyred"
     domains = ['videoseyred.in']
     pattern = r'(?://|\.)(videoseyred\.in)/embed/([0-9a-zA-Z]+)'
 

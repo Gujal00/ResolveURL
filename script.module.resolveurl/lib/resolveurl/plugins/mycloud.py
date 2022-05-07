@@ -20,8 +20,8 @@
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class MycloudResolver(ResolveGeneric):
-    name = 'mycloud'
+class MyCloudResolver(ResolveGeneric):
+    name = 'MyCloud'
     domains = ['mycloud.to', 'mcloud.to', 'vizcloud.digital']
     pattern = r'(?://|\.)((?:my?|viz)cloud\.(?:to|digital))/(?:embed|e)/([0-9a-zA-Z]+)'
 

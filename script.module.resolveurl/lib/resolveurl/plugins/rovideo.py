@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class RoVideoResolver(ResolveUrl):
-    name = "rovideo"
+    name = "RoVideo"
     domains = ['rovideo.net']
     pattern = r'(?://|\.)(rovideo\.net)/(?:embed|videos)/([0-9]+)'
 

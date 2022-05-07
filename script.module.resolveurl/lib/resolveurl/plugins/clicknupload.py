@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 import re
-from resolveurl.plugins.lib import helpers
-from resolveurl.plugins.lib import captcha_lib
+from resolveurl.lib import helpers
+from resolveurl.lib import captcha_lib
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -25,7 +25,7 @@ MAX_TRIES = 3
 
 
 class ClickNUploadResolver(ResolveUrl):
-    name = "clicknupload"
+    name = "ClickNUpload"
     domains = ['clicknupload.to', 'clicknupload.cc', 'clicknupload.co', 'clicknupload.com', 'clicknupload.me', 'clicknupload.link', 'clicknupload.org', 'clicknupload.club']
     pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to))/(?:f/)?([0-9A-Za-z]+)'
 

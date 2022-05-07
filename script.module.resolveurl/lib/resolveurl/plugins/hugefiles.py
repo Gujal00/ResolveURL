@@ -18,8 +18,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import re
 from six.moves import urllib_request, urllib_parse
-from resolveurl.plugins.lib import captcha_lib
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import captcha_lib
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -27,8 +27,8 @@ logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
 
-class HugefilesResolver(ResolveUrl):
-    name = "hugefiles"
+class HugeFilesResolver(ResolveUrl):
+    name = "HugeFiles"
     domains = ["hugefiles.net", "hugefiles.cc"]
     pattern = r'(?://|\.)(hugefiles\.(?:net|cc))/([0-9a-zA-Z/]+)'
 

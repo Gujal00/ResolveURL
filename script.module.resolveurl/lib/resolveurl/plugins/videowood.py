@@ -17,14 +17,14 @@
 """
 
 import re
-from resolveurl.plugins.lib import aadecode
+from resolveurl.lib import aadecode
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class VideowoodResolver(ResolveUrl):
-    name = "videowood"
+class VideoWoodResolver(ResolveUrl):
+    name = "VideoWood"
     domains = ['videowood.tv']
     pattern = r'(?://|\.)(videowood\.tv)/(?:embed/|video/)([0-9a-z]+)'
 

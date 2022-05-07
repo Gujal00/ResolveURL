@@ -17,14 +17,14 @@
 """
 
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class PeerTubeResolver(ResolveUrl):
-    name = "peertube"
-    domains = ["peertube.tv","peertube.co.uk","peertube.uno"]
+    name = "PeerTube"
+    domains = ["peertube.tv", "peertube.co.uk", "peertube.uno"]
     pattern = r'(?://|\.)(peertube\.(?:tv|co\.uk|uno))/(?:videos/)?(?:embed|watch|w)/([0-9a-zA-Z-]+)'
 
     def get_media_url(self, host, media_id):
@@ -41,7 +41,7 @@ class PeerTubeResolver(ResolveUrl):
         files = json_loaded.get('files')
         if files:
             return files[0].get('fileUrl') + helpers.append_headers(headers)
-        
+
         raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):

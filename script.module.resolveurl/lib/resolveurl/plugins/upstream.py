@@ -17,13 +17,13 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UpStreamResolver(ResolveUrl):
-    name = "upstream.to"
+    name = "UpStream"
     domains = ['upstream.to']
     pattern = r'(?://|\.)(upstream\.to)/(?:embed-)?([0-9a-zA-Z]+)'
 
@@ -47,9 +47,11 @@ class UpStreamResolver(ResolveUrl):
                 return s.group(1) + helpers.append_headers(headers)
 
         html += helpers.get_packed_data(html)
-        sources = helpers.scrape_sources(html,
-                                         patterns=[r'''sources:\s*\[(?:{file:)?\s*"(?P<url>[^"]+)'''],
-                                         generic_patterns=False)
+        sources = helpers.scrape_sources(
+            html,
+            patterns=[r'''sources:\s*\[(?:{file:)?\s*"(?P<url>[^"]+)'''],
+            generic_patterns=False
+        )
         if sources:
             return helpers.pick_source(sources) + helpers.append_headers(headers)
 

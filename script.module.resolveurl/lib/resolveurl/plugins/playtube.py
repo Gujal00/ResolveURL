@@ -18,13 +18,13 @@
 
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 import re
 import json
 
 
 class PlayTubeResolver(ResolveUrl):
-    name = "playtube"
+    name = "PlayTube"
     domains = ["playtube.ws"]
     pattern = r'(?://|\.)(playtube\.ws)/(?:embed-)?([0-9a-zA-Z]+)'
 

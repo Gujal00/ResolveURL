@@ -20,6 +20,6 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class SpeedVideoResolver(ResolveGeneric):
-    name = "speedvideo"
+    name = "SpeedVideo"
     domains = ["speedvideo.net"]
     pattern = r'(?://|\.)(speedvideo\.net)/(?:embed-)?([0-9a-zA-Z]+)'

@@ -18,13 +18,13 @@
 """
 
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class GofileResolver(ResolveUrl):
-    name = 'gofile'
+class GoFileResolver(ResolveUrl):
+    name = 'GoFile'
     domains = ['gofile.io']
     pattern = r'(?://|\.)(gofile\.io)/(?:\?c=|d/)([0-9a-zA-Z]+)'
 

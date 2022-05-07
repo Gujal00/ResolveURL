@@ -19,14 +19,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import re
 from six.moves import urllib_error
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError  # @UnusedImport
 
 
-class FlashxResolver(ResolveUrl):
-    name = "flashx"
+class FlashXResolver(ResolveUrl):
+    name = "FlashX"
     domains = ["flashx.tv", "flashx.to", "flashx.sx", "flashx.bz", "flashx.cc"]
     pattern = r'(?://|\.)(flashx\.(?:tv|to|sx|cc|bz))/(?:embed-|dl\?|embed.php\?c=)?([0-9a-zA-Z]+)'
 

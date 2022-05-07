@@ -15,13 +15,13 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VideaResolver(ResolveUrl):
-    name = "videa"
+    name = "Videa"
     domains = ["videa.hu", "videakid.hu"]
     pattern = r'(?://|\.)((?:videa|videakid)\.hu)/(?:player/?\?v=|player/v/|videok/)(?:.*-|)([0-9a-zA-Z]+)'
 

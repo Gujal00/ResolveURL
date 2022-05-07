@@ -16,15 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import unwise
+from resolveurl.lib import unwise
 import re
 
 
-class VideozUpload(ResolveUrl):
-    name = 'videozupload.net'
+class VideoZUpload(ResolveUrl):
+    name = 'VideoZUpload'
     domains = ['videozupload.net', 'videzup.pl', 'videzup.top']
     pattern = r'(?://|\.)((?:videozupload|videzup)\.(?:net|pl|top))/video/([0-9a-z]+)'
 

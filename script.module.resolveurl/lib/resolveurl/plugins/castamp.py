@@ -23,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError  # @UnusedImport Resol
 
 
 class CastampResolver(ResolveUrl):
-    name = "castamp"
+    name = "Castamp"
     domains = ["castamp.com"]
     pattern = r'(?://|\.)(castamp\.com)/embed\.php\?c=(.*?)&'
 

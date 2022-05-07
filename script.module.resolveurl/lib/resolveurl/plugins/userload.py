@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
-from resolveurl.plugins.lib import helpers, jsunhunt
+from resolveurl.lib import helpers, jsunhunt
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 

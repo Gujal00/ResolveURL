@@ -18,12 +18,12 @@
 import json
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class RuTubeResolver(ResolveUrl):
-    name = "rutube.ru"
+    name = "RuTube"
     domains = ['rutube.ru']
     pattern = r'(?://|\.)(rutube\.ru)/(?:play/embed/|video/)([0-9a-zA-Z]+)'
 

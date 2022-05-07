@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class MvidooResolver(ResolveUrl):
-    name = 'mvidoo'
+class MVidooResolver(ResolveUrl):
+    name = 'MVidoo'
     domains = ['mvidoo.com']
     pattern = r'(?://|\.)(mvidoo\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class VidorgResolver(ResolveUrl):
-    name = 'vidorg.net'
+class VidOrgResolver(ResolveUrl):
+    name = 'VidOrg'
     domains = ["vidorg.net", "vidpiz.xyz"]
     pattern = r'(?://|\.)(vid(?:org|piz)\.(?:net|xyz))/(?:embed[/-])?([0-9A-Za-z]+)'
 

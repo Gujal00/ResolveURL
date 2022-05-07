@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class FilesFMResolver(ResolveUrl):
-    name = 'files.fm'
+    name = 'FilesFM'
     domains = ['files.fm', 'file.fm']
     pattern = r'(?://|\.)(files?\.fm)/f/([0-9a-zA-Z]+)'
 

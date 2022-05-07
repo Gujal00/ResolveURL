@@ -18,14 +18,14 @@
 
 import re
 import base64
-from resolveurl.plugins.lib import helpers
-from resolveurl.plugins.lib import jsunpack
+from resolveurl.lib import helpers
+from resolveurl.lib import jsunpack
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class TruHDResolver(ResolveUrl):
-    name = "truhd"
+    name = "TruHD"
     domains = ["truhd.xyz"]
     pattern = r'(?://|\.)(truhd\.xyz)/embed/([0-9a-zA-Z]+)'
 

@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamRubyResolver(ResolveUrl):
-    name = 'streamruby'
+    name = 'StreamRuby'
     domains = ['streamruby.com', 'sruby.xyz']
     pattern = r'(?://|\.)(s(?:tream)?ruby\.(?:com|xyz))/(?:embed-|e/|d/)?(\w+)'
 

@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from six.moves import urllib_parse
 
 
 class SpeedoStreamResolver(ResolveGeneric):
-    name = "speedostream"
+    name = "SpeedoStream"
     domains = ["speedostream.com"]
     pattern = r'(?://|\.)(speedostream\.com)/(?:embed-)?([^\n]+)'
 

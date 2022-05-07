@@ -21,7 +21,7 @@ import sys
 from six.moves import urllib_request
 import ssl
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 

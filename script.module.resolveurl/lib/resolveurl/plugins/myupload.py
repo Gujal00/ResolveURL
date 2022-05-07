@@ -19,8 +19,8 @@
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class myUpload(ResolveGeneric):
-    name = "myupload"
+class MyUpload(ResolveGeneric):
+    name = "MyUpload"
     domains = ["myupload.co"]
     pattern = r'(?://|\.)(myupload\.co)/plugins/mediaplayer/site/_embed.php\?u=([0-9a-zA-Z]+)'
 

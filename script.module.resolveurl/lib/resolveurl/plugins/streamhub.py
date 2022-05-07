@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class StreamHubResolver(ResolveGeneric):
-    name = 'streamhub'
+    name = 'StreamHub'
     domains = ['streamhub.to']
     pattern = r'(?://|\.)(streamhub\.to)/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
 

@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class AparatResolver(ResolveUrl):
-    name = "aparat"
+    name = "Aparat"
     domains = ['aparat.cam', 'wolfstream.tv']
     pattern = r'(?://|\.)((?:aparat\.cam|wolfstream\.tv))/(?:embed-)?([0-9a-zA-Z]+)'
 

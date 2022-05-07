@@ -19,12 +19,12 @@
 import re
 import base64
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VideoHost2Resolver(ResolveUrl):
-    name = 'videohost2.com'
+    name = 'VideoHost2'
     domains = ['videohost2.com']
     pattern = r'(?://|\.)(videohost2\.com)/playh\.php\?id=([0-9a-f]+)'
 

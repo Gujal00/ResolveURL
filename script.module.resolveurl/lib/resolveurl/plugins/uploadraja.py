@@ -17,12 +17,12 @@
 """
 
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UploadRajaResolver(ResolveUrl):
-    name = 'uploadraja'
+    name = 'UploadRaja'
     domains = ['uploadraja.com']
     pattern = r'(?://|\.)(uploadraja\.com)/([0-9a-zA-Z]+)'
 

@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class BrighteonResolver(ResolveGeneric):
-    name = "brighteon"
+    name = "Brighteon"
     domains = ['brighteon.com']
     pattern = r'(?://|\.)(brighteon\.com)/(?:embed)?/?([\w-]+)'
 

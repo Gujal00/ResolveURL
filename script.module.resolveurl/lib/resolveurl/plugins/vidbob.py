@@ -19,8 +19,8 @@
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class VidbobResolver(ResolveGeneric):
-    name = "vidbob.com"
+class VidBobResolver(ResolveGeneric):
+    name = "VidBob"
     domains = ["vidbob.com"]
     pattern = r'(?://|\.)(vidbob\.com)/(?:embed-)?([0-9a-zA-Z-]+)'
 

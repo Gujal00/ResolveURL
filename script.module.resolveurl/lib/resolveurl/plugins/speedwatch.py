@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class SpeedWatchResolver(ResolveGeneric):
-    name = "speedwatch"
+    name = "SpeedWatch"
     domains = ["speedwatch.io"]
     pattern = r'(?://|\.)(speedwatch\.io)/(?:plyr|e|play-embed|file)/([0-9a-zA-Z]+)'
 

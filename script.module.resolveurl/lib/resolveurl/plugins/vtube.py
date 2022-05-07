@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class VTubeResolver(ResolveGeneric):
-    name = 'vtube'
+    name = 'VTube'
     domains = ['vtube.to']
     pattern = r'(?://|\.)(vtube\.to)/(?:embed-)?([0-9a-zA-Z]+)'
 

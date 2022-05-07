@@ -17,11 +17,11 @@
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
-class MixdropResolver(ResolveUrl):
-    name = "mixdrop"
+class MixDropResolver(ResolveUrl):
+    name = "MixDrop"
     domains = ["mixdrop.co", "mixdrop.to", "mixdrop.sx", "mixdrop.bz", "mixdrop.ch"]
     pattern = r'(?://|\.)(mixdrop\.(?:c[ho]|to|sx|bz))/(?:f|e)/(\w+)'
 
@@ -40,9 +40,12 @@ class MixdropResolver(ResolveUrl):
             html = helpers.get_packed_data(html)
         r = re.search(r'(?:vsr|wurl|surl)[^=]*=\s*"([^"]+)', html)
         if r:
+            surl = r.group(1)
+            if surl.startswith('//'):
+                surl = 'https:' + surl
             headers.pop('Origin')
             headers.update({'Referer': web_url})
-            return "https:" + r.group(1) + helpers.append_headers(headers)
+            return surl + helpers.append_headers(headers)
 
         raise ResolverError("Video not found")
 

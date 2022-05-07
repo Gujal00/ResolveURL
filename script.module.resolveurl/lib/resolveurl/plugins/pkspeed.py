@@ -18,11 +18,11 @@
 
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class PKSpeedResolver(ResolveUrl):
-    name = "pkspeed.net"
+    name = 'PKSpeed'
     domains = ["pkspeed.net"]
     pattern = r'(?://|\.)(pkspeed\.net)/(?:embed-)?([A-Za-z0-9]+)'
 

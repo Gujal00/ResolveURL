@@ -17,7 +17,7 @@
 """
 import re
 import abc
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl
 
 

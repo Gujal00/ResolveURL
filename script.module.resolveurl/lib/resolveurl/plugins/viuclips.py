@@ -17,13 +17,13 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class ViuclipsResolver(ResolveUrl):
-    name = "viuclips"
+class ViuClipsResolver(ResolveUrl):
+    name = "ViuClips"
     domains = ["viuclips.net", "veuclips.com"]
     pattern = r'(?://|\.)(v[ie]uclips\.(?:net|com))/(?:embed/)?([0-9a-zA-Z]+)'
 

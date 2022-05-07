@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 import re
 import base64
 from resolveurl import common
@@ -24,7 +24,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class AniStreamResolver(ResolveUrl):
-    name = "ani-stream"
+    name = "AniStream"
     domains = ["ani-stream.com"]
     pattern = r'(?://|\.)(ani-stream\.com)/(?:embed-)?([0-9a-zA-Z-]+)'
 

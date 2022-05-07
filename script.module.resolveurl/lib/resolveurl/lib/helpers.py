@@ -17,7 +17,7 @@
 """
 import re
 import xbmcgui
-from resolveurl.plugins.lib import jsunpack
+from resolveurl.lib import jsunpack
 import six
 from six.moves import urllib_parse, urllib_request
 from resolveurl import common

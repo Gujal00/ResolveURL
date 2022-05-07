@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class HexUploadResolver(ResolveUrl):
-    name = 'hexupload'
+    name = 'HexUpload'
     domains = ['hexupload.net']
     pattern = r'(?://|\.)(hexupload\.net)/(?:embed-)?([0-9a-zA-Z]+)'
 

@@ -20,6 +20,6 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class SendFoxResolver(ResolveGeneric):
-    name = "sendfox"
+    name = "SendFox"
     domains = ["sendfox.org"]
     pattern = r'(?://|\.)(sendfox\.org)/(?:embed-)?([0-9a-zA-Z]+)'

@@ -20,6 +20,6 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class FilesIMResolver(ResolveGeneric):
-    name = 'files.im'
+    name = 'FilesIM'
     domains = ['files.im']
     pattern = r'(?://|\.)(files\.im)/(?:embed-)?([0-9a-zA-Z]+)'

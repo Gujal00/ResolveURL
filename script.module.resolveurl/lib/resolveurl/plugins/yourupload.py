@@ -18,13 +18,13 @@
 
 import re
 from six.moves import urllib_parse
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class YourUploadResolver(ResolveUrl):
-    name = "yourupload.com"
+    name = "YourUpload"
     domains = ["yourupload.com", "yucache.net"]
     pattern = r'(?://|\.)(yourupload\.com|yucache\.net)/(?:watch|embed)?/?([0-9A-Za-z]+)'
 

@@ -17,16 +17,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import re
-from resolveurl.plugins.lib import helpers, aadecode
+from resolveurl.lib import helpers, aadecode
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VidBomResolver(ResolveUrl):
-    name = "vidbom"
-    domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org', 'vadbom.com', 'vidbam.org',
-               'myviid.com', 'myviid.net', 'myvid.com',
-               'vidshare.com', 'vedsharr.com', 'vedshar.com', 'vedshare.com', 'vadshar.com', 'vidshar.org']
+    name = "VidBom"
+    domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org',
+               'vadbom.com', 'vidbam.org', 'myviid.com', 'myviid.net', 'myvid.com', 'vidshare.com',
+               'vedsharr.com', 'vedshar.com', 'vedshare.com', 'vadshar.com', 'vidshar.org']
     pattern = r'(?://|\.)((?:v[aie]d[bp][aoe]?m|myvii?d|v[aei]dshar[er]?)\.(?:com|net|org))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):

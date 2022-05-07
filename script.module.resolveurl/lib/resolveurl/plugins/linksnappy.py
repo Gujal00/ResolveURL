@@ -25,7 +25,7 @@ from six.moves import urllib_parse
 from os.path import join, exists
 from os import remove
 from datetime import datetime
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.lib import kodi
 from resolveurl import common
 from resolveurl.common import i18n
@@ -44,24 +44,26 @@ regexarr = '/'.join([api, 'REGEXARR'])
 hostcachecheck = '/'.join([api, 'HOSTCACHECHECK?link={0}'])
 cachedlstatus = '/'.join([api, 'CACHEDLSTATUS?id={0}'])
 
-### Below API points for reference ###
+"""
+Below API points for reference
+"""
 
-## Does not work well with cookies:
+# # Does not work well with cookies:
 # user_details = '/'.join([api, 'USERDETAILS'])
-## Provides a zip-file of a torrent, not used in resolveurl
+# # Provides a zip-file of a torrent, not used in resolveurl
 # torrents_genzip = '/'.join([torrents, 'GENZIP'])
-## Can toggle download logs, state=on or state=off, not currently used in the plugin
+# # Can toggle download logs, state=on or state=off, not currently used in the plugin
 # toggle_download_log = '/'.join([api, 'TOGGLEDOWNLOADLOG?state={0}'])
-## Single regex pattern, not particularly useful
+# # Single regex pattern, not particularly useful
 # regex = '/'.join([api, 'REGEX'])
-## Does not update itself as often as /FILEHOSTSREALTIME:
+# # Does not update itself as often as /FILEHOSTSREALTIME:
 # filehosts = '/'.join([api, 'FILEHOSTS'])
 
 # Cyberlockers related api points
 deletelink = '/'.join([api, 'DELETELINK'])
 linkgen = '/'.join([api, 'linkgen?genLinks={0}'])
 
-## Torrent api endpoints
+# # Torrent api endpoints
 torrents = '/'.join([api, 'torrents'])
 torrents_addmagnet = '/'.join([torrents, 'ADDMAGNET?magnetlinks={0}'])
 torrents_addurl = '/'.join([torrents, 'ADDURL?url={0}'])
@@ -75,7 +77,7 @@ torrents_deletefile = '/'.join([torrents, 'DELETEFILE?fid={0}'])
 torrents_delete = '/'.join([torrents, 'DELETETORRENT?tid={0}&delFiles={1}'])
 torrents_hashcheck = '/'.join([torrents, 'HASHCHECK?{0}'])
 
-## Not currently used
+# # Not currently used
 # torrents_links = '/'.join([torrents, 'DOWNLOADLINKS?fid={0}'])
 # torrents_move = '/'.join([torrents, 'MOVETORRENTFILE?fid={0}&dir={1}'])
 # torrents_rename = '/'.join([torrents, 'RENAMEFOLDER?name={0}&fid={1}'])
@@ -84,7 +86,7 @@ folder_name = 'resolveurl'
 
 
 # noinspection PyBroadException
-class LinksnappyResolver(ResolveUrl):
+class LinkSnappyResolver(ResolveUrl):
 
     name = "Linksnappy"
     domains = ["*"]

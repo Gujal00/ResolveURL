@@ -16,11 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
-class WstreamResolver(ResolveGeneric):
-    name = "wstream"
+class WStreamResolver(ResolveGeneric):
+    name = "WStream"
     domains = ['wstream.video']
     pattern = r'(?://|\.)(wstream\.video)/(?:video6zvimpy52/|video.php\?file_code=)?([0-9a-zA-Z]+)'
 

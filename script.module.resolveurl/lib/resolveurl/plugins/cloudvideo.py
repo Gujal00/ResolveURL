@@ -22,5 +22,5 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class CloudVideoResolver(ResolveGeneric):
-    name = 'cloudvideo'
+    name = 'CloudVideo'
     domains = ['cloudvideo.tv']

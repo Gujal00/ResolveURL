@@ -16,13 +16,13 @@
 
 import json
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class IndavideoResolver(ResolveUrl):
-    name = "indavideo"
+class IndaVideoResolver(ResolveUrl):
+    name = "IndaVideo"
     domains = ["indavideo.hu"]
     pattern = r'(?://|\.)(indavideo\.hu)/(?:player/video|video)/([0-9A-Za-z-_]+)'
 

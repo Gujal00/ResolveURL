@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class StreamoUploadResolver(ResolveGeneric):
-    name = "streamoupload"
+    name = "StreamoUpload"
     domains = ["streamoupload.com"]
     pattern = r'(?://|\.)(streamoupload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

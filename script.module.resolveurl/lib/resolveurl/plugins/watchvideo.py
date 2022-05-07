@@ -16,11 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class WatchVideoResolver(ResolveGeneric):
-    name = "watchvideo"
+    name = "WatchVideo"
     domains = ["watchvideo.us", "watchvideo2.us", "watchvideo3.us",
                "watchvideo4.us", "watchvideo5.us", "watchvideo6.us",
                "watchvideo7.us", "watchvideo8.us", "watchvideo9.us",

@@ -17,12 +17,12 @@
 """
 
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class TusfilesResolver(ResolveUrl):
-    name = 'tusfiles'
+class TusFilesResolver(ResolveUrl):
+    name = 'TusFiles'
     domains = ['tusfiles.net', 'tusfiles.com']
     pattern = r'(?://|\.)(tusfiles\.(?:net|com))/(?:embed-)?([0-9a-zA-Z]+)'
 

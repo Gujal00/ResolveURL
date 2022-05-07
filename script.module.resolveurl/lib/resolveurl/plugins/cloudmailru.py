@@ -18,11 +18,11 @@
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
-class MailRuResolver(ResolveUrl):
-    name = "cloud.mail.ru"
+class CloudMailRuResolver(ResolveUrl):
+    name = "CloudMailRu"
     domains = ['cloud.mail.ru']
     pattern = r'(?://|\.)(cloud\.mail\.ru)/public/([0-9A-Za-z]+/[^/]+)'
 

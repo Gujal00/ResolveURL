@@ -17,13 +17,13 @@
 """
 
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class MeGoGoResolver(ResolveUrl):
-    name = "megogo"
+    name = "MeGoGo"
     domains = ["megogo.net", "megogo.ru"]
     pattern = r'(?://|\.)(megogo\.(?:net|ru))/.+?(?:id=|view/)(\d+)'
 

@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UploadEverResolver(ResolveUrl):
-    name = 'uploadever'
+    name = 'UploadEver'
     domains = ['uploadever.com', 'uploadever.in']
     pattern = r'(?://|\.)(uploadever\.(?:com|in))/([0-9a-zA-Z]+)'
 

@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class MyFeministResolver(ResolveGeneric):
-    name = 'myfeminist'
+    name = 'MyFeminist'
     domains = ['myfeminist.com']
     pattern = r'(?://|\.)(myfeminist\.com)/(?:embed-)?([a-zA-z0-9]+)'
 

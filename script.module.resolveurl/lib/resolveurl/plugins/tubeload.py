@@ -19,12 +19,12 @@
 import re
 import base64
 from resolveurl import common
-from resolveurl.plugins.lib import helpers, jsunhunt
+from resolveurl.lib import helpers, jsunhunt
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class TubeloadResolver(ResolveUrl):
-    name = 'tubeload'
+class TubeLoadResolver(ResolveUrl):
+    name = 'TubeLoad'
     domains = ['tubeload.co']
     pattern = r'(?://|\.)(tubeload\.co)/(?:embed|e|f)/([0-9a-zA-Z]+)'
 

@@ -21,7 +21,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class VlareTVResolver(ResolveGeneric):
 
-    name = "vlare.tv"
+    name = "VlareTV"
     domains = ['vlare.tv']
     pattern = r'(?://|\.)(vlare\.tv)/(?:v|embed)/([\w-]+)(?:/(?:false|true)/(?:false|true)/\d+?)?'
 

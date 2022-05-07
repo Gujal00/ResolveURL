@@ -17,11 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class VidziResolver(ResolveGeneric):
-    name = "vidzi"
+    name = "Vidzi"
     domains = ["vidzi.tv", "vidzi.nu"]
     pattern = r'(?://|\.)(vidzi\.(?:tv|nu))/(?:embed-)?([0-9a-zA-Z]+)'
 

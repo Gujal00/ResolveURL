@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
-class UQloadResolver(ResolveGeneric):
-    name = 'uqload'
+class UQLoadResolver(ResolveGeneric):
+    name = 'UQLoad'
     domains = ['uqload.com']
     pattern = r'(?://|\.)(uqload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

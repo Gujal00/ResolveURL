@@ -17,14 +17,14 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl import common
 from six.moves import urllib_parse
 
 
 class VlalaComResolver(ResolveUrl):
-    name = "vlalacom"
+    name = "VlalaCom"
     domains = ["videoslala.com"]
     pattern = r'(?://|\.)(videoslala\.com)/v/([^\n]+)'
 

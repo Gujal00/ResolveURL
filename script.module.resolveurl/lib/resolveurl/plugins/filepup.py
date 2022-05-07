@@ -19,11 +19,11 @@
 import re
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class FilePupResolver(ResolveUrl):
-    name = "filepup"
+    name = "FilePup"
     domains = ["filepup.net"]
     pattern = r'(?://|\.)(filepup.(?:net))/(?:play|files)/([0-9a-zA-Z]+)'
     headers = {'User-Agent': common.RAND_UA}

@@ -18,13 +18,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import re
 from six.moves import urllib_parse
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class VivosxResolver(ResolveUrl):
-    name = 'vivosx'
+class VivoResolver(ResolveUrl):
+    name = 'Vivo'
     domains = ['vivo.sx', 'vivo.st']
     pattern = r'(?://|\.)(vivo\.(?:sx|st))/(?:embed/)?([0-9a-zA-Z]+)'
 

@@ -19,11 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
-class VidwatchResolver(ResolveGeneric):
-    name = "vidwatch.me"
+class VidWatchResolver(ResolveGeneric):
+    name = "VidWatch"
     domains = ['vidwatch3.me', 'vidwatch4.me', 'vidwatch.me']
     pattern = r'(?://|\.)(vidwatch\d*\.me)/(?:embed-)?([a-zA-Z0-9]+)'
 

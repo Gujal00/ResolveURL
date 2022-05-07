@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class SendVidResolver(ResolveGeneric):
-    name = 'sendvid.com'
+    name = 'SendVid'
     domains = ['sendvid.com']
     pattern = r'(?://|\.)(sendvid\.com)/(?:embed/)?([0-9a-zA-Z]+)'
 

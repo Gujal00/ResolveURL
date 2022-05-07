@@ -20,7 +20,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class EnterVideoResolver(ResolveGeneric):
-    name = 'entervideo'
+    name = 'EnterVideo'
     domains = ['entervideo.net', 'eplayvid.com', 'eplayvid.net']
     pattern = r'(?://|\.)((?:entervideo|eplayvid)\.(?:com|net))/(?:watch/)?([0-9a-zA-Z]+)'
 

@@ -17,11 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class VuptoResolver(ResolveGeneric):
-    name = "vup"
+    name = "Vup"
     domains = ["vup.to"]
     pattern = r'(?://|\.)(vup\.to)/(?:embed-)?([0-9a-zA-Z]+)'
 

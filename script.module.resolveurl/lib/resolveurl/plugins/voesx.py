@@ -19,12 +19,12 @@
 import re
 import base64
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VoeResolver(ResolveUrl):
-    name = "voe"
+    name = "Voe"
     domains = ["voe.sx"]
     pattern = r'(?://|\.)(voe\.sx)/(?:e/)?([0-9A-Za-z]+)'
 

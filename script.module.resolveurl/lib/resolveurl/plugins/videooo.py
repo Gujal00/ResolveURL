@@ -17,12 +17,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from six.moves import urllib_parse
 
 
 class VideoooResolver(ResolveGeneric):
-    name = "videooo"
+    name = "Videooo"
     domains = ["videooo.news"]
     pattern = r'(?://|\.)(videooo\.news)/(?:embed-)?([^\n]+)'
 

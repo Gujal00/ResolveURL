@@ -18,13 +18,13 @@
 
 import re
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl import common
 
 
 class VlalaNetResolver(ResolveUrl):
-    name = "vlalanet"
+    name = "VlalaNet"
     domains = ["videoslala.net"]
     pattern = r'(?://|\.)(videoslala\.net)/embed/([^\n]+)'
 

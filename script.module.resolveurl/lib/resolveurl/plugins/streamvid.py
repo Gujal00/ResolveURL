@@ -18,14 +18,14 @@
 
 import re
 import base64
-from resolveurl.plugins.lib import helpers
-from resolveurl.plugins.lib import jsunpack
+from resolveurl.lib import helpers
+from resolveurl.lib import jsunpack
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class StreamvidResolver(ResolveUrl):
-    name = "streamvid"
+class StreamVidResolver(ResolveUrl):
+    name = "StreamVid"
     domains = ["streamvid.co"]
     pattern = r'(?://|\.)(streamvid\.co)/player/([0-9a-zA-Z]+)'
 

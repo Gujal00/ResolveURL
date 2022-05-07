@@ -17,11 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class ChromecastResolver(ResolveGeneric):
-    name = "chromecast.video"
+    name = "Chromecast"
     domains = ['chromecast.video']
     pattern = r'(?://|\.)(chromecast\.video)/(?:embed-)?([0-9a-zA-Z]+)'
 

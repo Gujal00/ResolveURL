@@ -19,7 +19,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class WeShareResolver(ResolveGeneric):
-    name = "weshare.me"
+    name = "WeShare"
     domains = ["weshare.me"]
     pattern = r'(?://|\.)(weshare\.me)/(?:services/mediaplayer/site/_embed(?:\.max)?\.php\?u=)?([A-Za-z0-9]+)'
 

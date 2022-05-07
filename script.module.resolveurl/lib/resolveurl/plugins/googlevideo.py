@@ -18,7 +18,7 @@
 
 from resolveurl import common, hmf
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 import re
 from kodi_six import xbmc, xbmcaddon, xbmcvfs
 import json
@@ -28,7 +28,7 @@ import sqlite3
 
 
 class GoogleResolver(ResolveUrl):
-    name = "googlevideo"
+    name = "GoogleVideo"
     domains = ["googlevideo.com", "googleusercontent.com", "get.google.com",
                "plus.google.com", "googledrive.com", "drive.google.com", "docs.google.com", "youtube.googleapis.com", "bp.blogspot.com", "blogger.com"]
     pattern = r'https?://(.*?(?:\.googlevideo|\.bp\.blogspot|blogger|(?:plus|drive|get|docs)\.google|google(?:usercontent|drive|apis))\.com)/(.*?(?:videoplayback\?|[\?&]authkey|host/)*.+)'

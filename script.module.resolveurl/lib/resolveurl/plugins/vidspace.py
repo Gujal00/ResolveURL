@@ -16,11 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
-class VidspaceResolve(ResolveGeneric):
-    name = 'vidspace'
+class VidSpaceResolve(ResolveGeneric):
+    name = 'VidSpace'
     domains = ["vidspace.io"]
     pattern = r'(?://|\.)(vidspace\.io)/(?:embed-)?([a-zA-Z0-9]+)'
 

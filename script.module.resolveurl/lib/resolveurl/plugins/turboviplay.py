@@ -17,11 +17,11 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class TurboVIPlayResolver(ResolveGeneric):
-    name = "turboviplay"
+    name = "TurboVIPlay"
     domains = ['turboviplay.com', 'emturbovid.com']
     pattern = r'(?://|\.)((?:turboviplay|emturbovid)\.com)/t/([0-9a-zA-Z]+)'
 

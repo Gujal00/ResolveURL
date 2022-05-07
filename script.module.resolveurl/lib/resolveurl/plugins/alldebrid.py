@@ -20,7 +20,7 @@
 import re
 from six.moves import urllib_parse, urllib_error
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError

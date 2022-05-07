@@ -19,8 +19,8 @@ from resolveurl.resolver import ResolveUrl
 from resolveurl.lib import kodi
 
 
-class YoutubeResolver(ResolveUrl):
-    name = "youtube"
+class YouTubeResolver(ResolveUrl):
+    name = "YouTube"
     domains = ['youtube.com', 'youtu.be', 'youtube-nocookie.com']
     pattern = r'''https?://(?:[0-9A-Z-]+\.)?(?:(youtu\.be|youtube(?:-nocookie)?\.com)/?\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|</a>))[?=&+%\w.-]*'''
 

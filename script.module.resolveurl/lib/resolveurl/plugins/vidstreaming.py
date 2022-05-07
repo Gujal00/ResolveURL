@@ -20,7 +20,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class VidStreamingResolver(ResolveGeneric):
-    name = "vidstreaming"
+    name = "VidStreaming"
     domains = ['vidstreaming.io']
     pattern = r'(?://|\.)(vidstreaming\.io)/(?:streaming|embed|load)\.php\?id=([a-zA-Z0-9]+)'
 

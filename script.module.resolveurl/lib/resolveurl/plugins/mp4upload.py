@@ -16,13 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class Mp4uploadResolver(ResolveUrl):
-    name = "mp4upload"
+class MP4UploadResolver(ResolveUrl):
+    name = "MP4Upload"
     domains = ["mp4upload.com"]
     pattern = r'(?://|\.)(mp4upload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

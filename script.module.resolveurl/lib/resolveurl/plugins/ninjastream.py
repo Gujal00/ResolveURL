@@ -20,8 +20,8 @@ import re
 import json
 import codecs
 from six.moves import urllib_parse
-from resolveurl.plugins.lib import helpers
-from resolveurl.plugins.lib.jscrypto import jscrypto
+from resolveurl.lib import helpers
+from resolveurl.lib.jscrypto import jscrypto
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 

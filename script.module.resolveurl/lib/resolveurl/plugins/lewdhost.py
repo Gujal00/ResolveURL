@@ -18,14 +18,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import re
 import base64
-from resolveurl.plugins.lib import helpers
-from resolveurl.plugins.lib import jsunpack
+from resolveurl.lib import helpers
+from resolveurl.lib import jsunpack
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class LewdHostResolver(ResolveUrl):
-    name = "lewdhost"
+    name = "LewdHost"
     domains = ["stream.lewd.host"]
     pattern = r'(?://|\.)(stream\.lewd\.host)/embed/([0-9a-zA-Z]+)'
 

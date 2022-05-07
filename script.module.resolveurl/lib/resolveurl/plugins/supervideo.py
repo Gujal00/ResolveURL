@@ -17,13 +17,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class SuperVideoResolver(ResolveUrl):
-    name = "supervideo.tv"
+    name = "SuperVideo"
     domains = ['supervideo.tv']
     pattern = r'(?://|\.)(supervideo\.tv)/(?:embed-|e/)?([0-9a-zA-Z]+)'
 

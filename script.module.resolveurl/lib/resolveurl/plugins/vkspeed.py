@@ -17,11 +17,11 @@
 '''
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 
 
 class VKSpeedResolver(ResolveGeneric):
-    name = "vkspeed"
+    name = "VKSpeed"
     domains = ["vkspeed.com", "speedwatch.us"]
     pattern = r'(?://|\.)(speedwatch\.us|vkspeed\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

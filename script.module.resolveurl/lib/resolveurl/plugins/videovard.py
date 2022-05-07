@@ -18,12 +18,12 @@
 
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 import json
 
 
 class VideoVardResolver(ResolveUrl):
-    name = "videovard"
+    name = "VideoVard"
     domains = ["videovard.sx", "videovard.to"]
     pattern = r'(?://|\.)(videovard\.(?:sx|to))/[ved]/([0-9a-zA-Z]+)'
 

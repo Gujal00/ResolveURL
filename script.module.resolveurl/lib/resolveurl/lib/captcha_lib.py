@@ -21,8 +21,8 @@ from resolveurl import common
 import re
 import xbmcgui
 import os
-from resolveurl.plugins.lib import recaptcha_v2
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import recaptcha_v2
+from resolveurl.lib import helpers
 import base64
 
 net = common.Net()

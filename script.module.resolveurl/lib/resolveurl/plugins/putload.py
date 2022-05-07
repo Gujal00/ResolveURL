@@ -19,6 +19,6 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class PutLoadResolver(ResolveGeneric):
-    name = "putload.tv"
+    name = "PutLoad"
     domains = ["putload.tv", "shitmovie.com"]
     pattern = r'(?://|\.)(putload\.tv|shitmovie\.com)/(?:embed-)?([0-9a-zA-Z]+)'

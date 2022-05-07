@@ -18,12 +18,12 @@
 
 import re
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class RacatyResolver(ResolveUrl):
-    name = 'racaty'
+    name = 'Racaty'
     domains = ['racaty.net']
     pattern = r'(?://|\.)(racaty\.net)/([0-9a-zA-Z]+)'
 

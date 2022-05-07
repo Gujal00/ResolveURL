@@ -20,7 +20,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class ItemFixResolver(ResolveGeneric):
-    name = "itemfix"
+    name = "ItemFix"
     domains = ["itemfix.com"]
     pattern = r'(?://|\.)(itemfix\.com)/v\?t=([0-9A-Za-z_]+)'
 

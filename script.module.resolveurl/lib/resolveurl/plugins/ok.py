@@ -19,12 +19,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import json
 from six.moves import urllib_parse
 from resolveurl import common
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class OKResolver(ResolveUrl):
-    name = "ok.ru"
+    name = "OKRu"
     domains = ['ok.ru', 'odnoklassniki.ru']
     pattern = r'(?://|\.)(ok\.ru|odnoklassniki\.ru)/(?:videoembed|video|live)/(\d+)'
     header = {"User-Agent": common.OPERA_USER_AGENT}

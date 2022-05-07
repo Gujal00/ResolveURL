@@ -18,13 +18,13 @@
 
 import re
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class EasyLoadResolver(ResolveUrl):
-    name = "easyload"
+    name = "EasyLoad"
     domains = ['easyload.io']
     pattern = r'(?://|\.)(easyload\.io)/e/([0-9a-zA-Z]+)'
 

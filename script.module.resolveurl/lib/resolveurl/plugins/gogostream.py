@@ -17,7 +17,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class GoGoStreamResolver(ResolveGeneric):
-    name = "gogostream"
+    name = "GoGoStream"
     domains = ['gogo-play.net']
     pattern = r'(?://|\.)(gogo-play\.net)/(?:streaming|embed|load|ajax)\.php\?id=([a-zA-Z0-9]+)'
 

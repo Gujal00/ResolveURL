@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class SibnetResolver(ResolveUrl):
-    name = 'sibnet'
+    name = 'Sibnet'
     domains = ['sibnet.ru']
     pattern = r'(?://|\.)(sibnet\.ru)/(?:shell\.php\?videoid=|.*video)([0-9a-zA-Z]+)'
 

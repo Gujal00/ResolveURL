@@ -17,7 +17,7 @@
 """
 
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -27,7 +27,7 @@ logger.disable()
 
 
 class UpToBoxResolver(ResolveUrl):
-    name = "uptobox"
+    name = "UpToBox"
     domains = ["uptobox.com", "uptostream.com"]
     pattern = r'(?://|\.)(uptobox.com|uptostream.com)/(?:iframe/)?([0-9A-Za-z_]+)'
 

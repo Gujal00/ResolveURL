@@ -22,7 +22,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class FacebookResolver(ResolveUrl):
-    name = "facebook"
+    name = "Facebook"
     domains = ["facebook.com"]
     pattern = r'(?://|\.)(facebook\.com)/.+?video_id=([0-9a-zA-Z]+)'
 

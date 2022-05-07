@@ -16,14 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re, json
-from resolveurl.plugins.lib import helpers
+import re
+import json
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class EvoLoadResolver(ResolveUrl):
-    name = "evoload"
+    name = "EvoLoad"
     domains = ["evoload.io"]
     pattern = r'(?://|\.)(evoload\.io)/(?:e|f|v)/([0-9a-zA-Z]+)'
 
@@ -34,7 +35,7 @@ class EvoLoadResolver(ResolveUrl):
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': rurl}
         html = self.net.http_GET(web_url, headers).content
-        passe = re.search('<div id="captcha_pass" value="(.+?)"></div>', html).group(1)
+        passe = re.search(r'<div\s*id="captcha_pass"\s*value="(.+?)"></div>', html).group(1)
         headers.update({'Origin': rurl[:-1]})
         crsv = self.net.http_GET('https://csrv.evosrv.com/captcha?m412548', headers).content
         post = {"code": media_id, "csrv_token": crsv, "pass": passe, "token": "ok"}

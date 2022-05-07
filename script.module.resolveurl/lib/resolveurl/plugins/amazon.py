@@ -17,13 +17,13 @@
 """
 import time
 import json
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class AmazonCloudResolver(ResolveUrl):
-    name = 'amazon_clouddrive'
+    name = 'Amazon_clouddrive'
     domains = ['amazon.com']
     pattern = r'(?://|\.)(amazon\.com)/clouddrive/share/([0-9a-zA-Z]+)'
 

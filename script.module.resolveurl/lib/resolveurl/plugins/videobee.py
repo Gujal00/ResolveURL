@@ -17,13 +17,13 @@
 """
 
 import re
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VideoBeeResolver(ResolveUrl):
-    name = "thevideobee.to"
+    name = "VideoBee"
     domains = ["thevideobee.to"]
     pattern = r'(?://|\.)(thevideobee\.to)/(?:embed-)?([0-9A-Za-z]+)'
 
