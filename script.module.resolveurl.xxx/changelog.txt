@@ -1,10 +1,10 @@
-Version 2.1.22 (April 10, 2022)
+Version 2.1.23 (May 8, 2022)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - datoporn
+    - None
 
 - Resolvers Removed
     - None
