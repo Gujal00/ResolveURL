@@ -32,13 +32,7 @@ from ._exceptions import *
 from ._utils import validate_utf8
 from threading import Lock
 
-try:
-    if six.PY3:
-        import numpy
-    else:
-        numpy = None
-except ImportError:
-    numpy = None
+numpy = None
 
 try:
     # If wsaccel is available we use compiled routines to mask data.
