@@ -59,7 +59,7 @@ class StreamRapidResolver(ResolveUrl):
             ws.close()
             sid = re.search(r'sid":"([^"]+)', msg)
             if sid:
-                headers.update({'Referer': web_url})
+                headers.update({'Referer': web_url, 'Accept': '*/*'})
                 surl = '{}/ajax/embed-{}/getSources'.format(rurl[:-1], eid)
                 if '?' in media_id:
                     media_id = media_id.split('?')[0]
@@ -73,6 +73,7 @@ class StreamRapidResolver(ResolveUrl):
                 if sources:
                     source = sources[0].get('file')
                     headers.pop('X-Requested-With')
+                    headers.pop('Accept')
                     headers.update({'Referer': rurl, 'Origin': rurl[:-1]})
                     return source + helpers.append_headers(headers)
 
