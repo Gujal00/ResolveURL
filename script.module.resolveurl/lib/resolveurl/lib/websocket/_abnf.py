@@ -33,20 +33,11 @@ from ._utils import validate_utf8
 from threading import Lock
 
 try:
-    if six.PY3:
-        import numpy
-    else:
-        numpy = None
-except ImportError:
-    numpy = None
-
-try:
     # If wsaccel is available we use compiled routines to mask data.
-    if not numpy:
-        from wsaccel.xormask import XorMaskerSimple
+    from wsaccel.xormask import XorMaskerSimple
 
-        def _mask(_m, _d):
-            return XorMaskerSimple(_m).process(_d)
+    def _mask(_m, _d):
+        return XorMaskerSimple(_m).process(_d)
 except ImportError:
     # wsaccel is not available, we rely on python implementations.
     def _mask(_m, _d):
@@ -278,21 +269,7 @@ class ABNF(object):
         if isinstance(data, six.text_type):
             data = six.b(data)
 
-        if numpy:
-            origlen = len(data)
-            _mask_key = mask_key[3] << 24 | mask_key[2] << 16 | mask_key[1] << 8 | mask_key[0]
-
-            # We need data to be a multiple of four...
-            data += bytes(" " * (4 - (len(data) % 4)), "us-ascii")
-            a = numpy.frombuffer(data, dtype="uint32")
-            masked = numpy.bitwise_xor(a, [_mask_key]).astype("uint32")
-            if len(data) > origlen:
-                return masked.tobytes()[:origlen]
-            return masked.tobytes()
-        else:
-            _m = array.array("B", mask_key)
-            _d = array.array("B", data)
-            return _mask(_m, _d)
+        return _mask(array.array("B", mask_key), array.array("B", data))
 
 
 class frame_buffer(object):
