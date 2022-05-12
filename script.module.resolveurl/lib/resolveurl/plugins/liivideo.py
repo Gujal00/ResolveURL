@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class LiiVideoResolver(ResolveGeneric):
     name = "LiiVideo"
-    domains = ['liivideo.com']
-    pattern = r'(?://|\.)(liivideo\.com)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['liivideo.com', 'liiivideo.com']
+    pattern = r'(?://|\.)(liii?video\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
