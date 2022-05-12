@@ -22,8 +22,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class StreamoUploadResolver(ResolveGeneric):
     name = "StreamoUpload"
-    domains = ["streamoupload.com"]
-    pattern = r'(?://|\.)(streamoupload\.com)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ["streamoupload.com", "streamoupload.xyz"]
+    pattern = r'(?://|\.)(streamoupload\.(?:com|xyz))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
