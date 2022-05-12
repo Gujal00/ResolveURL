@@ -291,3 +291,11 @@ msgstr "Uptobox Autorisierung zurücksetzen"
 msgctxt "#33069"
 msgid "Uptobox Resolver Authorised"
 msgstr "Uptobox Resolver autorisiert"
+
+msgctxt "#33101"
+msgid "Clean Settings File"
+msgstr "Einstellungsdatei bereinigen"
+
+msgctxt "#33102"
+msgid "Settings File cleaned"
+msgstr "Einstellungsdatei bereinigt"

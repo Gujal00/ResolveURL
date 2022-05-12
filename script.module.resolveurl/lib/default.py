@@ -35,7 +35,8 @@ MODES = __enum(
     AUTH_PM='auth_pm', RESET_PM='reset_pm', AUTH_RD='auth_rd', RESET_RD='reset_rd',
     AUTH_AD='auth_ad', RESET_AD='reset_ad', AUTH_LS='auth_ls', RESET_LS='reset_ls',
     AUTH_DL='auth_dl', RESET_DL='reset_dl', AUTH_UB='auth_ub', RESET_UB='reset_ub',
-    RESET_CACHE='reset_cache'
+    RESET_CACHE='reset_cache',
+    CLEAN_SETTINGS='clean_settings'
 )
 
 
@@ -159,6 +160,40 @@ def reset_dl():
     dl = debrid_link.DebridLinkResolver()
     dl.reset_authorization()
     kodi.notify(msg=kodi.i18n('dl_auth_reset'), duration=5000)
+
+
+@url_dispatcher.register(MODES.CLEAN_SETTINGS)
+def clean_settings():
+    from resolveurl import relevant_resolvers
+    from resolveurl import common
+    import re
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or reset won't work for some reason
+
+    # get list of supported resolvers
+    supp_resolvers = relevant_resolvers(include_universal=True, include_popups=True, include_disabled=True)
+    supp_resolvers = [i.__name__ for i in supp_resolvers]
+
+    settings_file = common.user_settings_file
+    if kodi.kodi_version() >= 19.0:
+        with open(settings_file, 'r', encoding='utf-8') as f:
+            settings_xml = f.read()
+    else:
+        with open(settings_file, 'r') as f:
+            settings_xml = f.read()
+
+    resolvers = set(re.findall(r'id="(.*?Resolver)_', settings_xml))
+    for resolver in resolvers:
+        if resolver not in supp_resolvers:
+            settings_xml = re.sub(r'\s{{4}}<setting\s*id="{0}.*\n'.format(resolver), '', settings_xml)
+
+    if kodi.kodi_version() >= 19.0:
+        with open(settings_file, 'w', encoding='utf-8') as f:
+            f.write(settings_xml)
+    else:
+        with open(settings_file, 'w') as f:
+            f.write(settings_xml.encode('utf8'))
+    kodi.notify(msg=kodi.i18n('settings_cleaned'), duration=5000)
 
 
 def main(argv=None):

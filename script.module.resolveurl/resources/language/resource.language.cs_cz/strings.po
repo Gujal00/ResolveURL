@@ -291,3 +291,11 @@ msgstr "Uptobox Obnovení autorizace"
 msgctxt "#33069"
 msgid "Uptobox Resolver Authorised"
 msgstr "Uptobox Resolver autorizován"
+
+msgctxt "#33101"
+msgid "Clean Settings File"
+msgstr "Vyčistit soubor nastavení"
+
+msgctxt "#33102"
+msgid "Settings File cleaned"
+msgstr "Soubor nastavení vyčištěn"

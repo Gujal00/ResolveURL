@@ -297,3 +297,11 @@ msgstr "Uptobox razrješitelj vraćen na izvorno"
 msgctxt "#33069"
 msgid "Uptobox Resolver Authorised"
 msgstr "Uptobox razrješitelj ovjeren"
+
+msgctxt "#33101"
+msgid "Clean Settings File"
+msgstr "Očistite datoteku postavki"
+
+msgctxt "#33102"
+msgid "Settings File cleaned"
+msgstr "Datoteka postavki je očišćena"

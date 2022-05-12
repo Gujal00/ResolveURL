@@ -292,3 +292,11 @@ msgstr "Επαναφορά έγκρισης Uptobox"
 msgctxt "#33069"
 msgid "Uptobox Resolver Authorised"
 msgstr "Ο επιλυτής Uptobox έχει εγκριθεί"
+
+msgctxt "#33101"
+msgid "Clean Settings File"
+msgstr "Καθαρίστε το αρχείο ρυθμίσεων"
+
+msgctxt "#33102"
+msgid "Settings File cleaned"
+msgstr "Καθαρίστε το αρχείο ρυθμίσεων"

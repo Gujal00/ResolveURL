@@ -294,3 +294,11 @@ msgstr "איפוס הרשאה ל-Uptobox"
 msgctxt "#33069"
 msgid "Uptobox Resolver Authorised"
 msgstr "Uptobox מורשה פותר"
+
+msgctxt "#33101"
+msgid "Clean Settings File"
+msgstr "נקה את קובץ ההגדרות"
+
+msgctxt "#33102"
+msgid "Settings File cleaned"
+msgstr "הגדרות קובץ ניקה"

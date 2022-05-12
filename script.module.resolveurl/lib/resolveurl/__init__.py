@@ -269,6 +269,7 @@ def _update_settings_xml():
         '\t\t<setting id="last_ua_create" label="last_ua_create" type="number" visible="false" default="0"/>',
         '\t\t<setting id="current_ua" label="current_ua" type="text" visible="false" default=""/>',
         '\t\t<setting id="addon_debug" label="addon_debug" type="bool" visible="false" default="false"/>',
+        '\t\t<setting id="clean_settings" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=clean_settings)"/>' % (common.i18n('clean_settings')),
         '\t</category>',
         '\t<category label="%s 1">' % (common.i18n('universal_resolvers'))]
 

@@ -30,6 +30,7 @@ plugins_path = os.path.join(addon_path, 'lib', 'resolveurl', 'plugins')
 profile_path = kodi.translate_path(kodi.get_profile())
 settings_file = os.path.join(addon_path, 'resources', 'settings.xml')
 settings_path = os.path.join(addon_path, 'resources')
+user_settings_file = os.path.join(profile_path, 'settings.xml')
 addon_version = kodi.get_version()
 get_setting = kodi.get_setting
 set_setting = kodi.set_setting
