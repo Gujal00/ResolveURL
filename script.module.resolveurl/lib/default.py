@@ -182,7 +182,7 @@ def clean_settings():
         with open(settings_file, 'r') as f:
             settings_xml = f.read()
 
-    resolvers = set(re.findall(r'id="(.*?Resolver)_', settings_xml))
+    resolvers = set(re.findall(r'id="([A-Z][^"_]+)', settings_xml))
     for resolver in resolvers:
         if resolver not in supp_resolvers:
             settings_xml = re.sub(r'\s{{4}}<setting\s*id="{0}.*\n'.format(resolver), '', settings_xml)
