@@ -17,9 +17,8 @@
 """
 
 import re
-from resolveurl.lib import aadecode
 from resolveurl import common
-from resolveurl.lib import helpers
+from resolveurl.lib import helpers, aadecode
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
