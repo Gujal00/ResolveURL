@@ -167,8 +167,8 @@ def clean_settings():
     kodi.close_all()
     kodi.sleep(500)  # sleep or reset won't work for some reason
     from resolveurl import cleanup_settings
-    cleanup_settings()
-    kodi.notify(msg=kodi.i18n('settings_cleaned'), duration=5000)
+    if cleanup_settings():
+        kodi.notify(msg=kodi.i18n('settings_cleaned'), duration=5000)
 
 
 def main(argv=None):
