@@ -246,6 +246,32 @@ def display_settings():
     common.open_settings()
 
 
+def cleanup_settings():
+    # get list of supported resolvers
+    supp_resolvers = relevant_resolvers(include_universal=True, include_popups=True, include_disabled=True)
+    supp_resolvers = [i.__name__ for i in supp_resolvers]
+
+    settings_file = common.user_settings_file
+    if six.PY3:
+        with open(settings_file, 'r', encoding='utf-8') as f:
+            settings_xml = f.read()
+    else:
+        with open(settings_file, 'r') as f:
+            settings_xml = f.read()
+
+    resolvers = set(re.findall(r'id="([A-Z][^"_]+)', settings_xml))
+    for resolver in resolvers:
+        if resolver not in supp_resolvers:
+            settings_xml = re.sub(r'\s{{4}}<setting\s*id="{0}.*\n'.format(resolver), '', settings_xml)
+
+    if six.PY3:
+        with open(settings_file, 'w', encoding='utf-8') as f:
+            f.write(settings_xml)
+    else:
+        with open(settings_file, 'w') as f:
+            f.write(settings_xml.encode('utf8'))
+
+
 def _update_settings_xml():
     """
     This function writes a new ``resources/settings.xml`` file which contains
@@ -330,6 +356,8 @@ def _update_settings_xml():
                     f.write(new_xml.encode('utf8'))
         except:
             raise
+        common.logger.log_debug('Cleaning User Settings XML')
+        cleanup_settings()
     else:
         common.logger.log_debug('No Settings Update Needed')
 

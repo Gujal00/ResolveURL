@@ -164,35 +164,10 @@ def reset_dl():
 
 @url_dispatcher.register(MODES.CLEAN_SETTINGS)
 def clean_settings():
-    from resolveurl import relevant_resolvers
-    from resolveurl import common
-    import re
     kodi.close_all()
     kodi.sleep(500)  # sleep or reset won't work for some reason
-
-    # get list of supported resolvers
-    supp_resolvers = relevant_resolvers(include_universal=True, include_popups=True, include_disabled=True)
-    supp_resolvers = [i.__name__ for i in supp_resolvers]
-
-    settings_file = common.user_settings_file
-    if kodi.kodi_version() >= 19.0:
-        with open(settings_file, 'r', encoding='utf-8') as f:
-            settings_xml = f.read()
-    else:
-        with open(settings_file, 'r') as f:
-            settings_xml = f.read()
-
-    resolvers = set(re.findall(r'id="([A-Z][^"_]+)', settings_xml))
-    for resolver in resolvers:
-        if resolver not in supp_resolvers:
-            settings_xml = re.sub(r'\s{{4}}<setting\s*id="{0}.*\n'.format(resolver), '', settings_xml)
-
-    if kodi.kodi_version() >= 19.0:
-        with open(settings_file, 'w', encoding='utf-8') as f:
-            f.write(settings_xml)
-    else:
-        with open(settings_file, 'w') as f:
-            f.write(settings_xml.encode('utf8'))
+    from resolveurl import cleanup_settings
+    cleanup_settings()
     kodi.notify(msg=kodi.i18n('settings_cleaned'), duration=5000)
 
 
