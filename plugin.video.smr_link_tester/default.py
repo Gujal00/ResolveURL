@@ -201,7 +201,8 @@ def play_link(link):
         logger.log('Indirect hoster_url not supported by smr: %s' % (link))
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
         return False
-    logger.log('Link Supported: |%s|' % (link), log_utils.LOGDEBUG)
+    resolvers = [item.name for item in hmf.get_resolvers(validated=True)]
+    logger.log('Link Supported: |%s| Resolvers: %s' % (link, ', '.join(resolvers)), log_utils.LOGDEBUG)
 
     try:
         if link.endswith('$$all'):

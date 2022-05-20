@@ -1,0 +1,3 @@
+<settings>
+        <setting id="addon_debug" type="bool" label="Addon debug" default="true"/>
+</settings>
