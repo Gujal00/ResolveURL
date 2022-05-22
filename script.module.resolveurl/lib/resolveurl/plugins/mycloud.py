@@ -22,8 +22,55 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class MyCloudResolver(ResolveGeneric):
     name = 'MyCloud'
-    domains = ['mycloud.to', 'mcloud.to', 'vizcloud.digital']
-    pattern = r'(?://|\.)((?:my?|viz)cloud\.(?:to|digital))/(?:embed|e)/([0-9a-zA-Z]+)'
+    domains = ['mycloud.to', 'mcloud.to', 'vizcloud.digital', 'vizcloud.cloud']
+    pattern = r'(?://|\.)((?:my?|viz)cloud\.(?:to|digital|cloud))/(?:embed|e)/([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
+        media_id = mc_encode(media_id)
         return self._default_get_url(host, media_id, template='https://{host}/info/{media_id}')
+
+
+def mc_encode(media_id):
+    import six
+    import base64
+
+    def encode2x(mstr):
+        # Thanks to https://github.com/mbebe for the encode2x function
+        STANDARD_ALPHABET = six.ensure_binary('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=')
+        CUSTOM_ALPHABET = six.ensure_binary('0wMrYU+ixjJ4QdzgfN2HlyIVAt3sBOZnCT9Lm7uFDovkb/EaKpRWhqXS5168ePcG=')
+        if six.PY2:
+            import string
+            ENCODE_TRANSx = string.maketrans(STANDARD_ALPHABET, CUSTOM_ALPHABET)
+        else:
+            ENCODE_TRANSx = bytes.maketrans(STANDARD_ALPHABET, CUSTOM_ALPHABET)
+            mstr = mstr.encode('latin-1')
+        return base64.b64encode(mstr).translate(ENCODE_TRANSx)
+
+    media_id = encode2x(media_id)
+    key = 'LCbu3iYC7ln24K7P'
+
+    f_list = list(range(256))
+    k = 0
+    for i in range(256):
+        k = (k + f_list[i] + ord(key[i % len(key)])) % 256
+        tmp = f_list[i]
+        f_list[i] = f_list[k]
+        f_list[k] = tmp
+
+    k = 0
+    c = 0
+    emid = ''
+    for i in range(len(media_id)):
+        c = (c + i) % 256
+        k = (k + f_list[c % 256]) % 256
+        tmp = f_list[c]
+        f_list[c] = f_list[k]
+        f_list[k] = tmp
+        if six.PY2:
+            emid += chr(ord(media_id[i]) ^ f_list[(f_list[c] + f_list[k]) % 256])
+        else:
+            emid += chr(ord(media_id[i]) if isinstance(media_id[i], six.string_types) else media_id[i] ^ f_list[(f_list[c] + f_list[k]) % 256])
+
+    emid = six.ensure_str(encode2x(emid)).replace('/', '_').replace('=', '')
+
+    return emid
