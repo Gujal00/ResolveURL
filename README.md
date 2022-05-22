@@ -1,6 +1,6 @@
 # ResolveURL for Kodi
 
-Fork of UrlResolver for XBMC/Kodi by t0mm0, eldorados, tknorris and jsergio123
+Fork of UrlResolver for XBMC/Kodi by t0mm0, eldorados, bstrdsmkr, tknorris and jsergio123
 
 I am in no way responsible for the urls being resolved by 3rd parties. This script only resolves video content from legitimate file lockers without prejudice. If this script is being used by 3rd parties to resolve content that you feel infringes upon your Intellectual Property then please take your complaints to the actual website or developer linking to such content and not me. This script in no way searches for any content whatsoever.
 
@@ -30,6 +30,18 @@ Import ResolveUrl and use it
 import resolveurl
 if resolveurl.HostedMediaFile(url):
     resolved = resolveurl.resolve(url)
+```
+
+You can ask ResolveURL to return all files in Debrid Magnet links this way
+
+```python
+import resolveurl
+if resolveurl.HostedMediaFile(magnet):
+    allfiles = resolveurl.HostedMediaFile(magnet, return_all=True).resolve()
+# pick the file you want to play with whatever logic
+stream_url = allfiles[item].get('link')
+if resolveurl.HostedMediaFile(stream_url):
+    stream_url = resolveurl.resolve(stream_url)
 ```
 
 ## script.module.resolveurl.xxx
