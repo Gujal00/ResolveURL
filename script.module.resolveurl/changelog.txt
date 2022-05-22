@@ -1,55 +1,30 @@
-Version 5.1.67 (May 8, 2022)
+Version 5.1.68 (May 23, 2022)
 - Code Base Changes:
-    - lib folders consolidated
+    - option to cleanup defunct resolvers from settings
+    - remove numpy usage
 
 - Resolvers Added:
-    - None
+    - vidzstore
  
 - Resolvers Fixed/Updated:
-    - aparat
-    - avideo
-    - cloudb
-    - mycloud
+    - alliez
+    - liivideo
+    - mcloud
     - streamingcommunity
+    - streamoupload
     - streamrapid
-    - streamsb
+    - videoseyred
+    - voesx
 
 - Resolvers Removed
-    - abcvideo
-    - anavids
-    - datemule
-    - easyload
-    - elupload
-    - gounlimited
-    - hugefiles
-    - mystream
-    - ninjastream
-    - nxload
-    - onlystream
-    - oogly
-    - playtube
-    - putload
-    - sendfox
-    - speedvideo
-    - speedwatch
-    - streamty
-    - streamwire
-    - tunepk
-    - vevio
-    - videobee
-    - videomega
-    - videozupload
-    - vidia
-    - vidlox
-    - viduplayer
-    - vidwatch
-    - vidzi
-    - viuclips
-    - vlaretv
-    - vupto
-    - watchvideo
-    - weshare
-    - wstream
+    - clipwatching
+    - cloud9
+    - hxload
+    - videohost2
+    - videossh
+    - videoz
+    - vidto
+    - vivosx
 
 - Languages Added/Updated
     - None
