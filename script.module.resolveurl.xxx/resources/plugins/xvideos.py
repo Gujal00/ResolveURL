@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class xvideosResolver(ResolveGeneric):
     name = 'xvideos'
-    domains = ['xvideos.com', 'xvideos.es']
-    pattern = r'(?://|\.)(xvideos\.(?:com|es))/(?:video|embedframe/)(\d+)'
+    domains = ['xvideos.com', 'xvideos.es', 'xv-videos1.com']
+    pattern = r'(?://|\.)(x(?:v-)?videos1?\.(?:com|es))/(?:video|embedframe/)(\d+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
