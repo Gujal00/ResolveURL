@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2021  script.module.resolveurl
+    Copyright (C) 2021 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,19 +24,31 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class LbryResolver(ResolveUrl):
     name = 'Lbry'
-    domains = ['lbry.tv', 'odysee.com', 'madiator.com']
-    pattern = r'(?://|\.)(lbry\.tv|odysee\.com|madiator\.com)/(\@[^:\/]+\:[^:\/]+\/[^:\/]+:[0-9a-zA-Z]+)'
+    domains = ['lbry.tv', 'lbry.science', 'odysee.com', 'madiator.com']
+    pattern = r'(?://|\.)((?:lbry|odysee|mediator)\.(?:tv|science|com))/(@[^/]+/[^/]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        form_data = {'jsonrpc': '2.0',
-                     'method': 'get',
-                     'params': {'uri': 'lbry://' + (media_id).replace(':', '#'),
-                                'save_file': False}}
+        form_data = {
+            'jsonrpc': '2.0',
+            'method': 'get',
+            'params': {
+                'uri': 'lbry://' + (media_id).replace(':', '#').replace('%23', '#'),
+                'save_file': False
+            }
+        }
         headers = {'User-Agent': common.FF_USER_AGENT, 'Origin': 'https://lbry.tv', 'Referer': web_url}
-        response = json.loads(self.net.http_POST('https://api.lbry.tv/api/v1/proxy?m=get', form_data=form_data, headers=headers, jdata=True).content)
-        if (response['result']['streaming_url']):
-            return response['result']['streaming_url'] + helpers.append_headers(headers)
+        response = json.loads(
+            self.net.http_POST(
+                'https://api.lbry.tv/api/v1/proxy?m=get',
+                form_data=form_data,
+                headers=headers,
+                jdata=True
+            ).content
+        )
+        source = response.get('result').get('streaming_url')
+        if source:
+            return source + helpers.append_headers(headers)
         raise ResolverError('Unable to locate video')
 
     def get_url(self, host, media_id):
