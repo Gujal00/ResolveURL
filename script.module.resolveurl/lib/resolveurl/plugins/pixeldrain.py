@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2019  script.module.resolveurl
+    Copyright (C) 2022 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,40 +24,29 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class PixelDrainResolver(ResolveUrl):
     name = 'PixelDrain'
     domains = ['pixeldrain.com']
-    pattern = r'(?://|\.)(pixeldrain\.com)/(?:u|l)/([0-9a-zA-Z\-]+)'
-
-    def __init__(self):
-        self.headers = {'User-Agent': common.RAND_UA}
-
-    def get_host_and_id(self, url):
-        self.web_url = url
-        return super(PixelDrainResolver, self).get_host_and_id(url)
+    pattern = r'(?://|\.)(pixeldrain\.com)/((?:u|l)/[0-9a-zA-Z\-]+)'
 
     def get_media_url(self, host, media_id):
-        if('/l/' in self.web_url):
-            response = self.get_media_url_list(host, media_id)
-        else:
-            response = self.get_media_url_file(host, media_id)
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        html = self.net.http_GET(web_url, headers).content
+        jd = json.loads(html)
 
-        if(response is not False):
-            return response
-        raise ResolverError('Unable to locate video')
+        if jd.get('success'):
+            if media_id.startswith('l/'):
+                sources = [
+                    (x.get('name'), x.get('id'))
+                    for x in jd.get('files')
+                    if 'video' in x.get('mime_type')
+                ]
+                return 'https://{0}/api/file/{1}'.format(host, helpers.pick_source(sources, False))
+            else:
+                return 'https://{0}/api/file/{1}'.format(host, media_id[2:])
 
-    def get_media_url_file(self, host, media_id):
-        file_info = json.loads(self.net.http_GET('https://' + host + '/api/file/' + media_id + '/info', headers=self.headers).content)
-        if(file_info['success'] is True and 'video' in file_info['mime_type']):
-            return 'http://' + host + '/api/file/' + media_id
-        return False
-
-    def get_media_url_list(self, host, media_id):
-        file_list = json.loads(self.net.http_GET('https://' + host + '/api/list/' + media_id, headers=self.headers).content)
-        if(file_list['success'] is True):
-            sources = []
-            if(file_list['files']):
-                for file in file_list['files']:
-                    sources += [(file['name'], 'http://' + host + '/api/file/' + file['id'])]
-            return helpers.pick_source(sources, False)
-        return False
+        raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/u/{media_id}')
+        mtype, mid = media_id.split('/')
+        if mtype == 'u':
+            return 'http://{0}/api/file/{1}/info'.format(host, mid)
+        return 'http://{0}/api/list/{1}'.format(host, mid)
