@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2020  gujal
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VoeResolver(ResolveUrl):
     name = 'Voe'
-    domains = ['voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com']
-    pattern = r'(?://|\.)(voe(?:-?unblock)?\.(?:sx|com|net))/(?:e/)?([0-9A-Za-z]+)'
+    domains = ['voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com', 'voeunblock1.com']
+    pattern = r'(?://|\.)(voe(?:-?unblock\d?)?\.(?:sx|com|net))/(?:e/)?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
