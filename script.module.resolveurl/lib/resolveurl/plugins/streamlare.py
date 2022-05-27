@@ -29,14 +29,17 @@ class StreamLareResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        api_durl = 'https://streamlare.com/api/video/download/get'
-        api_surl = 'https://streamlare.com/api/video/stream/get'
+        api_durl = 'https://{0}/api/video/download/get'.format(host)
+        api_surl = 'https://{0}/api/video/stream/get'.format(host)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': web_url,
                    'X-Requested-With': 'XMLHttpRequest'}
         data = {'id': media_id}
         html = json.loads(self.net.http_POST(api_surl, headers=headers, form_data=data, jdata=True).content)
-        source = html.get('result', {}).get('file') or html.get('result', {}).get('Original', {}).get('file')
+        result = html.get('result', {})
+        source = result.get('file') \
+            or result.get('Original', {}).get('file') \
+            or result.get(list(result.keys())[0], {}).get('file')
         if not source:
             html = self.net.http_POST(api_durl, headers=headers, form_data=data, jdata=True).content
             source = json.loads(html).get('result', {}).get('Original', {}).get('url')
