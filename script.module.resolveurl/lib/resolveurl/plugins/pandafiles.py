@@ -17,8 +17,7 @@
 """
 
 import re
-from resolveurl.lib import helpers
-from resolveurl.lib import captcha_lib
+from resolveurl.lib import helpers, captcha_lib
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
