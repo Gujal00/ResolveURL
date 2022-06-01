@@ -17,6 +17,8 @@
 """
 
 import re
+import base64
+from six.moves import urllib_parse
 from resolveurl.lib import helpers, captcha_lib
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -47,7 +49,9 @@ class PandaFilesResolver(ResolveUrl):
         source = re.search(r'id="direct_link".*?href="([^"]+)', html, re.S)
         if source:
             headers.update({'verifypeer': 'false'})
-            return source.group(1) + helpers.append_headers(headers)
+            query = urllib_parse.parse_qsl(urllib_parse.urlparse(source.group(1)).query)
+            src = base64.b64decode(query[0][1]).decode('utf-8')
+            return src + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
