@@ -1,30 +1,25 @@
-Version 5.1.68 (May 23, 2022)
+Version 5.1.69 (June 2, 2022)
 - Code Base Changes:
     - option to cleanup defunct resolvers from settings
     - remove numpy usage
 
 - Resolvers Added:
-    - vidzstore
+    - solidfiles
+    - vido
  
 - Resolvers Fixed/Updated:
-    - alliez
-    - liivideo
-    - mcloud
+    - bannedvideo
+    - lbry
+    - pandafiles
+    - pixeldrain
     - streamingcommunity
-    - streamoupload
-    - streamrapid
-    - videoseyred
+    - streamlare
+    - streamsb
     - voesx
+    - vtube
 
 - Resolvers Removed
-    - clipwatching
-    - cloud9
-    - hxload
-    - videohost2
-    - videossh
-    - videoz
-    - vidto
-    - vivosx
+    - None
 
 - Languages Added/Updated
     - None

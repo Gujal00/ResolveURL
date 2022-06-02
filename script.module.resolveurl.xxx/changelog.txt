@@ -1,10 +1,11 @@
-Version 2.1.23 (May 8, 2022)
+Version 2.1.24 (June 2, 2022)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - None
+    - xhamster
+    - xvideos
 
 - Resolvers Removed
     - None
