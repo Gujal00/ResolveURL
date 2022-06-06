@@ -46,7 +46,7 @@ def mc_encode(media_id):
         return base64.b64encode(mstr).translate(ENCODE_TRANSx)
 
     media_id = encode2x(media_id)
-    key = 'kKFmwRXyLGHMNHl0'
+    key = 'HNYnH8K4qERdSq7u'
 
     f_list = list(range(256))
     k = 0
