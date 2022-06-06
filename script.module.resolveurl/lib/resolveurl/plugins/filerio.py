@@ -20,8 +20,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class FilerIoResolver(ResolveGeneric):
-    name = "FilerIo"
-    domains = ["filerio.in"]
+    name = 'FilerIo'
+    domains = ['filerio.in']
     pattern = r'(?://|\.)(filerio\.in)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):

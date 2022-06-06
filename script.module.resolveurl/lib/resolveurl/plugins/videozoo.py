@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2014  smokdpi
+    Copyright (C) 2014 smokdpi
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,9 +25,10 @@ from resolveurl.hmf import HostedMediaFile
 
 
 class VideoZooResolver(ResolveUrl):
-    name = "VideoZoo"
-    domains = ["byzoo.org", "playpanda.net", "videozoo.me", "videowing.me", "easyvideo.me", "play44.net", "playbb.me", "video44.net"]
-    pattern = r'(?://|\.)(?:play44|playbb|video44|byzoo|playpanda|videozoo|videowing|easyvideo)\.(?:me|org|net|eu)/(?:embed[/0-9a-zA-Z]*?|gplus|picasa|gogo/)(?:\.php)*)\?.*?((?:vid|video|id|file)=[%0-9a-zA-Z_\-\./]+|.*)[\?&]*.*'
+    name = 'VideoZoo'
+    domains = ['byzoo.org', 'playpanda.net', 'videozoo.me', 'videowing.me', 'easyvideo.me', 'play44.net', 'playbb.me', 'video44.net']
+    pattern = r'(?://|\.)(?:play44|playbb|video44|byzoo|playpanda|videozoo|videowing|easyvideo)\.(?:me|org|net|eu)/' \
+              r'(?:embed[/0-9a-zA-Z]*?|gplus|picasa|gogo/)(?:\.php)*)\?.*?((?:vid|video|id|file)=[%0-9a-zA-Z_\-\./]+|.*)[\?&]*.*'
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'http://{host}?vid={media_id}')

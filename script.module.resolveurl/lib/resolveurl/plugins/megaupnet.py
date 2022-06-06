@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2021 ADDON-LAB, KAR10S
 
     This program is free software: you can redistribute it and/or modify

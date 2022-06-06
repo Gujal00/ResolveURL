@@ -1,6 +1,5 @@
 """
     Plugin for ResolveURL
-    v4 api updates
     Copyright (c) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -37,7 +36,7 @@ api_url = 'https://api.alldebrid.com/v4'
 
 
 class AllDebridResolver(ResolveUrl):
-    name = "AllDebrid"
+    name = 'AllDebrid'
     domains = ['*']
 
     def __init__(self):

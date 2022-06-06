@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2021  script.module.resolveurl
+    Copyright (C) 2021 script.module.resolveurl
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class ItemFixResolver(ResolveGeneric):
-    name = "ItemFix"
-    domains = ["itemfix.com"]
+    name = 'ItemFix'
+    domains = ['itemfix.com']
     pattern = r'(?://|\.)(itemfix\.com)/v\?t=([0-9A-Za-z_]+)'
 
     def get_url(self, host, media_id):

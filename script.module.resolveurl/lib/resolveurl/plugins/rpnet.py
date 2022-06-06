@@ -28,8 +28,8 @@ logger.disable()
 
 
 class RPnetResolver(ResolveUrl):
-    name = "RPnet"
-    domains = ["*"]
+    name = 'RPnet'
+    domains = ['*']
 
     def __init__(self):
         self.net = common.Net()

@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2021  gujal
+    Copyright (C) 2021 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,10 +26,12 @@ class VUploadResolver(ResolveGeneric):
     pattern = r'(?://|\.)(vupload\.com)/(?:embed-|e/|v/)?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''label:\s*"(?P<label>[\d]+).*?sources:\s*\[{src:\s*"(?P<url>[^"]+)",\s*type:\s*"video/mp4"''',
-                                               r'''sources:\s*\[{src:\s*"(?P<url>[^"]+)",'''],
-                                     generic_patterns=False)
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            patterns=[r'''label:\s*"(?P<label>[\d]+).*?sources:\s*\[{src:\s*"(?P<url>[^"]+)",\s*type:\s*"video/mp4"''',
+                      r'''sources:\s*\[{src:\s*"(?P<url>[^"]+)",'''],
+            generic_patterns=False
+        )
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')

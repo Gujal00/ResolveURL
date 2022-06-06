@@ -50,8 +50,8 @@ check_cache_path = 'torrents/instantAvailability'
 
 
 class RealDebridResolver(ResolveUrl):
-    name = "Real-Debrid"
-    domains = ["*"]
+    name = 'Real-Debrid'
+    domains = ['*']
 
     def __init__(self):
         self.net = common.Net()

@@ -28,7 +28,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamRapidResolver(ResolveUrl):
-    name = "StreamRapid"
+    name = 'StreamRapid'
     domains = ['streamrapid.ru', 'rabbitstream.net']
     pattern = r'(?://|\.)((?:rabbitstream|streamrapid)\.(?:ru|net))/embed-([^\n]+)'
 

@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
@@ -26,8 +26,10 @@ class YouJizzResolver(ResolveGeneric):
     pattern = r'(?://|\.)(youjizz\.com)/videos/.*[\-\/](\d+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''["']quality["']\s*:\s*["'](?P<label>\d+)["'].*?["']filename["']\s*:\s*["'](?P<url>[^"']+)''']).replace(' ', '%20')
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            patterns=[r'''["']quality["']\s*:\s*["'](?P<label>\d+)["'].*?["']filename["']\s*:\s*["'](?P<url>[^"']+)''']
+        ).replace(' ', '%20')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://www.{host}/videos/embed/{media_id}')

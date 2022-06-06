@@ -1,7 +1,4 @@
 """
-    OVERALL CREDIT TO:
-        t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
-
     Plugin for ResolveURL
     Copyright (C) 2011 t0mm0
 
@@ -18,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 from resolveurl.lib import helpers
 from resolveurl import common
@@ -25,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VideoBinResolver(ResolveUrl):
-    name = "VideoBin"
+    name = 'VideoBin'
     domains = ['videobin.co']
     pattern = r'(?://|\.)(videobin\.co)/(?:embed-|source/)?([0-9a-zA-Z]+)'
 

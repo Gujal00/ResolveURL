@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -33,7 +33,7 @@ class ZZCarttonResolver(ResolveUrl):
         if not media_id.isdigit():
             web_url = self.get_url(host, media_id)
             html = self.net.http_GET(web_url, headers=headers).content
-            r = re.search(r"""<iframe\s*width=['"]\d+['"]\s*height=['"]\d+['"]\s*src=['"](http:\/\/www\.zzcartoon\.com\/embed\/(\d+))""", html)
+            r = re.search(r'''<iframe\s*width=['"]\d+['"]\s*height=['"]\d+['"]\s*src=['"](http:\/\/www\.zzcartoon\.com\/embed\/(\d+))''', html)
             if r:
                 web_url = r.group(1)
             else:

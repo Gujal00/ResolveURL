@@ -21,7 +21,7 @@ from resolveurl.lib import helpers
 
 
 class CumLouderResolver(ResolveGeneric):
-    name = "cumlouder"
+    name = 'cumlouder'
     domains = ['cumlouder.com']
     pattern = r'(?://|\.)(cumlouder\.com)/(?:[a-z]+/)?(?:embed/)([0-9a-zA-Z]+)'
 

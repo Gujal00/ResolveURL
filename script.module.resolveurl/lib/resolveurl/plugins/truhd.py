@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class TruHDResolver(ResolveUrl):
-    name = "TruHD"
-    domains = ["truhd.xyz"]
+    name = 'TruHD'
+    domains = ['truhd.xyz']
     pattern = r'(?://|\.)(truhd\.xyz)/embed/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):

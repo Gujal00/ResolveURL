@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl import common
@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 
 class PKSpeedResolver(ResolveUrl):
     name = 'PKSpeed'
-    domains = ["pkspeed.net"]
+    domains = ['pkspeed.net']
     pattern = r'(?://|\.)(pkspeed\.net)/(?:embed-)?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):

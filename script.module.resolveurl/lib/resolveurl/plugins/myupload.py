@@ -1,6 +1,6 @@
 """
-    Plugin for ResolveUrl
-    Copyright (C) 2018 Resolveurl
+    Plugin for ResolveURL
+    Copyright (C) 2018 jsergio
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -9,19 +9,19 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class MyUpload(ResolveGeneric):
-    name = "MyUpload"
-    domains = ["myupload.co"]
+    name = 'MyUpload'
+    domains = ['myupload.co']
     pattern = r'(?://|\.)(myupload\.co)/plugins/mediaplayer/site/_embed.php\?u=([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):

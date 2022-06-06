@@ -1,5 +1,5 @@
 """
-    plugin for ResolveURL
+    Plugin for ResolveURL
     Copyright (C) 2021 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 import json
 from resolveurl.lib import helpers
@@ -23,7 +24,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class StreamCommunityResolver(ResolveUrl):
-    name = "StreamCommunity"
+    name = 'StreamCommunity'
     domains = ['streamingcommunity.xyz', 'streamingcommunity.one', 'streamingcommunity.vip',
                'streamingcommunity.work', 'streamingcommunity.name', 'streamingcommunity.video',
                'streamingcommunity.live', 'streamingcommunity.tv', 'streamingcommunity.space',

@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -26,8 +26,8 @@ from six.moves import urllib_parse
 
 
 class DaxabResolver(ResolveUrl):
-    name = "Daxab"
-    domains = ["daxab.com"]
+    name = 'Daxab'
+    domains = ['daxab.com']
     pattern = r'(?://|\.)(daxab\.com)/player/([^\n]+)'
 
     def get_media_url(self, host, media_id):

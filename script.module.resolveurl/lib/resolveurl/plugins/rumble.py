@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2021  script.module.resolveurl
+    Copyright (C) 2021 script.module.resolveurl
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

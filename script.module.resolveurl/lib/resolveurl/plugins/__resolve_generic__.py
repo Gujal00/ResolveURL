@@ -1,4 +1,7 @@
 """
+    OVERALL CREDIT TO:
+    t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
+
     Plugin for ResolveURL
     Copyright (C) 2016  script.module.resolveurl
 
@@ -15,6 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 import abc
 from resolveurl.lib import helpers

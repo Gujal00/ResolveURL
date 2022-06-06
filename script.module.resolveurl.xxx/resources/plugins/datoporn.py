@@ -23,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class DatoPornResolver(ResolveUrl):
-    name = "datoporn"
+    name = 'datoporn'
     domains = ['datoporn.com', 'dato.porn', 'datoporn.co']
     pattern = r'(?://|\.)(datoporn\.com|dato\.porn|datoporn\.co)/(?:embed[/-]|videos/|emb.html\?)?([0-9a-zA-Z]+)'
 

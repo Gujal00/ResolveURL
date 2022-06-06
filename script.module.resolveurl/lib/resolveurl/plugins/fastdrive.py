@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class FastDriveResolver(ResolveUrl):
-    name = "FastDrive"
+    name = 'FastDrive'
     domains = ['fastdrive.io']
     pattern = r'(?://|\.)(fastdrive\.io)/([0-9a-zA-Z]+)'
 

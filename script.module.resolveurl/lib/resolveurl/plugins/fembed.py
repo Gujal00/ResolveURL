@@ -24,16 +24,16 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class FEmbedResolver(ResolveUrl):
-    name = "FEmbed"
-    domains = ["fembed.com", "anime789.com", "24hd.club", "vcdn.io", "sharinglink.club", "votrefiles.club",
-               "femoload.xyz", "feurl.com", "dailyplanet.pw", "jplayer.net", "xstreamcdn.com", "gcloud.live",
-               "vcdnplay.com", "vidohd.com", "vidsource.me", "votrefile.xyz", "zidiplay.com", "fcdn.stream",
-               "mediashore.org", "there.to", "femax20.com", "sexhd.co", "viplayer.cc", "mrdhan.com", "votrefilms.xyz",
-               "embedsito.com", "dutrag.com", "youvideos.ru", "streamm4u.club", "moviepl.xyz", "asianclub.tv",
-               "vidcloud.fun", "fplayer.info", "diasfem.com", "fembad.org", "moviemaniac.org", "albavido.xyz",
-               "ncdnstm.com", "fembed-hd.com", "superplayxyz.club", "cinegrabber.com", "ndrama.xyz",
-               "javstream.top", "javpoll.com", "suzihaza.com", "fembed.net", "ezsubz.com", "reeoov.tube",
-               "diampokusy.com", "filmvi.xyz"]
+    name = 'FEmbed'
+    domains = ['fembed.com', 'anime789.com', '24hd.club', 'vcdn.io', 'sharinglink.club', 'votrefiles.club',
+               'femoload.xyz', 'feurl.com', 'dailyplanet.pw', 'jplayer.net', 'xstreamcdn.com', 'gcloud.live',
+               'vcdnplay.com', 'vidohd.com', 'vidsource.me', 'votrefile.xyz', 'zidiplay.com', 'fcdn.stream',
+               'mediashore.org', 'there.to', 'femax20.com', 'sexhd.co', 'viplayer.cc', 'mrdhan.com', 'votrefilms.xyz',
+               'embedsito.com', 'dutrag.com', 'youvideos.ru', 'streamm4u.club', 'moviepl.xyz', 'asianclub.tv',
+               'vidcloud.fun', 'fplayer.info', 'diasfem.com', 'fembad.org', 'moviemaniac.org', 'albavido.xyz',
+               'ncdnstm.com', 'fembed-hd.com', 'superplayxyz.club', 'cinegrabber.com', 'ndrama.xyz',
+               'javstream.top', 'javpoll.com', 'suzihaza.com', 'fembed.net', 'ezsubz.com', 'reeoov.tube',
+               'diampokusy.com', 'filmvi.xyz']
     pattern = r'(?://|\.)(' \
               r'(?:femb[ae]d(?:-hd)?|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|' \
               r'femoload|asianclub|dailyplanet|[jf]player|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|' \

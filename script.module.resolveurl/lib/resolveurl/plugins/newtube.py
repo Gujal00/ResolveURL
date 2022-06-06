@@ -1,5 +1,5 @@
 """
-    NewTube Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 twilight0
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ from resolveurl.lib import helpers
 
 class NewTubeResolver(ResolveGeneric):
 
-    name = "NewTube"
+    name = 'NewTube'
     domains = ['newtube.app']
     pattern = r'(?://|\.)(newtube\.app)/(?:user/)?(?:embed/|\w+)/(\w+)'
 

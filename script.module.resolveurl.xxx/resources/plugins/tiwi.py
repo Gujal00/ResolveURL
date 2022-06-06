@@ -2,26 +2,18 @@
     Plugin for ResolveURL
     Copyright (C) 2018 Whitecream
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-This plugin returns a MPEG Dash file (.mpd)
-To play this with Kodi you'll need to at the following properties to ListItem:
-listitem.setProperty('inputstreamaddon','inputstream.adaptive')
-listitem.setProperty('inputstream.adaptive.manifest_type','mpd')
-
-Also, inputstream.adaptive needs to be installed and enabled.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -31,6 +23,13 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class TiwiResolver(ResolveUrl):
+    """
+    This plugin returns a MPEG Dash file (.mpd)
+    To play this with Kodi you'll need to at the following properties to ListItem:
+    listitem.setProperty('inputstreamaddon','inputstream.adaptive')
+    listitem.setProperty('inputstream.adaptive.manifest_type','mpd')
+    Also, inputstream.adaptive needs to be installed and enabled.
+    """
     name = 'tiwi'
     domains = ['tiwi.kiwi']
     pattern = r'(?://|\.)(tiwi\.kiwi)/(?:embed[/-])?([A-Za-z0-9]+)'

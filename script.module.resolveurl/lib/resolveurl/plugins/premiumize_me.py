@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 from six.moves import urllib_parse, urllib_error
 import json
@@ -48,8 +49,8 @@ token_path = '%s/token' % base_url
 
 # noinspection PyBroadException
 class PremiumizeMeResolver(ResolveUrl):
-    name = "Premiumize.me"
-    domains = ["*"]
+    name = 'Premiumize.me'
+    domains = ['*']
     media_url = None
 
     def __init__(self):

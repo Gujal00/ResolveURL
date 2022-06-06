@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class AparatResolver(ResolveUrl):
-    name = "Aparat"
+    name = 'Aparat'
     domains = ['aparat.cam', 'wolfstream.tv']
     pattern = r'(?://|\.)((?:aparat\.cam|wolfstream\.tv))/(?:embed-)?([0-9a-zA-Z]+)'
 

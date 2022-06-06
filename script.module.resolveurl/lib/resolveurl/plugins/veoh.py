@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VeohResolver(ResolveUrl):
-    name = "Veoh"
-    domains = ["veoh.com"]
+    name = 'Veoh'
+    domains = ['veoh.com']
     pattern = r'(?://|\.)(veoh\.com)/(?:watch/|.+?permalinkId=)?([0-9a-zA-Z/]+)'
 
     def get_media_url(self, host, media_id):

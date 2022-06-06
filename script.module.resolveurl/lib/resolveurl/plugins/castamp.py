@@ -15,28 +15,29 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import random
 import re
 import math
 from resolveurl import common
-from resolveurl.resolver import ResolveUrl, ResolverError  # @UnusedImport ResolverError
+from resolveurl.resolver import ResolveUrl, ResolverError  # @UnusedImport ResolverError  # NoQA
 
 
 class CastampResolver(ResolveUrl):
-    name = "Castamp"
-    domains = ["castamp.com"]
+    name = 'Castamp'
+    domains = ['castamp.com']
     pattern = r'(?://|\.)(castamp\.com)/embed\.php\?c=(.*?)&'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url).content
 
-        streamer = ""
-        flashplayer = ""
-        file = ""
+        streamer = ''
+        flashplayer = ''
+        file = ''
 
-        common.logger.log("*******************************************")
-        common.logger.log("web_url: " + web_url)
+        common.logger.log('*******************************************')
+        common.logger.log('web_url: ' + web_url)
 
         pattern_flashplayer = r"""'flashplayer': \"(.*?)\""""
         r = re.search(pattern_flashplayer, html)
@@ -59,7 +60,7 @@ class CastampResolver(ResolveUrl):
         return rtmp
 
     def get_url(self, host, media_id):
-        chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz"
+        chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'
         string_length = 8
         randomstring = ''
         for _x in range(0, string_length):

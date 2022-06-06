@@ -1,19 +1,19 @@
 """
-Plugin for ResolveUrl
-Copyright (C) 2020 gujal
+    Plugin for ResolveURL
+    Copyright (C) 2020 gujal
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -24,7 +24,7 @@ from six.moves import urllib_error
 
 
 class StreamTapeResolver(ResolveUrl):
-    name = "StreamTape"
+    name = 'StreamTape'
     domains = ['streamtape.com', 'strtape.cloud', 'streamtape.net', 'streamta.pe', 'streamtape.site',
                'strcloud.link', 'strtpe.link', 'streamtape.cc', 'scloud.online', 'stape.fun']
     pattern = r'(?://|\.)(s(?:tr)?(?:eam)?(?:ta?p?e?|cloud)\.(?:com|cloud|net|pe|site|link|cc|online|fun))/' \

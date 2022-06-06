@@ -1,19 +1,19 @@
 """
-Plugin for ResolveUrl
-Copyright (C) 2020 gujal
+    Plugin for ResolveURL
+    Copyright (C) 2020 gujal
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import random
@@ -38,8 +38,8 @@ class VidCloud9Resolver(ResolveUrl):
                    'Referer': web_url}
 
         key = '25742532592138496744665879883281'.encode('utf8')
-        iv = '9225679083961858'
-        encryptor = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv.encode('utf8')))
+        iv = '9225679083961858'.encode('utf8')
+        encryptor = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv))
         eid = encryptor.feed(media_id)
         eid += encryptor.feed()
         url = 'https://membed.net' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
@@ -48,7 +48,7 @@ class VidCloud9Resolver(ResolveUrl):
         js_data = json.loads(self.net.http_GET(url, headers=headers).content).get('data', None)
         if js_data:
             ct = base64.b64decode(js_data)
-            decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv.encode('utf8')))
+            decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv))
             ddata = decryptor.feed(ct)
             ddata += decryptor.feed()
             sources = json.loads(ddata.decode('utf-8').replace('\\', '')).get('source')

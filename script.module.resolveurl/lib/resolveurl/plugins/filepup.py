@@ -23,8 +23,8 @@ from resolveurl.lib import helpers
 
 
 class FilePupResolver(ResolveUrl):
-    name = "FilePup"
-    domains = ["filepup.net"]
+    name = 'FilePup'
+    domains = ['filepup.net']
     pattern = r'(?://|\.)(filepup.(?:net))/(?:play|files)/([0-9a-zA-Z]+)'
     headers = {'User-Agent': common.RAND_UA}
 

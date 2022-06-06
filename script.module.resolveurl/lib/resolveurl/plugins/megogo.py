@@ -23,8 +23,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class MeGoGoResolver(ResolveUrl):
-    name = "MeGoGo"
-    domains = ["megogo.net", "megogo.ru"]
+    name = 'MeGoGo'
+    domains = ['megogo.net', 'megogo.ru']
     pattern = r'(?://|\.)(megogo\.(?:net|ru))/.+?(?:id=|view/)(\d+)'
 
     def get_media_url(self, host, media_id):

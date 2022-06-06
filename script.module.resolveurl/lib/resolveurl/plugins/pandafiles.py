@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class PandaFilesResolver(ResolveUrl):
-    name = "PandaFiles"
+    name = 'PandaFiles'
     domains = ['pandafiles.com']
     pattern = r'(?://|\.)(pandafiles\.com)/([0-9a-zA-Z]+)'
 

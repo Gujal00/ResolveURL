@@ -1,5 +1,5 @@
 """
-    Linksnappy plugin for ResolveURL
+    Plugin for ResolveURL
     Version 4 (improved logging, replace quote_plus with quote, various bug fixes)
     Copyright (C) 2020 Twilight0
 
@@ -88,8 +88,8 @@ folder_name = 'resolveurl'
 # noinspection PyBroadException
 class LinkSnappyResolver(ResolveUrl):
 
-    name = "Linksnappy"
-    domains = ["*"]
+    name = 'Linksnappy'
+    domains = ['*']
     media_url = None
     cookie_file = join(common.profile_path, '{0}.cookies'.format(name))
 

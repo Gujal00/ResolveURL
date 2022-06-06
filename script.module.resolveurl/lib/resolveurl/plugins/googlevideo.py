@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2014  smokdpi
+    Copyright (C) 2014 smokdpi
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,9 +28,11 @@ import sqlite3
 
 
 class GoogleResolver(ResolveUrl):
-    name = "GoogleVideo"
-    domains = ["googlevideo.com", "googleusercontent.com", "get.google.com",
-               "plus.google.com", "googledrive.com", "drive.google.com", "docs.google.com", "youtube.googleapis.com", "bp.blogspot.com", "blogger.com"]
+    name = 'GoogleVideo'
+    domains = ['googlevideo.com', 'googleusercontent.com', 'get.google.com',
+               'plus.google.com', 'googledrive.com', 'drive.google.com',
+               'docs.google.com', 'youtube.googleapis.com', 'bp.blogspot.com',
+               'blogger.com']
     pattern = r'https?://(.*?(?:\.googlevideo|\.bp\.blogspot|blogger|(?:plus|drive|get|docs)\.google|google(?:usercontent|drive|apis))\.com)/(.*?(?:videoplayback\?|[\?&]authkey|host/)*.+)'
 
     def __init__(self):

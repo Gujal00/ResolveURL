@@ -1,19 +1,19 @@
 """
-Plugin for ResolveUrl
-Copyright (C) 2011 t0mm0
+    Plugin for ResolveURL
+    Copyright (C) 2011 t0mm0
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VeeHDResolver(ResolveUrl):
-    name = "VeeHD"
-    domains = ["veehd.com"]
+    name = 'VeeHD'
+    domains = ['veehd.com']
     pattern = r'(?://|\.)(veehd\.com)/video/([0-9A-Za-z]+)'
 
     profile_path = common.profile_path

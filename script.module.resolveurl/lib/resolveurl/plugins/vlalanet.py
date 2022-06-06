@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@ from resolveurl import common
 
 
 class VlalaNetResolver(ResolveUrl):
-    name = "VlalaNet"
-    domains = ["videoslala.net"]
+    name = 'VlalaNet'
+    domains = ['videoslala.net']
     pattern = r'(?://|\.)(videoslala\.net)/embed/([^\n]+)'
 
     def get_media_url(self, host, media_id):

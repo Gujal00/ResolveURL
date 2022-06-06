@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 Anis
 
     This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class AniStreamResolver(ResolveUrl):
-    name = "AniStream"
-    domains = ["ani-stream.com"]
+    name = 'AniStream'
+    domains = ['ani-stream.com']
     pattern = r'(?://|\.)(ani-stream\.com)/(?:embed-)?([0-9a-zA-Z-]+)'
 
     def get_media_url(self, host, media_id):

@@ -23,8 +23,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class K2SResolver(ResolveUrl):
-    name = "K2S"
-    domains = ["k2s.cc", "publish2.me", "tezfiles.com"]
+    name = 'K2S'
+    domains = ['k2s.cc', 'publish2.me', 'tezfiles.com']
     pattern = r'(?://|\.)(k2s\.cc|publish2\.me|tezfiles\.com)/(?:file/)?([0-9a-f]+)'
 
     def get_media_url(self, host, media_id):

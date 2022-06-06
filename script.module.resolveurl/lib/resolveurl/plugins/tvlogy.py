@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2016 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class TVLogyResolver(ResolveUrl):
-    name = "TVLogy"
-    domains = ["tvlogy.to"]
+    name = 'TVLogy'
+    domains = ['tvlogy.to']
     pattern = r'(?://|\.)((?:hls\.|flow\.)?tvlogy\.to)/(?:embed/|watch\.php\?v=|player/index.php\?data=)?([0-9a-zA-Z/]+)'
 
     def get_media_url(self, host, media_id):

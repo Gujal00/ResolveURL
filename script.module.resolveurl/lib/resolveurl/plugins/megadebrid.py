@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 import json
 import six
@@ -28,7 +29,7 @@ logger.disable()
 
 
 class MegaDebridResolver(ResolveUrl):
-    name = "MegaDebrid"
+    name = 'MegaDebrid'
     domains = ['*']
     profile_path = common.profile_path
     media_url = None

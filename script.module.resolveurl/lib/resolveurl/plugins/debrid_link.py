@@ -34,8 +34,8 @@ api_url = 'https://debrid-link.fr/api/v2'
 
 
 class DebridLinkResolver(ResolveUrl):
-    name = "Debrid-Link"
-    domains = ["*"]
+    name = 'Debrid-Link'
+    domains = ['*']
 
     def __init__(self):
         self.hosters = None

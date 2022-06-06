@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -21,14 +21,16 @@ from resolveurl.lib import helpers
 
 
 class BrighteonResolver(ResolveGeneric):
-    name = "Brighteon"
+    name = 'Brighteon'
     domains = ['brighteon.com']
     pattern = r'(?://|\.)(brighteon\.com)/(?:embed)?/?([\w-]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''source\s*src=['"](?P<url>.+?)['"].+?x-mpegURL'''],
-                                     generic_patterns=False)
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            patterns=[r'''source\s*src=['"](?P<url>.+?)['"].+?x-mpegURL'''],
+            generic_patterns=False
+        )
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://www.{host}/embed/{media_id}')

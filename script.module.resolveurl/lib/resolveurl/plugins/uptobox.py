@@ -27,8 +27,8 @@ logger.disable()
 
 
 class UpToBoxResolver(ResolveUrl):
-    name = "UpToBox"
-    domains = ["uptobox.com", "uptostream.com"]
+    name = 'UpToBox'
+    domains = ['uptobox.com', 'uptostream.com']
     pattern = r'(?://|\.)(uptobox.com|uptostream.com)/(?:iframe/)?([0-9A-Za-z_]+)'
 
     def __init__(self):

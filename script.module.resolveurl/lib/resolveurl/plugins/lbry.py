@@ -37,7 +37,11 @@ class LbryResolver(ResolveUrl):
                 'save_file': False
             }
         }
-        headers = {'User-Agent': common.FF_USER_AGENT, 'Origin': 'https://lbry.tv', 'Referer': web_url}
+        headers = {
+            'User-Agent': common.FF_USER_AGENT,
+            'Origin': 'https://lbry.tv',
+            'Referer': web_url
+        }
         response = json.loads(
             self.net.http_POST(
                 'https://api.lbry.tv/api/v1/proxy?m=get',

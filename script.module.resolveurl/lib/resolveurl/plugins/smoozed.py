@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2016 t0mm0, tknorris
 
     This program is free software: you can redistribute it and/or modify
@@ -70,8 +70,8 @@ INTERVALS = 5
 
 
 class SmoozedResolver(ResolveUrl):
-    name = "SMOOZED"
-    domains = ["*"]
+    name = 'SMOOZED'
+    domains = ['*']
 
     def __init__(self):
         self.net = common.Net()

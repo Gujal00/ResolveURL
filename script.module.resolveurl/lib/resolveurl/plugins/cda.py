@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 from six.moves import urllib_parse
 import json
@@ -24,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class CdaResolver(ResolveUrl):
-    name = "cda"
+    name = 'cda'
     domains = ['m.cda.pl', 'cda.pl', 'www.cda.pl', 'ebd.cda.pl']
     pattern = r'(?://|\.)(cda\.pl)/(?:.\d+x\d+|video)/([0-9a-zA-Z]+)'
 

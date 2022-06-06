@@ -27,8 +27,8 @@ logger.disable()
 
 
 class SimplyDebridResolver(ResolveUrl):
-    name = "Simply-Debrid"
-    domains = ["*"]
+    name = 'Simply-Debrid'
+    domains = ['*']
     base_url = r'https://simply-debrid.com/kapi.php?'
 
     def __init__(self):

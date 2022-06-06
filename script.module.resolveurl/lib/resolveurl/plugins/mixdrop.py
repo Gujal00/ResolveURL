@@ -6,10 +6,12 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
@@ -21,8 +23,8 @@ from resolveurl.lib import helpers
 
 
 class MixDropResolver(ResolveUrl):
-    name = "MixDrop"
-    domains = ["mixdrop.co", "mixdrop.to", "mixdrop.sx", "mixdrop.bz", "mixdrop.ch"]
+    name = 'MixDrop'
+    domains = ['mixdrop.co', 'mixdrop.to', 'mixdrop.sx', 'mixdrop.bz', 'mixdrop.ch']
     pattern = r'(?://|\.)(mixdrop\.(?:c[ho]|to|sx|bz))/(?:f|e)/(\w+)'
 
     def get_media_url(self, host, media_id):
@@ -47,7 +49,7 @@ class MixDropResolver(ResolveUrl):
             headers.update({'Referer': web_url})
             return surl + helpers.append_headers(headers)
 
-        raise ResolverError("Video not found")
+        raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')

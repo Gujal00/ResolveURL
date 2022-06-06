@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2011 t0mm0
 
     This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class YourUploadResolver(ResolveUrl):
-    name = "YourUpload"
-    domains = ["yourupload.com", "yucache.net"]
+    name = 'YourUpload'
+    domains = ['yourupload.com', 'yucache.net']
     pattern = r'(?://|\.)(yourupload\.com|yucache\.net)/(?:watch|embed)?/?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):

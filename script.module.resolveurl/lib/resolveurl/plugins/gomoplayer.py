@@ -21,6 +21,6 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class GomoPlayerResolver(ResolveGeneric):
 
-    name = "GomoPlayer"
+    name = 'GomoPlayer'
     domains = ['gomoplayer.com', 'tunestream.net', 'xvideosharing.com']
     pattern = r'(?://|\.)((?:gomoplayer|tunestream|xvideosharing)\.(?:com|net))/(?:embed-)?([0-9a-zA-Z]+)'

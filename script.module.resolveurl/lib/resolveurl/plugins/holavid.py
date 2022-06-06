@@ -22,7 +22,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class HolaVidResolver(ResolveUrl):
-    name = "HolaVid"
+    name = 'HolaVid'
     domains = ['holavid.com']
     pattern = r'(?://|\.)(holavid\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 

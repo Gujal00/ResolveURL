@@ -1,7 +1,6 @@
 """
-    Plugin for ResolveUrl
-    Copyright (C) 2020 gujal
-    Copyright (C) 2020 groggyegg
+    Plugin for ResolveURL
+    Copyright (C) 2020 gujal, groggyegg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -10,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -25,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class ZPlayerResolver(ResolveUrl):
-    name = "ZPlayer"
-    domains = ["zplayer.live"]
+    name = 'ZPlayer'
+    domains = ['zplayer.live']
     pattern = r'(?://|\.)(zplayer\.live)/(?:embed/|video/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):

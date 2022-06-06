@@ -1,19 +1,19 @@
 """
-Plugin for ResolveURL
-Copyright (C) 2016 Seberoth
+    Plugin for ResolveURL
+    Copyright (C) 2016 Seberoth
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import json
@@ -24,10 +24,10 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class OKResolver(ResolveUrl):
-    name = "OKRu"
+    name = 'OKRu'
     domains = ['ok.ru', 'odnoklassniki.ru']
     pattern = r'(?://|\.)(ok\.ru|odnoklassniki\.ru)/(?:videoembed|video|live)/(\d+)'
-    header = {"User-Agent": common.OPERA_USER_AGENT}
+    header = {'User-Agent': common.OPERA_USER_AGENT}
     qual_map = {'ultra': '2160', 'quad': '1440', 'full': '1080', 'hd': '720', 'sd': '480', 'low': '360', 'lowest': '240', 'mobile': '144'}
 
     def get_media_url(self, host, media_id):

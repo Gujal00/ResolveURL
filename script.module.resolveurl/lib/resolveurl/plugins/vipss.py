@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2019 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 import json
 from resolveurl.lib import helpers
@@ -23,7 +24,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VipSSResolver(ResolveUrl):
-    name = "VipSS"
+    name = 'VipSS'
     domains = ['vipss.club']
     pattern = r'(?://|\.)(vipss\.club)/([a-zA-Z0-9]+)'
 

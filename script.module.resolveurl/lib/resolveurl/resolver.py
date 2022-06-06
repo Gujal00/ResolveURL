@@ -1,5 +1,7 @@
-#    resolveurl XBMC Addon
+#    ResolveURL XBMC Addon
 #    Copyright (C) 2011, 2016 t0mm0, tknorris
+#    OVERALL CREDIT TO:
+#    t0mm0, Eldorado, VOINAGE, BSTRDMKR, tknorris, smokdpi, TheHighway
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
