@@ -9,5 +9,9 @@
 		<summary lang="en">Resolve adult video host URL's to be playable in XBMC/Kodi.</summary>
 		<description lang="en">Resolve adult video host URL's to be playable in XBMC/Kodi.</description>
 		<platform>all</platform>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
 	</extension>
 </addon>
