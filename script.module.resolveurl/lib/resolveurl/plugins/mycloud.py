@@ -25,51 +25,50 @@ class MyCloudResolver(ResolveGeneric):
     pattern = r'(?://|\.)((?:my?|viz)cloud\.(?:to|digital|cloud))/(?:embed|e)/([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
-        media_id = mc_encode(media_id)
-        return self._default_get_url(host, media_id, template='https://{host}/mediainfo/{media_id}?key=vWal9S52iJwMql9q')
+        media_id = self.__mc_encode(media_id)
+        return self._default_get_url(host, media_id, template='https://{host}/mediainfo/{media_id}?key=Q1nbJDsdM2BpgXNU')
 
+    def __mc_encode(self, media_id):
+        import six
+        import base64
 
-def mc_encode(media_id):
-    import six
-    import base64
+        def encode2x(mstr):
+            # Thanks to https://github.com/mbebe for the encode2x function
+            STANDARD_ALPHABET = six.ensure_binary('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')
+            CUSTOM_ALPHABET = six.ensure_binary('51wJ0FDq/UVCefLopEcmK3ni4WIQztMjZdSYOsbHr9R2h7PvxBGAuglaN8+kXT6y')
+            if six.PY2:
+                import string
+                ENCODE_TRANSx = string.maketrans(STANDARD_ALPHABET, CUSTOM_ALPHABET)
+            else:
+                ENCODE_TRANSx = bytes.maketrans(STANDARD_ALPHABET, CUSTOM_ALPHABET)
+                mstr = mstr.encode('latin-1')
+            return base64.b64encode(mstr).translate(ENCODE_TRANSx)
 
-    def encode2x(mstr):
-        # Thanks to https://github.com/mbebe for the encode2x function
-        STANDARD_ALPHABET = six.ensure_binary('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')
-        CUSTOM_ALPHABET = six.ensure_binary('51wJ0FDq/UVCefLopEcmK3ni4WIQztMjZdSYOsbHr9R2h7PvxBGAuglaN8+kXT6y')
-        if six.PY2:
-            import string
-            ENCODE_TRANSx = string.maketrans(STANDARD_ALPHABET, CUSTOM_ALPHABET)
-        else:
-            ENCODE_TRANSx = bytes.maketrans(STANDARD_ALPHABET, CUSTOM_ALPHABET)
-            mstr = mstr.encode('latin-1')
-        return base64.b64encode(mstr).translate(ENCODE_TRANSx)
+        media_id = encode2x(media_id)
+        key = 'RTorhhm9RwQwUjOi'
 
-    media_id = encode2x(media_id)
-    key = 'HNYnH8K4qERdSq7u'
+        f_list = list(range(256))
+        k = 0
+        for i in range(256):
+            k = (k + f_list[i] + ord(key[i % len(key)])) % 256
+            tmp = f_list[i]
+            f_list[i] = f_list[k]
+            f_list[k] = tmp
 
-    f_list = list(range(256))
-    k = 0
-    for i in range(256):
-        k = (k + f_list[i] + ord(key[i % len(key)])) % 256
-        tmp = f_list[i]
-        f_list[i] = f_list[k]
-        f_list[k] = tmp
+        k = 0
+        c = 0
+        emid = ''
+        for i in range(len(media_id)):
+            c = (c + i) % 256
+            k = (k + f_list[c % 256]) % 256
+            tmp = f_list[c]
+            f_list[c] = f_list[k]
+            f_list[k] = tmp
+            if six.PY2:
+                emid += chr(ord(media_id[i]) ^ f_list[(f_list[c] + f_list[k]) % 256])
+            else:
+                emid += chr(ord(media_id[i]) if isinstance(media_id[i], six.string_types) else media_id[i] ^ f_list[(f_list[c] + f_list[k]) % 256])
 
-    k = 0
-    c = 0
-    emid = ''
-    for i in range(len(media_id)):
-        c = (c + i) % 256
-        k = (k + f_list[c % 256]) % 256
-        tmp = f_list[c]
-        f_list[c] = f_list[k]
-        f_list[k] = tmp
-        if six.PY2:
-            emid += chr(ord(media_id[i]) ^ f_list[(f_list[c] + f_list[k]) % 256])
-        else:
-            emid += chr(ord(media_id[i]) if isinstance(media_id[i], six.string_types) else media_id[i] ^ f_list[(f_list[c] + f_list[k]) % 256])
+        emid = six.ensure_str(encode2x(emid)).replace('/', '_').replace('=', '')
 
-    emid = six.ensure_str(encode2x(emid)).replace('/', '_').replace('=', '')
-
-    return emid
+        return emid
