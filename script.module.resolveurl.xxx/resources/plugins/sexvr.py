@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -27,14 +26,17 @@ class SexVRResolver(ResolveUrl):
     domains = ['sexvr.com']
     pattern = r'(?://|\.)(sexvr\.com)/(?:video/|embed/)(?:[a-zA-Z-]+)?(\d+)'
 
+    def __init__(self):
+        self.net = common.Net(ssl_verify=False)
+
     def get_media_url(self, host, media_id):
         headers = {'User-Agent': common.RAND_UA}
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''<source\s*src=['"]([^"']+)''', html, re.DOTALL)
-        if r:
+        sources = helpers.scrape_sources(html)
+        if sources:
             headers.update({'Referer': web_url, 'verifypeer': 'false'})
-            return r.group(1) + helpers.append_headers(headers)
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
