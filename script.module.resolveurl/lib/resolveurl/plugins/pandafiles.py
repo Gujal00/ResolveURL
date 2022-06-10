@@ -31,15 +31,14 @@ class PandaFilesResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        rurl = 'https://{0}/'.format(host)
         headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Origin': rurl[:-1],
-                   'Referer': rurl}
+                   'Origin': web_url.rsplit('/', 1)[0],
+                   'Referer': web_url}
         data = {
             'op': 'download1',
             'usr_login': '',
             'id': media_id,
-            'referer': rurl,
+            'referer': web_url,
             'method_free': 'Free Download'
         }
         html = self.net.http_POST(web_url, form_data=data, headers=headers).content
@@ -58,4 +57,4 @@ class PandaFilesResolver(ResolveUrl):
         raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/document')
