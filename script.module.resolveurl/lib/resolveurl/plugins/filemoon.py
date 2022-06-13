@@ -40,9 +40,9 @@ class FileMoonResolver(ResolveUrl):
             headers.update({'Origin': url[:-3], 'Referer': url[:-2]})
             req = self.net.http_POST(url, form_data=payload, headers=headers)
             data = json.loads(req.content)[0]
-            file = data.get('file')
+            vfile = data.get('file')
             seed = data.get('seed')
-            source = helpers.tear_decode(file, seed)
+            source = helpers.tear_decode(vfile, seed)
             if source:
                 return source + helpers.append_headers(headers)
 
