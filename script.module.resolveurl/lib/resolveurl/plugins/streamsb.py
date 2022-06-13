@@ -47,8 +47,8 @@ class StreamSBResolver(ResolveUrl):
         if sources:
             sources.sort(key=lambda x: int(x[1]), reverse=True)
             sources = [(x[1] + 'p', x[0]) for x in sources]
-            code, mode, hash = eval(helpers.pick_source(sources))
-            dl_url = 'https://{0}/dl?op=download_orig&id={1}&mode={2}&hash={3}'.format(host, code, mode, hash)
+            code, mode, dl_hash = eval(helpers.pick_source(sources))
+            dl_url = 'https://{0}/dl?op=download_orig&id={1}&mode={2}&hash={3}'.format(host, code, mode, dl_hash)
             html = self.net.http_GET(dl_url, headers=headers).content
             domain = base64.b64encode((rurl[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '')
             token = helpers.girc(html, rurl, domain)
