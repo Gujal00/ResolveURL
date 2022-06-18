@@ -1,22 +1,20 @@
-Version 5.1.69 (June 2, 2022)
+Version 5.1.70 (June 18, 2022)
 - Code Base Changes:
     - option to cleanup defunct resolvers from settings
     - remove numpy usage
 
 - Resolvers Added:
-    - solidfiles
-    - vido
- 
+    - filemoon
+
 - Resolvers Fixed/Updated:
-    - bannedvideo
-    - lbry
+    - cloudb
+    - fembed
     - pandafiles
-    - pixeldrain
     - streamingcommunity
     - streamlare
-    - streamsb
+    - streamtape
     - voesx
-    - vtube
+
 
 - Resolvers Removed
     - None
