@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamLareResolver(ResolveUrl):
     name = 'StreamLare'
-    domains = ['streamlare.com', 'slmaxed.com']
-    pattern = r'(?://|\.)((?:streamlare|slmaxed)\.com)/(?:e|v)/([0-9A-Za-z]+)'
+    domains = ['streamlare.com', 'slmaxed.com', 'sltube.org']
+    pattern = r'(?://|\.)((?:streamlare|sl(?:maxed|tube))\.(?:com|org))/(?:e|v)/([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
