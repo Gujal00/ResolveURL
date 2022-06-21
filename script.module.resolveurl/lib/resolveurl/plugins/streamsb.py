@@ -32,10 +32,11 @@ class StreamSBResolver(ResolveUrl):
     domains = ['sbembed.com', 'sbembed1.com', 'sbplay.org', 'sbvideo.net', 'streamsb.net', 'sbplay.one',
                'cloudemb.com', 'playersb.com', 'tubesb.com', 'sbplay1.com', 'embedsb.com', 'watchsb.com',
                'sbplay2.com', 'japopav.tv', 'viewsb.com', 'sbplay2.xyz', 'sbfast.com', 'sbfull.com',
-               'javplaya.com']
+               'javplaya.com', 'ssbstream.net']
     pattern = r'(?://|\.)(' \
-              r'(?:view|watch|embed|tube|player|cloudemb|japopav|javplaya|stream)?s?b?(?:embed\d?|play\d?|video|fast|full)?\.' \
-              r'(?:com|net|org|one|tv|xyz))/(?:embed-|e/|play/|d/|sup/)?([0-9a-zA-Z]+)'
+              r'(?:view|watch|embed|tube|player|cloudemb|japopav|javplaya|stream)?s{0,2}b?' \
+              r'(?:embed\d?|play\d?|video|fast|full|stream)?\.(?:com|net|org|one|tv|xyz))/' \
+              r'(?:embed-|e/|play/|d/|sup/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
