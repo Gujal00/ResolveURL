@@ -57,7 +57,8 @@ class RealDebridResolver(ResolveUrl):
         self.net = common.Net()
         self.hosters = None
         self.hosts = None
-        self.headers = {'User-Agent': USER_AGENT}
+        # self.headers = {'User-Agent': USER_AGENT}
+        self.headers = {}
 
     def get_media_url(self, host, media_id, retry=False, cached_only=False, return_all=False):
         try:
