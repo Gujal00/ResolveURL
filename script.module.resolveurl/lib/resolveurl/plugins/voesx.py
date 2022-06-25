@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VoeResolver(ResolveUrl):
     name = 'Voe'
     domains = ['voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com', 'voeunbl0ck.com',
-               'voeunblck.com', 'voeunblk.com', 'voe-un-block.com']
+               'voeunblck.com', 'voeunblk.com', 'voe-un-block.com', 'voeun-block.net']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)(voe(?:-?un-?bl[o0]?c?k\d{0,2})?\.(?:sx|com|net))/(?:e/)?([0-9A-Za-z]+)'
 
