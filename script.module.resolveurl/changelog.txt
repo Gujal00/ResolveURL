@@ -1,18 +1,14 @@
-Version 5.1.70 (June 18, 2022)
+Version 5.1.71 (June 29, 2022)
 - Code Base Changes:
-    - option to cleanup defunct resolvers from settings
-    - remove numpy usage
+    - Add ALPN information to SSL context
 
 - Resolvers Added:
     - filemoon
 
 - Resolvers Fixed/Updated:
-    - cloudb
-    - fembed
-    - pandafiles
-    - streamingcommunity
     - streamlare
-    - streamtape
+    - streamsb
+    - streamrapid
     - voesx
 
 
