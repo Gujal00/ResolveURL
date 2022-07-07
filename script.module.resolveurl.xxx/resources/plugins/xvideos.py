@@ -22,16 +22,19 @@ from resolveurl.lib import helpers
 
 class xvideosResolver(ResolveGeneric):
     name = 'xvideos'
-    domains = ['xvideos.com', 'xvideos.es', 'xv-videos1.com']
-    pattern = r'(?://|\.)(x(?:v-)?videos1?\.(?:com|es))/(?:video|embedframe/)(\d+)'
+    domains = ['xvideos.com', 'xvideos.es', 'xv-videos1.com', 'xvideos1.mx']
+    pattern = r'(?://|\.)(x(?:v-)?videos1?\.(?:com|es|mx))/(?:video|embedframe/|embed/)(\d+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''setVideo(?:Url)?(?P<label>(?:HLS|UrlHigh|UrlLow))\(['"](?P<url>[^"']+)''']
+            patterns=[r'''setVideo(?:Url)?(?P<label>(?:HLS|UrlHigh|UrlLow))\(['"](?P<url>[^"']+)''',
+                      r'''file:\s*'(?P<url>[^']+)''']
         ).replace(' ', '%20')
 
     def get_url(self, host, media_id):
+        if host.endswith('.mx'):
+            return self._default_get_url(host, media_id, template='https://in.{host}/embed/{media_id}/')
         return self._default_get_url(host, media_id, template='https://www.{host}/embedframe/{media_id}')
 
     @classmethod
