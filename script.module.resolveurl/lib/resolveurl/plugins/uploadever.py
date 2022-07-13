@@ -48,7 +48,7 @@ class UploadEverResolver(ResolveUrl):
             return url + helpers.append_headers(headers)
 
         html = r.content
-        url = re.search(r'btn\s*btn-dow"\s*href="(http[^"]+)', html)
+        url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
             return url.group(1) + helpers.append_headers(headers)
 
