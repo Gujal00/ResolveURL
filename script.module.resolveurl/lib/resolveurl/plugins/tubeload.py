@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class TubeLoadResolver(ResolveUrl):
     name = 'TubeLoad'
-    domains = ['tubeload.co']
-    pattern = r'(?://|\.)(tubeload\.co)/(?:embed|e|f)/([0-9a-zA-Z]+)'
+    domains = ['tubeload.co', 'redload.co']
+    pattern = r'(?://|\.)((?:tube|red)load\.co)/(?:embed|e|f)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
