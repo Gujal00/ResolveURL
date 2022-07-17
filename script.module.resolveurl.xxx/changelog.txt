@@ -1,10 +1,10 @@
-Version 2.1.25 (June 18, 2022)
+Version 2.1.26 (July 18, 2022)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - sexvr
+    - xvideos
 
 - Resolvers Removed
     - None

@@ -1,16 +1,19 @@
-Version 5.1.71 (June 29, 2022)
+Version 5.1.72 (July 18, 2022)
 - Code Base Changes:
-    - Add ALPN information to SSL context
+    - fix incorrect firefox UA
+    - fix get_redirect_url function
 
 - Resolvers Added:
-    - filemoon
+    - None
 
 - Resolvers Fixed/Updated:
-    - streamlare
+    - fembed
+    - streamingcommunity
     - streamsb
     - streamrapid
+    - tubeload
+    - uploadever
     - voesx
-
 
 - Resolvers Removed
     - None
