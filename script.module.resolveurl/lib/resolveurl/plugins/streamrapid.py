@@ -49,51 +49,41 @@ class StreamRapidResolver(ResolveUrl):
         number = re.findall(r"recaptchaNumber\s*=\s*'(\d+)", html)
         if token and number:
             eid, media_id = media_id.split('/')
+            sid = ''
             if eid == '5':
-                ws_servers = ['ws10', 'ws11', 'ws12']
-                wurl = 'ws://{0}.{1}/socket.io/?EIO=4&transport=websocket'.format(random.choice(ws_servers), host)
-                ws = websocket.WebSocket()
-                ws.connect(wurl)
-                ws.recv()
-                ws.send("40")
-                msg = ws.recv()
-                ws.close()
-                sid = re.search(r'sid":"([^"]+)', msg)
-                if sid:
-                    headers.update({'Referer': web_url, 'Accept': '*/*'})
-                    surl = '{}/ajax/embed-{}/getSources'.format(rurl[:-1], eid)
-                    if '?' in media_id:
-                        media_id = media_id.split('?')[0]
-                    data = {'_number': number[0],
-                            'id': media_id,
-                            '_token': token,
-                            'sId': sid.group(1)}
-                    headers.update({'X-Requested-With': 'XMLHttpRequest'})
-                    shtml = self.net.http_GET('{0}?{1}'.format(surl, urllib_parse.urlencode(data)), headers=headers).content
-                    sources = json.loads(shtml).get('sources')
-                    if sources:
-                        source = sources[0].get('file')
-                        headers.pop('X-Requested-With')
-                        headers.pop('Accept')
-                        headers.update({'Referer': rurl, 'Origin': rurl[:-1]})
-                        return source + helpers.append_headers(headers)
-            else:
-                headers.update({'Referer': web_url, 'Accept': '*/*'})
-                surl = '{0}ajax/embed-{1}/getSources'.format(rurl, eid)
-                if '?' in media_id:
-                    media_id = media_id.split('?')[0]
-                data = {'_number': number[0],
-                        'id': media_id,
-                        '_token': token}
-                headers.update({'X-Requested-With': 'XMLHttpRequest'})
-                shtml = self.net.http_GET('{0}?{1}'.format(surl, urllib_parse.urlencode(data)), headers=headers).content
-                sources = json.loads(shtml).get('sources')
-                if sources:
-                    source = sources[0].get('file')
-                    headers.pop('X-Requested-With')
-                    headers.pop('Accept')
-                    headers.update({'Referer': rurl, 'Origin': rurl[:-1]})
-                    return source + helpers.append_headers(headers)
+                try:
+                    ws_servers = ['ws10', 'ws11', 'ws12']
+                    wurl = 'ws://{0}.{1}/socket.io/?EIO=4&transport=websocket'.format(random.choice(ws_servers), host)
+                    ws = websocket.WebSocket()
+                    ws.connect(wurl)
+                    ws.recv()
+                    ws.send("40")
+                    msg = ws.recv()
+                    ws.close()
+                    s = re.search(r'sid":"([^"]+)', msg)
+                    if s:
+                        sid = s.group(1)
+                except:
+                    pass
+
+            headers.update({'Referer': web_url, 'Accept': '*/*'})
+            surl = '{0}ajax/embed-{1}/getSources'.format(rurl, eid)
+            if '?' in media_id:
+                media_id = media_id.split('?')[0]
+            data = {'_number': number[0],
+                    'id': media_id,
+                    '_token': token}
+            if sid:
+                data.update({'sId': sid})
+            headers.update({'X-Requested-With': 'XMLHttpRequest'})
+            shtml = self.net.http_GET('{0}?{1}'.format(surl, urllib_parse.urlencode(data)), headers=headers).content
+            sources = json.loads(shtml).get('sources')
+            if sources:
+                source = sources[0].get('file')
+                headers.pop('X-Requested-With')
+                headers.pop('Accept')
+                headers.update({'Referer': rurl, 'Origin': rurl[:-1]})
+                return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
