@@ -33,12 +33,17 @@ class StreamTapeResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Referer': 'https://{0}/'.format(host)}
+        headers = {
+            'User-Agent': common.FF_USER_AGENT,
+            'Referer': 'https://{0}/'.format(host)
+        }
         try:
             r = self.net.http_GET(web_url, headers=headers).content
-        except urllib_error.HTTPError:
-            raise ResolverError('Video deleted or removed.')
+        except urllib_error.HTTPError as e:
+            if e.code == 503:
+                raise ResolverError('Site using Cloudflare DDOS protection')
+            else:
+                raise ResolverError('Video deleted or removed.')
             return
         src = re.findall(r'''ById\('.+?=\s*(["']//[^;<]+)''', r)
         if src:

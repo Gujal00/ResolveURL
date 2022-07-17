@@ -19,7 +19,7 @@ import re
 import xbmcgui
 from resolveurl.lib import jsunpack
 import six
-from six.moves import urllib_parse, urllib_request
+from six.moves import urllib_parse, urllib_request, urllib_error
 from resolveurl import common
 from resolveurl.resolver import ResolverError
 
@@ -299,10 +299,17 @@ def fun_decode(vu, lc, hr='16'):
 
 
 def get_redirect_url(url, headers={}):
+    class NoRedirection(urllib_request.HTTPRedirectHandler):
+        def redirect_request(self, req, fp, code, msg, headers, newurl):
+            return None
+
     request = urllib_request.Request(url, headers=headers)
-    request.get_method = lambda: 'HEAD'
-    response = urllib_request.urlopen(request)
-    return response.geturl()
+    opener = urllib_request.build_opener(NoRedirection())
+    try:
+        response = opener.open(request, timeout=20)
+    except urllib_error.HTTPError as e:
+        response = e
+    return response.headers.get('location') or url
 
 
 def girc(page_data, url, co):

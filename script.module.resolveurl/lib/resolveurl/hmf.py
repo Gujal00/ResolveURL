@@ -257,6 +257,7 @@ class HostedMediaFile:
             import ssl
             ssl_context = ssl._create_unverified_context()
             ssl._create_default_https_context = ssl._create_unverified_context
+            ssl_context.set_alpn_protocols(['http/1.1'])
             opener = urllib_request.build_opener(urllib_request.HTTPSHandler(context=ssl_context))
             urllib_request.install_opener(opener)
         except:

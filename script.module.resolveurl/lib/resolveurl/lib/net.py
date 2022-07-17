@@ -186,7 +186,7 @@ class Net:
             try:
                 import ssl
                 ctx = ssl.create_default_context()
-                ctx.set_alpn_protocols(['http/1.0', 'http/1.1'])
+                ctx.set_alpn_protocols(['http/1.1'])
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
                 if self._http_debug:
@@ -199,7 +199,7 @@ class Net:
             try:
                 import ssl
                 ctx = ssl.create_default_context(cafile=CERT_FILE)
-                ctx.set_alpn_protocols(['http/1.0', 'http/1.1'])
+                ctx.set_alpn_protocols(['http/1.1'])
                 if self._http_debug:
                     handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
                 else:
@@ -344,7 +344,7 @@ class Net:
             if e.code == 403 and 'cloudflare' in e.hdrs.get('Expect-CT', ''):
                 import ssl
                 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-                ctx.set_alpn_protocols(['http/1.0', 'http/1.1'])
+                ctx.set_alpn_protocols(['http/1.1'])
                 handlers = [urllib_request.HTTPSHandler(context=ctx)]
                 opener = urllib_request.build_opener(*handlers)
                 try:
@@ -352,7 +352,7 @@ class Net:
                 except urllib_error.HTTPError as e:
                     if e.code == 403:
                         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
-                        ctx.set_alpn_protocols(['http/1.0', 'http/1.1'])
+                        ctx.set_alpn_protocols(['http/1.1'])
                         handlers = [urllib_request.HTTPSHandler(context=ctx)]
                         opener = urllib_request.build_opener(*handlers)
                         try:
