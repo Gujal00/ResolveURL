@@ -16,13 +16,40 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import re
+import json
+import codecs
+from resolveurl import common
+from resolveurl.lib import helpers
+from resolveurl.lib.jscrypto import jscrypto
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class PlayHDResolver(ResolveGeneric):
+class PlayHDResolver(ResolveUrl):
     name = 'PlayHD'
     domains = ['playhd.one', 'playdrive.xyz']
-    pattern = r'(?://|\.)(play(?:hd|drive)\.(?:one|xyz))/e/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(play(?:hd|drive)\.(?:one|xyz))/e(?:mbed)?/([0-9a-zA-Z-]+)'
+
+    def get_media_url(self, host, media_id):
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA}
+        html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r"_decx\('([^']+)", html)
+        if r:
+            data = json.loads(r.group(1))
+            ct = data.get('ct', False)
+            salt = codecs.decode(data.get('s'), 'hex')
+            html2 = jscrypto.decode(ct, 'GDPlayer-JASm(8234_)9312HJASi23lakka', salt)
+            html2 = html2[1:-1].replace('\\"', '"')
+            s = re.search(r'{\s*url:\s*"([^"]+)', html2)
+            if s:
+                headers.update({'Referer': 'https://{}/'.format(host)})
+                aurl = s.group(1).replace('\\', '')
+                jd = json.loads(self.net.http_GET(aurl, headers=headers).content)
+                url = jd.get('sources')[0].get('file')
+                return url + helpers.append_headers(headers)
+
+        raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}/')
