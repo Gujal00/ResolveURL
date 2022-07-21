@@ -74,7 +74,7 @@ class StreamRapidResolver(ResolveUrl):
                 media_id = media_id.split('?')[0]
             data = {'_number': number[0],
                     'id': media_id,
-                    '_token': token}
+                    '_token': '' if token == ' ' else token}
             if sid:
                 data.update({'sId': sid})
             headers.update({'X-Requested-With': 'XMLHttpRequest'})
