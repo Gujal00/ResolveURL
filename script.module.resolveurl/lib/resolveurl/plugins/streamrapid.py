@@ -29,8 +29,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamRapidResolver(ResolveUrl):
     name = 'StreamRapid'
-    domains = ['streamrapid.ru', 'rabbitstream.net']
-    pattern = r'(?://|\.)((?:rabbitstream|streamrapid)\.(?:ru|net))/embed-([^\n]+)'
+    domains = ['streamrapid.ru', 'rabbitstream.net', 'mzzcloud.life']
+    pattern = r'(?://|\.)((?:rabbitstream|streamrapid|mzzcloud)\.(?:ru|net|life))/embed-([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -46,6 +46,8 @@ class StreamRapidResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers).content
         domain = base64.b64encode((rurl[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '.')
         token = helpers.girc(html, rurl, domain)
+        if not token and host == 'mzzcloud.life':
+            token = ' '
         number = re.findall(r"recaptchaNumber\s*=\s*'(\d+)", html)
         if token and number:
             eid, media_id = media_id.split('/')
@@ -80,6 +82,7 @@ class StreamRapidResolver(ResolveUrl):
             sources = json.loads(shtml).get('sources')
             if sources:
                 source = sources[0].get('file')
+                rurl = 'https://{0}/'.format(host)
                 headers.pop('X-Requested-With')
                 headers.pop('Accept')
                 headers.update({'Referer': rurl, 'Origin': rurl[:-1]})
