@@ -24,7 +24,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class FacebookResolver(ResolveUrl):
     name = 'Facebook'
     domains = ['facebook.com']
-    pattern = r'(?://|\.)(facebook\.com)/.+?video_id=([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(facebook\.com)/.+?(?:video_id|v|videos)[=/]([0-9a-zA-Z]+)/?'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
