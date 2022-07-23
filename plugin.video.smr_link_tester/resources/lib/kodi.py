@@ -111,7 +111,7 @@ def get_kodi_version():
 
     class KodiVersion(object):
         __metaclass__ = MetaClass
-        version = xbmc.getInfoLabel('System.BuildVersion').decode('utf-8')
+        version = xbmc.getInfoLabel('System.BuildVersion')  # .decode('utf-8')
         match = re.search(r'([0-9]+)\.([0-9]+)', version)
         if match:
             major, minor = match.groups()
@@ -131,11 +131,11 @@ def get_kodi_version():
         except:
             minor = 0
         try:
-            revision = revision.decode('utf-8')
+            revision = revision  # .decode('utf-8')
         except:
             revision = u''
         try:
-            tag = tag.decode('utf-8')
+            tag = tag  # .decode('utf-8')
         except:
             tag = u''
         try:
