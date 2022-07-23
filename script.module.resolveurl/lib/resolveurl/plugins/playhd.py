@@ -30,6 +30,9 @@ class PlayHDResolver(ResolveUrl):
     domains = ['playhd.one', 'playdrive.xyz']
     pattern = r'(?://|\.)(play(?:hd|drive)\.(?:one|xyz))/e(?:mbed)?/([0-9a-zA-Z-]+)'
 
+    def __init__(self):
+        self.net = common.Net(ssl_verify=False)
+
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
@@ -47,6 +50,7 @@ class PlayHDResolver(ResolveUrl):
                 aurl = s.group(1).replace('\\', '')
                 jd = json.loads(self.net.http_GET(aurl, headers=headers).content)
                 url = jd.get('sources')[0].get('file')
+                headers.update({'verifypeer': 'false'})
                 return url + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
