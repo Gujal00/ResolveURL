@@ -39,7 +39,7 @@ class UploadBazResolver(ResolveUrl):
         url = r.get_url()
         payload = helpers.get_hidden(html)
         headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': url})
-        surl = self.net.http_POST(url, form_data=payload, headers=headers).get_url()
+        surl = self.net.http_REDIRECT_URL(url, form_data=payload, headers=headers)
         if surl != url:
             headers.pop('Origin')
             headers.update({'verifypeer': 'false'})

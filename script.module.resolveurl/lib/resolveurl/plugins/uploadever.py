@@ -42,12 +42,11 @@ class UploadEverResolver(ResolveUrl):
             'method_free': '',
             'method_premium': ''
         }
-        r = self.net.http_POST(web_url, form_data=payload, headers=headers)
-        url = r.get_url()
+        url = self.net.http_REDIRECT_URL(web_url, form_data=payload, headers=headers)
         if url != web_url:
             return url + helpers.append_headers(headers)
 
-        html = r.content
+        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
             return url.group(1) + helpers.append_headers(headers)

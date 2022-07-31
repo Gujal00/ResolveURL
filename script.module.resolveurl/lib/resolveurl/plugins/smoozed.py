@@ -83,8 +83,8 @@ class SmoozedResolver(ResolveUrl):
         try:
             url = 'https://www.smoozed.com/api/download'
             data = {'session_key': self.get_session_key(), 'url': media_id}
-            result = self.net.http_POST(url, form_data=data, compression=False)
-            return result.get_url()
+            result = self.net.http_REDIRECT_URL(url, form_data=data)
+            return result
         except urllib_error.HTTPError as e:
             content = e.read()
             try:

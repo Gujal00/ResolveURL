@@ -19,6 +19,7 @@
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
+from six.moves import urllib_parse
 
 
 class TusFilesResolver(ResolveUrl):
@@ -41,9 +42,9 @@ class TusFilesResolver(ResolveUrl):
             'method_free': '',
             'method_premium': ''
         }
-        resp = self.net.http_POST(web_url, form_data=payload, headers=headers).get_url()
+        resp = self.net.http_REDIRECT_URL(web_url, form_data=payload, headers=headers)
         if resp != web_url:
-            return resp + helpers.append_headers(headers)
+            return urllib_parse.quote(resp, ':/') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 

@@ -62,6 +62,11 @@ def get_ua():
     return user_agent
 
 
+class NoRedirection(urllib_request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
 class Net:
     """
     This class wraps :mod:`urllib2` and provides an easy way to make http
@@ -274,6 +279,22 @@ class Net:
             request.add_header(key, headers[key])
         response = urllib_request.urlopen(request)
         return HttpResponse(response)
+
+    def http_REDIRECT_URL(self, url, headers={}, form_data=None):
+        if form_data:
+            if isinstance(form_data, dict):
+                form_data = urllib_parse.urlencode(form_data)
+            req = urllib_request.Request(url, six.b(form_data), headers=headers)
+        else:
+            req = urllib_request.Request(url, headers=headers)
+        opener = urllib_request.build_opener(NoRedirection())
+
+        try:
+            response = opener.open(req, timeout=30)
+        except urllib_error.HTTPError as e:
+            response = e
+
+        return response.headers.get('location') or url
 
     def http_DELETE(self, url, headers={}):
         """
