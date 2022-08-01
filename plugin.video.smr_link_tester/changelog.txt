@@ -1,2 +1,2 @@
-Version 1.1.8 (June 2, 2022)
-- log relevant resolvers found for link
+Version 1.1.9 (Aug 1, 2022)
+- Add mpd playback support

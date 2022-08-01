@@ -1,10 +1,10 @@
-Version 2.1.26 (July 18, 2022)
+Version 2.1.27 (Aug 1, 2022)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - xvideos
+    - motherless
 
 - Resolvers Removed
     - None

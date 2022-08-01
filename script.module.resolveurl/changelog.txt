@@ -1,18 +1,17 @@
-Version 5.1.72 (July 18, 2022)
+Version 5.1.73 (Aug 1, 2022)
 - Code Base Changes:
-    - fix incorrect firefox UA
-    - fix get_redirect_url function
+    -  http_REDIRECT_URL method added to net
 
 - Resolvers Added:
-    - None
+    - neohd
 
 - Resolvers Fixed/Updated:
+    - facebook
     - fembed
+    - playhd
     - streamingcommunity
-    - streamsb
     - streamrapid
-    - tubeload
-    - uploadever
+    - streamtape
     - voesx
 
 - Resolvers Removed
