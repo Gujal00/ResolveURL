@@ -49,7 +49,7 @@ class TubePornClassicResolver(ResolveUrl):
                 videourl = re.sub(r'/get_file/\d+/[0-9a-z]{32}/', replaceparts[0], videourl)
                 videourl += '&' if '?' in videourl else '?'
                 videourl += 'lip=' + replaceparts[1] + '&lt=' + replaceparts[2]
-                return self.net.http_REDIRECT_URL(videourl, headers=headers) + helpers.append_headers(headers)
+                return helpers.get_redirect_url(videourl, headers=headers) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 

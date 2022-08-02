@@ -42,7 +42,7 @@ class LetsUploadResolver(ResolveUrl):
         file_id = re.search(r'showFileInformation\((\d+)', html)
         if file_id:
             durl = 'https://{}/account/direct_download/{}'.format(host, file_id.group(1))
-            url = self.net.http_REDIRECT_URL(durl, headers=headers)
+            url = helpers.get_redirect_url(durl, headers=headers)
             if url != durl:
                 return url + helpers.append_headers(headers)
         raise ResolverError('Video cannot be located.')

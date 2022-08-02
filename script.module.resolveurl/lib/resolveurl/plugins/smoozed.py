@@ -22,6 +22,7 @@ import hashlib
 import time
 from six.moves import urllib_error
 from resolveurl import common
+from resolveurl.lib import helpers
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
 try:
@@ -83,7 +84,7 @@ class SmoozedResolver(ResolveUrl):
         try:
             url = 'https://www.smoozed.com/api/download'
             data = {'session_key': self.get_session_key(), 'url': media_id}
-            result = self.net.http_REDIRECT_URL(url, form_data=data)
+            result = helpers.get_redirect_url(url, form_data=data)
             return result
         except urllib_error.HTTPError as e:
             content = e.read()

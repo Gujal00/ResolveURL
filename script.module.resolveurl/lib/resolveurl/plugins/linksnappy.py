@@ -635,7 +635,7 @@ class LinkSnappyResolver(ResolveUrl):
 
                     try:
 
-                        stream = self.net().http_REDIRECT_URL(link)
+                        stream = self.net().http_HEAD(link).get_url()
 
                     except Exception:
 
@@ -645,7 +645,7 @@ class LinkSnappyResolver(ResolveUrl):
                             logger.log_debug(
                                 '(Linksnappy) SSL verification failed, attempting to generate link without validation'
                             )
-                            stream = self.net(ssl_verify=self.verify).http_REDIRECT_URL(link)
+                            stream = self.net(ssl_verify=self.verify).http_HEAD(link).get_url()
 
                         except Exception:
 

@@ -42,7 +42,7 @@ class TusFilesResolver(ResolveUrl):
             'method_free': '',
             'method_premium': ''
         }
-        resp = self.net.http_REDIRECT_URL(web_url, form_data=payload, headers=headers)
+        resp = helpers.get_redirect_url(web_url, headers=headers, form_data=payload)
         if resp != web_url:
             return urllib_parse.quote(resp, ':/') + helpers.append_headers(headers)
 

@@ -68,7 +68,7 @@ class FEmbedResolver(ResolveUrl):
                     sources = [(i.get('label'), i.get('file')) for i in js_data.get('data') if i.get('type') == 'mp4']
                     sources = helpers.sort_sources_list(sources)
                     rurl = helpers.pick_source(sources)
-                    str_url = self.net.http_REDIRECT_URL(rurl, headers=headers)
+                    str_url = helpers.get_redirect_url(rurl, headers=headers)
                     headers.update({'verifypeer': 'false'})
                     return str_url + helpers.append_headers(headers)
 

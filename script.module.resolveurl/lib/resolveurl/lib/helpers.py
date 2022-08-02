@@ -298,12 +298,18 @@ def fun_decode(vu, lc, hr='16'):
     return vu
 
 
-def get_redirect_url(url, headers={}):
+def get_redirect_url(url, headers={}, form_data=None):
     class NoRedirection(urllib_request.HTTPRedirectHandler):
         def redirect_request(self, req, fp, code, msg, headers, newurl):
             return None
 
-    request = urllib_request.Request(url, headers=headers)
+    if form_data:
+        if isinstance(form_data, dict):
+            form_data = urllib_parse.urlencode(form_data)
+        request = urllib_request.Request(url, six.b(form_data), headers=headers)
+    else:
+        request = urllib_request.Request(url, headers=headers)
+
     opener = urllib_request.build_opener(NoRedirection())
     try:
         response = opener.open(request, timeout=20)

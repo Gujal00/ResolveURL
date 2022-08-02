@@ -39,7 +39,7 @@ class VidStoreResolver(ResolveUrl):
             sources = sorted(sources, key=lambda x: x[0], reverse=True)
             source = 'http://www.%s%s' % (host, helpers.pick_source(sources))
             headers['Referer'] = web_url
-            source = self.net.http_REDIRECT_URL(source, headers=headers)
+            source = helpers.get_redirect_url(source, headers=headers)
             return source + helpers.append_headers(headers)
         raise ResolverError('File not found')
 
