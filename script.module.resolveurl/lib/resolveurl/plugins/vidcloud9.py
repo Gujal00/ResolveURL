@@ -28,8 +28,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VidCloud9Resolver(ResolveUrl):
     name = 'VidCloud9'
     domains = ['vidcloud9.com', 'vidnode.net', 'vidnext.net', 'vidembed.net', 'vidembed.cc', 'vidembed.io',
-               'vidembed.me', 'membed.net']
-    pattern = r'(?://|\.)((?:vidcloud9|vidnode|vidnext|(?:vid|m)embed)\.(?:com|net|cc|io|me))/' \
+               'vidembed.me', 'membed.net', 'goload.io', 'goload.pro']
+    pattern = r'(?://|\.)((?:vidcloud9|vidnode|goload|vidnext|(?:vid|m)embed)\.(?:com|net|cc|io|pro|me))/' \
               r'(?:streaming|embedplus|load(?:server)?)(?:\.php)?\?id=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
