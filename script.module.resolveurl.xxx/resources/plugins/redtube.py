@@ -16,23 +16,36 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import re
+import json
+from resolveurl import common
 from resolveurl.lib import helpers
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class RedTubeResolver(ResolveGeneric):
+class RedTubeResolver(ResolveUrl):
     name = 'redtube'
     domains = ['redtube.com']
-    pattern = r'(?://|\.)(redtube\.com)(?:/|/\?id=)(\d+)'
+    pattern = r'(?://|\.)(redtube\.com)/(?:\?id=)?(\d+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''["']?quality\s*["']?\s*[:=]\s*["']?(?P<label>[^"',]+)["']?(?:[^}\]]+)["']?\s*videoUrl\s*["']?\s*[:=,]?\s*["'](?P<url>[^"']+)''']
-        ).replace(' ', '%20')
+        headers = {'User-Agent': common.RAND_UA}
+        web_url = self.get_url(host, media_id)
+        html = self.net.http_GET(web_url, headers=headers).content
+        url = re.search(r'format":"mp4","videoUrl":"([^"]+)', html)
+        if url:
+            headers.update({'Referer': web_url})
+            r = self.net.http_GET(url.group(1).replace(r'\/', '/'), headers=headers)
+            jdata = json.loads(r.content)
+            sources = [(x.get('quality'), x.get('videoUrl')) for x in jdata]
+            if sources:
+                return helpers.pick_source(
+                    helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+
+        raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://embed.{host}/?id={media_id}')
+        return self._default_get_url(host, media_id, template='https://www.{host}/{media_id}')
 
     @classmethod
     def _is_enabled(cls):
