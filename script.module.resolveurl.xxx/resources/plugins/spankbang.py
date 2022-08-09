@@ -28,7 +28,9 @@ class SpankbangResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''source\s*src[=]?['"](?P<url>[^'"]+)''']
+            patterns=[r"'(?P<label>\d+\w{,1})':\s*\['(?P<url>[^']+)",
+                      r'''source\s*src[=]?['"](?P<url>[^'"]+)'''],
+            generic_patterns=False
         ).replace(' ', '%20').split('|')[0]
 
     def get_url(self, host, media_id):
