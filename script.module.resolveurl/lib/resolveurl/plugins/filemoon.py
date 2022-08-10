@@ -42,8 +42,10 @@ class FileMoonResolver(ResolveUrl):
             data = json.loads(req.content)[0]
             vfile = data.get('file')
             seed = data.get('seed')
-            source = helpers.tear_decode(vfile, seed)
+            source = helpers.tear_decode(vfile, seed) if not vfile.startswith('https:') else vfile
             if source:
+                map = {'0': '5', '1': '6', '2': '7', '5': '0', '6': '1', '7': '2'}
+                source = re.sub(r'[012567]', lambda x: map[x.group(0)], source)
                 return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
