@@ -1,10 +1,12 @@
-Version 2.1.27 (Aug 1, 2022)
+Version 2.1.28 (Aug 12, 2022)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - motherless
+    - pornone
+    - redtube
+    - spankbang
 
 - Resolvers Removed
     - None
