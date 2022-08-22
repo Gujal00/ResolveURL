@@ -23,8 +23,7 @@ from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from base64 import b64decode, b64encode
-from resolveurl.lib.pyaes import AESModeOfOperationCBC
-from resolveurl.lib.pyaes.util import append_PKCS7_padding, strip_PKCS7_padding
+from resolveurl.lib.pyaes import AESModeOfOperationCBC, Encrypter, Decrypter
 # from Cryptodome.Cipher import AES
 # from Cryptodome.Util.Padding import unpad
 # from Cryptodome.Util.Padding import pad
@@ -67,13 +66,16 @@ class DembedResolver(ResolveGeneric):
         return self._default_get_url(host, media_id, template='https://{host}//encrypt-ajax.php?{media_id}')
 
     def _encrypt(self,msg):
-        try:
+        try:        
             # cipher = AES.new(self.key.encode("utf8"), AES.MODE_CBC, self.iv.encode("utf8"))
             # ct_bytes = cipher.encrypt(pad(msg.encode("utf8"), AES.block_size))
-            cipher = AESModeOfOperationCBC(self.key.encode("utf8"), self.iv.encode("utf8"))
-            ct_bytes = cipher.encrypt(append_PKCS7_padding(msg.encode("utf8")))
-            ct = b64encode(ct_bytes).decode("utf8")
-            return ct
+            # ct = b64encode(ct_bytes).decode("utf8")
+            # return ct
+            encrypter = Encrypter(AESModeOfOperationCBC(self.key.encode("utf8"), self.iv.encode("utf8")))
+            ciphertext = encrypter.feed(msg)
+            ciphertext += encrypter.feed()
+            ciphertext = b64encode(ciphertext).decode("utf8")
+            return ciphertext
         except ValueError as e:
             return e
 
@@ -82,11 +84,13 @@ class DembedResolver(ResolveGeneric):
             ct = b64decode(msg)
             # cipher = AES.new(self.key.encode("utf8"), AES.MODE_CBC, self.iv.encode("utf8"))
             # pt = unpad(cipher.decrypt(ct), AES.block_size)
-            cipher = AESModeOfOperationCBC(self.key.encode("utf8"), self.iv.encode("utf8"))
-            pt = strip_PKCS7_padding(cipher.decrypt(ct))
-            return pt
-        except (ValueError, KeyError):
-            return ValueError
+            # return pt
+            decrypter = Decrypter(AESModeOfOperationCBC(self.key.encode("utf8"), self.iv.encode("utf8")))
+            decrypted = decrypter.feed(ct)
+            decrypted += decrypter.feed()
+            return decrypted
+        except ValueError as e:
+            return e
     
     def _getEncryptedParams(self, url):
         params = parse_qs(urlsplit(url).query)
