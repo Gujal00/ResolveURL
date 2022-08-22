@@ -63,7 +63,7 @@ class DembedResolver(ResolveGeneric):
         raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}//encrypt-ajax.php?{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/encrypt-ajax.php?{media_id}')
 
     def _encrypt(self,msg):
         try:        
@@ -98,7 +98,7 @@ class DembedResolver(ResolveGeneric):
         response = requests.get(url)
         soup = BeautifulSoup(response.content, 'html.parser')
         result = soup.find('script', {"data-name": "crypto"})
-        decryptedToken = self._decrypt(result['data-value'])
+        decryptedToken = self._decrypt(result['data-value']).decode('UTF-8')
         return f'id={encryptedKey}&alias={decryptedToken}'
 
     @classmethod
