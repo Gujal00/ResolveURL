@@ -24,57 +24,55 @@ from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.lib.pyaes import AESModeOfOperationCBC, Encrypter, Decrypter
-from six.moves import urllib_parse
 
 
 class GoloadResolver(ResolveUrl):
     name = "goload"
-    domains = ['goload.io']
-    pattern = r'(?://|\.)(goload\.io)/(?:streaming\.php|embedplus)\?id=([a-zA-Z0-9-]+)'
-    key1 = six.ensure_binary('54674138327930866480207815084989')
-    key2 = six.ensure_binary('37911490979715163134003223491201')
+    domains = ['goload.io', 'goload.pro']
+    pattern = r'(?://|\.)(goload\.(?:io|pro))/(?:streaming\.php|embedplus)\?id=([a-zA-Z0-9-]+)'
+    keys = ['37911490979715163134003223491201', '54674138327930866480207815084989']
     iv = six.ensure_binary('3134003223491201')
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-        response = self.net.http_GET(web_url, headers=headers).content
-        response = json.loads(response).get('data')
-        if response:
-            result = self._decrypt(response, self.key1)
-            result = json.loads(result)
-            str_url = result.get('source')[0].get('file') or result.get('source_bk')[0].get('file')
-            if str_url:
-                headers.pop('X-Requested-With')
-                return str_url + helpers.append_headers(headers)
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r'crypto-js\.js.+?data-value="([^"]+)', html)
+        if r:
+            params = self._decrypt(r.group(1))
+            eurl = 'https://{0}/encrypt-ajax.php?id={1}&alias={2}'.format(
+                host, self._encrypt(media_id), params)
+            headers.update({'X-Requested-With': 'XMLHttpRequest'})
+            response = self.net.http_GET(eurl, headers=headers).content
+            response = json.loads(response).get('data')
+            if response:
+                result = self._decrypt(response, 1)
+                result = json.loads(result)
+                str_url = ''
+                if len(result.get('source')) > 0:
+                    str_url = result.get('source')[0].get('file')
+                if not str_url and len(result.get('source_bk')) > 0:
+                    str_url = result.get('source_bk')[0].get('file')
+                if str_url:
+                    headers.pop('X-Requested-With')
+                    return str_url + helpers.append_headers(headers)
 
         raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
-        id = self._encrypt(media_id)
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-        html = self.net.http_GET('https://{0}/streaming.php?id={1}'.format(host, media_id), headers=headers).content
-        result = re.search(r'(?:<\s*?script[\s\S](?:.*)(?:data-name=\"episode\")[\s\S]*?(?:(?:data-value=[\'\"](.*?)[\'\"])(?:[\S\s]*?))?>)(?:[\s\S]*?)</script>', html)
-        if result:
-            params = self._decrypt(result.group(1), self.key2)
+        return self._default_get_url(host, media_id, template='https://{host}/streaming.php?id={media_id}')
 
-        return 'https://{0}/encrypt-ajax.php?id={1}&alias={2}'.format(host, id, params)
-
-    def _encrypt(self, msg):
-        encrypter = Encrypter(AESModeOfOperationCBC(self.key2, self.iv))
+    def _encrypt(self, msg, keyid=0):
+        key = six.ensure_binary(self.keys[keyid])
+        encrypter = Encrypter(AESModeOfOperationCBC(key, self.iv))
         ciphertext = encrypter.feed(msg)
         ciphertext += encrypter.feed()
         ciphertext = base64.b64encode(ciphertext)
         return six.ensure_str(ciphertext)
 
-    def _decrypt(self, msg, key):
+    def _decrypt(self, msg, keyid=0):
         ct = base64.b64decode(msg)
+        key = six.ensure_binary(self.keys[keyid])
         decrypter = Decrypter(AESModeOfOperationCBC(key, self.iv))
         decrypted = decrypter.feed(ct)
         decrypted += decrypter.feed()
