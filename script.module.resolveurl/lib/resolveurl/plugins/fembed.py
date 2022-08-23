@@ -33,9 +33,9 @@ class FEmbedResolver(ResolveUrl):
                'vidcloud.fun', 'fplayer.info', 'diasfem.com', 'fembad.org', 'moviemaniac.org', 'albavido.xyz',
                'ncdnstm.com', 'fembed-hd.com', 'superplayxyz.club', 'cinegrabber.com', 'ndrama.xyz',
                'javstream.top', 'javpoll.com', 'suzihaza.com', 'fembed.net', 'ezsubz.com', 'reeoov.tube',
-               'diampokusy.com', 'filmvi.xyz', 'vidsrc.xyz', 'i18n.pw', 'vanfem.com']
+               'diampokusy.com', 'filmvi.xyz', 'vidsrc.xyz', 'i18n.pw', 'vanfem.com', 'fembed9hd.com']
     pattern = r'(?://|\.)(' \
-              r'(?:femb[ae]d(?:-hd)?|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|' \
+              r'(?:femb[ae]d(?:[-9]hd)?|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|' \
               r'femoload|asianclub|dailyplanet|[jf]player|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|' \
               r'vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl|vidcloud|' \
               r'diasfem|moviemaniac|albavido|ncdnstm|superplayxyz|cinegrabber|ndrama|jav(?:stream|poll)|' \
