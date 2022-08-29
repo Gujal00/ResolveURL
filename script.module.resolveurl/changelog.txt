@@ -1,19 +1,14 @@
-Version 5.1.74 (Aug 12, 2022)
+Version 5.1.75 (Aug 29, 2022)
 - Code Base Changes:
-    - http_REDIRECT_URL method removed from net
-      and integrated into helpers
+    - None
 
 - Resolvers Added:
-    - superembeds
+    - dembed
+    - goload
 
 - Resolvers Fixed/Updated:
-    - cloudb
-    - dood
-    - filemoon
-    - streamingcommunity
+    - fembed
     - streamsb
-    - uploadever
-    - vidcloud9
     - voesx
 
 - Resolvers Removed
