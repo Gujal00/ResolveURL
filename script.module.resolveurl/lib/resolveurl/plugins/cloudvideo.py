@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2018 jsergio
+    Copyright (C) 2022 jsergio, shellc0de
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,9 +16,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
 class CloudVideoResolver(ResolveGeneric):
     name = 'CloudVideo'
     domains = ['cloudvideo.tv']
+
+    def get_media_url(self, host, media_id):
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            patterns=[r'''sources:\s*\[{src:\s*["'](?P<url>[^"']+)'''],
+            generic_patterns=False
+        )
