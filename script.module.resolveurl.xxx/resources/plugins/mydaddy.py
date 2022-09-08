@@ -28,7 +28,7 @@ class MyDaddyResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''<source\s*src=\\"(?P<url>[^\\]+)\\" title=\\"(?P<label>[^\\]+)'''],
+            patterns=[r'''<source\s*src=\\"(?P<url>[^\\]+)\\" title=\\"(?P<label>[\d]+)'''],
             generic_patterns=False
         )
 
