@@ -22,7 +22,7 @@ from resolveurl.lib import helpers
 
 class CloudbResolver(ResolveGeneric):
     name = 'CloudB'
-    domains = ['cloudb.me', 'cloudb2.me', 'gamatotv.site']
+    domains = ['cloudb.me', 'cloudb2.me', 'gamatotv.site', 'cloudb.site']
     pattern = r'(?://|\.)((?:cloudb2?|gamatotv)\.(?:me|site))/(?:embed[/-]|emb.html\?)?([0-9a-zA-Z-]+)'
 
     def get_media_url(self, host, media_id):
