@@ -1,12 +1,10 @@
-Version 2.1.28 (Aug 12, 2022)
+Version 2.1.29 (Sep 10, 2022)
 
 - Resolvers Added:
-    - None
+    - mydaddy
  
 - Resolvers Fixed/Updated:
-    - pornone
-    - redtube
-    - spankbang
+    - None
 
 - Resolvers Removed
     - None

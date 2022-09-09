@@ -1,13 +1,16 @@
-Version 5.1.75 (Aug 29, 2022)
+Version 5.1.76 (Sep 10, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - dembed
-    - goload
+    - linkbox
 
 - Resolvers Fixed/Updated:
+    - cloudb
+    - cloudvideo
     - fembed
+    - goload
+    - streamingcommunity
     - streamsb
     - voesx
 
