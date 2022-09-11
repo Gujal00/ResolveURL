@@ -31,9 +31,13 @@ class PornDigResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r"""<iframe.+?src=["'](https://videos\.porndig\.com/player/index/[\d/]+)""", html)
+        r = re.search(r'''<iframe.+?src=["'](https://videos\.porndig\.com/player/index/[\d/]+)''', html)
         if r:
-            return helpers.get_media_url(r.group(1)).replace(' ', '%20')
+            return helpers.get_media_url(
+                r.group(1),
+                patterns=[r'src":\s*"(?P<url>[^"]+)",\s*"type":\s*"[^"]+",\s*"label":\s*"(?P<label>[^"]+)'],
+                generic_patterns=False
+            ).replace(' ', '%20')
 
         raise ResolverError('File not found')
 
