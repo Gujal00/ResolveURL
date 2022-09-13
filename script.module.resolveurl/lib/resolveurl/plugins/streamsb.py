@@ -58,7 +58,7 @@ class StreamSBResolver(ResolveUrl):
                 payload = helpers.get_hidden(html)
                 payload.update({'g-recaptcha-response': token})
                 req = self.net.http_POST(dl_url, form_data=payload, headers=headers).content
-                r = re.search('href="([^"]+)">Direct', req)
+                r = re.search('href="([^"]+).+?>(?:Direct|Download)', req)
                 if r:
                     return r.group(1) + helpers.append_headers(headers)
 
