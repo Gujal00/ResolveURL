@@ -63,7 +63,7 @@ class StreamSBResolver(ResolveUrl):
                     return r.group(1) + helpers.append_headers(headers)
 
         eurl = self.get_embedurl(host, media_id)
-        headers.update({'watchsb': 'streamsb'})
+        headers.update({'watchsb': 'sbstream'})
         html = self.net.http_GET(eurl, headers=headers).content
         data = json.loads(html).get("stream_data", {})
         strurl = data.get('file') or data.get('backup')
@@ -88,4 +88,4 @@ class StreamSBResolver(ResolveUrl):
         c2 = binascii.hexlify(x.encode('utf8')).decode('utf8')
         x = '{0}||{1}||{2}||streamsb'.format(makeid(12), c2, makeid(12))
         c3 = binascii.hexlify(x.encode('utf8')).decode('utf8')
-        return 'https://{0}/sources43/{1}/{2}'.format(host, c1, c3)
+        return 'https://{0}/sources48/{1}/{2}'.format(host, c1, c3)
