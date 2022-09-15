@@ -16,14 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 import json
-import base64
-import random
-from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
-from resolveurl.lib import websocket
+from resolveurl.lib.pyaes import openssl_aes
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
@@ -33,62 +29,27 @@ class StreamRapidResolver(ResolveUrl):
     pattern = r'(?://|\.)((?:rabbitstream|streamrapid|mzzcloud)\.(?:ru|net|life))/embed-([^\n]+)'
 
     def get_media_url(self, host, media_id):
-        if '$$' in media_id:
-            media_id, referer = media_id.split('$$')
-            referer = urllib_parse.urljoin(referer, '/')
-        else:
-            # Needs to be hard coded for now if nothing is passed in.
-            referer = 'https://{0}/'.format(host)
         web_url = self.get_url(host, media_id)
-        rurl = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Referer': referer}
+                   'Referer': 'https://{0}/'.format(host),
+                   'X-Requested-With': 'XMLHttpRequest'}
         html = self.net.http_GET(web_url, headers).content
-        domain = base64.b64encode((rurl[:-1] + ':443').encode('utf-8')).decode('utf-8').replace('=', '.')
-        token = helpers.girc(html, rurl, domain)
-        if not token and host == 'mzzcloud.life':
-            token = ' '
-        number = re.findall(r"recaptchaNumber\s*=\s*'(\d+)", html)
-        if token and number:
-            eid, media_id = media_id.split('/')
-            sid = ''
-            if eid == '5':
-                try:
-                    ws_servers = ['ws10', 'ws11', 'ws12']
-                    wurl = 'ws://{0}.{1}/socket.io/?EIO=4&transport=websocket'.format(random.choice(ws_servers), host)
-                    ws = websocket.WebSocket()
-                    ws.connect(wurl)
-                    ws.recv()
-                    ws.send("40")
-                    msg = ws.recv()
-                    ws.close()
-                    s = re.search(r'sid":"([^"]+)', msg)
-                    if s:
-                        sid = s.group(1)
-                except:
-                    pass
+        sources = json.loads(html).get('sources')
+        if sources:
+            OpenSSL_AES = openssl_aes.AESCipher()
+            try:
+                sources = json.loads(OpenSSL_AES.decrypt(sources, '69932eff70fd109a'))
+                source = sources[0]
+            except:
+                raise ResolverError('Decrypt key changed')
 
-            headers.update({'Referer': web_url, 'Accept': '*/*'})
-            surl = '{0}ajax/embed-{1}/getSources'.format(rurl, eid)
-            if '?' in media_id:
-                media_id = media_id.split('?')[0]
-            data = {'_number': number[0],
-                    'id': media_id,
-                    '_token': '' if token == ' ' else token}
-            if sid:
-                data.update({'sId': sid})
-            headers.update({'X-Requested-With': 'XMLHttpRequest'})
-            shtml = self.net.http_GET('{0}?{1}'.format(surl, urllib_parse.urlencode(data)), headers=headers).content
-            sources = json.loads(shtml).get('sources')
-            if sources:
-                source = sources[0].get('file')
-                rurl = 'https://{0}/'.format(host)
+            if source:
                 headers.pop('X-Requested-With')
-                headers.pop('Accept')
-                headers.update({'Referer': rurl, 'Origin': rurl[:-1]})
-                return source + helpers.append_headers(headers)
+                return source.get('file') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}')
+        media_id = media_id.split('?')[0]
+        media_id = media_id.replace('/', '/getSources?id=')
+        return self._default_get_url(host, media_id, template='https://{host}/ajax/embed-{media_id}')
