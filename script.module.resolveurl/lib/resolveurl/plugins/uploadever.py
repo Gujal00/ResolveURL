@@ -45,12 +45,12 @@ class UploadEverResolver(ResolveUrl):
         r = self.net.http_POST(web_url, form_data=payload, headers=headers)
         url = r.get_url()
         if url != web_url:
-            return url + helpers.append_headers(headers)
+            return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         html = r.content
         url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
-            return url.group(1) + helpers.append_headers(headers)
+            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
