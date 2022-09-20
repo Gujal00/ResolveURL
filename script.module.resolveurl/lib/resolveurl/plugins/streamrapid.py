@@ -17,6 +17,8 @@
 """
 
 import json
+import re
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.lib.pyaes import openssl_aes
@@ -26,30 +28,45 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class StreamRapidResolver(ResolveUrl):
     name = 'StreamRapid'
     domains = ['streamrapid.ru', 'rabbitstream.net', 'mzzcloud.life']
-    pattern = r'(?://|\.)((?:rabbitstream|streamrapid|mzzcloud)\.(?:ru|net|life))/embed-([^\n]+)'
+    pattern = r'(?://|\.)((?:rabbitstream|streamrapid|mzzcloud)\.(?:ru|net|life))/embed-([^\n$]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
+        referer = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Referer': 'https://{0}/'.format(host),
-                   'X-Requested-With': 'XMLHttpRequest'}
+                   'Referer': referer}
+
         html = self.net.http_GET(web_url, headers).content
-        sources = json.loads(html).get('sources')
-        if sources:
-            OpenSSL_AES = openssl_aes.AESCipher()
-            try:
-                sources = json.loads(OpenSSL_AES.decrypt(sources, '69932eff70fd109a'))
+        surl = re.findall(r'<script\s*type.+?src="([^"]+)', html)[0]
+        surl = urllib_parse.urljoin(referer, surl)
+        tries = 0
+        key = ''
+        while tries < 3 and not key:
+            js = self.net.http_GET(surl, headers).content
+            r = re.search(r"const\s*_0x[0-9a-f]{1,6}='([^']+)", js)
+            if r:
+                key = r.group(1)
+            else:
+                common.kodi.sleep(5000)
+                tries += 1
+
+        if key:
+            headers.update({'X-Requested-With': 'XMLHttpRequest'})
+            mid = media_id.split('?')[0]
+            mid = mid.replace('/', '/getSources?id=')
+            aurl = 'https://{0}/ajax/embed-{1}'.format(host, mid)
+            ahtml = self.net.http_GET(aurl, headers).content
+            sources = json.loads(ahtml).get('sources')
+            if sources:
+                OpenSSL_AES = openssl_aes.AESCipher()
+                sources = json.loads(OpenSSL_AES.decrypt(sources, key))
                 source = sources[0]
-            except:
-                raise ResolverError('Decrypt key changed')
+                if source:
+                    headers.pop('X-Requested-With')
+                    return source.get('file') + helpers.append_headers(headers)
+            raise ResolverError('File Not Found or removed')
 
-            if source:
-                headers.pop('X-Requested-With')
-                return source.get('file') + helpers.append_headers(headers)
-
-        raise ResolverError('File Not Found or removed')
+        raise ResolverError('Unable to locate Decryption key')
 
     def get_url(self, host, media_id):
-        media_id = media_id.split('?')[0]
-        media_id = media_id.replace('/', '/getSources?id=')
-        return self._default_get_url(host, media_id, template='https://{host}/ajax/embed-{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}')
