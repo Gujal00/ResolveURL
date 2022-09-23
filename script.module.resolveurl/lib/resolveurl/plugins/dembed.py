@@ -28,8 +28,8 @@ from six.moves import urllib_parse
 
 class DembedResolver(ResolveUrl):
     name = "dembed2"
-    domains = ['dembed2.com']
-    pattern = r'(?://|\.)(dembed2\.com)/(?:streaming\.php|embedplus)\?id=([a-zA-Z0-9-]+)'
+    domains = ['dembed2.com', 'asianplay.net']
+    pattern = r'(?://|\.)(dembed2\.com|asianplay\.net)/(?:streaming\.php|embedplus)\?id=([a-zA-Z0-9-]+)'
     key = six.ensure_binary('93422192433952489752342908585752')
     iv = six.ensure_binary('9262859232435825')
 
