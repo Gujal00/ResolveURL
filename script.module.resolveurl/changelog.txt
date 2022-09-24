@@ -1,21 +1,27 @@
-Version 5.1.76 (Sep 10, 2022)
+Version 5.1.77 (Sep 25, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - linkbox
+    - None
 
 - Resolvers Fixed/Updated:
     - cloudb
-    - cloudvideo
-    - fembed
+    - dembed
+    - filemoon
     - goload
-    - streamingcommunity
+    - streamcommunity
+    - streamrapid
     - streamsb
+    - uploadever
+    - uploadflix
     - voesx
 
 - Resolvers Removed
-    - None
+    - evoload
+    - gogostream (merged with goload)
+    - streamani (merged with goload)
+    - videovard
 
 - Languages Added/Updated
     - None
