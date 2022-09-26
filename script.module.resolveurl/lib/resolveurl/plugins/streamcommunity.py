@@ -49,7 +49,7 @@ class StreamCommunityResolver(ResolveUrl):
             headers.update({'Referer': web_url})
             html = self.net.http_GET('https://scws.work/videos/' + scws_id, headers=headers).content
             a = json.loads(html).get('client_ip')
-            url = 'https://scws.xyz/master/{0}?{1}'.format(scws_id, self.get_token(a))
+            url = 'https://scws.work/master/{0}?{1}'.format(scws_id, self.get_token(a))
             return url + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
