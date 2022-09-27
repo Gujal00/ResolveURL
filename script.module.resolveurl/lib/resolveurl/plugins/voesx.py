@@ -31,13 +31,13 @@ class VoeResolver(ResolveUrl):
                'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com',
                'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com',
                'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com',
-               'realfinanceblogcenter.com']
+               'realfinanceblogcenter.com', 'tinycat-voe-fashion.com']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|' \
               r'housecardsummerbutton|fraudclatterflyingcar|' \
               r'bigclatterhomesguideservice|uptodatefinishconferenceroom|' \
-              r'realfinanceblogcenter|' \
+              r'realfinanceblogcenter|tinycat-voe-fashion|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
