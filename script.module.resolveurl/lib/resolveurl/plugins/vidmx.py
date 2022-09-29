@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class VidMXResolver(ResolveGeneric):
     name = 'VidMX'
-    domains = ['vidmx.xyz']
-    pattern = r'(?://|\.)(vidmx\.xyz)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['vidmx.xyz', 'vembx.one']
+    pattern = r'(?://|\.)((?:vidmx|vembx)\.(?:xyz|one))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
