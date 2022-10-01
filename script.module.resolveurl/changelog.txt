@@ -1,27 +1,22 @@
-Version 5.1.77 (Sep 25, 2022)
+Version 5.1.78 (Oct 01, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - gogostream
+    - zillastream
 
 - Resolvers Fixed/Updated:
-    - cloudb
-    - dembed
-    - filemoon
     - goload
+    - itemfix
     - streamcommunity
-    - streamrapid
-    - streamsb
-    - uploadever
-    - uploadflix
+    - streamtape
+    - vidbom
+    - vidmx
     - voesx
 
 - Resolvers Removed
-    - evoload
-    - gogostream (merged with goload)
-    - streamani (merged with goload)
-    - videovard
+    - vidstreaming
 
 - Languages Added/Updated
     - None
