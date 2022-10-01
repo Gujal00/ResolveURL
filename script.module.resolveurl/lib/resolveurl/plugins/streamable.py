@@ -27,7 +27,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class StreamableResolver(ResolveUrl):
     name = 'Streamable'
     domains = ['streamable.com']
-    pattern = r'(?://|\.)(streamable\.com)/(?:s/)?([a-zA-Z0-9]+(?:/[a-zA-Z0-9]+)?)'
+    pattern = r'(?://|\.)(streamable\.com)/(?:s/|e/)?([a-zA-Z0-9]+(?:/[a-zA-Z0-9]+)?)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -37,7 +37,7 @@ class StreamableResolver(ResolveUrl):
         if match:
             try:
                 js_data = json.loads(match.group(1))
-            except:
+            except Exception:
                 js_data = {}
             streams = js_data.get('files', {})
             sources = [(stream.get('height', 'Unknown'), stream['url']) for _key, stream in list(streams.items())]
