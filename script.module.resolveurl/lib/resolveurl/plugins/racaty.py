@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class RacatyResolver(ResolveUrl):
     name = 'Racaty'
     domains = ['racaty.net']
-    pattern = r'(?://|\.)(racaty\.net)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(racaty\.net)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
