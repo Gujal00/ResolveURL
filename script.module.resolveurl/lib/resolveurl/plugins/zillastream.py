@@ -30,4 +30,5 @@ class ZillaStreamResolver(ResolveGeneric):
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{src:\s*["'](?P<url>[^"']+)'''],
             generic_patterns=False
+            referer=False
         )
