@@ -21,7 +21,7 @@ import gzip
 import re
 import json
 import six
-from six.moves import urllib_request, urllib_parse, urllib_error
+from six.moves import urllib_request, urllib_parse, urllib_error, urllib_response
 import socket
 import time
 from resolveurl.lib import kodi
@@ -63,8 +63,15 @@ def get_ua():
 
 
 class NoRedirection(urllib_request.HTTPRedirectHandler):
-    def redirect_request(self, req, fp, code, msg, headers, newurl):
-        return None
+    def http_error_302(self, req, fp, code, msg, headers):
+        infourl = urllib_response.addinfourl(fp, headers, req.get_full_url() if six.PY2 else req.full_url)
+        infourl.status = code
+        infourl.code = code
+        return infourl
+    http_error_300 = http_error_302
+    http_error_301 = http_error_302
+    http_error_303 = http_error_302
+    http_error_307 = http_error_302
 
 
 class Net:
@@ -215,7 +222,7 @@ class Net:
         opener = urllib_request.build_opener(*handlers)
         urllib_request.install_opener(opener)
 
-    def http_GET(self, url, headers={}, compression=True):
+    def http_GET(self, url, headers={}, compression=True, redirect=True):
         """
         Perform an HTTP GET request.
 
@@ -233,7 +240,7 @@ class Net:
             An :class:`HttpResponse` object containing headers and other
             meta-information about the page and the page content.
         """
-        return self._fetch(url, headers=headers, compression=compression)
+        return self._fetch(url, headers=headers, compression=compression, redirect=redirect)
 
     def http_POST(self, url, form_data, headers={}, compression=True, jdata=False):
         """
@@ -303,7 +310,7 @@ class Net:
         response = urllib_request.urlopen(request)
         return HttpResponse(response)
 
-    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False):
+    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False, redirect=True):
         """
         Perform an HTTP GET or POST request.
 
@@ -344,7 +351,11 @@ class Net:
         host = req.host if six.PY3 else req.get_host()
         req.add_unredirected_header('Host', host)
         try:
-            response = urllib_request.urlopen(req, timeout=15)
+            if not redirect:
+                opener = urllib_request.build_opener(NoRedirection())
+                response = opener.open(req, timeout=20)
+            else:
+                response = urllib_request.urlopen(req, timeout=15)
         except urllib_error.HTTPError as e:
             if e.code == 403 and 'cloudflare' in e.hdrs.get('Expect-CT', ''):
                 import ssl

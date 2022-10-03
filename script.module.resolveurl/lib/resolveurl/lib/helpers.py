@@ -183,7 +183,7 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
     return source_list
 
 
-def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=True, referer=True):
+def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=True, referer=True, redirect=True):
     if patterns is None:
         patterns = []
     scheme = urllib_parse.urlparse(url).scheme
@@ -201,7 +201,7 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
         headers.update({'Referer': referer})
     elif referer:
         headers.update({'Referer': rurl})
-    response = net.http_GET(url, headers=headers)
+    response = net.http_GET(url, headers=headers, redirect=redirect)
     response_headers = response.get_headers(as_dict=True)
     cookie = response_headers.get('Set-Cookie', None)
     if cookie:
