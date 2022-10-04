@@ -183,7 +183,7 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
     return source_list
 
 
-def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=True, referer=True, redirect=True, verify=True):
+def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=True, referer=True, redirect=True, verifypeer=True):
     if patterns is None:
         patterns = []
     scheme = urllib_parse.urlparse(url).scheme
@@ -209,7 +209,7 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
     html = response.content
     if not referer:
         headers.update({'Referer': rurl})
-    if not verify:
+    if not verifypeer:
         headers.update({'verifypeer': 'false'})
     headers.update({'Origin': rurl[:-1]})
     source_list = scrape_sources(html, result_blacklist, scheme, patterns, generic_patterns)
