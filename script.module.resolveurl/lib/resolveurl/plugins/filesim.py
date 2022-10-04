@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
@@ -23,3 +24,9 @@ class FilesIMResolver(ResolveGeneric):
     name = 'FilesIM'
     domains = ['files.im']
     pattern = r'(?://|\.)(files\.im)/(?:embed-)?([0-9a-zA-Z]+)'
+
+    def get_media_url(self, host, media_id):
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            verifypeer=False
+        )
