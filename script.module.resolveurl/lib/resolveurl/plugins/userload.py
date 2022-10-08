@@ -56,6 +56,7 @@ class UserLoadResolver(ResolveUrl):
                 stream_url = self.net.http_POST(api_url, data, headers=headers).content
                 headers.pop('X-Requested-With')
                 stream_url = helpers.get_redirect_url(stream_url, headers)
+                headers.update({'verifypeer': 'false'})
                 return stream_url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
