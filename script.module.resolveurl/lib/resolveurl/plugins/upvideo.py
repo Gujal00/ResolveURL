@@ -45,9 +45,7 @@ class UpVideoResolver(ResolveUrl):
 
         aurl = 'https://{0}/assets/js/tabber.js'.format(host)
         ahtml = self.net.http_GET(aurl, headers=headers).content
-        if jsunhunt.detect(ahtml):
-            pass
-        else:
+        if not jsunhunt.detect(ahtml):
             aurl = 'https://{0}/assets/js/master.js'.format(host)
             ahtml = self.net.http_GET(aurl, headers=headers).content
 
@@ -61,7 +59,7 @@ class UpVideoResolver(ResolveUrl):
                 surl = r.group(1).replace(rep1, '')
                 surl = surl.replace(rep2, '')
                 surl = base64.b64decode(surl).decode('utf-8')
-                if host.split('.')[0] == 'embedo':
+                if host.split('.')[0] in ['embedo', 'highload']:
                     headers.update({'verifypeer': 'false'})
                 return surl.replace(' ', '%20') + helpers.append_headers(headers)
 
