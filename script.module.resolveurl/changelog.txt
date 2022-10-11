@@ -1,22 +1,15 @@
-Version 5.1.79 (Oct 09, 2022)
+Version 5.1.80 (Oct 11, 2022)
 - Code Base Changes:
-    - add verifypeer option to Generic Resolvers
+    - None
 
 - Resolvers Added:
-    - justok
-    - voxzer
+    - chillx
 
 - Resolvers Fixed/Updated:
-    - filesim
-    - racaty
-    - streamable
-    - streamcommunity
-    - streamrapid
-    - streamsb
-    - uploadingsite
-    - userload
-    - vkspeed
-    - zillastream
+    - upvideo
+    - vimeo
+    - vlalacom
+    - vlalanet
 
 - Resolvers Removed
     - None
