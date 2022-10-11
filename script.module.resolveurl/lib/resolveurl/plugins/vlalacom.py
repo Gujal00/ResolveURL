@@ -17,7 +17,11 @@
 """
 
 import re
+import json
+import codecs
+
 from resolveurl.lib import helpers
+from resolveurl.lib.jscrypto import jscrypto
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl import common
 from six.moves import urllib_parse
@@ -26,7 +30,7 @@ from six.moves import urllib_parse
 class VlalaComResolver(ResolveUrl):
     name = 'VlalaCom'
     domains = ['videoslala.com']
-    pattern = r'(?://|\.)(videoslala\.com)/v/([^\n]+)'
+    pattern = r'(?://|\.)(videoslala\.com)/(?:v|e)/([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -46,15 +50,23 @@ class VlalaComResolver(ResolveUrl):
         if 'Please Wait' in html:
             raise ResolverError('Please Wait Video Uploading.')
 
-        html = helpers.get_packed_data(html)
-        sources = re.findall(r"label':\s*'(?P<label>[^']+).+?file':\s*'(?P<url>[^']+)", html)
-        if sources:
-            source = helpers.pick_source(sorted(sources, reverse=True))
-            if source.startswith('/'):
-                source = urllib_parse.urljoin(web_url, source)
-            return source + helpers.append_headers(headers)
+        r = re.search(r"_decx\('([^']+)", html)
+        if r:
+            data = json.loads(r.group(1))
+            ct = data.get('ct', False)
+            salt = codecs.decode(data.get('s'), 'hex')
+            html2 = jscrypto.decode(ct, 'GDPlayer-JASm(8234_)9312HJASi23lakka', salt)
+            html2 = html2[1:-1].replace('\\"', '"')
+            s = re.search(r'{\s*url:\s*"([^"]+)', html2)
+            if s:
+                headers.update({'Referer': 'https://{}/'.format(host)})
+                aurl = s.group(1).replace('\\', '')
+                jd = json.loads(self.net.http_GET(aurl, headers=headers).content)
+                url = jd.get('sources')[0].get('file')
+                headers.update({'verifypeer': 'false'})
+                return url + helpers.append_headers(headers)
 
-        raise ResolverError('No playable video found.')
+        raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')

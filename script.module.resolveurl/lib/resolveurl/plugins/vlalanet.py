@@ -39,6 +39,7 @@ class VlalaNetResolver(ResolveUrl):
             sources = json.loads(sources.group(1))
             sources = [(x.get('label'), x.get('file')) for x in sources]
             source = helpers.pick_source(sorted(sources, reverse=True))
+            headers.update({'verifypeer': 'false'})
             return source + helpers.append_headers(headers)
 
         raise ResolverError('No playable video found.')
@@ -46,4 +47,4 @@ class VlalaNetResolver(ResolveUrl):
     def get_url(self, host, media_id):
         if media_id.endswith('-mp4'):
             return self._default_get_url(host, media_id, template='https://cdn1.{host}/embed/{media_id}')
-        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
+        return self._default_get_url(host, media_id, template='https://pro.{host}/embed/{media_id}')
