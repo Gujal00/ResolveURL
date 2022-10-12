@@ -34,7 +34,11 @@ class PornFunResolver(ResolveUrl):
         r = re.search(r'''video_url:\s*['"]([^"']+)''', html, re.DOTALL)
         if r:
             headers.update({'Referer': web_url})
-            return r.group(1) + helpers.append_headers(headers)
+            url = r.group(1)
+            if url.startswith('function/'):
+                lcode = re.findall(r"license_code:\s*'([^']+)", html)[0]
+                url = helpers.fun_decode(url, lcode)
+            return url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
