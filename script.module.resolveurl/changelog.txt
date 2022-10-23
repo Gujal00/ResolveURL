@@ -1,15 +1,18 @@
-Version 5.1.80 (Oct 11, 2022)
+Version 5.1.81 (Oct 24, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - chillx
+    - None
 
 - Resolvers Fixed/Updated:
-    - upvideo
-    - vimeo
-    - vlalacom
-    - vlalanet
+    - cloudb
+    - dembed
+    - dood
+    - mixdrop
+    - streamcommunity
+    - vidbom
+    - vido
 
 - Resolvers Removed
     - None
