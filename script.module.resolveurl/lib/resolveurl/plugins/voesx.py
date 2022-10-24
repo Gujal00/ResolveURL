@@ -53,7 +53,9 @@ class VoeResolver(ResolveUrl):
 
         sources = helpers.scrape_sources(
             html,
-            patterns=[r'''hls":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
+            patterns=[r'''mp4["']:\s*["'](?P<url>[^"']+)["'],\s*["']video_height["']:\s*(?P<label>[^,]+)''',
+                      r'''hls':\s*'(?P<url>[^']+)''',
+                      r'''hls":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
             generic_patterns=False
         )
         if sources:
