@@ -1,4 +1,4 @@
-Version 5.1.81 (Oct 24, 2022)
+Version 5.1.82 (Oct 31, 2022)
 - Code Base Changes:
     - None
 
@@ -6,13 +6,11 @@ Version 5.1.81 (Oct 24, 2022)
     - None
 
 - Resolvers Fixed/Updated:
-    - cloudb
-    - dembed
-    - dood
-    - mixdrop
-    - streamcommunity
-    - vidbom
-    - vido
+    - send
+    - speedostream
+    - streamsb
+    - userload
+    - voesx
 
 - Resolvers Removed
     - None
