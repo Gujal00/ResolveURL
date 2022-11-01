@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class RacatyResolver(ResolveUrl):
     name = 'Racaty'
-    domains = ['racaty.net']
-    pattern = r'(?://|\.)(racaty\.net)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['racaty.net', 'racaty.io']
+    pattern = r'(?://|\.)(racaty\.(?:net|io))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -49,4 +49,4 @@ class RacatyResolver(ResolveUrl):
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
+        return self._default_get_url(host, media_id, template='https://racaty.io/{media_id}')
