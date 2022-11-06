@@ -1,16 +1,14 @@
-Version 5.1.82 (Oct 31, 2022)
+Version 5.1.83 (Nov 7, 2022)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - dropload
 
 - Resolvers Fixed/Updated:
-    - send
-    - speedostream
+    - hdvid
+    - racaty
     - streamsb
-    - userload
-    - voesx
 
 - Resolvers Removed
     - None
