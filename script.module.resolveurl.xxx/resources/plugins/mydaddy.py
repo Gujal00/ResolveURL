@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class MyDaddyResolver(ResolveGeneric):
     name = 'mydaddy'
     domains = ['mydaddy.cc']
-    pattern = r'(?://|\.)(mydaddy\.cc)/video/([\w]+)'
+    pattern = r'(?://|\.)(mydaddy\.cc)/video/{1,2}([\w]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
