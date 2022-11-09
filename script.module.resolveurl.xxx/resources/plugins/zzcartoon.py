@@ -33,7 +33,7 @@ class ZZCarttonResolver(ResolveUrl):
         if not media_id.isdigit():
             web_url = self.get_url(host, media_id)
             html = self.net.http_GET(web_url, headers=headers).content
-            r = re.search(r'''<iframe\s*width=['"]\d+['"]\s*height=['"]\d+['"]\s*src=['"](http:\/\/www\.zzcartoon\.com\/embed\/(\d+))''', html)
+            r = re.search(r'''<iframe\s*width=['"]\d+['"]\s*height=['"]\d+['"]\s*src=['"](https?:\/\/www\.zzcartoon\.com\/embed\/(\d+))''', html)
             if r:
                 web_url = r.group(1)
             else:
@@ -60,9 +60,9 @@ class ZZCarttonResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         if not media_id.isdigit():
-            return self._default_get_url(host, media_id, template='http://www.{host}/videos/{media_id}.html')
+            return self._default_get_url(host, media_id, template='https://www.{host}/videos/{media_id}.html')
         else:
-            return self._default_get_url(host, media_id, template='http://www.{host}/embed/{media_id}')
+            return self._default_get_url(host, media_id, template='https://www.{host}/embed/{media_id}')
 
     def valid_url(self, url, host):
         return re.search(self.pattern, url, re.I) or re.search(self.pattern2, url, re.I) or self.name in host
