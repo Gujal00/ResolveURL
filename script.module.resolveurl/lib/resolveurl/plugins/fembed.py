@@ -34,7 +34,7 @@ class FEmbedResolver(ResolveUrl):
                'ncdnstm.com', 'fembed-hd.com', 'superplayxyz.club', 'cinegrabber.com', 'ndrama.xyz',
                'javstream.top', 'javpoll.com', 'suzihaza.com', 'fembed.net', 'ezsubz.com', 'reeoov.tube',
                'diampokusy.com', 'filmvi.xyz', 'vidsrc.xyz', 'i18n.pw', 'vanfem.com', 'fembed9hd.com',
-               'votrefilms.xyz', 'watchjavnow.xyz']
+               'votrefilms.xyz', 'watchjavnow.xyz', 'ncdnstm.xyz']
     pattern = r'(?://|\.)(' \
               r'(?:femb[ae]d(?:[-9]hd)?|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|' \
               r'femoload|asianclub|dailyplanet|[jf]player|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|' \
