@@ -34,10 +34,10 @@ class StreamSBResolver(ResolveUrl):
                'sbplay2.com', 'japopav.tv', 'viewsb.com', 'sbplay2.xyz', 'sbfast.com', 'sbfull.com',
                'javplaya.com', 'ssbstream.net', 'p1ayerjavseen.com', 'sbthe.com', 'vidmovie.xyz',
                'sbspeed.com', 'streamsss.net', 'sblanh.com', 'tvmshow.com', 'sbanh.com', 'streamovies.xyz',
-               'embedtv.fun']
+               'embedtv.fun', 'sblongvu.com']
     pattern = r'(?://|\.)(' \
               r'(?:view|watch|embed(?:tv)?|tube|player|cloudemb|japopav|javplaya|p1ayerjavseen|stream(?:ovies)?|vidmovie)?s{0,2}b?' \
-              r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow)?\.(?:com|net|org|one|tv|xyz|fun))/' \
+              r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu)?\.(?:com|net|org|one|tv|xyz|fun))/' \
               r'(?:embed[-/]|e/|play/|d/|sup/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
