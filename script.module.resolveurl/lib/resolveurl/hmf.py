@@ -274,7 +274,7 @@ class HostedMediaFile:
         except urllib_error.HTTPError as e:
             if isinstance(e, urllib_error.HTTPError):
                 http_code = e.code
-                if http_code == 405:
+                if http_code == 405 or http_code == 472:
                     http_code = 200
             else:
                 http_code = 600

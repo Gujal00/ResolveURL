@@ -1,10 +1,11 @@
-Version 2.1.31 (Oct 16, 2022)
+Version 2.1.32 (Nov 20, 2022)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - pornfun
+    - mydaddy
+    - zzcartoon
 
 - Resolvers Removed
     - None

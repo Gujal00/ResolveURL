@@ -9,11 +9,9 @@ Version 5.1.84 (Nov 14, 2022)
     - cloudb
     - fembed
     - mixdrop
-    - mydaddy
     - streamingcommunity
     - streamsb
     - vidmx
-    - zzcartoon
 
 - Resolvers Removed
     - None

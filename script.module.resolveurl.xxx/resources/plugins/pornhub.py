@@ -29,13 +29,15 @@ class PornHubResolver(ResolveUrl):
     pattern = r'(?://|\.)(pornhub\.com)/(?:view_video\.php\?viewkey=|embed/)([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
+        host_url = 'https://www.{0}/'.format(host)
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
-                   'Referer': 'https://www.{0}/'.format(host)}
+        headers = {'User-Agent': common.SAFARI_USER_AGENT,
+                   'Referer': host_url}
+
         html = self.net.http_GET(web_url, headers=headers).content
         sources = []
 
-        qvars = re.search(r'qualityItems_[^\[]+([^;]+)', html)
+        qvars = re.search(r'qualityItems_[^\[]+(.+?);', html)
         if qvars:
             sources = json.loads(qvars.group(1))
             sources = [(src.get('text'), src.get('url')) for src in sources if src.get('url')]
@@ -64,7 +66,7 @@ class PornHubResolver(ResolveUrl):
                            type(src.get('quality')) is not list and src.get('videoUrl')]
 
         if sources:
-            headers.update({'Origin': 'https://www.{0}'.format(host)})
+            headers.update({'Origin': host[:-1]})
             return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
