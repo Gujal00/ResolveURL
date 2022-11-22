@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class BitPornoResolver(ResolveUrl):
     name = 'bitporno'
-    domains = ['bitporno.com']
-    pattern = r'(?://|\.)(bitporno\.com)/(?:embed/|e/|v/|\?v=)?([0-9a-zA-Z]+)'
+    domains = ['bitporno.com', 'bitporno.to']
+    pattern = r'(?://|\.)(bitporno\.(?:com|to))/(?:embed/|e/|v/|\?v=)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -33,6 +33,8 @@ class BitPornoResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         url = re.search(r'file:\s*"([^"]+)', html)
         if url:
+            if not url.group(1).endswith('.m3u8'):
+                return url.group(1) + helpers.append_headers(headers)
             surl = '{}{}'.format(web_url.rsplit('/', 1)[0], url.group(1)) if url.group(1).startswith('/') else url.group(1)
             playlist_html = self.net.http_GET(surl, headers=headers).content
             sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).+\n(?!#)(?P<url>[^\n]+)', playlist_html, re.I)
@@ -42,7 +44,7 @@ class BitPornoResolver(ResolveUrl):
         raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://www.bitporno.com/?v={media_id}')
+        return self._default_get_url(host, media_id, template='https://www.bitporno.to/?v={media_id}')
 
     @classmethod
     def _is_enabled(cls):
