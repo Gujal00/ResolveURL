@@ -33,7 +33,7 @@ class StreamVidsResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         html += helpers.get_packed_data(html)
-        burl = re.search(r'atob\("(?P<url>[^"]+)', html)
+        burl = re.search(r'atob\("([^"]+)', html)
         if burl:
             headers.update({'Referer': 'https://{}/'.format(host)})
             source = base64.b64decode(burl.group(1)).decode('utf-8')
