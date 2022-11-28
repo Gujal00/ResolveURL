@@ -34,6 +34,12 @@ class HexUploadResolver(ResolveUrl):
             'Referer': web_url,
             'User-Agent': common.RAND_UA
         }
+        html = self.net.http_GET(web_url, headers=headers).content
+        payload = helpers.get_hidden(html)
+        url = helpers.get_redirect_url(web_url, headers=headers, form_data=payload)
+        if url != web_url:
+            return url.replace(' ', '%20') + helpers.append_headers(headers)
+
         payload = {
             'op': 'download2',
             'id': media_id,
@@ -42,7 +48,7 @@ class HexUploadResolver(ResolveUrl):
             'method_free': 'Free Download'
         }
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
-        url = re.search(r'id="direct_link".*?href="([^"]+)', html, re.S)
+        url = re.search(r'href="([^"]+)"\s*class="[^"]+">Download\s*Now', html)
         if url:
             return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
