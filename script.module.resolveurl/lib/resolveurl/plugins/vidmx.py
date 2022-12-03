@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class VidMXResolver(ResolveGeneric):
     name = 'VidMX'
     domains = ['vidmx.xyz', 'vembx.one']
-    pattern = r'(?://|\.)((?:vidmx|vembx)\.(?:xyz|one))/(?:embed\d?-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)((?:vidmx|vembx)\.(?:xyz|one))/(?:embed*\d?-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
@@ -32,3 +32,6 @@ class VidMXResolver(ResolveGeneric):
             generic_patterns=False,
             referer=False
         )
+
+    def get_url(self, host, media_id):
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')

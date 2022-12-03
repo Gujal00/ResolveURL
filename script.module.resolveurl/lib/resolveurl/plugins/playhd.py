@@ -27,8 +27,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class PlayHDResolver(ResolveUrl):
     name = 'PlayHD'
-    domains = ['playhd.one', 'playdrive.xyz']
-    pattern = r'(?://|\.)(play(?:hd|drive)\.(?:one|xyz))/e(?:mbed)?/([0-9a-zA-Z-]+)'
+    domains = ['playhd.one', 'playdrive.xyz', 'prohd.one']
+    pattern = r'(?://|\.)((?:play|pro)(?:hd|drive)\.(?:one|xyz))/e(?:mbed)?/([0-9a-zA-Z-]+)'
 
     def __init__(self):
         self.net = common.Net(ssl_verify=False)
@@ -49,11 +49,13 @@ class PlayHDResolver(ResolveUrl):
                 headers.update({'Referer': 'https://{}/'.format(host)})
                 aurl = s.group(1).replace('\\', '')
                 jd = json.loads(self.net.http_GET(aurl, headers=headers).content)
-                url = jd.get('sources')[0].get('file')
+                url = jd.get('sources')[0].get('file').replace(' ', '%20')
+                if url.startswith('//'):
+                    url = 'https:' + url
                 headers.update({'verifypeer': 'false'})
                 return url + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}/')
+        return self._default_get_url(host, media_id, 'https://{host}/embed/{media_id}')
