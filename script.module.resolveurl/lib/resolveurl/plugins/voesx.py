@@ -30,14 +30,16 @@ class VoeResolver(ResolveUrl):
                'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com',
                'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com',
                'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com',
-               'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com',
-               'realfinanceblogcenter.com', 'tinycat-voe-fashion.com']
+               'housecardsummerbutton.com', 'fraudclatterflyingcar.com',
+               'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com',
+               'realfinanceblogcenter.com', 'tinycat-voe-fashion.com',
+               '20demidistance9elongations.com']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|' \
               r'housecardsummerbutton|fraudclatterflyingcar|' \
               r'bigclatterhomesguideservice|uptodatefinishconferenceroom|' \
-              r'realfinanceblogcenter|tinycat-voe-fashion|' \
+              r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
