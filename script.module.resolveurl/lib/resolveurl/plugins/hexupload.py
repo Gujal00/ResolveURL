@@ -17,6 +17,8 @@
 """
 
 import re
+import json
+import base64
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -35,10 +37,20 @@ class HexUploadResolver(ResolveUrl):
             'User-Agent': common.RAND_UA
         }
         html = self.net.http_GET(web_url, headers=headers).content
+        # Can be found on some mp4 embeds
+        burl = re.search(r'b4aa\.buy\("([^"]+)', html)
+        if burl:
+            url = base64.b64decode(burl.group(1)).decode('utf-8')
+            return url + helpers.append_headers(headers)
+
         payload = helpers.get_hidden(html)
-        url = helpers.get_redirect_url(web_url, headers=headers, form_data=payload)
-        if url != web_url:
-            return url.replace(' ', '%20') + helpers.append_headers(headers)
+        payload.update({'dataType': 'json', 'ajax': '1'})
+        r = self.net.http_POST(headers['Origin'], form_data=payload, headers=headers)
+        if 'text/html' not in r.get_headers(as_dict=True)['Content-Type']:
+            url = json.loads(r.content).get('link')
+            if url:
+                url = base64.b64decode(url).decode('utf-8')
+                return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         payload = {
             'op': 'download2',
@@ -48,9 +60,10 @@ class HexUploadResolver(ResolveUrl):
             'method_free': 'Free Download'
         }
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
-        url = re.search(r'href="([^"]+)"\s*class="[^"]+">Download\s*Now', html)
+        url = re.search(r"ldl.ld\('([^']+)", html)
         if url:
-            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+            url = base64.b64decode(url.group(1)).decode('utf-8')
+            return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
