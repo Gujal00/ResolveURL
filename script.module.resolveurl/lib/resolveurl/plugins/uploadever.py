@@ -48,8 +48,6 @@ class UploadEverResolver(ResolveUrl):
         url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
             path = urllib_parse.urlparse(url.group(1)).path[1:]
-            if not self.like_base64(path):
-                return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
             url = base64.b64decode(path).decode('utf-8')
             return url.replace(' ', '%20') + helpers.append_headers(headers)
 
@@ -57,7 +55,3 @@ class UploadEverResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://uploadever.in/{media_id}')
-
-    def like_base64(self, burl):
-        r = '([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?'
-        return False if burl is None or not re.search(r, burl) else True
