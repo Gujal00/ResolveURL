@@ -17,6 +17,8 @@
 """
 
 import re
+import base64
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -42,15 +44,12 @@ class UploadEverResolver(ResolveUrl):
             'method_free': '',
             'method_premium': ''
         }
-        r = self.net.http_POST(web_url, form_data=payload, headers=headers)
-        url = r.get_url()
-        if url != web_url:
-            return url.replace(' ', '%20') + helpers.append_headers(headers)
-
-        html = r.content
+        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
-            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+            path = urllib_parse.urlparse(url.group(1)).path[1:]
+            url = base64.b64decode(path).decode('utf-8')
+            return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
