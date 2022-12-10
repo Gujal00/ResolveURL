@@ -43,6 +43,7 @@ class UploadingSiteResolver(ResolveUrl):
         }
         url = helpers.get_redirect_url(web_url, headers=headers, form_data=payload)
         if url != web_url:
+            headers['verifypeer'] = 'false'
             return url.replace(' ', '%20').replace('http:', 'https:') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
