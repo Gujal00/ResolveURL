@@ -46,7 +46,7 @@ class StreamSBResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': rurl}
         html = self.net.http_GET(web_url, headers=headers).content
-        sources = re.findall(r'download_video([^"]+)[^\d]+\d+x(\d+)', html)
+        sources = re.findall(r'download_video([^"]+)[^\d]+(?:\d+x)?(\d+)', html)
         if sources:
             sources.sort(key=lambda x: int(x[1]), reverse=True)
             sources = [(x[1] + 'p', x[0]) for x in sources]
@@ -89,4 +89,4 @@ class StreamSBResolver(ResolveUrl):
         c2 = binascii.hexlify(x.encode('utf8')).decode('utf8')
         x = '{0}||{1}||{2}||streamsb'.format(makeid(12), c2, makeid(12))
         c3 = binascii.hexlify(x.encode('utf8')).decode('utf8')
-        return 'https://{0}/sources48/{1}/{2}'.format(host, c1, c3)
+        return 'https://{0}/sources49/{1}/{2}'.format(host, c1, c3)
