@@ -29,7 +29,7 @@ from resolveurl.lib.pyaes import AESModeOfOperationCBC, Encrypter, Decrypter
 class GoloadResolver(ResolveUrl):
     name = 'GoLoad'
     domains = ['goload.io', 'goload.pro', 'gogohd.net', 'streamani.net', 'gogo-play.net',
-               'vidstreaming.io']
+               'vidstreaming.io', 'gogohd.pro']
     pattern = r'(?://|\.)((?:gogo-play|streamani|goload|gogohd|vidstreaming)\.(?:io|pro|net))/' \
               r'(?:streaming|embed(?:plus)?|ajax|load)(?:\.php)?\?id=([a-zA-Z0-9-]+)'
     keys = ['37911490979715163134003223491201', '54674138327930866480207815084989']
