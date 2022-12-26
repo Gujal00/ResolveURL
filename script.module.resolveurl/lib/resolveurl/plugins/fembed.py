@@ -34,13 +34,13 @@ class FEmbedResolver(ResolveUrl):
                'ncdnstm.com', 'fembed-hd.com', 'superplayxyz.club', 'cinegrabber.com', 'ndrama.xyz',
                'javstream.top', 'javpoll.com', 'suzihaza.com', 'fembed.net', 'ezsubz.com', 'reeoov.tube',
                'diampokusy.com', 'filmvi.xyz', 'vidsrc.xyz', 'i18n.pw', 'vanfem.com', 'fembed9hd.com',
-               'votrefilms.xyz', 'watchjavnow.xyz', 'ncdnstm.xyz', 'albavide.xyz']
+               'votrefilms.xyz', 'watchjavnow.xyz', 'ncdnstm.xyz', 'albavide.xyz', 'kitabmarkaz.xyz']
     pattern = r'(?://|\.)(' \
               r'(?:femb[ae]d(?:[-9]hd)?|feurl|femax20|24hd|anime789|[fv]cdn|sharinglink|streamm4u|votrefil[em]s?|' \
               r'femoload|asianclub|dailyplanet|[jf]player|mrdhan|there|sexhd|gcloud|mediashore|xstreamcdn|' \
               r'vcdnplay|vidohd|vidsource|viplayer|zidiplay|embedsito|dutrag|youvideos|moviepl|vidcloud|' \
               r'diasfem|moviemaniac|albavid[eo]|ncdnstm|superplayxyz|cinegrabber|ndrama|jav(?:stream|poll)|' \
-              r'suzihaza|ezsubz|reeoov|diampokusy|filmvi|vidsrc|i18n|vanfem|watchjavnow)\.' \
+              r'suzihaza|ezsubz|reeoov|diampokusy|filmvi|vidsrc|i18n|vanfem|watchjavnow|kitabmarkaz)\.' \
               r'(?:com|club|io|xyz|pw|net|to|live|me|stream|co|cc|org|ru|tv|fun|info|top|tube))' \
               r'/(?:v|f)/([a-zA-Z0-9-]+)'
 
