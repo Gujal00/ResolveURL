@@ -48,7 +48,10 @@ class UploadEverResolver(ResolveUrl):
         url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
             path = urllib_parse.urlparse(url.group(1)).path[1:]
-            url = base64.b64decode(path).decode('utf-8')
+            try:
+                url = base64.b64decode(path).decode('utf-8')
+            except Exception:
+                url = url.group(1)
             return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
