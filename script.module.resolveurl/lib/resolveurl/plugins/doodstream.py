@@ -32,7 +32,7 @@ class DoodStreamResolver(ResolveUrl):
     pattern = r'(?://|\.)(dood(?:stream)?\.(?:com?|watch|to|s[ho]|cx|la|w[sf]|pm|re))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        if host.endswith('.cx'):
+        if any(host.endswith(x) for x in ['.cx', '.wf']):
             host = 'dood.so'
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
