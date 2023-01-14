@@ -42,7 +42,7 @@ class VoeResolver(ResolveUrl):
               r'bigclatterhomesguideservice|uptodatefinishconferenceroom|' \
               r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|' \
               r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|' \
-              r'745mingiestblissfully|19turanosephantasia' \
+              r'745mingiestblissfully|19turanosephantasia|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
