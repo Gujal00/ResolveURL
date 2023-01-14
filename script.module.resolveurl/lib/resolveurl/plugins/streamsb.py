@@ -37,7 +37,7 @@ class StreamSBResolver(ResolveUrl):
                'embedtv.fun', 'sblongvu.com', 'arslanrocky.xyz', 'sbchill.com']
     pattern = r'(?://|\.)(' \
               r'(?:view|watch|embed(?:tv)?|tube|player|cloudemb|japopav|javplaya|p1ayerjavseen|stream(?:ovies)?|vidmovie)?s{0,2}b?' \
-              r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu|arslanrocky|sbchill)?\.(?:com|net|org|one|tv|xyz|fun))/' \
+              r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu|arslanrocky|chill)?\.(?:com|net|org|one|tv|xyz|fun))/' \
               r'(?:embed[-/]|e/|play/|d/|sup/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
@@ -89,4 +89,4 @@ class StreamSBResolver(ResolveUrl):
         c2 = binascii.hexlify(x.encode('utf8')).decode('utf8')
         x = '{0}||{1}||{2}||streamsb'.format(makeid(12), c2, makeid(12))
         c3 = binascii.hexlify(x.encode('utf8')).decode('utf8')
-        return 'https://{0}/sources49/{1}/{2}'.format(host, c1, c3)
+        return 'https://{0}/sources50/{1}/{2}'.format(host, c1, c3)
