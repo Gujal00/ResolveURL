@@ -23,8 +23,8 @@ from resolveurl.lib import helpers
 
 class PKSpeedResolver(ResolveUrl):
     name = 'PKSpeed'
-    domains = ['pkspeed.net']
-    pattern = r'(?://|\.)(pkspeed\.net)/(?:embed-)?([A-Za-z0-9]+)'
+    domains = ['pkspeed.net', 'pkembed.com']
+    pattern = r'(?://|\.)(pk(?:speed|embed)\.(?:net|com))/(?:embed-)?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
