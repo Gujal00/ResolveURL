@@ -51,7 +51,8 @@ class VimeoResolver(ResolveUrl):
             sources.sort(key=lambda x: x[0], reverse=True)
             return helpers.pick_source(sources) + helpers.append_headers(headers)
 
-        raise ResolverError('File Not Found or removed')
+        # raise ResolverError('File Not Found or removed')
+        return 'plugin://plugin.video.vimeo/play/?video_id={0}'.format(media_id)
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://player.vimeo.com/video/{media_id}/config')
