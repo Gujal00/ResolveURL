@@ -1,22 +1,24 @@
-Version 5.1.87 (Jan 02, 2023)
+Version 5.1.88 (Jan 26, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - streamhide
+    - anonymfile
+    - desiupload
+    - embedgram
+    - fastupload
+    - uppit
 
 - Resolvers Fixed/Updated:
-    - dembed
-    - fembed
-    - goload
-    - neohd
+    - doodstream
+    - filemoon
+    - pkspeed
     - streamsb
-    - uploadever
-    - vidcloud9
+    - vimeo
     - voesx
 
 - Resolvers Removed
-    - None
+    - vupload
 
 - Languages Added/Updated
     - None
