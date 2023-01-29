@@ -129,7 +129,7 @@ def auth_ls():
     kodi.close_all()
     kodi.sleep(500)  # sleep or authorize won't work for some reason
     from resolveurl.plugins import linksnappy
-    if linksnappy.LinksnappyResolver().authorize_resolver():
+    if linksnappy.LinkSnappyResolver().authorize_resolver():
         kodi.notify(msg=kodi.i18n('ls_authorized'), duration=5000)
 
 
@@ -138,7 +138,7 @@ def reset_ls():
     kodi.close_all()
     kodi.sleep(500)  # sleep or reset won't work for some reason
     from resolveurl.plugins import linksnappy
-    ls = linksnappy.LinksnappyResolver()
+    ls = linksnappy.LinkSnappyResolver()
     ls.reset_authorization()
     kodi.notify(msg=kodi.i18n('ls_auth_reset'), duration=5000)
 
