@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class ArchiveResolver(ResolveGeneric):
     name = 'Archive'
     domains = ['archive.org']
-    pattern = r'(?://|\.)(archive\.org)/embed/([0-9a-zA-Z-_]+)'
+    pattern = r'(?://|\.)(archive\.org)/embed/([0-9a-zA-Z-_\.]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
