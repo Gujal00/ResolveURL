@@ -16,23 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import re
+from resolveurl import common
 from resolveurl.lib import helpers
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class ArchiveResolver(ResolveGeneric):
+class ArchiveResolver(ResolveUrl):
     name = 'Archive'
     domains = ['archive.org']
-    pattern = r'(?://|\.)(archive\.org)/embed/([0-9a-zA-Z-_]+)'
+    pattern = r'(?://|\.)(archive\.org)/embed/([0-9a-zA-Z-_\.]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'property="og:video"\s*content="(?P<url>[^"]+)'],
-            generic_patterns=False,
-            referer=False,
-            result_blacklist=['.zip', '.rar', '.7z']
-        ).replace(' ', '%20')
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        html = self.net.http_GET(web_url, headers=headers).content
+        sources = re.findall(r'"file":"(?P<url>[^"]+)[^}]+?label":"(?P<label>[\d]+p?)', html)
+        if sources:
+            sources = [(x[1], x[0]) for x in sources]
+            surl = 'https://' + host + helpers.pick_source(helpers.sort_sources_list(sources)).replace('/download/', '/serve/').replace(' ', '%20')
+            return surl + helpers.append_headers(headers)
+        raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
