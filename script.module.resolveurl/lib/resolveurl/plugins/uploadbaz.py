@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -39,11 +40,12 @@ class UploadBazResolver(ResolveUrl):
         url = r.get_url()
         payload = helpers.get_hidden(html)
         headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': url})
-        surl = helpers.get_redirect_url(url, headers=headers, form_data=payload)
-        if surl != url:
+        html = self.net.http_POST(url, form_data=payload, headers=headers).content
+        surl = re.search(r'href="([^"]+)"\s*class="btn\s*btn-block', html)
+        if surl:
             headers.pop('Origin')
             headers.update({'verifypeer': 'false'})
-            return surl.replace(' ', '%20') + helpers.append_headers(headers)
+            return surl.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found')
 
