@@ -1,24 +1,25 @@
-Version 5.1.88 (Jan 26, 2023)
+Version 5.1.89 (Feb 05, 2023)
 - Code Base Changes:
-    - None
+    - linksnappy auth call
 
 - Resolvers Added:
-    - anonymfile
-    - desiupload
-    - embedgram
-    - fastupload
-    - uppit
+    - archiveorg
+    - clipwatching
+    - streama2z
+    - streamembed
 
 - Resolvers Fixed/Updated:
-    - doodstream
-    - filemoon
-    - pkspeed
+    - fembed
+    - goload
     - streamsb
-    - vimeo
+    - tvlogy
+    - uploadbaz
+    - uploadever
     - voesx
+    - vtube
 
 - Resolvers Removed
-    - vupload
+    - None
 
 - Languages Added/Updated
     - None
