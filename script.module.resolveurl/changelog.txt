@@ -1,22 +1,13 @@
-Version 5.1.89 (Feb 05, 2023)
+Version 5.1.90 (Feb 06, 2023)
 - Code Base Changes:
     - linksnappy auth call
 
 - Resolvers Added:
-    - archiveorg
-    - clipwatching
-    - streama2z
-    - streamembed
+    - latestview
+    - vembx
 
 - Resolvers Fixed/Updated:
-    - fembed
-    - goload
-    - streamsb
-    - tvlogy
-    - uploadbaz
-    - uploadever
     - voesx
-    - vtube
 
 - Resolvers Removed
     - None
