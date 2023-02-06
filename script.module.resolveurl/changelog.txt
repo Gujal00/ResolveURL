@@ -1,13 +1,12 @@
-Version 5.1.90 (Feb 06, 2023)
+Version 5.1.91 (Feb 06, 2023)
 - Code Base Changes:
-    - linksnappy auth call
+    - Add missing settings.xml
 
 - Resolvers Added:
-    - latestview
-    - vembx
+    - None
 
 - Resolvers Fixed/Updated:
-    - voesx
+    - None
 
 - Resolvers Removed
     - None
