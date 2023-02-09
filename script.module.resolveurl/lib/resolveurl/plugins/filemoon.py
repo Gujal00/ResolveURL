@@ -23,8 +23,8 @@ from resolveurl.lib import helpers
 class FileMoonResolver(ResolveGeneric):
     name = 'FileMoon'
     domains = ['filemoon.sx', 'filemoon.to', 'filemoon.in', 'filemoon.link', 'filemoon.nl',
-               'filemoon.wf']
-    pattern = r'(?://|\.)(filemoon\.(?:sx|to|in|link|nl|wf))/(?:e|d)/([0-9a-zA-Z]+)'
+               'filemoon.wf', 'cinegrab.com']
+    pattern = r'(?://|\.)((?:filemoon|cinegrab)\.(?:sx|to|in|link|nl|wf|com))/(?:e|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
