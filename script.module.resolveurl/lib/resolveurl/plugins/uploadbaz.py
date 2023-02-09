@@ -37,14 +37,19 @@ class UploadBazResolver(ResolveUrl):
         html = r.content
         if 'File Not Found' in html:
             raise ResolverError('File Removed')
+
         url = r.get_url()
         payload = helpers.get_hidden(html)
         headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': url})
-        html = self.net.http_POST(url, form_data=payload, headers=headers).content
-        surl = re.search(r'href="([^"]+)"\s*class="btn\s*btn-block', html)
+        req = self.net.http_POST(url, form_data=payload, headers=headers)
+        headers.pop('Origin')
+        headers.update({'verifypeer': 'false'})
+        surl = req.get_url()
+        if surl != url:
+            return surl.replace(' ', '%20') + helpers.append_headers(headers)
+
+        surl = re.search(r'href="([^"]+)"\s*class="btn\s*btn-block', req.content)
         if surl:
-            headers.pop('Origin')
-            headers.update({'verifypeer': 'false'})
             return surl.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found')
