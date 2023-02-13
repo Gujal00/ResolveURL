@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -41,10 +42,11 @@ class UploadingSiteResolver(ResolveUrl):
             'method_free': '',
             'method_premium': ''
         }
-        url = helpers.get_redirect_url(web_url, headers=headers, form_data=payload)
-        if url != web_url:
+        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
+        url = re.search(r'href="([^"]+).+?>\s*Download', html)
+        if url:
             headers['verifypeer'] = 'false'
-            return url.replace(' ', '%20').replace('http:', 'https:') + helpers.append_headers(headers)
+            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
