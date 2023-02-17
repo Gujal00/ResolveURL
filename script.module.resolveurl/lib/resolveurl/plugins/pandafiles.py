@@ -50,9 +50,9 @@ class PandaFilesResolver(ResolveUrl):
             headers.update({'verifypeer': 'false'})
             query = urllib_parse.parse_qsl(urllib_parse.urlparse(source.group(1)).query)
             if not query:
-                return source.group(1) + helpers.append_headers(headers)
+                return source.group(1).replace(' ', '%20') + helpers.append_headers(headers)
             src = base64.b64decode(query[0][1]).decode('utf-8')
-            return src + helpers.append_headers(headers)
+            return src.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
