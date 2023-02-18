@@ -1,12 +1,32 @@
-Version 5.1.91 (Feb 06, 2023)
+Version 5.1.92 (Feb 18, 2023)
 - Code Base Changes:
-    - Add missing settings.xml
+    - None
 
 - Resolvers Added:
-    - None
+    - drop
+    - goodstream
+    - gostream
+    - govad
+    - juxxi
+    - krakenfiles
+    - vidhd
 
 - Resolvers Fixed/Updated:
-    - None
+    - fembed
+    - mixdrop
+    - pandafiles
+    - streamingcommunity
+    - streamsb
+    - streamtape
+    - uploadbaz
+    - uploadflix
+    - uploadingsite
+    - uqload
+    - vidbom
+    - vidcoud9
+    - vido
+    - voesx
+    - youdbox
 
 - Resolvers Removed
     - None
