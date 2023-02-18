@@ -27,7 +27,7 @@ class StreamTapeResolver(ResolveUrl):
     name = 'StreamTape'
     domains = ['streamtape.com', 'strtape.cloud', 'streamtape.net', 'streamta.pe', 'streamtape.site',
                'strcloud.link', 'strtpe.link', 'streamtape.cc', 'scloud.online', 'stape.fun',
-               'streamadblockplus.com', 'shavetape.cash', 'streamtape.to']
+               'streamadblockplus.com', 'shavetape.cash', 'streamtape.to', 'streamta.site']
     pattern = r'(?://|\.)(s(?:tr)?(?:eam|have)?(?:ta?p?e?|cloud|adblockplus)\.' \
               r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to))/(?:e|v)/([0-9a-zA-Z]+)'
 
