@@ -25,4 +25,4 @@ class LinkBoxResolver(ResolveGeneric):
     pattern = r'(?://|\.)((?:linkbox|sharezweb)\.(?:to|com))/(?:player\.html\?id=|file/)([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://www.linkbox.to/api/open/get_url?itemId={media_id}')
+        return self._default_get_url(host, media_id, template='https://www.linkbox.to/api/file/detail?itemId={media_id}')
