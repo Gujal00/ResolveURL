@@ -19,8 +19,8 @@
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class JuxxiResolver(ResolveGeneric):
-    name = 'Juxxi'
+class Full30Resolver(ResolveGeneric):
+    name = 'Full30'
     domains = ['juxxi.com']
     pattern = r'(?://|\.)(juxxi\.com)/(?:v|video(?:Embed)?)/(\d+)'
 

@@ -43,6 +43,7 @@ class DesiuploadResolver(ResolveUrl):
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         source = re.search(r'direct_link".+?href="([^"]+)', html)
         if source:
+            headers['verifypeer'] = 'false'
             return source.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
