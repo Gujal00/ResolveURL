@@ -55,40 +55,36 @@ def base64_decode(text):
     i = 0
     out = []
     while i < length:
-        while True:
+        c1 = -1
+        while i < length and c1 == -1:
             c1 = base64_decode_chars[ord(text[i]) & 0xff]
             i += 1
-            if not (i < length and c1 == -1):
-                break
         if c1 == -1:
             break
-        while True:
+        c2 = -1
+        while i < length and c2 == -1:
             c2 = base64_decode_chars[ord(text[i]) & 0xff]
             i += 1
-            if not (i < length and c2 == -1):
-                break
         if c2 == -1:
             break
         out.append(chr((c1 << 2) | ((c2 & 0x30) >> 4)))
-        while True:
+        c3 = -1
+        while i < length and c3 == -1:
             c3 = ord(text[i]) & 0xff
             i += 1
             if c3 == 61:
                 return ''.join(out)
             c3 = base64_decode_chars[c3]
-            if not (i < length and c3 == -1):
-                break
         if c3 == -1:
             break
         out.append(chr(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2)))
-        while True:
+        c4 = -1
+        while i < length and c4 == -1:
             c4 = ord(text[i]) & 0xff
             i += 1
             if c4 == 61:
                 return ''.join(out)
             c4 = base64_decode_chars[c4]
-            if not (i < length and c4 == -1):
-                break
         if c4 == -1:
             break
         out.append(chr(((c3 & 0x03) << 6) | c4))
