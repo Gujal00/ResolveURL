@@ -1,18 +1,13 @@
-Version 5.1.93 (Feb 26, 2023)
+Version 5.1.94 (Mar 06, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - duboku
 
 - Resolvers Fixed/Updated:
-    - bannedvideo
-    - desiupload
-    - filemoon
-    - goload
-    - linkbox
-    - streamhide
-    - streamsb
+    - videa
+    - vudeo
     - voesx
 
 - Resolvers Removed
