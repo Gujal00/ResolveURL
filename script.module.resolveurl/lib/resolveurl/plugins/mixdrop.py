@@ -24,9 +24,9 @@ from resolveurl.lib import helpers
 
 class MixDropResolver(ResolveUrl):
     name = 'MixDrop'
-    domains = ['mixdrop.co', 'mixdrop.to', 'mixdrop.sx', 'mixdrop.bz', 'mixdrop.ch',
+    domains = ['mixdrop.co', 'mixdrop.to', 'mixdrop.sx', 'mixdrop.bz', 'mixdrop.ch','mixdrop.club',
                'mixdrp.co', 'mixdrp.to', 'mixdrop.gl']
-    pattern = r'(?://|\.)(mixdro?p\.(?:c[ho]|to|sx|bz|gl))/(?:f|e)/(\w+)'
+    pattern = r'(?://|\.)(mixdro?p\.(?:c[ho]|to|sx|bz|gl|club))/(?:f|e)/(\w+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -38,6 +38,10 @@ class MixDropResolver(ResolveUrl):
         r = re.search(r'location\s*=\s*"([^"]+)', html)
         if r:
             web_url = 'https://{0}{1}'.format(host, r.group(1))
+            html = self.net.http_GET(web_url, headers=headers).content
+        else:
+            r = re.search(r'iframe.*src="([^"]+)', html)
+            web_url = 'https:{0}'.format(r.group(1))
             html = self.net.http_GET(web_url, headers=headers).content
         if '(p,a,c,k,e,d)' in html:
             html = helpers.get_packed_data(html)

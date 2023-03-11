@@ -131,5 +131,8 @@ dmypy.json
 # VSCode
 .vscode
 
+# Visual Studio
+.vs
+
 # Mac Spotlight
 *.DS_Store
