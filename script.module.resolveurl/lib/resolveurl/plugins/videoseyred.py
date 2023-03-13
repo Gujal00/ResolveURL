@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VideoSeyredResolver(ResolveUrl):
     name = 'VideoSeyred'
     domains = ['videoseyred.in']
-    pattern = r'(?://|\.)(videoseyred\.in)/(?:embed/)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(videoseyred\.in)/(?:embed/|watch/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -41,9 +41,10 @@ class VideoSeyredResolver(ResolveUrl):
             r = json.loads(html2)[0].get('sources', None)
             if r:
                 html = self.net.http_GET(r[0].get('file'), headers=headers).content
-                sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).*\n(?!#)(?P<url>[^\n]+)', html, re.IGNORECASE)
+                sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).*\n(?!#)(?P<url>[^\n]+)', html, re.I)
                 if sources:
-                    return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+                    return helpers.pick_source(helpers.sort_sources_list(
+                        sources)).replace('https:', 'http:') + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
