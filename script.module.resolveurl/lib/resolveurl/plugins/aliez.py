@@ -44,4 +44,4 @@ class AliezResolver(ResolveGeneric):
 
     def get_url(self, host, media_id):
         media_id = media_id.split('|')
-        return self._default_get_url(host, media_id, template='http://emb.apl133.me/player/video.php?id=%s&s=%s&w=590&h=332' % (media_id[0], media_id[1]))
+        return self._default_get_url(host, media_id, template='http://emb.apl215.me/player/video.php?id=%s&s=%s&w=590&h=332' % (media_id[0], media_id[1]))
