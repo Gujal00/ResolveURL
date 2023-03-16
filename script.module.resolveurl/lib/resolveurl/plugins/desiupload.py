@@ -41,7 +41,7 @@ class DesiuploadResolver(ResolveUrl):
             'referer': rurl
         }
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
-        source = re.search(r'direct_link".+?href="([^"]+)', html)
+        source = re.search(r'href="([^"]+).+?>\s*Download', html)
         if source:
             headers['verifypeer'] = 'false'
             return source.group(1).replace(' ', '%20') + helpers.append_headers(headers)
