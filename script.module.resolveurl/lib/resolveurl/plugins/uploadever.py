@@ -20,7 +20,7 @@ import re
 import base64
 from six.moves import urllib_parse
 from resolveurl import common
-from resolveurl.lib import helpers, captcha_lib
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
@@ -31,14 +31,19 @@ class UploadEverResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
-        html = self.net.http_GET(web_url, headers=headers).content
-        if 'File Not Found' in html:
-            raise ResolverError('File Removed')
-
-        payload = helpers.get_hidden(html)
-        payload.update(captcha_lib.do_captcha(html))
-        headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': web_url})
+        headers = {
+            'Origin': web_url.rsplit('/', 1)[0],
+            'Referer': web_url,
+            'User-Agent': common.RAND_UA
+        }
+        payload = {
+            'op': 'download2',
+            'id': media_id,
+            'rand': '',
+            'referer': web_url,
+            'method_free': '',
+            'method_premium': ''
+        }
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
@@ -49,7 +54,7 @@ class UploadEverResolver(ResolveUrl):
                 url = url.group(1)
             return url.replace(' ', '%20') + helpers.append_headers(headers)
 
-        raise ResolverError('File Not Found')
+        raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://uploadever.in/{media_id}')
