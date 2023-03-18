@@ -38,9 +38,12 @@ class StreamEmbedResolver(ResolveUrl):
                 host, data.group(1), data.group(2)
             )
             html = self.net.http_GET(url, headers=headers).content
-            sources = re.findall(r'[A-Z]{10}=\d+x(?P<label>[\d]+)\s*(?P<url>[^\n]+)', html)
-            if sources:
-                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+            if 'type=audio' not in html.lower():
+                sources = re.findall(r'\d+x(?P<label>[\d]+).*\n(?P<url>[^\n]+)', html)
+                if sources:
+                    return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+            else:
+                return url + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
