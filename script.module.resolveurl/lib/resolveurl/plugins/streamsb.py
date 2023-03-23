@@ -39,7 +39,7 @@ class StreamSBResolver(ResolveUrl):
     pattern = r'(?://|\.)(' \
               r'(?:view|watch|embed(?:tv)?|tube|player|cloudemb|japopav|javplaya|p1ayerjavseen|gomovizplay|stream(?:ovies)?|' \
               r'vidmovie)?s{0,2}b?' \
-              r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu|arslanrocky|chill|rity|hight|brisk|sbface)?\.' \
+              r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu|arslanrocky|chill|rity|hight|brisk|face)?\.' \
               r'(?:com|net|org|one|tv|xyz|fun))/(?:embed[-/]|e/|play/|d/|sup/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
