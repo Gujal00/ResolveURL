@@ -32,7 +32,8 @@ class PornHubResolver(ResolveUrl):
         host_url = 'https://www.{0}/'.format(host)
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
-                   'Referer': host_url}
+                   'Referer': host_url,
+                   'Cookie': 'accessAgeDisclaimerPH=1'}
 
         html = self.net.http_GET(web_url, headers=headers).content
         sources = []
