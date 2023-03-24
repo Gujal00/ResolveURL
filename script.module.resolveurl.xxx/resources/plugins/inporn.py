@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     Plugin for ResolveURL
     Copyright (C) 2023 gujal
@@ -34,7 +33,7 @@ class InPornResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         r = json.loads(html)[0]
         if r.get('video_url'):
-            vurl = 'https://{0}{1}'.format(host, self.base164(r.get('video_url')))
+            vurl = 'https://{0}{1}'.format(host, helpers.base164(r.get('video_url')))
             headers.update({'Referer': 'https://{0}/'.format(host)})
             surl = helpers.get_redirect_url(vurl, headers)
             if surl != vurl:
@@ -43,30 +42,6 @@ class InPornResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/api/videofile.php?video_id={media_id}&lifetime=8640000')
-
-    # needed to decode hash for inporn
-    def base164(self, e):
-        t = 'АВСDЕFGHIJKLМNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~'
-        n = ''
-        o = 0
-        while o < len(e):
-            r = t.index(e[o])
-            o += 1
-            i = t.index(e[o])
-            o += 1
-            s = t.index(e[o])
-            o += 1
-            a = t.index(e[o])
-            o += 1
-            r = r << 2 | i >> 4
-            i = (15 & i) << 4 | s >> 2
-            c = (3 & s) << 6 | a
-            n += chr(r)
-            if s != 64:
-                n += chr(i)
-            if a != 64:
-                n += chr(c)
-        return n
 
     @classmethod
     def _is_enabled(cls):

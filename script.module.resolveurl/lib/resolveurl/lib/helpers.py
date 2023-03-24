@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
     ResolveURL Addon for Kodi
     Copyright (C) 2016 t0mm0, tknorris
@@ -674,3 +675,27 @@ def duboku_decode(encurl):
             break
         out.append(chr(((c3 & 0x03) << 6) | c4))
     return ''.join(out)
+
+
+def base164(e):
+    t = 'АВСDЕFGHIJKLМNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,~'
+    n = ''
+    o = 0
+    while o < len(e):
+        r = t.index(e[o])
+        o += 1
+        i = t.index(e[o])
+        o += 1
+        s = t.index(e[o])
+        o += 1
+        a = t.index(e[o])
+        o += 1
+        r = r << 2 | i >> 4
+        i = (15 & i) << 4 | s >> 2
+        c = (3 & s) << 6 | a
+        n += chr(r)
+        if s != 64:
+            n += chr(i)
+        if a != 64:
+            n += chr(c)
+    return n
