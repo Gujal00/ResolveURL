@@ -1,13 +1,21 @@
-Version 5.1.94 (Mar 06, 2023)
+Version 5.1.95 (Mar 25, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - duboku
+    - upvid
 
 - Resolvers Fixed/Updated:
-    - videa
-    - vudeo
+    - aliez
+    - anonfiles
+    - bannedvideo
+    - dembed
+    - desiupload
+    - mixdrop
+    - streamembed
+    - streamsb
+    - uploadever
+    - videoseyred
     - voesx
 
 - Resolvers Removed

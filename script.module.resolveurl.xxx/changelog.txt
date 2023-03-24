@@ -1,10 +1,10 @@
-Version 2.1.35 (Jan 02, 2023)
+Version 2.1.36 (Mar 25, 2023)
 
 - Resolvers Added:
-    - None
+    - inporn
  
 - Resolvers Fixed/Updated:
-    - motherless
+    - pornhub
 
 - Resolvers Removed
     - None
