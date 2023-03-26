@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -39,9 +41,12 @@ class UploadRajaResolver(ResolveUrl):
             'rand': '',
             'referer': 'https://{}/'.format(host)
         }
-        url = helpers.get_redirect_url(web_url, headers=headers, form_data=payload)
-        if url != web_url:
-            return url.replace(' ', '%20') + helpers.append_headers(headers)
+        html = self.net.http_POST(web_url, headers=headers, form_data=payload).content
+        source = re.search(r'href="([^"]+)"\s*class="download', html)
+        if source:
+            query = urllib_parse.parse_qsl(urllib_parse.urlparse(source.group(1)).query)
+            src = query[1][1] if query else source.group(1)
+            return src.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
