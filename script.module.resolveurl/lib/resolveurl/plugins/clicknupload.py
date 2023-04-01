@@ -21,6 +21,7 @@ from resolveurl.lib import helpers
 from resolveurl.lib import captcha_lib
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+from six.moves import urllib_parse
 
 MAX_TRIES = 3
 
@@ -29,8 +30,8 @@ class ClickNUploadResolver(ResolveUrl):
     name = 'ClickNUpload'
     domains = ['clicknupload.to', 'clicknupload.cc', 'clicknupload.co',
                'clicknupload.com', 'clicknupload.me', 'clicknupload.link',
-               'clicknupload.org', 'clicknupload.club']
-    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to))/(?:f/)?([0-9A-Za-z]+)'
+               'clicknupload.org', 'clicknupload.club', 'clicknupload.red']
+    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to|red))/(?:f/)?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -42,13 +43,14 @@ class ClickNUploadResolver(ResolveUrl):
             while tries < MAX_TRIES:
                 data = helpers.get_hidden(html)
                 data.update(captcha_lib.do_captcha(html))
+                common.kodi.sleep(3000)
                 html = self.net.http_POST(web_url, data, headers=headers).content
-                r = re.search(r'''class="downloadbtn"[^>]+onClick\s*=\s*\"window\.open\('([^']+)''', html)
+                r = re.search(r'''class="downloadbtn"[^>]+onClick\s*=\s*\"window\.open\('(.+?)'\);"''', html)
                 if r:
                     headers.update({'verifypeer': 'false'})
-                    return r.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+                    return urllib_parse.quote(r.group(1), '/:') + helpers.append_headers(headers)
 
-                common.kodi.sleep(15000)
+                common.kodi.sleep(12000)
                 tries = tries + 1
             raise ResolverError('Unable to locate link')
         else:
@@ -56,7 +58,7 @@ class ClickNUploadResolver(ResolveUrl):
         return
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://clicknupload.to/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
 
     @classmethod
     def isPopup(self):
