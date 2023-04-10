@@ -1,25 +1,31 @@
-Version 5.1.95 (Mar 25, 2023)
+Version 5.1.96 (Apr 11, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - upvid
+    - hurrystream
+    - oneupload
+    - reviewtech
+    - secvideo
+    - vidpro
 
 - Resolvers Fixed/Updated:
-    - aliez
-    - anonfiles
-    - bannedvideo
-    - dembed
+    - chillx
+    - clicknupload
     - desiupload
-    - mixdrop
-    - streamembed
+    - goload
+    - goodstream
+    - streamhide
     - streamsb
-    - uploadever
-    - videoseyred
-    - voesx
+    - streamtape
+    - uploadraja
+    - vidcloud9
+    - vk
+
 
 - Resolvers Removed
-    - None
+    - watchingvn
+    - zillastream
 
 - Languages Added/Updated
     - None
