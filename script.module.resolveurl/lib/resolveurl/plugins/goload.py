@@ -58,6 +58,8 @@ class GoloadResolver(ResolveUrl):
                     str_url = result.get('source_bk')[0].get('file')
                 if str_url:
                     headers.pop('X-Requested-With')
+                    headers.update({'Referer': 'https://{0}/'.format(host),
+                                    'Origin': 'https://{0}'.format(host)})
                     return str_url + helpers.append_headers(headers)
 
         raise ResolverError('Video cannot be located.')
