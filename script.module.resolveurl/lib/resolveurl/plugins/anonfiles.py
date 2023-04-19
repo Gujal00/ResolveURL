@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class AnonFilesResolver(ResolveGeneric):
     name = 'AnonFiles'
-    domains = ['anonfiles.com', 'bayfiles.com']
-    pattern = r'(?://|\.)((?:bay|anon)files\.com)/([0-9a-zA-Z]+)'
+    domains = ['anonfiles.com', 'bayfiles.com', 'letsupload.cc', 'openload.cc', 'hotfile.io']
+    pattern = r'(?://|\.)((?:(?:bay|anon)files|letsupload|openload|hotfile)\.(?:com|cc|io))/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(

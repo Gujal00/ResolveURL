@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UpVidResolver(ResolveUrl):
     name = 'UpVid'
-    domains = ['upvid.co', 'upvid.pro', 'upvid.live', 'upvid.host', 'upvid.biz', 'upvid.cloud'
+    domains = ['upvid.co', 'upvid.pro', 'upvid.live', 'upvid.host', 'upvid.biz', 'upvid.cloud',
                'opvid.org', 'opvid.online']
     pattern = r'(?://|\.)((?:up|op)vid\.(?:co|org|pro|live|host|biz|cloud|online))/(?:embed-)?([0-9a-zA-Z]+)'
 
