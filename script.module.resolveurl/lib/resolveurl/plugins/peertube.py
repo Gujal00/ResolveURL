@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class PeerTubeResolver(ResolveUrl):
     name = 'PeerTube'
-    domains = ['peertube.tv', 'peertube.co.uk', 'peertube.uno']
-    pattern = r'(?://|\.)(peertube\.(?:tv|co\.uk|uno))/(?:videos/)?(?:embed|watch|w)/([0-9a-zA-Z-]+)'
+    domains = ['peertube.tv', 'peertube.co.uk', 'peertube.uno', 'peertube.stream']
+    pattern = r'(?://|\.)(peertube\.(?:tv|co\.uk|uno|stream))/(?:videos/)?(?:embed|watch|w)/([0-9a-zA-Z-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
