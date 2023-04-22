@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamRubyResolver(ResolveUrl):
     name = 'StreamRuby'
-    domains = ['streamruby.com', 'sruby.xyz']
-    pattern = r'(?://|\.)(s(?:tream)?ruby\.(?:com|xyz))/(?:embed-|e/|d/)?(\w+)'
+    domains = ['streamruby.com', 'sruby.xyz', 'rubystream.xyz']
+    pattern = r'(?://|\.)(s?(?:tream)?ruby(?:stream)?\.(?:com|xyz))/(?:embed-|e/|d/)?(\w+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
