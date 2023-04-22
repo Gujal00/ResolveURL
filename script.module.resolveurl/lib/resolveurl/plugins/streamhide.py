@@ -22,7 +22,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class StreamHideResolver(ResolveGeneric):
     name = 'StreamHide'
-    domains = ['streamhide.to', 'guccihide.com', 'moviesm4u.com', 'movhide.pro']
+    domains = ['streamhide.to', 'guccihide.com', 'moviesm4u.com', 'movhide.pro', 'streamhide.com']
     pattern = r'(?://|\.)((?:moviesm4u|(?:stream|gucci|mov)hide)\.(?:to|com|pro))/(?:e|d|w)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
