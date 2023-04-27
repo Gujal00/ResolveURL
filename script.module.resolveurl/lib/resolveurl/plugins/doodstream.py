@@ -28,8 +28,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class DoodStreamResolver(ResolveUrl):
     name = 'DoodStream'
     domains = ['dood.watch', 'doodstream.com', 'dood.to', 'dood.so', 'dood.cx', 'dood.la', 'dood.ws',
-               'dood.sh', 'doodstream.co', 'dood.pm', 'dood.wf', 'dood.re', 'dood.yt']
-    pattern = r'(?://|\.)(dood(?:stream)?\.(?:com?|watch|to|s[ho]|cx|la|w[sf]|pm|re|yt))/(?:d|e)/([0-9a-zA-Z]+)'
+               'dood.sh', 'doodstream.co', 'dood.pm', 'dood.wf', 'dood.re', 'dood.yt', 'dooood.com']
+    pattern = r'(?://|\.)(do*d(?:stream)?\.(?:com?|watch|to|s[ho]|cx|la|w[sf]|pm|re|yt))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         if any(host.endswith(x) for x in ['.cx', '.wf']):
