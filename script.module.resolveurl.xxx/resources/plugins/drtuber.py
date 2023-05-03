@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
 from six.moves import urllib_parse
 import hashlib
 from resolveurl import common
@@ -41,9 +42,14 @@ class DRTuberResolver(ResolveUrl):
         url = 'https://www.{0}/player_config/?{1}'.format(host, params)
         sources_html = self.net.http_GET(url, headers=headers).content
         if sources_html:
-            sources = helpers.scrape_sources(sources_html, patterns=[r"""video_file>\<\!\[CDATA\[(?P<url>[^\]]+)"""])
-            if sources:
-                return helpers.pick_source(sources) + helpers.append_headers(headers)
+            srcs = re.findall(r'<((?:hq_)?video_file)>\<\!\[CDATA\[([^\]]+)', sources_html)
+            if srcs:
+                sources = []
+                for k, v in srcs:
+                    qual = {'video_file': '360p', 'hq_video_file': '720p'}.get(k)
+                    sources.append((qual, v))
+                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
