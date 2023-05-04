@@ -21,8 +21,9 @@ from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
+
 class BlackPornTubeResolver(ResolveUrl):
-    name = 'blackporntube'
+    name = 'BlackPornTube'
     domains = ['blackporn.tube']
     pattern = r'(?://|\.)(blackporn\.tube)/video/([a-zA-Z0-9]+)'
 
