@@ -70,7 +70,7 @@ class PornHubResolver(ResolveUrl):
             headers.update({'Origin': host[:-1]})
             return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
-        raise ResolverError('File not found')
+        raise ResolverError('File not found or not Free')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://www.{host}/view_video.php?viewkey={media_id}')

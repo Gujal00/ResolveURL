@@ -20,6 +20,7 @@ import re
 import xbmcgui
 from resolveurl.lib import jsunpack
 import six
+import base64
 from six.moves import urllib_parse, urllib_request, urllib_error
 from resolveurl import common
 from resolveurl.resolver import ResolverError
@@ -699,3 +700,12 @@ def base164(e):
         if a != 64:
             n += chr(c)
     return n
+
+
+def Tdecode(vidurl):
+    replacemap = {'M': r'\u041c', 'A': r'\u0410', 'B': r'\u0412', 'C': r'\u0421', 'E': r'\u0415', '=': '~', '+': '.', '/': ','}
+
+    for key in replacemap:
+        vidurl = vidurl.replace(replacemap[key], key)
+    vidurl = base64.b64decode(vidurl)
+    return vidurl.decode('utf-8')
