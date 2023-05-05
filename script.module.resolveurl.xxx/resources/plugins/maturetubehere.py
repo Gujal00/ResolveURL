@@ -17,39 +17,33 @@
 """
 
 import re
-from six.moves import urllib_error
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class FourKPornResolver(ResolveUrl):
-    name = 'FourKPorn'
-    domains = ['4kporn.xxx']
-    pattern = r'(?://|\.)(4kporn\.xxx)/videos/(\d+/[^/]+)'
+class MatureTubeHereResolver(ResolveUrl):
+    name = 'MatureTubeHere'
+    domains = ['maturetubehere.com']
+    pattern = r'(?://|\.)(maturetubehere\.com)/videos/(\d+/[^/]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
-                   'Referer': 'https://{0}/'.format(host)}
-        try:
-            html = self.net.http_GET(web_url, headers=headers).content
-        except urllib_error.HTTPError:
-            raise ResolverError('Cloudflare enabled')
-
-        sources = re.findall(r"video(?:_alt)?_url:\s*'(?P<url>[^']+).+?text:\s*'(?P<label>[^']+)", html)
-        if sources:
-            sources = [(label, url) for url, label in sources]
-            url = helpers.pick_source(helpers.sort_sources_list(sources))
+                   'Referer': 'https://www.{0}/'.format(host)}
+        html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r"video_url:\s*'([^']+)", html, re.DOTALL)
+        if r:
+            url = r.group(1)
             if url.startswith('function/'):
-                lcode = re.findall(r"license_code:\s*'([^']+)", html)[0]
+                lcode = re.findall(r"license_code:\s*'([^']+)", html, re.DOTALL)[0]
                 url = helpers.fun_decode(url, lcode)
             return url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/videos/{media_id}/')
+        return self._default_get_url(host, media_id, template='https://www.{host}/videos/{media_id}/')
 
     @classmethod
     def _is_enabled(cls):

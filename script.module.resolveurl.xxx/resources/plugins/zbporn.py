@@ -17,27 +17,22 @@
 """
 
 import re
-from six.moves import urllib_error
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class FourKPornResolver(ResolveUrl):
-    name = 'FourKPorn'
-    domains = ['4kporn.xxx']
-    pattern = r'(?://|\.)(4kporn\.xxx)/videos/(\d+/[^/]+)'
+class ZBPornResolver(ResolveUrl):
+    name = 'ZBPorn'
+    domains = ['zbporn.com']
+    pattern = r'(?://|\.)(zbporn\.com)/videos/(\d+/[^/]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://{0}/'.format(host)}
-        try:
-            html = self.net.http_GET(web_url, headers=headers).content
-        except urllib_error.HTTPError:
-            raise ResolverError('Cloudflare enabled')
-
-        sources = re.findall(r"video(?:_alt)?_url:\s*'(?P<url>[^']+).+?text:\s*'(?P<label>[^']+)", html)
+        html = self.net.http_GET(web_url, headers=headers).content
+        sources = re.findall(r"video(?:_alt)?_url:\s*'(?P<url>[^']+).+?text:\s*'(?P<label>[^']+)", html, re.DOTALL)
         if sources:
             sources = [(label, url) for url, label in sources]
             url = helpers.pick_source(helpers.sort_sources_list(sources))
