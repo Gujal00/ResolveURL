@@ -30,7 +30,7 @@ class Love4PornResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
-                   'Referer': 'https://www.{0}/'.format(host)}
+                   'Referer': 'https://{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'''video_url:\s*['"]([^"']+)''', html, re.DOTALL)
         if r:
@@ -45,7 +45,7 @@ class Love4PornResolver(ResolveUrl):
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://www.{host}/embed/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
 
     @classmethod
     def _is_enabled(cls):
