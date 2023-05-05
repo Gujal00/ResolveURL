@@ -23,8 +23,8 @@ from six.moves import urllib_parse
 
 class SpeedoStreamResolver(ResolveGeneric):
     name = 'SpeedoStream'
-    domains = ['speedostream.com', 'speedostream.nl']
-    pattern = r'(?://|\.)(speedostream\.(?:com|nl))/(?:embed-)?([^\n]+)'
+    domains = ['speedostream.com', 'speedostream.nl', 'speedostream.pm']
+    pattern = r'(?://|\.)(speedostream\.(?:com|nl|pm))/(?:embed-)?([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
