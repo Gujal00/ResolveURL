@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class Amateur8Resolver(ResolveUrl):
     name = 'Amateur8'
-    domains = ['amateur8.com']
-    pattern = r'(?://|\.)(amateur8\.com)/(?:videos|embed)/(\d+)'
+    domains = ['amateur8.com', 'lesbian8.com']
+    pattern = r'(?://|\.)((?:amateur|lesbian)8\.com)/(?:videos|embed)/(\d+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
