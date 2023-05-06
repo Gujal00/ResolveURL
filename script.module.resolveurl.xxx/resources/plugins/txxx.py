@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class TxxxResolver(ResolveUrl):
     name = 'Txxx'
-    domains = ['txxx.com']
-    pattern = r'(?://|\.)(txxx\.com)/videos/([a-zA-Z0-9]+)'
+    domains = ['txxx.com', 'bdsmx.tube', 'blackporn.tube', 'hclips.com', 'inporn.com', 'voyeurhit.com']
+    pattern = r'(?://|\.)((?:txxx|bdsmx|blackporn|hclips|inporn|voyeurhit)\.(?:com|tube))/(?:videos?|embed)/([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -37,7 +37,7 @@ class TxxxResolver(ResolveUrl):
         r = re.search('video_url":"([^"]+)', html)
         if r:
             videourl = helpers.Tdecode(r.group(1))
-            if not videourl.startswith('http'):
+            if videourl.startswith('/'):
                 videourl = 'https://{0}{1}'.format(host, videourl)
             return videourl + helpers.append_headers(headers)
 

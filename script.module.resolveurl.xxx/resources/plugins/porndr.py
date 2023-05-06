@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2023 gujal
+    Copyright (C) 2023 ErosVece
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,20 +24,26 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class PornDRResolver(ResolveUrl):
     name = 'PornDR'
-    domains = ['porndr.com']
-    pattern = r'(?://|\.)(porndr\.com)/videos/(\d+/[^/]+)'
+    domains = ['amateur8.com', 'ebony8.com', 'lesbian8.com', '4wank.com', 'analdin.xxx', 'bigtitslust.com',
+               'fetishshrine.com', 'maturetubehere.com', 'porndr.com', 'sortporn.com', 'vikiporn.com',
+               'crazyporn.xxx', 'freeporn8.com', 'pornfun.com', '3movs.com']
+    pattern = r'(?://|\.)((?:4wank|amateur8|ebony8|lesbian8|analdin|bigtitslust|fetishshrine|maturetubehere|' \
+              r'porndr|sortporn|vikiporn|crazyporn|freeporn8|pornfun|3movs)' \
+              r'\.(?:com|xxx))/(?:videos|embed)/(\d+(?:/[^/]+)?)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://www.{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r"video_url:\s*'([^']+)", html, re.DOTALL)
+        r = re.search(r'''video_url:\s*['"]([^"']+)''', html, re.DOTALL)
         if r:
+            headers.update({'Referer': web_url})
             url = r.group(1)
             if url.startswith('function/'):
-                lcode = re.findall(r"license_code:\s*'([^']+)", html, re.DOTALL)[0]
+                lcode = re.findall(r"license_code:\s*'([^']+)", html)[0]
                 url = helpers.fun_decode(url, lcode)
+                url = helpers.get_redirect_url(url, headers)
             return url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')

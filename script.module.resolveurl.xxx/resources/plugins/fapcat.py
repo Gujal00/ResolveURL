@@ -17,6 +17,7 @@
 """
 
 import re
+from six.moves import urllib_error
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -24,14 +25,18 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class FapCatResolver(ResolveUrl):
     name = 'FapCat'
-    domains = ['fapcat.com']
-    pattern = r'(?://|\.)(fapcat\.com)/videos/(\d+/[^/]+)'
+    domains = ['fapcat.com', 'fapnado.xxx', 'pornicom.com', 'zbporn.com', '4kporn.xxx']
+    pattern = r'(?://|\.)((?:fapcat|pornicom|zbporn|4kporn)\.(?:xxx|com))/videos/(\d+/[^/]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://www.{0}/'.format(host)}
-        html = self.net.http_GET(web_url, headers=headers).content
+        try:
+            html = self.net.http_GET(web_url, headers=headers).content
+        except urllib_error.HTTPError:
+            raise ResolverError('Cloudflare enabled')
+
         sources = re.findall(r"video(?:_alt)?_url:\s*'(?P<url>[^']+).+?text:\s*'(?P<label>[^']+)", html)
         if sources:
             sources = [(label, url) for url, label in sources]
