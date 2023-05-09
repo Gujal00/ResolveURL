@@ -26,9 +26,11 @@ class PornDRResolver(ResolveUrl):
     name = 'PornDR'
     domains = ['amateur8.com', 'ebony8.com', 'lesbian8.com', '4wank.com', 'analdin.xxx', 'bigtitslust.com',
                'fetishshrine.com', 'maturetubehere.com', 'porndr.com', 'sortporn.com', 'vikiporn.com',
-               'crazyporn.xxx', 'freeporn8.com', 'pornfun.com', '3movs.com']
+               'crazyporn.xxx', 'freeporn8.com', 'pornfun.com', '3movs.com', 'trannygem.com', 'gayck.com',
+               'urgayporn.com', 'keekass.com', 'yeswegays.com', 'mengem.com']
     pattern = r'(?://|\.)((?:4wank|amateur8|ebony8|lesbian8|analdin|bigtitslust|fetishshrine|maturetubehere|' \
-              r'porndr|sortporn|vikiporn|crazyporn|freeporn8|pornfun|3movs)' \
+              r'porndr|sortporn|vikiporn|crazyporn|freeporn8|pornfun|3movs|trannygem|gayck|urgayporn|keekass|' \
+              r'yeswegays|mengem)' \
               r'\.(?:com|xxx))/(?:videos|embed)/(\d+(?:/[^/]+)?)'
 
     def get_media_url(self, host, media_id):

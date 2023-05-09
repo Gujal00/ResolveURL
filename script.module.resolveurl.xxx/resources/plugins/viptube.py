@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VipTubeResolver(ResolveUrl):
     name = 'VipTube'
-    domains = ['viptube.com', 'proporn.com', 'vivatube.com', 'winporn.com']
-    pattern = r'(?://|\.)((?:viptube|proporn|vivatube|winporn)\.com)/(?:\w\w/)?(?:video|embed)/([a-zA-Z0-9]+)'
+    domains = ['viptube.com', 'proporn.com', 'vivatube.com', 'winporn.com', 'tubeon.com', 'iceporn.com']
+    pattern = r'(?://|\.)((?:viptube|proporn|vivatube|winporn|tubeon|iceporn)\.com)/(?:\w\w/)?(?:video|embed)/([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

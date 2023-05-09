@@ -17,38 +17,39 @@
 """
 
 import re
+from six.moves import urllib_error
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class TxxxResolver(ResolveUrl):
-    name = 'Txxx'
-    domains = ['txxx.com', 'bdsmx.tube', 'blackporn.tube', 'hclips.com', 'inporn.com',
-               'voyeurhit.com', 'gettranny.com', 'mrgay.tube', 'shemalez.com', 'vxxx.com',
-               'upornia.com']
-    pattern = r'(?://|\.)' \
-              r'((?:[tv]xxx|bdsmx|blackporn|hclips|inporn|voyeurhit|gettranny|mrgay|shemalez|upornia)' \
-              r'\.(?:com|tube))/(?:videos?|embed)[/-]([a-zA-Z0-9]+)'
+class BeMyHoleResolver(ResolveUrl):
+    name = 'BeMyHole'
+    domains = ['bemyhole.com']
+    pattern = r'(?://|\.)(bemyhole\.com)/((?:v|embed)/[a-zA-Z0-9-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'User-Agent': common.RAND_UA,
-            'Referer': 'https://{0}/'.format(host)
-        }
-        html = self.net.http_GET(web_url, headers=headers).content
-        r = re.findall('video_url":"([^"]+)', html)
-        if r:
-            videourl = helpers.Tdecode(r[-1])
-            if videourl.startswith('/'):
-                videourl = 'https://{0}{1}'.format(host, videourl)
-            return videourl + helpers.append_headers(headers)
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': 'https://www.{0}/'.format(host)}
+        try:
+            html = self.net.http_GET(web_url, headers=headers).content
+        except urllib_error.HTTPError:
+            raise ResolverError('Cloudflare enabled')
+
+        sources = re.findall(r"video(?:_alt)?_url:\s*'(?P<url>[^']+).+?text:\s*'(?P<label>[^']+)", html)
+        if sources:
+            sources = [(label, url) for url, label in sources]
+            url = helpers.pick_source(helpers.sort_sources_list(sources))
+            if url.startswith('function/'):
+                lcode = re.findall(r"license_code:\s*'([^']+)", html)[0]
+                url = helpers.fun_decode(url, lcode)
+            return url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/api/videofile.php?video_id={media_id}&lifetime=8640000')
+        return self._default_get_url(host, media_id, template='https://www.{host}/{media_id}/')
 
     @classmethod
     def _is_enabled(cls):
