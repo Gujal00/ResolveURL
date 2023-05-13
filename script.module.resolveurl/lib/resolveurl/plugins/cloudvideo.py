@@ -16,17 +16,33 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
+from resolveurl import common
 from resolveurl.lib import helpers
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class CloudVideoResolver(ResolveGeneric):
+class CloudVideoResolver(ResolveUrl):
     name = 'CloudVideo'
     domains = ['cloudvideo.tv']
+    pattern = r'(?://|\.)(cloudvideo\.tv)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[{src:\s*["'](?P<url>[^"']+)'''],
-            generic_patterns=False
-        )
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA}
+        html = self.net.http_GET(web_url, headers=headers).content
+        payload = helpers.get_hidden(html)
+        if not payload:
+            raise ResolverError('File Removed')
+
+        headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': web_url})
+        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
+        html += helpers.get_packed_data(html)
+        source = re.search(r'''sources:\s*\[{src:\s*["']([^"']+)''', html)
+        if source:
+            return source.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+
+        raise ResolverError('File Not Found')
+
+    def get_url(self, host, media_id):
+        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
