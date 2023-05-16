@@ -1,10 +1,10 @@
-Version 2.1.36 (Mar 25, 2023)
+Version 2.1.37 (May 16, 2023)
 
 - Resolvers Added:
-    - inporn
+    - too many
  
 - Resolvers Fixed/Updated:
-    - pornhub
+    - bitporno
 
 - Resolvers Removed
     - None
