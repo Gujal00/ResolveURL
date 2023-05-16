@@ -26,9 +26,10 @@ class TxxxResolver(ResolveUrl):
     name = 'Txxx'
     domains = ['txxx.com', 'bdsmx.tube', 'blackporn.tube', 'hclips.com', 'inporn.com',
                'voyeurhit.com', 'gettranny.com', 'mrgay.tube', 'shemalez.com', 'vxxx.com',
-               'upornia.com']
+               'upornia.com', 'thegay.com', 'hdzog.com']
     pattern = r'(?://|\.)' \
-              r'((?:[tv]xxx|bdsmx|blackporn|hclips|inporn|voyeurhit|gettranny|mrgay|shemalez|upornia)' \
+              r'((?:[tv]xxx|bdsmx|blackporn|hclips|inporn|voyeurhit|gettranny|mrgay|shemalez|upornia|' \
+              r'thegay|hdzog)' \
               r'\.(?:com|tube))/(?:videos?|embed)[/-]([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):

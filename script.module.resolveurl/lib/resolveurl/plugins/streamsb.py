@@ -89,8 +89,10 @@ class StreamSBResolver(ResolveUrl):
 
         x = '{0}||{1}||{2}||streamsb'.format(makeid(12), media_id, makeid(12))
         c1 = binascii.hexlify(x.encode('utf8')).decode('utf8')
-        x = '{0}||{1}||{2}||streamsb'.format(makeid(12), makeid(12), makeid(12))
+        x = '7Vd5jIEF2lKy||nuewwgxb1qs'
         c2 = binascii.hexlify(x.encode('utf8')).decode('utf8')
-        x = '{0}||{1}||{2}||streamsb'.format(makeid(12), c2, makeid(12))
-        c3 = binascii.hexlify(x.encode('utf8')).decode('utf8')
-        return 'https://{0}/sources16/{1}/{2}'.format(host, c1, c3)
+        # x = '{0}||{1}||{2}||streamsb'.format(makeid(12), makeid(12), makeid(12))
+        # c2 = binascii.hexlify(x.encode('utf8')).decode('utf8')
+        # x = '{0}||{1}||{2}||streamsb'.format(makeid(12), c2, makeid(12))
+        # c3 = binascii.hexlify(x.encode('utf8')).decode('utf8')
+        return 'https://{0}/{1}/{2}'.format(host, c2, c1)

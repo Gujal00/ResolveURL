@@ -25,8 +25,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class FapCatResolver(ResolveUrl):
     name = 'FapCat'
-    domains = ['fapcat.com', 'fapnado.xxx', 'pornicom.com', 'zbporn.com', '4kporn.xxx']
-    pattern = r'(?://|\.)((?:fapcat|pornicom|zbporn|4kporn)\.(?:xxx|com))/videos/(\d+/[^/]+)'
+    domains = ['fapcat.com', 'fapnado.xxx', 'pornicom.com', 'zbporn.com', '4kporn.xxx',
+               'gay4porn.com', 'allboner.com', 'gayvids.tv']
+    pattern = r'(?://|\.)((?:fapcat|pornicom|zbporn|4kporn|gay4porn|allboner|gayvids)\.(?:xxx|com|tv))/videos/(\d+/[^/]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -35,7 +36,7 @@ class FapCatResolver(ResolveUrl):
         try:
             html = self.net.http_GET(web_url, headers=headers).content
         except urllib_error.HTTPError:
-            raise ResolverError('Cloudflare enabled')
+            raise ResolverError('Cloudflare protected')
 
         sources = re.findall(r"video(?:_alt)?_url:\s*'(?P<url>[^']+).+?text:\s*'(?P<label>[^']+)", html)
         if sources:

@@ -36,10 +36,7 @@ class BitPornoResolver(ResolveUrl):
             if not url.group(1).endswith('.m3u8'):
                 return url.group(1) + helpers.append_headers(headers)
             surl = '{}{}'.format(web_url.rsplit('/', 1)[0], url.group(1)) if url.group(1).startswith('/') else url.group(1)
-            playlist_html = self.net.http_GET(surl, headers=headers).content
-            sources = re.findall(r'RESOLUTION=\d+x(?P<label>[\d]+).+\n(?!#)(?P<url>[^\n]+)', playlist_html, re.I)
-            if sources:
-                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+            return surl + helpers.append_headers(headers)
 
         raise ResolverError('Video cannot be located.')
 
