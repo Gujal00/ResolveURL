@@ -34,7 +34,8 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.cc', 'streamingcommunity.monster', 'streamingcommunity.press',
                'streamingcommunity.business', 'streamingcommunity.org', 'streamingcommunity.best',
                'streamingcommunity.agency', 'streamingcommunity.blog', 'streamingcommunity.tech',
-               'streamingcommunity.golf', 'streamingcommunity.city', 'streamingcommunity.help', 'streamingcommunity.blue', 'streamingcommunity.codes']
+               'streamingcommunity.golf', 'streamingcommunity.city', 'streamingcommunity.help',
+               'streamingcommunity.blue', 'streamingcommunity.codes']
     pattern = r'(?://|\.)(streamingcommunity\.' \
         r'(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar|top|' \
         r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes))' \
@@ -44,7 +45,7 @@ class StreamCommunityResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r'''<video-player.+?scws_id[^\d]+(\d+)''', html, re.DOTALL)
+        match = re.search(r'''scws_id[^\d]+(\d+)''', html)
         if match:
             scws_id = match.group(1)
             headers.update({'Referer': web_url})
