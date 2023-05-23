@@ -45,23 +45,23 @@ class BoxbitResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         logger.log('in get_media_url %s : %s' % (host, media_id))
         token = self.get_setting('token')
-        
+
         if token is None:
             raise ResolverError('No BB Token Available')
-        
+
         uuid = self.get_setting('uuid')
-        self.headers['Authorization'] = f"Bearer {token}"
+        self.headers['Authorization'] = "Bearer {0}".format(token)
         data = {'link': media_id}
         while True:
-            requestlink = f"{self.base_url}/users/{uuid}/downloader/request-file"
+            requestlink = "{0}/users/{1}/downloader/request-file".format(self.base_url, uuid)
             response = self.net.http_POST(requestlink, form_data=data, headers=self.headers, jdata=True)
             jsdata = response.content
             if response._response.code == 429:
                 time.sleep(2)
             elif response._response.code == 200:
-                 videolink = json.loads(jsdata).get('link')
-                 self.headers['Referer'] = requestlink
-                 return videolink + helpers.append_headers(self.headers)
+                videolink = json.loads(jsdata).get('link')
+                self.headers['Referer'] = requestlink
+                return videolink + helpers.append_headers(self.headers)
             else:
                 msg = response.json().get('message', 'Unknown BB Error during resolve')
                 logger.log_warning(msg)
@@ -76,10 +76,10 @@ class BoxbitResolver(ResolveUrl):
         return 'boxbit.app', url
 
     def get_hosters(self):
-        try: 
-            html = self.net.http_GET(f"{self.base_url}/filehosts/domains", headers=self.headers).content
+        try:
+            html = self.net.http_GET("{0}/filehosts/domains".format(self.base_url), headers=self.headers).content
             js_domains = json.loads(html)
-            
+
             js_hosters = self.get_user_hosters_info()
             if js_hosters:
                 workinghosters = []
@@ -92,9 +92,9 @@ class BoxbitResolver(ResolveUrl):
                             workinghosters.append(domain)
                     else:
                         logger.log("Skipping non working host: " + hostidentifier)
-                return workinghosters                        
+                return workinghosters
             else:
-                return [host.lower() for item in js_domains.values() for host in item] 
+                return [host.lower() for item in js_domains.values() for host in item]
         except Exception as e:
             logger.log_error('Filehost list retrieval failed: %s' % (e))
             return []
@@ -107,7 +107,7 @@ class BoxbitResolver(ResolveUrl):
         if url:
             match = re.search('//(.*?)/', url)
             if match:
-                logger.log('Boxbit checking host : %s' %str(host))
+                logger.log('Boxbit checking host : {0}'.format(host))
                 host = match.group(1)
             else:
                 return False
@@ -127,9 +127,9 @@ class BoxbitResolver(ResolveUrl):
                 raise ResolverError('No BB Token Available')
 
             uuid = self.get_setting('uuid')
-            login = self.login()
-            user_url = f"{self.base_url}/users/{uuid}?with[]=subscription&with[]=current_subscription_filehosts&with[]=current_subscription_filehost_usages"
-            self.headers = {"Authorization": f"Bearer {token}"}
+            _ = self.login()
+            user_url = "{0}/users/{1}?with[]=subscription&with[]=current_subscription_filehosts&with[]=current_subscription_filehost_usages".format(self.base_url, uuid)
+            self.headers = {"Authorization": "Bearer {0}".format(token)}
             response = self.net.http_GET(user_url, headers=self.headers)
             if response._response.code == 200:
                 jsdata = json.loads(response.content)
@@ -138,19 +138,19 @@ class BoxbitResolver(ResolveUrl):
                 logger.log('Failed to retrieve user and hoster information.')
                 return False
         except Exception as e:
-            logger.log(f"Failed to retrieve user and hoster information: {e}")
+            logger.log("Failed to retrieve user and hoster information: {0}".format(e))
             return False
 
     def refresh_token(self):
         try:
             token = self.get_setting('token')
-            self.headers['Authorization'] = f"Bearer {token}"
-            response = self.net.http_POST(f"{self.base_url}/auth/refresh", headers=self.headers)
+            self.headers['Authorization'] = "Bearer {0}".format(token)
+            response = self.net.http_POST("{0}/auth/refresh".format(self.base_url), headers=self.headers)
             if response._response.code == 200:
                 data = json.loads(response.content)
                 self.set_setting('token', data['auth']['access_token'])
-                self.set_setting('uuid', js_data['user']['uuid'])
-                self.set_setting('time_expired', time.time() + int(js_data['auth']['expires_in']))
+                self.set_setting('uuid', data['user']['uuid'])
+                self.set_setting('time_expired', time.time() + int(data['auth']['expires_in']))
                 return True
             else:
                 raise ResolverError('BB Refresh Token Failed')
@@ -163,7 +163,7 @@ class BoxbitResolver(ResolveUrl):
         logger.log('BB Start Login')
         token = self.get_setting('token')
         uuid = self.get_setting('uuid')
-        if token and uuid: # try refresh token
+        if token and uuid:  # try refresh token
             try:
                 timeleft = self.getTimeExpirationTimeLeft()
                 tokenRefreshRequired = timeleft < 3600
@@ -173,7 +173,7 @@ class BoxbitResolver(ResolveUrl):
                 else:
                     logger.log('Boxbit - Refreshing Token')
                     if self.refresh_token():
-                         logger.log('Boxbit - Refreshing Token done')
+                        logger.log('Boxbit - Refreshing Token done')
                 return True
             except Exception as e:
                 msg = str(e)
