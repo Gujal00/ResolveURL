@@ -45,7 +45,7 @@ class StreamCommunityResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r'''scws_id[^\d]+(\d+)''', html)
+        match = re.search(r'''scws_id&quot;:(\d+)''', html)
         if match:
             scws_id = match.group(1)
             headers.update({'Referer': web_url})
