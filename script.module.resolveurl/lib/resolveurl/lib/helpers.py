@@ -83,7 +83,7 @@ def append_headers(headers):
 
 def get_packed_data(html):
     packed_data = ''
-    for match in re.finditer(r'(eval\s*\(function.*?)</script>', html, re.DOTALL | re.I):
+    for match in re.finditer(r'(eval\s*\(function\(p,a,c,k,e.+?\)\)[;\n<])', html, re.DOTALL | re.I):
         if jsunpack.detect(match.group(1)):
             packed_data += jsunpack.unpack(match.group(1))
 
