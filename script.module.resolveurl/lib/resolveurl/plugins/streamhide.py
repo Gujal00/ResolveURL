@@ -23,7 +23,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 class StreamHideResolver(ResolveGeneric):
     name = 'StreamHide'
     domains = ['streamhide.to', 'guccihide.com', 'moviesm4u.com', 'movhide.pro', 'streamhide.com',
-               'louishide.com', 'ahvsh.com', 'javb1.com']
+               'louishide.com', 'ahvsh.com', 'javb1.com', 'bikurathulw.sbs']
     pattern = r'(?://|\.)((?:moviesm4u|ahvsh|(?:stream|gucci|mov|louis)hide|javb1|bikurathulw)\.(?:to|com|pro|sbs))/' \
               r'(?:e|d|w)/([0-9a-zA-Z]+)'
 
