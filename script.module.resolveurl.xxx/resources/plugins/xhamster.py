@@ -30,9 +30,9 @@ class xHamsterResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''{"url":"(?P<url>http[^"]+).+?label":"(?P<label>[^"]+)'''],
+            patterns=[r'''{"url":"(?P<url>http[^"]+)[^}]+label":"(?P<label>[^"]+)'''],
             generic_patterns=False,
-            result_blacklist=["auto"]
+            result_blacklist=["1080p"]
         )
 
     def get_url(self, host, media_id):
