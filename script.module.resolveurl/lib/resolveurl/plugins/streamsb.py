@@ -42,7 +42,7 @@ class StreamSBResolver(ResolveUrl):
               r'stream(?:ovies)?|vidmovie|javside|aintahalu)?s{0,2}b?' \
               r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu|arslanrocky|' \
               r'chill|rity|hight|brisk|face|lvturbo|net|one|asian|ani|rapid)?\.' \
-              r'(?:com|net|org|one|tv|xyz|fun|pro|sbs))/(?:embed[-/]|e/|play/|d/|sup/)?([0-9a-zA-Z]+)'
+              r'(?:com|net|org|one|tv|xyz|fun|pro|sbs))/(?:embed[-/]|e/|play/|d/|sup/|w/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
