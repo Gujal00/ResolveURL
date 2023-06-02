@@ -17,9 +17,19 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from resolveurl.lib import helpers
 
 
 class GoVadResolver(ResolveGeneric):
     name = 'GoVad'
     domains = ['govad.xyz']
-    pattern = r'(?://|\.)(govad\.xyz)/(?:embed-)?([0-9a-zA-Z-]+)'
+    pattern = r'//(.*\.?govad\.xyz)/(?:embed-)?([0-9a-zA-Z-]+)'
+
+    def get_media_url(self, host, media_id):
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            referer=False,
+        )
+
+    def get_url(self, host, media_id):
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
