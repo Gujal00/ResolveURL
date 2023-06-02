@@ -22,13 +22,13 @@ from resolveurl.lib import helpers
 
 class StreamHubResolver(ResolveGeneric):
     name = 'StreamHub'
-    domains = ['streamhub.to']
-    pattern = r'(?://|\.)(streamhub\.to)/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
+    domains = ['streamhub.to', 'streamhub.gg']
+    pattern = r'(?://|\.)(streamhub\.(?:to|gg))/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[{src:\s*"(?P<url>[^"]+)",'''],
+            patterns=[r'''sources:\s*\[{src:\s*"(?P<url>[^"]+)'''],
             generic_patterns=False,
             referer=False
         )
