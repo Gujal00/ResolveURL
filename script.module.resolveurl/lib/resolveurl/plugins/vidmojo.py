@@ -42,7 +42,10 @@ class VidMojoResolver(ResolveUrl):
         response = self.net.http_GET(web_url, headers=headers).content
         srcs = helpers.scrape_sources(response, patterns=[r'''sources:\s*[[{]+\s*file:\s*"(?P<url>[^"]+)'''], generic_patterns=False)
         if srcs:
-            headers.update({'Referer': web_url})
+            headers.update({
+                'Referer': 'https://{0}/'.format(host),
+                'Origin': 'https://{0}'.format(host)
+            })
             return helpers.pick_source(sorted(srcs, reverse=True)) + helpers.append_headers(headers)
 
         raise ResolverError('No playable video found.')

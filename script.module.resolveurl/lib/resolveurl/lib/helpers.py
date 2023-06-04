@@ -18,7 +18,7 @@
 """
 import re
 import xbmcgui
-from resolveurl.lib import jsunpack
+from resolveurl.lib import jsunpack, unjuice
 import six
 from six.moves import urllib_parse, urllib_request, urllib_error
 from resolveurl import common
@@ -88,6 +88,15 @@ def get_packed_data(html):
             packed_data += jsunpack.unpack(match.group(1))
 
     return packed_data
+
+
+def get_juiced_data(html):
+    juiced_data = ''
+    for match in re.finditer(r'(JuicyCodes\.Run.+?[;\n<])', html, re.DOTALL | re.I):
+        if unjuice.test(match.group(1)):
+            juiced_data += unjuice.run(match.group(1))
+
+    return juiced_data
 
 
 def sort_sources_list(sources):
@@ -208,11 +217,9 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
     if cookie:
         headers.update({'Cookie': cookie})
     html = response.content
-    if not referer:
-        headers.update({'Referer': rurl})
+    headers.update({'Referer': rurl, 'Origin': rurl[:-1]})
     if not verifypeer:
         headers.update({'verifypeer': 'false'})
-    headers.update({'Origin': rurl[:-1]})
     source_list = scrape_sources(html, result_blacklist, scheme, patterns, generic_patterns)
     source = pick_source(source_list)
     return source + append_headers(headers)
