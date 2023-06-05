@@ -1,20 +1,28 @@
-Version 5.1.98 (May 16, 2023)
+Version 5.1.99 (Jun 05, 2023)
 - Code Base Changes:
-    - None
+    - unjuice helper functions
 
 - Resolvers Added:
-    - film77
-    - streamwish
-    - vidello
-    - vidlook
+    - boxbit
+    - drkvid
+    - filelions
+    - kwik
+    - reviewrate
 
 - Resolvers Fixed/Updated:
-    - cloudvideo
-    - mixdrop
-    - speedostream
+    - goload
+    - govad
+    - myfeminist
+    - neohd
     - streamhide
+    - streamhub
+    - streamingcommunity
     - streamsb
-
+    - streamvid
+    - streamwish
+    - vidmojo
+    - voesx
+    - vtube
 
 - Resolvers Removed
     - None

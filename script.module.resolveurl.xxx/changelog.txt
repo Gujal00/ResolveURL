@@ -1,10 +1,10 @@
-Version 2.1.37 (May 16, 2023)
+Version 2.1.38 (Jun 05, 2023)
 
 - Resolvers Added:
-    - too many
+    - None
  
 - Resolvers Fixed/Updated:
-    - bitporno
+    - xhamster
 
 - Resolvers Removed
     - None

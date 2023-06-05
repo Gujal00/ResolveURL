@@ -18,7 +18,7 @@
 """
 import re
 import xbmcgui
-from resolveurl.lib import jsunpack, unjuice
+from resolveurl.lib import jsunpack, unjuice, unjuice2
 import six
 from six.moves import urllib_parse, urllib_request, urllib_error
 from resolveurl import common
@@ -95,6 +95,15 @@ def get_juiced_data(html):
     for match in re.finditer(r'(JuicyCodes\.Run.+?[;\n<])', html, re.DOTALL | re.I):
         if unjuice.test(match.group(1)):
             juiced_data += unjuice.run(match.group(1))
+
+    return juiced_data
+
+
+def get_juiced2_data(html):
+    juiced_data = ''
+    for match in re.finditer(r'(_juicycodes\(.+?[;\n<])', html, re.DOTALL | re.I):
+        if unjuice2.test(match.group(1)):
+            juiced_data += unjuice2.run(match.group(1))
 
     return juiced_data
 
