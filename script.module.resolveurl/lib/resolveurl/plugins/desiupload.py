@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class DesiuploadResolver(ResolveUrl):
     name = 'Desiupload'
-    domains = ['desiupload.co', 'desiupload.to']
-    pattern = r'(?://|\.)(desiupload\.[ct]o)/([0-9a-zA-Z]+)'
+    domains = ['desiupload.co', 'desiupload.to', 'quotesread.org']
+    pattern = r'(?://|\.)((?:desiupload|quotesread)\.(?:[ct]o|org))/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
