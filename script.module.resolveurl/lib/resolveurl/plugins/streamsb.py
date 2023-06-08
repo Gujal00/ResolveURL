@@ -36,12 +36,13 @@ class StreamSBResolver(ResolveUrl):
                'sbspeed.com', 'streamsss.net', 'sblanh.com', 'tvmshow.com', 'sbanh.com', 'streamovies.xyz',
                'embedtv.fun', 'sblongvu.com', 'arslanrocky.xyz', 'sbchill.com', 'sbrity.com', 'sbhight.com',
                'sbbrisk.com', 'gomovizplay.com', 'sbface.com', 'lvturbo.com', 'sbnet.one', 'sbone.pro',
-               'sbasian.pro', 'sbani.pro', 'sbrapid.com', 'javside.com', 'aintahalu.sbs', 'vidmoviesb.xyz']
+               'sbasian.pro', 'sbani.pro', 'sbrapid.com', 'javside.com', 'aintahalu.sbs', 'vidmoviesb.xyz',
+               'sbsonic.com']
     pattern = r'(?://|\.)(' \
               r'(?:view|watch|embed(?:tv)?|tube|player|cloudemb|japopav|javplaya|p1ayerjavseen|gomovizplay|' \
               r'stream(?:ovies)?|vidmovie|javside|aintahalu)?s{0,2}b?' \
               r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu|arslanrocky|' \
-              r'chill|rity|hight|brisk|face|lvturbo|net|one|asian|ani|rapid)?\.' \
+              r'chill|rity|hight|brisk|face|lvturbo|net|one|asian|ani|rapid|sonic)?\.' \
               r'(?:com|net|org|one|tv|xyz|fun|pro|sbs))/(?:embed[-/]|e/|play/|d/|sup/|w/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
