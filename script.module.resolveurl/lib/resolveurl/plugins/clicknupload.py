@@ -28,10 +28,10 @@ MAX_TRIES = 3
 
 class ClickNUploadResolver(ResolveUrl):
     name = 'ClickNUpload'
-    domains = ['clicknupload.to', 'clicknupload.cc', 'clicknupload.co',
-               'clicknupload.com', 'clicknupload.me', 'clicknupload.link',
-               'clicknupload.org', 'clicknupload.club', 'clicknupload.red']
-    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to|red))/(?:f/)?([0-9A-Za-z]+)'
+    domains = ['clicknupload.to', 'clicknupload.cc', 'clicknupload.co', 'clicknupload.com',
+               'clicknupload.me', 'clicknupload.link', 'clicknupload.red', 'clicknupload.org',
+               'clicknupload.club', 'clicknupload.click']
+    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to|red|click))/(?:f/)?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
