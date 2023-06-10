@@ -31,3 +31,6 @@ class DropLoadResolver(ResolveGeneric):
             patterns=[r'''sources:\s*\[{\s*file:\s*["'](?P<url>[^"']+)'''],
             generic_patterns=False
         )
+
+    def get_url(self, host, media_id):
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
