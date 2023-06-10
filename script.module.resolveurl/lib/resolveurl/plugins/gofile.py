@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
 import json
 from resolveurl.lib import helpers
 from resolveurl import common
@@ -35,13 +36,20 @@ class GoFileResolver(ResolveUrl):
         token = json.loads(r.content).get('data').get('token')
         if not token:
             raise ResolverError('Unable to retrieve token!')
-        content_url = '{}/getContent?contentId={}&token={}&websiteToken=12345'.format(
-            base_api, media_id, token
+
+        r = self.net.http_GET('https://{}/dist/js/alljs.js'.format(host), headers=headers).content
+        wtoken = re.search(r'websiteToken\s*=\s*"([^"]+)', r)
+        if not wtoken:
+            raise ResolverError('Unable to retrieve websiteToken!')
+
+        content_url = '{}/getContent?contentId={}&token={}&websiteToken={}'.format(
+            base_api, media_id, token, wtoken.group(1)
         )
         r = self.net.http_GET(content_url, headers=headers).content
         data = json.loads(r).get('data').get('contents')
         if not data:
             raise ResolverError('This file does not exist.')
+
         headers.update({'Cookie': 'accountToken={}'.format(token)})
         sources = [(data[x].get('size'), data[x].get('link')) for x in data]
         return helpers.pick_source(sources, False) + helpers.append_headers(headers)
