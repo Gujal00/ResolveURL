@@ -30,8 +30,8 @@ import six
 
 class ChillXResolver(ResolveUrl):
     name = 'ChillX'
-    domains = ['chillx.top', 'watchx.top']
-    pattern = r'(?://|\.)((?:chill|watch)x\.top)/v/([A-Za-z0-9]+)'
+    domains = ['chillx.top', 'watchx.top', 'bestx.stream']
+    pattern = r'(?://|\.)((?:chill|watch|best)x\.(?:top|stream))/v/([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
