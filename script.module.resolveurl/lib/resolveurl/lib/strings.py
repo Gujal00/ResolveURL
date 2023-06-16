@@ -87,6 +87,7 @@ STRINGS = {
     'hours': 33067,
     'ub_auth_reset': 33068,
     'ub_authorized': 33069,
+    'email': 33070,
     'clean_settings': 33101,
     'settings_cleaned': 33102
 }

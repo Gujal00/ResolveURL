@@ -295,6 +295,10 @@ msgctxt "#33069"
 msgid "Uptobox Resolver Authorised"
 msgstr "Resolver Uptobox Autorizzato"
 
+msgctxt "#33070"
+msgid "email"
+msgstr "email"
+
 msgctxt "#33101"
 msgid "Clean Settings File"
 msgstr "Pulisci il file delle impostazioni"
