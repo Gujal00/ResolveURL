@@ -1,0 +1,309 @@
+# Addon Name: ResolveURL
+# Addon id: script.module.resolveurl
+# Addon Provider:
+# Translators:
+# Xulek, 2023
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Xulek, 2023\n"
+"Language-Team: Polish ()\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#33000"
+msgid "OpenLoad Stream Authorization"
+msgstr "Autoryzacja Strumienia OpenLoad"
+
+msgctxt "#33001"
+msgid "To play this video, authorization is required"
+msgstr "Aby odtworzyć to wideo, wymagana jest autoryzacja"
+
+msgctxt "#33002"
+msgid "Visit the link below to authorize the devices on your network:"
+msgstr "Odwiedź poniższy link, aby zautoryzować urządzenia w Twojej sieci:"
+
+msgctxt "#33003"
+msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
+msgstr "[B][COLOR blue]%s[/COLOR][/B] a następnie kliknij 'Pair'"
+
+msgctxt "#33004"
+msgid "No OpenLoad Authorization"
+msgstr "Brak autoryzacji OpenLoad"
+
+msgctxt "#33005"
+msgid "Automatically update resolver"
+msgstr "Automatycznie aktualizuj resolver"
+
+msgctxt "#33006"
+msgid "Auto-Update Url"
+msgstr "Automatyczna aktualizacja URL"
+
+msgctxt "#33007"
+msgid "Decryption Key"
+msgstr "Klucz deszyfrujący"
+
+msgctxt "#33008"
+msgid "Vev.io Stream Authorization"
+msgstr "Autoryzacja Strumienia Vev.io"
+
+msgctxt "#33009"
+msgid "VidUP.me Stream Authorization"
+msgstr "Autoryzacja Strumienia VidUP.me"
+
+msgctxt "#33010"
+msgid "Enable Universal Resolvers"
+msgstr "Włącz uniwersalne resolvery"
+
+msgctxt "#33011"
+msgid "Automatically pick best quality"
+msgstr "Automatycznie wybieraj najlepszą jakość"
+
+msgctxt "#33012"
+msgid "Use Function Cache"
+msgstr "Użyj pamięci podręcznej funkcji"
+
+msgctxt "#33013"
+msgid "Reset Function Cache"
+msgstr "Zresetuj pamięć podręczną funkcji"
+
+msgctxt "#33014"
+msgid "Universal Resolvers"
+msgstr "Uniwersalne resolvery"
+
+msgctxt "#33015"
+msgid "Resolvers"
+msgstr "Resolvery"
+
+msgctxt "#33016"
+msgid "Priority"
+msgstr "Priorytet"
+
+msgctxt "#33017"
+msgid "Enabled"
+msgstr "Włączony"
+
+msgctxt "#33018"
+msgid "Real-Debrid Resolver Authorized"
+msgstr "Real-Debrid Resolver zautoryzowany"
+
+msgctxt "#33019"
+msgid "Real-Debrid Authorization Reset"
+msgstr "Reset autoryzacji Real-Debrid"
+
+msgctxt "#33020"
+msgid "Cache Reset"
+msgstr "Reset pamięci podręcznej"
+
+msgctxt "#33021"
+msgid "Cache Reset Failed"
+msgstr "Nie udało się zresetować pamięci podręcznej"
+
+msgctxt "#33022"
+msgid "login"
+msgstr "login"
+
+msgctxt "#33023"
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+msgctxt "#33024"
+msgid "Password"
+msgstr "Hasło"
+
+msgctxt "#33025"
+msgid "Use HTTPS"
+msgstr "Użyj HTTPS"
+
+msgctxt "#33026"
+msgid "Customer ID"
+msgstr "ID klienta"
+
+msgctxt "#33027"
+msgid "PIN"
+msgstr "PIN"
+
+msgctxt "#33028"
+msgid "Choose Primary Link Automatically"
+msgstr "Automatycznie wybierz główny link"
+
+msgctxt "#33029"
+msgid "(Re)Authorize My Account"
+msgstr "(Ponownie)Zautoryzuj moje konto"
+
+msgctxt "#33030"
+msgid "Reset My Authorization"
+msgstr "Zresetuj moją autoryzację"
+
+msgctxt "#33031"
+msgid "Resolver Auto-Updated"
+msgstr "Automatycznie zaktualizowany resolver"
+
+msgctxt "#33032"
+msgid "Type the letters in the image"
+msgstr "Wpisz litery widoczne na obrazie"
+
+msgctxt "#33033"
+msgid "Captcha Error"
+msgstr "Błąd Captchy"
+
+msgctxt "#33034"
+msgid "Choose the link"
+msgstr "Wybierz link"
+
+msgctxt "#33035"
+msgid "No link selected"
+msgstr "Nie wybrano żadnego linku"
+
+msgctxt "#33036"
+msgid "No Video Link Found"
+msgstr "Nie znaleziono linku do wideo"
+
+msgctxt "#33037"
+msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
+msgstr "Runda Captchy: %s [I](typowo są 2 rundy)[/I]"
+
+msgctxt "#33038"
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgctxt "#33039"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#33040"
+msgid "IP Stream Authorization Pairing"
+msgstr "Parowanie autoryzacji strumienia IP"
+
+msgctxt "#33041"
+msgid "No IP Authorization"
+msgstr "Brak autoryzacji IP"
+
+msgctxt "#33042"
+msgid "Client ID"
+msgstr "ID klienta"
+
+msgctxt "#33043"
+msgid "Vshare.eu Stream Authorization"
+msgstr "Autoryzacja Strumienia Vshare.eu"
+
+msgctxt "#33044"
+msgid "Flashx Stream Authorization"
+msgstr "Autoryzacja Strumienia Flashx"
+
+msgctxt "#33045"
+msgid "AllDebrid Authorization Reset"
+msgstr "Reset Autoryzacji AllDebrid"
+
+msgctxt "#33046"
+msgid "AllDebrid Resolver Authorized"
+msgstr "AllDebrid Resolver zautoryzowany"
+
+msgctxt "#33047"
+msgid "Enable PopUps"
+msgstr "Włącz wyskakujące okienka"
+
+msgctxt "#33048"
+msgid "API Key"
+msgstr "Klucz API"
+
+msgctxt "#33049"
+msgid "Torrent Support"
+msgstr "Wsparcie dla torrentów"
+
+msgctxt "#33050"
+msgid "Cached torrents only"
+msgstr "Tylko buforowane torrenty"
+
+msgctxt "#33051"
+msgid "Premiumize Authorization Reset"
+msgstr "Reset Autoryzacji Premiumize"
+
+msgctxt "#33052"
+msgid "Premiumize Resolver Authorized"
+msgstr "Premiumize Resolver zautoryzowany"
+
+msgctxt "#33053"
+msgid "Linksnappy Authorization Reset"
+msgstr "Reset Autoryzacji Linksnappy"
+
+msgctxt "#33054"
+msgid "Linksnappy Resolver Authorized"
+msgstr "Linksnappy Resolver zautoryzowany"
+
+msgctxt "#33055"
+msgid "Download rate:"
+msgstr "Prędkość pobierania:"
+
+msgctxt "#33056"
+msgid "Peers:"
+msgstr "Peery:"
+
+msgctxt "#33057"
+msgid "seconds"
+msgstr "sekundy"
+
+msgctxt "#33058"
+msgid "Cached filehosts only"
+msgstr "Tylko buforowani gospodarze plików"
+
+msgctxt "#33059"
+msgid "JetLoad Stream Authorization"
+msgstr "Autoryzacja Strumienia JetLoad"
+
+msgctxt "#33060"
+msgid "Uptobox Stream Authorization"
+msgstr "Autoryzacja Strumienia Uptobox"
+
+msgctxt "#33061"
+msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
+msgstr "Odwiedź ten link: [B][COLOR blue]{0}[/COLOR][/B]"
+
+msgctxt "#33062"
+msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
+msgstr "Wpisz PIN jako [B][COLOR blue]{0}[/COLOR][/B] a następnie kliknij 'Link Account'"
+
+msgctxt "#33063"
+msgid "Debrid-Link Authorization Reset"
+msgstr "Reset Autoryzacji Debrid-Link"
+
+msgctxt "#33064"
+msgid "Debrid-Link Resolver Authorized"
+msgstr "Debrid-Link Resolver zautoryzowany"
+
+msgctxt "#33065"
+msgid "Clear Finished torrents from account"
+msgstr "Usuń zakończone torrenty z konta"
+
+msgctxt "#33066"
+msgid "minutes"
+msgstr "minuty"
+
+msgctxt "#33067"
+msgid "hours"
+msgstr "godziny"
+
+msgctxt "#33068"
+msgid "Uptobox Authorisation Reset"
+msgstr "Reset Autoryzacji Uptobox"
+
+msgctxt "#33069"
+msgid "Uptobox Resolver Authorised"
+msgstr "Uptobox Resolver zautoryzowany"
+
+msgctxt "#33070"
+msgid "email"
+msgstr "email"
+
+msgctxt "#33101"
+msgid "Clean Settings File"
+msgstr "Wyczyść plik ustawień"
+
+msgctxt "#33102"
+msgid "Settings File cleaned"
+msgstr "Plik ustawień wyczyszczony"
