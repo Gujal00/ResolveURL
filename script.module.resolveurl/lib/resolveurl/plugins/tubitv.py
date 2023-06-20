@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class TubiTvResolver(ResolveUrl):
     name = 'TubiTV'
     domains = ['tubitv.com']
-    pattern = r'(?://|\.)(tubitv\.com)/(?:video|embed)/(\d+)'
+    pattern = r'(?://|\.)(tubitv\.com)/(?:video|embed|movies)/(\d+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -35,14 +35,16 @@ class TubiTvResolver(ResolveUrl):
 
         r = re.search(r"""window\.__data\s*=\s*({.+?});""", html)
         if r:
-            data = json.loads(r.group(1))
+            data = re.sub(r'undefined', '""', r.group(1))
+            data = re.sub(r'new\s[^,]+', '""', data)
+            data = json.loads(data)
             stream_url = data["video"]["byId"][media_id]["url"].replace(r"\\u002F", "/")
             if stream_url.startswith("//"):
-                stream_url = "http:%s" % stream_url
+                stream_url = "https:%s" % stream_url
             headers.update({"Referer": web_url})
             return stream_url + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://{host}/embed/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
