@@ -22,14 +22,14 @@ from resolveurl.lib import helpers
 
 
 class DrkVidResolver(ResolveGeneric):
-    name = 'drkvid'
-    domains = ['drkvid.site']
-    pattern = r'(?://|\.)(.*?\.drkvid\.site)/(?:embed-|play/)?([0-9a-zA-Z]+)'
+    name = 'DrkVid'
+    domains = ['drkvid.site', 'allviid.online']
+    pattern = r'(?://|\.)(.*?\.(?:drkvid|allviid)\.(?:site|online))/(?:embed-|play/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[(?:{file:)?\s*"(?P<url>[^"]+)'''],
+            patterns=[r'''sources:\s*\[(?:{\s*file:)?\s*"(?P<url>[^"]+)'''],
             generic_patterns=False
         )
 
