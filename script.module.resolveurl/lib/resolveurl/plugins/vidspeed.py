@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class VidSpeedResolver(ResolveGeneric):
     name = 'VidSpeed'
     domains = ['vidspeed.cc', 'vidspeeds.com']
-    pattern = r'(?://|\.)(vidspeed(?:s)\.(?:cc|com))/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(vidspeeds?\.(?:cc|com))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
