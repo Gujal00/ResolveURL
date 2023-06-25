@@ -1,21 +1,28 @@
-Version 5.1.100 (Jun 11, 2023)
+Version 5.1.101 (Jun 26, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - embedrise
+    - lulustream
 
 - Resolvers Fixed/Updated:
-    - clicknupload
-    - desiupload
+    - chillx
+    - doodstream
+    - drkvid
     - filelions
-    - gofile
-    - streamhide
+    - oneupload
     - streamsb
-
+    - streamtape
+    - streamwish
+    - tubutv
+    - uploadraja
+    - vidspeed
+    - voesx
+    - youdbox
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - None
+    - Polish
