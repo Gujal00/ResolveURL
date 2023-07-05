@@ -35,7 +35,7 @@ class NeoHDResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r"playerConfig\s*=\s*([^;]+)", html)
+        r = re.search(r"playerConfig\s*=\s*({.+?})", html)
         if r:
             data = json.loads(r.group(1))
             ct = data.get('ct', False)
