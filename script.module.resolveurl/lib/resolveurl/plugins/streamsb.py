@@ -37,10 +37,11 @@ class StreamSBResolver(ResolveUrl):
                'embedtv.fun', 'sblongvu.com', 'arslanrocky.xyz', 'sbchill.com', 'sbrity.com', 'sbhight.com',
                'sbbrisk.com', 'gomovizplay.com', 'sbface.com', 'lvturbo.com', 'sbnet.one', 'sbone.pro',
                'sbasian.pro', 'sbani.pro', 'sbrapid.com', 'javside.com', 'aintahalu.sbs', 'vidmoviesb.xyz',
-               'sbsonic.com', 'finaltayibin.sbs', 'sblona.com', 'yahlusubh.sbs', 'taeyabathuna.sbs']
+               'sbsonic.com', 'finaltayibin.sbs', 'sblona.com', 'yahlusubh.sbs', 'taeyabathuna.sbs',
+               'likessb.com']
     pattern = r'(?://|\.)(' \
               r'(?:view|watch|embed(?:tv)?|tube|player|cloudemb|japopav|javplaya|p1ayerjavseen|gomovizplay|' \
-              r'stream(?:ovies)?|vidmovie|javside|aintahalu|finaltayibin|yahlusubh|taeyabathuna|)?s{0,2}b?' \
+              r'stream(?:ovies)?|vidmovie|javside|aintahalu|finaltayibin|yahlusubh|taeyabathuna|like)?s{0,2}b?' \
               r'(?:embed\d?|play\d?|video|fast|full|streams{0,3}|the|speed|l?anh|tvmshow|longvu|arslanrocky|' \
               r'chill|rity|hight|brisk|face|lvturbo|net|one|asian|ani|rapid|sonic|lona)?\.' \
               r'(?:com|net|org|one|tv|xyz|fun|pro|sbs))/(?:embed[-/]|e/|play/|d/|sup/|w/)?([0-9a-zA-Z]+)'
