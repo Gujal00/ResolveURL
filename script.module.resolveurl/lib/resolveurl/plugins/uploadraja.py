@@ -46,7 +46,7 @@ class UploadRajaResolver(ResolveUrl):
         if source:
             query = urllib_parse.parse_qsl(urllib_parse.urlparse(source.group(1)).query)
             src = query[1][1] if query else source.group(1)
-            return src.replace(' ', '%20').replace('https:', 'http:') + helpers.append_headers(headers)
+            return src.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
