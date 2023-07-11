@@ -23,8 +23,8 @@ from resolveurl.lib import helpers
 
 class DrkVidResolver(ResolveGeneric):
     name = 'DrkVid'
-    domains = ['drkvid.site', 'allviid.online']
-    pattern = r'(?://|\.)(.*?\.(?:drkvid|allviid)\.(?:site|online))/(?:embed-|play/)?([0-9a-zA-Z]+)'
+    domains = ['drkvid.site', 'allviid.online','telvod.site']
+    pattern = r'(?://|\.)(.*?\.(?:drkvid|allviid|telvod)\.(?:site|online))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
