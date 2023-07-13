@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class AVideoResolver(ResolveGeneric):
     name = 'AVideo'
     domains = ['avideo.host']
-    pattern = r'(?://|\.)(avideo\.host)/(?:embed-|e/|d/|v/)?(\w+)'
+    pattern = r'(?://|\.)(avideo\.host)/(?:embed-|e/|d/|v/|e-)?(\w+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
