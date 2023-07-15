@@ -22,8 +22,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class StreamWishResolver(ResolveGeneric):
     name = 'StreamWish'
-    domains = ['streamwish.com', 'streamwish.to', 'ajmidyad.sbs', 'khadhnayad.sbs', 'yadmalik.sbs', 'hayaatieadhab.sbs','kharabnahs.sbs', 'atabkhha.sbs']
-    pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|atabkhha)\.(?:com|to|sbs))/(?:e/|f/)?([0-9a-zA-Z]+)'
+    domains = ['streamwish.com', 'streamwish.to', 'ajmidyad.sbs', 'khadhnayad.sbs', 'yadmalik.sbs', 'hayaatieadhab.sbs','kharabnahs.sbs', 'atabkhha.sbs', 'atabknha.sbs']
+    pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|atabkhha|atabknha)\.(?:com|to|sbs))/(?:e/|f/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
