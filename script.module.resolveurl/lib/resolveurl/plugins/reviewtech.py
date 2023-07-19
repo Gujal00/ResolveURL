@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class ReviewTechResolver(ResolveGeneric):
     name = 'ReviewTech'
     domains = ['reviewtech.me']
-    pattern = r'//(.*?\.reviewtech\.me)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'//(.*?\.reviewtech\.me)/(?:embed-embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
