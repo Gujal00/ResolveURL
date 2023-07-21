@@ -1,10 +1,10 @@
-Version 2.1.38 (Jun 05, 2023)
+Version 2.1.39 (Jul 21, 2023)
 
 - Resolvers Added:
     - None
  
 - Resolvers Fixed/Updated:
-    - xhamster
+    - pornhub
 
 - Resolvers Removed
     - None

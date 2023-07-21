@@ -1,4 +1,4 @@
-Version 5.1.102 (Jul 08, 2023)
+Version 5.1.103 (Jul 21, 2023)
 - Code Base Changes:
     - None
 
@@ -6,11 +6,20 @@ Version 5.1.102 (Jul 08, 2023)
     - None
 
 - Resolvers Fixed/Updated:
-    - neohd
-    - vembx
+    - avideo
+    - drkvid
+    - embedgram
+    - hdvid
+    - reviewrate
+    - reviewtech
+    - streamsb
+    - streamwish
+    - uploadraja
+    - voesx
 
 - Resolvers Removed
-    - None
+    - anafast
+    - zstreamhub
 
 - Languages Added/Updated
     - None
