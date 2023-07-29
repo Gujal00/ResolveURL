@@ -28,8 +28,7 @@ class EmbedGramResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''source\s*src=["']?(?P<url>[^"']+)["']?\s+title=["'](?P<label>[^"']+)'''],
-            generic_patterns=False
+            patterns=[r'''source\s*src=["']?(?P<url>[^"']+)["']?\s+title=["'](?P<label>[^"']+)''']
         )
 
     def get_url(self, host, media_id):
