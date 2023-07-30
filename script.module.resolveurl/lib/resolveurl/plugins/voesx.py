@@ -30,7 +30,7 @@ class VoeResolver(ResolveUrl):
                'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com',
                'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com',
                'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com',
-               'housecardsummerbutton.com', 'fraudclatterflyingcar.com',
+               'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'wolfdyslectic.com',
                'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com',
                'realfinanceblogcenter.com', 'tinycat-voe-fashion.com', '35volitantplimsoles5.com',
                '20demidistance9elongations.com', 'telyn610zoanthropy.com', 'toxitabellaeatrebates306.com',
@@ -38,8 +38,8 @@ class VoeResolver(ResolveUrl):
                '30sensualizeexpression.com', '321naturelikefurfuroid.com', '449unceremoniousnasoseptal.com',
                'guidon40hyporadius9.com', 'cyamidpulverulence530.com', 'boonlessbestselling244.com',
                'antecoxalbobbing1010.com', 'matriculant401merited.com', 'scatch176duplicities.com',
-               'availedsmallest.com', 'counterclockwisejacky.com', 'simpulumlamerop.com', 'wolfdyslectic.com', 'metagnathtuggers.com',
-               'gamoneinterrupted.com']
+               'availedsmallest.com', 'counterclockwisejacky.com', 'simpulumlamerop.com',
+               'metagnathtuggers.com', 'gamoneinterrupted.com']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|' \
