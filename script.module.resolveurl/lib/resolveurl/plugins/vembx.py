@@ -22,13 +22,16 @@ from resolveurl.lib import helpers
 
 class VemBXResolver(ResolveGeneric):
     name = 'VemBX'
-    domains = ['vembx.one']
-    pattern = r'(?://|\.)(vembx\.one)/(?:embed*(?:\d|vip)?-)?([0-9a-zA-Z]+)'
+    domains = ['vembx.one', 'embed.icu']
+    pattern = r'(?://|\.)((?:vembx|embed)\.(?:one|icu))/(?:x?embed*(?:\d|vip)?-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''{file:"(?P<url>[^"]+)"}'''],
+            patterns=[
+                r'''file:"(?P<url>[^"]+)",label:"(?P<label>[^"]+)"''',
+                r'''{file:"(?P<url>[^"]+)"}'''
+            ],
             generic_patterns=False,
             referer=False
         )
