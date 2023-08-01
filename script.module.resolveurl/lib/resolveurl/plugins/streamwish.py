@@ -27,7 +27,7 @@ class StreamWishResolver(ResolveGeneric):
                'hayaatieadhab.sbs', 'kharabnahs.sbs', 'atabkhha.sbs', 'atabknha.sbs', 'atabknhk.sbs', 'atabknhs.sbs', 'abkrzkr.sbs']
     pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|' \
               r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr)' \
-              r'\.(?:com|to|sbs))/(?:e/|f/)?([0-9a-zA-Z]+)'
+              r'\.(?:com|to|sbs))/(?:e/|f/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
