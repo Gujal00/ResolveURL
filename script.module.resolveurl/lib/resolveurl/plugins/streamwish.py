@@ -18,6 +18,7 @@
 
 from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from six.moves import urllib_parse
 
 
 class StreamWishResolver(ResolveGeneric):
@@ -26,13 +27,21 @@ class StreamWishResolver(ResolveGeneric):
                'hayaatieadhab.sbs', 'kharabnahs.sbs', 'atabkhha.sbs', 'atabknha.sbs', 'atabknhk.sbs', 'atabknhs.sbs', 'abkrzkr.sbs','abkrzkz.sbs']
     pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|' \
               r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz)' \
-              r'\.(?:com|to|sbs))/(?:e/|f/)?([0-9a-zA-Z]+)'
+              r'\.(?:com|to|sbs))/(?:e/|f/)?([0-9a-zA-Z$:/.]+)'
+
+              
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+           media_id, referer = media_id.split('$$')
+           referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)'''],
-            generic_patterns=False
+            generic_patterns=False,
+            referer = referer
         )
 
     def get_url(self, host, media_id):
