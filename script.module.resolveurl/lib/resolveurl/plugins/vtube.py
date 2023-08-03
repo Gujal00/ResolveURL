@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class VTubeResolver(ResolveGeneric):
     name = 'VTube'
-    domains = ['vtube.to', 'vtplay.net', 'vtbe.net', 'vtbe.to']
-    pattern = r'(?://|\.)(vt(?:u?be|play)\.(?:to|net))/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['vtube.to', 'vtplay.net', 'vtbe.net', 'vtbe.to', 'vtube.network']
+    pattern = r'(?://|\.)(vt(?:u?be|play)\.(?:to|net|network))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
