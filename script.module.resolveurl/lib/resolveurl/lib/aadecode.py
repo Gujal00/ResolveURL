@@ -3,21 +3,29 @@
 # Alfa Addon - Kodi Plugin
 # https://github.com/alfa-addon/addon/blob/master/plugin.video.alfa/lib/aadecode.py
 # ------------------------------------------------------------
-# Modified by jsergio
+# Modified by jsergio, gujal
 import re
 
 
-def decode(text):
+def decode(text, alt=False):
     text = re.sub(r"\s+|/\*.*?\*/", "", text)
-    data = text.split("+(ﾟДﾟ)[ﾟoﾟ]")[1]
-    chars = data.split("+(ﾟДﾟ)[ﾟεﾟ]+")[1:]
+    if alt:
+        data = text.split("+(ﾟɆﾟ)[ﾟoﾟ]")[1]
+        chars = data.split("+(ﾟɆﾟ)[ﾟεﾟ]+")[1:]
+        char1 = "ღ"
+        char2 = "(ﾟɆﾟ)[ﾟΘﾟ]"
+    else:
+        data = text.split("+(ﾟДﾟ)[ﾟoﾟ]")[1]
+        chars = data.split("+(ﾟДﾟ)[ﾟεﾟ]+")[1:]
+        char1 = "c"
+        char2 = "(ﾟДﾟ)['0']"
 
     txt = ""
     for char in chars:
         char = char \
             .replace("(oﾟｰﾟo)", "u") \
-            .replace("c", "0") \
-            .replace("(ﾟДﾟ)['0']", "c") \
+            .replace(char1, "0") \
+            .replace(char2, "c") \
             .replace("ﾟΘﾟ", "1") \
             .replace("!+[]", "1") \
             .replace("-~", "1+") \
