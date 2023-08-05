@@ -36,7 +36,7 @@ class StreamSBResolver(ResolveUrl):
                'sbspeed.com', 'streamsss.net', 'sblanh.com', 'tvmshow.com', 'sbanh.com', 'streamovies.xyz',
                'embedtv.fun', 'sblongvu.com', 'arslanrocky.xyz', 'sbchill.com', 'sbrity.com', 'sbhight.com',
                'sbbrisk.com', 'gomovizplay.com', 'sbface.com', 'lvturbo.com', 'sbnet.one', 'sbone.pro',
-               'sbasian.pro', 'sbani.pro', 'sbrapid.com', 'javside.com', 'aintahalu.sbs', 'vidmoviesb.xyz',
+               'sbasian.pro', 'sbani.pro', 'sbrapid.com', 'javside.com', 'aintahalu.sbs',
                'sbsonic.com', 'finaltayibin.sbs', 'sblona.com', 'yahlusubh.sbs', 'taeyabathuna.sbs',
                'likessb.com', 'kharabnahk.sbs', 'sbnmp.bar']
     pattern = r'(?://|\.)(' \
