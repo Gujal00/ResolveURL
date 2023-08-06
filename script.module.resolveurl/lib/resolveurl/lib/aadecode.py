@@ -5,10 +5,11 @@
 # ------------------------------------------------------------
 # Modified by jsergio, gujal
 import re
+import six
 
 
 def decode(text, alt=False):
-    text = re.sub(r"\s+|/\*.*?\*/", "", text)
+    text = re.sub(r"\s+|/\*.*?\*/", "", six.ensure_str(text))
     if alt:
         data = text.split("+(ﾟɆﾟ)[ﾟoﾟ]")[1]
         chars = data.split("+(ﾟɆﾟ)[ﾟεﾟ]+")[1:]
