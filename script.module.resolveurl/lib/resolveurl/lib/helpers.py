@@ -16,10 +16,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+import base64
 import re
+import six
 import xbmcgui
 from resolveurl.lib import jsunpack, unjuice, unjuice2
-import six
 from six.moves import urllib_parse, urllib_request, urllib_error
 from resolveurl import common
 from resolveurl.resolver import ResolverError
@@ -733,3 +734,11 @@ def Tdecode(vidurl):
         vidurl = vidurl.replace(replacemap[key], key)
     vidurl = base64.b64decode(vidurl)
     return vidurl.decode('utf-8')
+
+
+def b64decode(t):
+    return six.ensure_str(base64.b64decode(t))
+
+
+def b64encode(b):
+    return six.ensure_str(base64.b64encode(six.ensure_binary(b)))
