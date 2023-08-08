@@ -29,9 +29,9 @@ class DoodStreamResolver(ResolveUrl):
     name = 'DoodStream'
     domains = ['dood.watch', 'doodstream.com', 'dood.to', 'dood.so', 'dood.cx', 'dood.la', 'dood.ws',
                'dood.sh', 'doodstream.co', 'dood.pm', 'dood.wf', 'dood.re', 'dood.yt', 'dooood.com',
-               'dood.stream', 'ds2play.com']
-    pattern = r'(?://|\.)((?:do*d(?:stream)?|ds2play)\.' \
-              r'(?:com?|watch|to|s[ho]|cx|la|w[sf]|pm|re|yt|stream))/(?:d|e)/([0-9a-zA-Z]+)'
+               'dood.stream', 'ds2play.com', 'doods.pro']
+    pattern = r'(?://|\.)((?:do*ds?(?:tream)?|ds2play)\.' \
+              r'(?:com?|watch|to|s[ho]|cx|la|w[sf]|pm|re|yt|stream|pro))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         if any(host.endswith(x) for x in ['.cx', '.wf']):
