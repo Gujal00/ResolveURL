@@ -30,8 +30,8 @@ class ClickNUploadResolver(ResolveUrl):
     name = 'ClickNUpload'
     domains = ['clicknupload.to', 'clicknupload.cc', 'clicknupload.co', 'clicknupload.com',
                'clicknupload.me', 'clicknupload.link', 'clicknupload.red', 'clicknupload.org',
-               'clicknupload.club', 'clicknupload.click']
-    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to|red|click))/(?:f/)?([0-9A-Za-z]+)'
+               'clicknupload.club', 'clicknupload.click', 'clicknupload.download']
+    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to|red|click|download))/(?:f/)?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
