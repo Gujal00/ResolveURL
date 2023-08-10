@@ -18,7 +18,6 @@
 
 import re
 import json
-import base64
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -40,7 +39,7 @@ class HexUploadResolver(ResolveUrl):
         # Can be found on some mp4 embeds
         burl = re.search(r'b4aa\.buy\("([^"]+)', html)
         if burl:
-            url = base64.b64decode(burl.group(1)).decode('utf-8')
+            url = helpers.b64decode(burl.group(1))
             return url + helpers.append_headers(headers)
 
         payload = helpers.get_hidden(html)
@@ -49,7 +48,7 @@ class HexUploadResolver(ResolveUrl):
         if 'text/html' not in r.get_headers(as_dict=True)['Content-Type']:
             url = json.loads(r.content).get('link')
             if url:
-                url = base64.b64decode(url).decode('utf-8')
+                url = helpers.b64decode(url)
                 return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         payload = {
@@ -62,7 +61,7 @@ class HexUploadResolver(ResolveUrl):
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         url = re.search(r"ldl.ld\('([^']+)", html)
         if url:
-            url = base64.b64decode(url.group(1)).decode('utf-8')
+            url = helpers.b64decode(url.group(1))
             return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')

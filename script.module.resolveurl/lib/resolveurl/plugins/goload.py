@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import base64
 import json
 import six
 import re
@@ -73,11 +72,11 @@ class GoloadResolver(ResolveUrl):
         encrypter = Encrypter(AESModeOfOperationCBC(key, self.iv))
         ciphertext = encrypter.feed(msg)
         ciphertext += encrypter.feed()
-        ciphertext = base64.b64encode(ciphertext)
-        return six.ensure_str(ciphertext)
+        ciphertext = helpers.b64encode(ciphertext)
+        return ciphertext
 
     def _decrypt(self, msg, keyid=0):
-        ct = base64.b64decode(msg)
+        ct = helpers.b64decode(msg, binary=True)
         key = six.ensure_binary(self.keys[keyid])
         decrypter = Decrypter(AESModeOfOperationCBC(key, self.iv))
         decrypted = decrypter.feed(ct)

@@ -17,7 +17,6 @@
 """
 
 import re
-import base64
 from resolveurl.lib import helpers, jsunpack
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -37,8 +36,8 @@ class LewdHostResolver(ResolveUrl):
 
         if r:
             jc = r.group(1).replace('"+"', '')
-            jc = base64.b64decode(jc.encode('ascii'))
-            jc = jsunpack.unpack(jc.decode('ascii'))
+            jc = helpers.b64decode(jc)
+            jc = jsunpack.unpack(jc)
             sources = helpers.scrape_sources(jc)
             headers.update({'Range': 'bytes=0-',
                             'Referer': web_url})

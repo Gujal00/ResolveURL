@@ -18,7 +18,6 @@
 """
 
 import re
-import base64
 from resolveurl import common
 from resolveurl.lib import helpers, aadecode
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -63,7 +62,7 @@ class UpVidResolver(ResolveUrl):
         return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
 
     def dec(self, o, r):
-        o = base64.b64decode(o)
+        o = helpers.b64decode(o, binary=True)
         n = 0
         a = ''
         e = list(range(256))

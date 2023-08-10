@@ -17,7 +17,6 @@
 """
 
 import re
-import base64
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -63,7 +62,7 @@ class VoeResolver(ResolveUrl):
         r = re.search(r'uttf0\((\[[^)]+)', html)
         if r:
             r = eval(r.group(1))
-            r = base64.b64decode(''.join(r)[::-1].encode('utf8')).decode('utf8')
+            r = helpers.b64decode(''.join(r)[::-1])
             return r + helpers.append_headers(headers)
 
         sources = helpers.scrape_sources(

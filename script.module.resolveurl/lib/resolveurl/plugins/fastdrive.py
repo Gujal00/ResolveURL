@@ -17,7 +17,6 @@
 """
 
 import re
-import base64
 from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
@@ -39,7 +38,7 @@ class FastDriveResolver(ResolveUrl):
         if r:
             common.kodi.sleep(5000)
             query = urllib_parse.parse_qsl(urllib_parse.urlparse(r.group(1)).query)
-            source = base64.b64decode(query[0][1]).decode('utf-8')
+            source = helpers.b64decode(query[0][1])
             return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')

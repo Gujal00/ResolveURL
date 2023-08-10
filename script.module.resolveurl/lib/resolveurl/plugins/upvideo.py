@@ -17,7 +17,6 @@
 """
 
 import re
-import base64
 from resolveurl.lib import helpers, jsunhunt
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -58,7 +57,7 @@ class UpVideoResolver(ResolveUrl):
             if r:
                 surl = r.group(1).replace(rep1, '')
                 surl = surl.replace(rep2, '')
-                surl = base64.b64decode(surl).decode('utf-8')
+                surl = helpers.b64decode(surl)
                 if host.split('.')[0] in ['embedo', 'highload']:
                     headers.update({'verifypeer': 'false'})
                 return surl.replace(' ', '%20') + helpers.append_headers(headers)

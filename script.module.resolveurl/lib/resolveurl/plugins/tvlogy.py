@@ -18,7 +18,6 @@
 
 import re
 import random
-import base64
 import json
 from resolveurl.lib import helpers
 from resolveurl import common
@@ -70,7 +69,7 @@ class TVLogyResolver(ResolveUrl):
                     source = re.sub(r"//\d+/", "//{0}/".format(host), source[0][1]) + '?s={0}&d='.format(vsrv.group(1))
                     disk = re.findall(r'videoDisk":\s*"([^"]+)', html)
                     if disk:
-                        disk = base64.b64encode(disk[0].encode('utf-8')).decode('utf-8')
+                        disk = helpers.b64encode(disk[0])
                         source += disk
                 else:
                     source = source[0][1]

@@ -35,10 +35,10 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.business', 'streamingcommunity.org', 'streamingcommunity.best',
                'streamingcommunity.agency', 'streamingcommunity.blog', 'streamingcommunity.tech',
                'streamingcommunity.golf', 'streamingcommunity.city', 'streamingcommunity.help',
-               'streamingcommunity.blue', 'streamingcommunity.codes']
+               'streamingcommunity.blue', 'streamingcommunity.codes', 'streamingcommunity.bet']
     pattern = r'(?://|\.)(streamingcommunity\.' \
         r'(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar|top|' \
-        r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes))' \
+        r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes|bet))' \
         r'/watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
@@ -57,14 +57,13 @@ class StreamCommunityResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://streamingcommunity.codes/watch/{media_id}')
+        return self._default_get_url(host, media_id, template='https://streamingcommunity.bet/watch/{media_id}')
 
     def get_token(self, a):
         import time
-        import base64
         from hashlib import md5
         t = int(time.time() + 172800)
         s = '{0}{1} Yc8U6r8KjAKAepEA'.format(t, a)
-        c = base64.b64encode(md5(s.encode('utf-8')).digest()).decode('utf-8')
+        c = helpers.b64encode(md5(s.encode('utf-8')).digest())
         c = c.replace('=', '').replace('+', '-').replace('/', '_')
         return 'token={0}&expires={1}&n=1'.format(c, t)

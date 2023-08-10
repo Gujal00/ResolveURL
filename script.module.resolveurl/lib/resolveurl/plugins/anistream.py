@@ -18,7 +18,6 @@
 
 from resolveurl.lib import helpers
 import re
-import base64
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -34,7 +33,7 @@ class AniStreamResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'base64,([^"]+)', html)
         if r:
-            html = base64.b64decode(r.group(1)).decode('utf-8')
+            html = helpers.b64decode(r.group(1))
             sources = helpers.scrape_sources(html)
             if sources:
                 return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)

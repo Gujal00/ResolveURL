@@ -17,7 +17,6 @@
 """
 
 import re
-import base64
 import json
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -46,7 +45,7 @@ class DaxabResolver(ResolveUrl):
         if params:
             params = params.group(1)
             server = re.findall(r'server:\s*"([^"]+)', params)[0][::-1]
-            server = base64.b64decode(server.encode('ascii')).decode('ascii')
+            server = helpers.b64decode(server.encode('ascii'))
             ids = re.search(r'cdn_id:\s*"([^"]+)', params)
             if ids:
                 id1, id2 = ids.group(1).split('_')

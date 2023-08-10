@@ -17,7 +17,6 @@
 """
 
 import random
-import base64
 import json
 from resolveurl.lib import pyaes
 from resolveurl.lib import helpers
@@ -42,16 +41,17 @@ class VidCloud9Resolver(ResolveUrl):
         encryptor = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv))
         eid = encryptor.feed(media_id)
         eid += encryptor.feed()
-        url = 'https://movembed.cc' + '/encrypt-ajax.php?id=' + base64.b64encode(eid).decode('utf8') \
+        url = 'https://movembed.cc' + '/encrypt-ajax.php?id=' + helpers.b64encode(eid) \
             + '&c=aaaaaaaa&refer=none&alias={0}'.format(media_id)
         headers.update({'X-Requested-With': 'XMLHttpRequest'})
         js_data = json.loads(self.net.http_GET(url, headers=headers).content).get('data', None)
         if js_data:
-            ct = base64.b64decode(js_data)
+            ct = helpers.b64decode(js_data, binary=True)
             decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv))
             ddata = decryptor.feed(ct)
             ddata += decryptor.feed()
-            sources = json.loads(ddata.decode('utf-8').replace('\\', '')).get('source')
+            ddata = ddata.decode('utf-8').replace('\\', '')
+            sources = json.loads(ddata).get('source')
             if sources:
                 sources = [(source.get('label').replace(' ', ''), source.get('file')) for source in sources if source.get('label') != 'Auto']
                 headers.pop('X-Requested-With')

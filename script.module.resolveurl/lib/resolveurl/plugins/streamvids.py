@@ -17,7 +17,6 @@
 """
 
 import re
-import base64
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -37,7 +36,7 @@ class StreamVidsResolver(ResolveUrl):
         if burl:
             headers.update({'Referer': 'https://{}/'.format(host)})
             source = burl.group(1)
-            source = base64.b64decode(source).decode('utf-8') if not source.startswith('http') else source
+            source = helpers.b64decode(source) if not source.startswith('http') else source
             return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
