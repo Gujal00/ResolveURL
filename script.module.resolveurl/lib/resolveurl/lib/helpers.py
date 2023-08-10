@@ -736,8 +736,9 @@ def Tdecode(vidurl):
     return vidurl.decode('utf-8')
 
 
-def b64decode(t):
-    return six.ensure_str(base64.b64decode(t))
+def b64decode(t, binary=False):
+    r = base64.b64decode(t)
+    return r if binary else six.ensure_str(r)
 
 
 def b64encode(b):
