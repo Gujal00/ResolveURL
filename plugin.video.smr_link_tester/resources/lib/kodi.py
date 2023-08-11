@@ -190,7 +190,12 @@ def add_item(queries, list_item, fanart='', is_folder=None, is_playable=None, to
     liz_url = queries if isinstance(queries, six.string_types) else get_plugin_url(queries)
     if not list_item.getProperty('fanart_image'):
         list_item.setProperty('fanart_image', fanart)
-    list_item.setInfo('video', {'title': list_item.getLabel()})
+    kodiver = get_kodi_version().major
+    if kodiver < 20:
+        list_item.setInfo('video', {'title': list_item.getLabel()})
+    else:
+        vtag = list_item.getVideoInfoTag()
+        vtag.setTitle(list_item.getLabel())
     list_item.setProperty('isPlayable', playable)
     list_item.addContextMenuItems(menu_items, replaceItems=replace_menu)
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), liz_url, list_item, isFolder=is_folder, totalItems=total_items)
@@ -230,33 +235,6 @@ def close_all():
 def get_current_view():
     window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
     return str(window.getFocusId())
-
-
-def kodiVersion():
-    xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
-    version = float(xbmc_version[:4])
-    if version >= 11.0 and version <= 11.9:
-        codename = 'Eden'
-    elif version >= 12.0 and version <= 12.9:
-        codename = 'Frodo'
-    elif version >= 13.0 and version <= 13.9:
-        codename = 'Gotham'
-    elif version >= 14.0 and version <= 14.9:
-        codename = 'Helix'
-    elif version >= 15.0 and version <= 15.9:
-        codename = 'Isengard'
-    elif version >= 16.0 and version <= 16.9:
-        codename = 'Jarvis'
-    elif version >= 17.0 and version <= 17.9:
-        codename = 'Krypton'
-    elif version >= 18.0 and version <= 18.9:
-        codename = 'Leia'
-    elif version >= 19.0 and version <= 19.9:
-        codename = 'Matrix'
-    else:
-        codename = "Decline"
-
-    return codename
 
 
 def set_view(content, set_view=False, set_sort=False):

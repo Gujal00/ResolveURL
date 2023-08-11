@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.smr_link_tester" version="1.1.9" name="SMR Link Tester" provider-name="gujal">
+<addon id="plugin.video.smr_link_tester" version="1.1.10" name="SMR Link Tester" provider-name="gujal">
     <requires>
         <!-- <import addon="xbmc.python" version="3.0.0"/> -->
         <import addon="script.module.resolveurl"/>

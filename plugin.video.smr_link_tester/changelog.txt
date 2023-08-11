@@ -1,2 +1,5 @@
+Version 1.1.10 (Aug 1, 2022)
+- adjust setInfo for Kodi 20 and above
+
 Version 1.1.9 (Aug 1, 2022)
 - Add mpd playback support
