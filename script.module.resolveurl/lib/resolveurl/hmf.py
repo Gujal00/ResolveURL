@@ -266,6 +266,8 @@ class HostedMediaFile:
 
         try:
             msg = ''
+            if 'verifypeer' in headers.keys():
+                headers.pop('verifypeer')
             request = urllib_request.Request(stream_url.split('|')[0], headers=headers)
             # only do a HEAD request for non m3u8 streams
             if '.m3u8' not in stream_url:
