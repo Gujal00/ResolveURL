@@ -26,10 +26,11 @@ class StreamWishResolver(ResolveGeneric):
     domains = ['streamwish.com', 'streamwish.to', 'ajmidyad.sbs', 'khadhnayad.sbs', 'yadmalik.sbs',
                'hayaatieadhab.sbs', 'kharabnahs.sbs', 'atabkhha.sbs', 'atabknha.sbs', 'atabknhk.sbs',
                'atabknhs.sbs', 'abkrzkr.sbs', 'abkrzkz.sbs', 'wishembed.pro', 'mwish.pro',
-               'awish.pro', 'dwish.pro', 'vidmoviesb.xyz', 'embedwish.com','cilootv.store','tuktukcinema.store']
+               'awish.pro', 'dwish.pro', 'vidmoviesb.xyz', 'embedwish.com', 'cilootv.store',
+               'tuktukcinema.store']
     pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|' \
-              r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|wishembed|[mad]wish|vidmoviesb|cilootv|tuktukcinema|' \
-              r'embedwish)' \
+              r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|wishembed|[mad]wish|vidmoviesb|' \
+              r'cilootv|tuktukcinema|embedwish)' \
               r'\.(?:com|to|sbs|pro|xyz|store))/(?:e/|f/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
