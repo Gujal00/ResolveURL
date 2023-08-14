@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class StreamHubResolver(ResolveGeneric):
     name = 'StreamHub'
-    domains = ['streamhub.to', 'streamhub.gg']
-    pattern = r'(?://|\.)(streamhub\.(?:to|gg))/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
+    domains = ['streamhub.to', 'streamhub.gg', 'streamhub.ink']
+    pattern = r'(?://|\.)(streamhub\.(?:to|gg|ink))/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
