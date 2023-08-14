@@ -30,7 +30,7 @@ class StreamWishResolver(ResolveGeneric):
                'tuktukcinema.store', 'doodporn.xyz', 'ankrzkz.sbs','volvovideo.top']
     pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|' \
               r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|wishembed|[mad]wish|vidmoviesb|' \
-              r'cilootv|tuktukcinema|embedwish|doodporn|ankrzkz|volvovideo|)' \
+              r'cilootv|tuktukcinema|embedwish|doodporn|ankrzkz|volvovideo)' \
               r'\.(?:com|to|sbs|pro|xyz|store|top))/(?:e/|f/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
