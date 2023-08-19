@@ -16,38 +16,46 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
-from six.moves import urllib_parse
 import json
-from resolveurl.lib import helpers
+import re
+
+from six.moves import urllib_parse
+
 from resolveurl import common
-from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.lib import helpers
+from resolveurl.resolver import ResolverError, ResolveUrl
 
 
 class CdaResolver(ResolveUrl):
-    name = 'cda'
-    domains = ['m.cda.pl', 'cda.pl', 'www.cda.pl', 'ebd.cda.pl']
-    pattern = r'(?://|\.)(cda\.pl)/(?:.\d+x\d+|video)/([0-9a-zA-Z]+)'
+    name = "cda"
+    domains = ["m.cda.pl", "cda.pl", "www.cda.pl", "ebd.cda.pl"]
+    pattern = r"(?://|\.)(cda\.pl)/(?:.\d+x\d+|video)/([0-9a-zA-Z]+)"
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
+        headers = {"Referer": web_url, "User-Agent": common.RAND_UA}
 
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r"player_data='([^']+)", html)
+        match = re.search(r"player_data=\"([^\"]+)", html)
         if match:
-            qdata = json.loads(match.group(1)).get('video', {}).get('qualities')
-            sources = [(q, '?wersja={0}'.format(q)) for q in qdata.keys()]
+            fixed_json = match.group(1).replace("&quot;", '"')
+            qdata = json.loads(fixed_json).get("video", {}).get("qualities")
+            sources = [(q, "?wersja={0}".format(q)) for q in qdata.keys()]
             if len(sources) > 1:
-                html = self.net.http_GET(web_url + helpers.pick_source(helpers.sort_sources_list(sources)), headers=headers).content
-                match = re.search(r"player_data='([^']+)", html)
-            src = json.loads(match.group(1)).get('video').get('file')
+                html = self.net.http_GET(
+                    web_url + helpers.pick_source(helpers.sort_sources_list(sources)),
+                    headers=headers,
+                ).content
+                match = re.search(r"player_data=\"([^\"]+)", html)
+            src = json.loads(fixed_json).get("video").get("file")
             return self.cda_decode(src) + helpers.append_headers(headers)
 
-        raise ResolverError('Video Link Not Found')
+        raise ResolverError("Video Link Not Found")
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://ebd.cda.pl/647x500/{media_id}')
+        return self._default_get_url(
+            host, media_id, template="https://ebd.cda.pl/647x500/{media_id}"
+        )
 
     def cda_decode(self, a):
         a = a.replace("_XDDD", "")
@@ -58,7 +66,12 @@ class CdaResolver(ResolveUrl):
         a = a.replace("_Q5", "")
         a = a.replace("_IKSDE", "")
         a = urllib_parse.unquote(a)
-        a = ''.join([chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char for char in a])
+        a = "".join(
+            [
+                chr(33 + (ord(char) + 14) % 94) if 32 < ord(char) < 127 else char
+                for char in a
+            ]
+        )
         a = a.replace(".cda.mp4", "")
         a = a.replace(".2cda.pl", ".cda.pl")
         a = a.replace(".3cda.pl", ".cda.pl")
