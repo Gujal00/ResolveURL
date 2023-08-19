@@ -34,20 +34,22 @@ class CdaResolver(ResolveUrl):
         headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
 
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r"player_data='([^']+)", html)
+        match = re.search(r'''player_data=['"]([^'"]+)''', html)
         if match:
-            qdata = json.loads(match.group(1)).get('video', {}).get('qualities')
-            sources = [(q, '?wersja={0}'.format(q)) for q in qdata.keys()]
+            qdata = json.loads(match.group(1).replace('&quot;', '"')).get('video', {}).get('qualities')
+            sources = [(q, '?wersja={0}'.format(q)) for q in qdata.keys() if q != 'auto']
             if len(sources) > 1:
                 html = self.net.http_GET(web_url + helpers.pick_source(helpers.sort_sources_list(sources)), headers=headers).content
-                match = re.search(r"player_data='([^']+)", html)
-            src = json.loads(match.group(1)).get('video').get('file')
+                match = re.search(r'''player_data=['"]([^'"]+)''', html)
+            src = json.loads(match.group(1).replace('&quot;', '"')).get('video').get('file')
+            if len(src) < 1:
+                raise ResolverError('DRM protected Video Link')
             return self.cda_decode(src) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://ebd.cda.pl/647x500/{media_id}')
+        return self._default_get_url(host, media_id, template='https://ebd.cda.pl/647x500/{media_id}/vfilm')
 
     def cda_decode(self, a):
         a = a.replace("_XDDD", "")
