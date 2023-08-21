@@ -21,7 +21,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
 
 
-class VidtubeResolver(ResolveGeneric):
+class VidTubeResolver(ResolveGeneric):
     name = 'VidTube'
     domains = ['vidtube.pro', 'vidtube.cam']
     pattern = r'(?://|\.)(.*?vidtube\.(?:pro|cam))/(?:embed-|d/)?([0-9a-zA-Z]+)'
@@ -30,7 +30,6 @@ class VidtubeResolver(ResolveGeneric):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''file:\s*"(?P<url>[^"]+)",label:\s*"(?P<label>[^"]+)"}''']
-            
         )
 
     def get_url(self, host, media_id):
