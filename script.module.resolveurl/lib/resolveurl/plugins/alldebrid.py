@@ -328,6 +328,14 @@ class AllDebridResolver(ResolveUrl):
             if js_data.get("status", False) == "success":
                 js_data = js_data.get('data')
                 activated = js_data.get('activated', False)
+            else:
+                ecode = js_data.get('error', {}).get('code', '')
+                if ecode == "AUTH_BLOCKED":
+                    logger.log_debug('Exception during AD auth: {0}'.format(ecode))
+                    raise ResolverError('Email not validated or Geo-Blocked')
+                elif ecode == "AUTH_USER_BANNED":
+                    logger.log_debug('Exception during AD auth: {0}'.format(ecode))
+                    raise ResolverError('This account is banned')
         except Exception as e:
             logger.log_debug('Exception during AD auth: {0}'.format(e))
         return activated
