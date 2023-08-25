@@ -295,7 +295,111 @@ msgstr "Ο επιλυτής Uptobox έχει εγκριθεί"
 
 msgctxt "#33070"
 msgid "email"
-msgstr "email"
+msgstr "ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΕΥΘΥΝΣΗ"
+
+msgctxt "#33071"
+msgid "Only cached torrents are allowed to be initiated"
+msgstr "Επιτρέπεται η εκκίνηση μόνο αποθηκευμένων torrents"
+
+msgctxt "#33072"
+msgid "No stream returned"
+msgstr "Δεν επέστρεψε καμία ροή"
+
+msgctxt "#33073"
+msgid "Transfer"
+msgstr "ΜΕΤΑΦΟΡΑ"
+
+msgctxt "#33074"
+msgid "Cancelled by user"
+msgstr "Ακυρώθηκε από τον χρήστη"
+
+msgctxt "#33075"
+msgid "Please validate your Email with Alldebrid before authorising"
+msgstr "Επικυρώστε το email σας με το Alldebrid πριν το εξουσιοδοτήσετε"
+
+msgctxt "#33076"
+msgid "This account is banned"
+msgstr "Αυτός ο λογαριασμός είναι αποκλεισμένος"
+
+msgctxt "#33077"
+msgid "Saving torrent to UptoBox via AllDebrid"
+msgstr "Αποθήκευση torrent στο UptoBox μέσω AllDebrid"
+
+msgctxt "#33078"
+msgid "Downloading at"
+msgstr "Λήψη στο"
+
+msgctxt "#33079"
+msgid "Uploading at"
+msgstr "Μεταφόρτωση στο"
+
+msgctxt "#33080"
+msgid "completed"
+msgstr "ολοκληρώθηκε το"
+
+msgctxt "#33081"
+msgid "of"
+msgstr "του"
+
+msgctxt "#33082"
+msgid "Keep transferring to AllDebrid Cloud in the background?"
+msgstr "Συνεχίστε τη μεταφορά στο AllDebrid Cloud στο παρασκήνιο;"
+
+msgctxt "#33083"
+msgid "Goto URL"
+msgstr "Μετάβαση στη διεύθυνση URL"
+
+msgctxt "#33084"
+msgid "When prompted, enter"
+msgstr "Όταν σας ζητηθεί, εισάγετε"
+
+msgctxt "#33085"
+msgid "Authorisation"
+msgstr "Εξουσιοδότηση"
+
+msgctxt "#33086"
+msgid "Torrent queueing failed"
+msgstr "Η ουρά torrent απέτυχε"
+
+msgctxt "#33087"
+msgid "Torrent access not available"
+msgstr "Η πρόσβαση μέσω torrent δεν είναι διαθέσιμη"
+
+msgctxt "#33088"
+msgid "Authorisation Failed"
+msgstr "Η εξουσιοδότηση απέτυχε"
+
+msgctxt "#33089"
+msgid "No usable link returned"
+msgstr "Δεν επιστράφηκε χρησιμοποιήσιμος σύνδεσμος"
+
+msgctxt "#33090"
+msgid "Saving Torrent to Debrid-Link Seedbox"
+msgstr "Αποθήκευση Torrent στο Debrid-Link Seedbox"
+
+msgctxt "#33091"
+msgid "Keep transferring to Debrid-Link Cloud in the background?"
+msgstr "Συνεχίστε τη μεταφορά στο Debrid-Link Cloud στο παρασκήνιο;"
+
+msgctxt "#33092"
+msgid "Saving Torrent to the Premiumize Cloud"
+msgstr "Αποθήκευση Torrent στο Premiumize Cloud"
+
+msgctxt "#33093"
+msgid "Keep transferring to Premiumize Cloud in the background?"
+msgstr "Συνεχίστε τη μεταφορά στο Premiumize Cloud στο παρασκήνιο;"
+
+msgctxt "#33094"
+msgid "Saving Torrent to Real-Debrid Cloud"
+msgstr "Αποθήκευση Torrent στο Real-Debrid Cloud"
+
+msgctxt "#33095"
+msgid "Keep transferring to Real-Debrid Cloud in the background?"
+msgstr "Συνεχίστε τη μεταφορά στο Real-Debrid Cloud στο παρασκήνιο;"
+
+msgctxt "#33096"
+msgid "Getting Torrent from Real-Debrid Cloud"
+msgstr "Λήψη Torrent από το Real-Debrid Cloud"
 
 msgctxt "#33101"
 msgid "Clean Settings File"

@@ -299,7 +299,111 @@ msgstr "Uptobox Resolver Geauthoriseerd"
 
 msgctxt "#33070"
 msgid "email"
-msgstr "email"
+msgstr "e-mail"
+
+msgctxt "#33071"
+msgid "Only cached torrents are allowed to be initiated"
+msgstr "Alleen in de cache opgeslagen torrents mogen worden gestart"
+
+msgctxt "#33072"
+msgid "No stream returned"
+msgstr "Er is geen stream teruggekomen"
+
+msgctxt "#33073"
+msgid "Transfer"
+msgstr "Overdracht"
+
+msgctxt "#33074"
+msgid "Cancelled by user"
+msgstr "Geannuleerd door gebruiker"
+
+msgctxt "#33075"
+msgid "Please validate your Email with Alldebrid before authorising"
+msgstr "Valideer uw e-mail bij Alldebrid voordat u autoriseert"
+
+msgctxt "#33076"
+msgid "This account is banned"
+msgstr "Dit account is verboden"
+
+msgctxt "#33077"
+msgid "Saving torrent to UptoBox via AllDebrid"
+msgstr "Torrent opslaan in UptoBox via AllDebrid"
+
+msgctxt "#33078"
+msgid "Downloading at"
+msgstr "Downloaden op"
+
+msgctxt "#33079"
+msgid "Uploading at"
+msgstr "Uploaden op"
+
+msgctxt "#33080"
+msgid "completed"
+msgstr "voltooid"
+
+msgctxt "#33081"
+msgid "of"
+msgstr "van"
+
+msgctxt "#33082"
+msgid "Keep transferring to AllDebrid Cloud in the background?"
+msgstr "Op de achtergrond blijven overzetten naar AllDebrid Cloud?"
+
+msgctxt "#33083"
+msgid "Goto URL"
+msgstr "Ga naar URL"
+
+msgctxt "#33084"
+msgid "When prompted, enter"
+msgstr "Voer in wanneer daarom wordt gevraagd"
+
+msgctxt "#33085"
+msgid "Authorisation"
+msgstr "Autorisatie"
+
+msgctxt "#33086"
+msgid "Torrent queueing failed"
+msgstr "Torrent-wachtrij mislukt"
+
+msgctxt "#33087"
+msgid "Torrent access not available"
+msgstr "Torrent-toegang niet beschikbaar"
+
+msgctxt "#33088"
+msgid "Authorisation Failed"
+msgstr "Autorisatie is mislukt"
+
+msgctxt "#33089"
+msgid "No usable link returned"
+msgstr "Er is geen bruikbare link geretourneerd"
+
+msgctxt "#33090"
+msgid "Saving Torrent to Debrid-Link Seedbox"
+msgstr "Torrent opslaan in Debrid-Link Seedbox"
+
+msgctxt "#33091"
+msgid "Keep transferring to Debrid-Link Cloud in the background?"
+msgstr "Op de achtergrond blijven overzetten naar Debrid-Link Cloud?"
+
+msgctxt "#33092"
+msgid "Saving Torrent to the Premiumize Cloud"
+msgstr "Torrent opslaan in de Premiumize Cloud"
+
+msgctxt "#33093"
+msgid "Keep transferring to Premiumize Cloud in the background?"
+msgstr "Op de achtergrond blijven overzetten naar Premiumize Cloud?"
+
+msgctxt "#33094"
+msgid "Saving Torrent to Real-Debrid Cloud"
+msgstr "Torrent opslaan in Real-Debrid Cloud"
+
+msgctxt "#33095"
+msgid "Keep transferring to Real-Debrid Cloud in the background?"
+msgstr "Op de achtergrond blijven overzetten naar Real-Debrid Cloud?"
+
+msgctxt "#33096"
+msgid "Getting Torrent from Real-Debrid Cloud"
+msgstr "Torrent downloaden van Real-Debrid Cloud"
 
 msgctxt "#33101"
 msgid "Clean Settings File"

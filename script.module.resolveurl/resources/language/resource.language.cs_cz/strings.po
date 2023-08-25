@@ -294,7 +294,111 @@ msgstr "Uptobox Resolver autorizován"
 
 msgctxt "#33070"
 msgid "email"
-msgstr "email"
+msgstr "e-mail"
+
+msgctxt "#33071"
+msgid "Only cached torrents are allowed to be initiated"
+msgstr "Je povoleno spouštět pouze torrenty uložené v mezipaměti"
+
+msgctxt "#33072"
+msgid "No stream returned"
+msgstr "Nevrátil se žádný stream"
+
+msgctxt "#33073"
+msgid "Transfer"
+msgstr "Převod"
+
+msgctxt "#33074"
+msgid "Cancelled by user"
+msgstr "Zrušeno uživatelem"
+
+msgctxt "#33075"
+msgid "Please validate your Email with Alldebrid before authorising"
+msgstr "Před autorizací prosím ověřte svůj e-mail u Alldebrid"
+
+msgctxt "#33076"
+msgid "This account is banned"
+msgstr "Tento účet je zakázán"
+
+msgctxt "#33077"
+msgid "Saving torrent to UptoBox via AllDebrid"
+msgstr "Ukládání torrentu do UptoBox přes AllDebrid"
+
+msgctxt "#33078"
+msgid "Downloading at"
+msgstr "Stahování na"
+
+msgctxt "#33079"
+msgid "Uploading at"
+msgstr "Nahrávání v"
+
+msgctxt "#33080"
+msgid "completed"
+msgstr "dokončeno"
+
+msgctxt "#33081"
+msgid "of"
+msgstr "z"
+
+msgctxt "#33082"
+msgid "Keep transferring to AllDebrid Cloud in the background?"
+msgstr "Pokračovat v přenosu do AllDebrid Cloud na pozadí?"
+
+msgctxt "#33083"
+msgid "Goto URL"
+msgstr "Přejít na URL"
+
+msgctxt "#33084"
+msgid "When prompted, enter"
+msgstr "Po zobrazení výzvy zadejte"
+
+msgctxt "#33085"
+msgid "Authorisation"
+msgstr "Oprávnění"
+
+msgctxt "#33086"
+msgid "Torrent queueing failed"
+msgstr "Zařazení torrentu do fronty se nezdařilo"
+
+msgctxt "#33087"
+msgid "Torrent access not available"
+msgstr "Přístup k torrentu není k dispozici"
+
+msgctxt "#33088"
+msgid "Authorisation Failed"
+msgstr "Autorizace se nezdařila"
+
+msgctxt "#33089"
+msgid "No usable link returned"
+msgstr "Nevrátil se žádný použitelný odkaz"
+
+msgctxt "#33090"
+msgid "Saving Torrent to Debrid-Link Seedbox"
+msgstr "Ukládání torrentu do Debrid-Link Seedbox"
+
+msgctxt "#33091"
+msgid "Keep transferring to Debrid-Link Cloud in the background?"
+msgstr "Pokračovat v přenosu do cloudu Debrid-Link na pozadí?"
+
+msgctxt "#33092"
+msgid "Saving Torrent to the Premiumize Cloud"
+msgstr "Ukládání torrentu do cloudu Premiumize"
+
+msgctxt "#33093"
+msgid "Keep transferring to Premiumize Cloud in the background?"
+msgstr "Pokračovat v přenosu do Premiumize Cloud na pozadí?"
+
+msgctxt "#33094"
+msgid "Saving Torrent to Real-Debrid Cloud"
+msgstr "Ukládání torrentu do Real-Debrid Cloud"
+
+msgctxt "#33095"
+msgid "Keep transferring to Real-Debrid Cloud in the background?"
+msgstr "Pokračovat v přenosu do Real-Debrid Cloud na pozadí?"
+
+msgctxt "#33096"
+msgid "Getting Torrent from Real-Debrid Cloud"
+msgstr "Získávání torrentu z Real-Debrid Cloud"
 
 msgctxt "#33101"
 msgid "Clean Settings File"

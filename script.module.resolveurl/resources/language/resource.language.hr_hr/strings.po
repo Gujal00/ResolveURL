@@ -300,7 +300,111 @@ msgstr "Uptobox razrješitelj ovjeren"
 
 msgctxt "#33070"
 msgid "email"
-msgstr "email"
+msgstr "elektronička pošta"
+
+msgctxt "#33071"
+msgid "Only cached torrents are allowed to be initiated"
+msgstr "Dopušteno je pokretanje samo predmemoriranih torrenta"
+
+msgctxt "#33072"
+msgid "No stream returned"
+msgstr "Nije vraćen nijedan tok"
+
+msgctxt "#33073"
+msgid "Transfer"
+msgstr "Prijenos"
+
+msgctxt "#33074"
+msgid "Cancelled by user"
+msgstr "Otkazao korisnik"
+
+msgctxt "#33075"
+msgid "Please validate your Email with Alldebrid before authorising"
+msgstr "Prije autorizacije potvrdite svoju e-poštu s Alldebridom"
+
+msgctxt "#33076"
+msgid "This account is banned"
+msgstr "Ovaj račun je zabranjen"
+
+msgctxt "#33077"
+msgid "Saving torrent to UptoBox via AllDebrid"
+msgstr "Spremanje torrenta u UptoBox putem AllDebrid-a"
+
+msgctxt "#33078"
+msgid "Downloading at"
+msgstr "Preuzimanje na"
+
+msgctxt "#33079"
+msgid "Uploading at"
+msgstr "Prijenos u"
+
+msgctxt "#33080"
+msgid "completed"
+msgstr "dovršeno"
+
+msgctxt "#33081"
+msgid "of"
+msgstr "od"
+
+msgctxt "#33082"
+msgid "Keep transferring to AllDebrid Cloud in the background?"
+msgstr "Nastaviti prijenos u AllDebrid Cloud u pozadini?"
+
+msgctxt "#33083"
+msgid "Goto URL"
+msgstr "Idi na URL"
+
+msgctxt "#33084"
+msgid "When prompted, enter"
+msgstr "Kada se to od vas zatraži, unesite"
+
+msgctxt "#33085"
+msgid "Authorisation"
+msgstr "Autorizacija"
+
+msgctxt "#33086"
+msgid "Torrent queueing failed"
+msgstr "Torrent nije uspio"
+
+msgctxt "#33087"
+msgid "Torrent access not available"
+msgstr "Pristup torrentu nije dostupan"
+
+msgctxt "#33088"
+msgid "Authorisation Failed"
+msgstr "Autorizacija nije uspjela"
+
+msgctxt "#33089"
+msgid "No usable link returned"
+msgstr "Nije vraćena upotrebljiva veza"
+
+msgctxt "#33090"
+msgid "Saving Torrent to Debrid-Link Seedbox"
+msgstr "Spremanje torrenta u Debrid-Link Seedbox"
+
+msgctxt "#33091"
+msgid "Keep transferring to Debrid-Link Cloud in the background?"
+msgstr "Nastaviti prijenos u Debrid-Link Cloud u pozadini?"
+
+msgctxt "#33092"
+msgid "Saving Torrent to the Premiumize Cloud"
+msgstr "Spremanje Torrenta u Premiumize Cloud"
+
+msgctxt "#33093"
+msgid "Keep transferring to Premiumize Cloud in the background?"
+msgstr "Nastaviti prijenos u Premiumize Cloud u pozadini?"
+
+msgctxt "#33094"
+msgid "Saving Torrent to Real-Debrid Cloud"
+msgstr "Spremanje torrenta u Real-Debrid Cloud"
+
+msgctxt "#33095"
+msgid "Keep transferring to Real-Debrid Cloud in the background?"
+msgstr "Nastaviti prijenos u Real-Debrid Cloud u pozadini?"
+
+msgctxt "#33096"
+msgid "Getting Torrent from Real-Debrid Cloud"
+msgstr "Dohvaćanje torrenta iz Real-Debrid Clouda"
 
 msgctxt "#33101"
 msgid "Clean Settings File"
