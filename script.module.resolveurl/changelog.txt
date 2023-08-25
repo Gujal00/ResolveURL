@@ -1,26 +1,22 @@
-Version 5.1.106 (Aug 15, 2023)
+Version 5.1.107 (Aug 25, 2023)
 - Code Base Changes:
-    - None
+    - Use localisation strings inside Debrid resolvers
 
 - Resolvers Added:
-    - uploaddo
+    - updown
+    - vidtube
 
 - Resolvers Fixed/Updated:
-    - chillx
-    - clicknupload
-    - doodstream
+    - alldebrid
+    - cda.pl
     - filelions
-    - pandafiles
-    - speedostream
-    - streamhub
-    - streamtape
+    - reviewtech
     - streamwish
-    - vidcloud9
+    - vidguard
     - voesx
-    - vtube
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - None
+    - All
