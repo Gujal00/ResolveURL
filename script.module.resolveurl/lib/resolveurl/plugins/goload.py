@@ -29,9 +29,9 @@ class GoloadResolver(ResolveUrl):
     name = 'GoLoad'
     domains = ['goload.io', 'goload.pro', 'gogohd.net', 'streamani.net', 'gogo-play.net',
                'vidstreaming.io', 'gogohd.pro', 'gembedhd.com', 'playgo1.cc', 'anihdplay.com',
-               'playtaku.net', 'playtaku.online', 'gotaku1.com']
+               'playtaku.net', 'playtaku.online', 'gotaku1.com', 'goone.pro']
     pattern = r'(?://|\.)(' \
-              r'(?:gogo-play|streamani|goload|gogohd|vidstreaming|gembedhd|playgo1|anihdplay|playtaku|gotaku1)\.' \
+              r'(?:gogo-play|streamani|goload|gogohd|vidstreaming|gembedhd|playgo1|anihdplay|playtaku|gotaku1|goone)\.' \
               r'(?:io|pro|net|com|cc|online))/(?:streaming|embed(?:plus)?|ajax|load)(?:\.php)?\?id=([a-zA-Z0-9-]+)'
     keys = ['37911490979715163134003223491201', '54674138327930866480207815084989']
     iv = six.ensure_binary('3134003223491201')
