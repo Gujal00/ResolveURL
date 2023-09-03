@@ -1,19 +1,22 @@
-Version 5.1.107 (Aug 25, 2023)
+Version 5.1.108 (Sep 3, 2023)
 - Code Base Changes:
-    - Use localisation strings inside Debrid resolvers
+    - Update User-Agents
 
 - Resolvers Added:
     - updown
     - vidtube
 
 - Resolvers Fixed/Updated:
-    - alldebrid
-    - cda.pl
-    - filelions
-    - reviewtech
-    - streamwish
+    - dembed
+    - goload
+    - hdvid
+    - lulustream
+    - reviewrate
+    - speedostream
     - vidguard
+    - vimoly
     - voesx
+    - vtube
 
 - Resolvers Removed
     - None
