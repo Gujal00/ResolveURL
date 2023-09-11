@@ -51,6 +51,7 @@ there clears it up.
 from array import array
 from six.moves import range
 import codecs
+import six
 
 # Globals mandated by PEP 272:
 # http://www.python.org/dev/peps/pep-0272/
@@ -327,7 +328,7 @@ class ECBMode(object):
             block_func(block)
             data[offset: offset + block_size] = block
 
-        return data.tostring()
+        return data.tostring() if six.PY2 else data.tobytes()
 
     def encrypt(self, data):
         """Encrypt data in ECB mode"""
@@ -379,7 +380,7 @@ class CBCMode(object):
             IV = block
 
         self.IV = IV
-        return data.tostring()
+        return data.tostring() if six.PY2 else data.tobytes()
 
     def decrypt(self, data):
         """Decrypt data in CBC mode"""
@@ -407,7 +408,7 @@ class CBCMode(object):
             # data[offset : offset+block_size] = block
 
         self.IV = IV
-        return data.tostring()
+        return data.tostring() if six.PY2 else data.tobytes()
 
 ####
 

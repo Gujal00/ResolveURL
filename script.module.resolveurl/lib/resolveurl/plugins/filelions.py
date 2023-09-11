@@ -24,9 +24,9 @@ class FileLionsResolver(ResolveGeneric):
     name = 'FileLions'
     domains = ['filelions.com', 'filelions.to', 'ajmidyadfihayh.sbs', 'alhayabambi.sbs', 'techradar.ink',
                'moflix-stream.click', 'azipcdn.com', 'mlions.pro', 'alions.pro', 'dlions.pro',
-               'filelions.live','motvy55.store', 'filelions.xyz', 'lumiawatch.top']
-    pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|motvy55|lumiawatch|' \
-              r'[mad]lions)\.' \
+               'filelions.live', 'motvy55.store', 'filelions.xyz', 'lumiawatch.top']
+    pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|motvy55|' \
+              r'[mad]lions|lumiawatch)\.' \
               r'(?:com|to|sbs|ink|click|pro|live|store|xyz|top))/(?:v|f|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):

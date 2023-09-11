@@ -25,12 +25,12 @@ class StreamWishResolver(ResolveGeneric):
     name = 'StreamWish'
     domains = ['streamwish.com', 'streamwish.to', 'ajmidyad.sbs', 'khadhnayad.sbs', 'yadmalik.sbs',
                'hayaatieadhab.sbs', 'kharabnahs.sbs', 'atabkhha.sbs', 'atabknha.sbs', 'atabknhk.sbs',
-               'atabknhs.sbs', 'abkrzkr.sbs', 'abkrzkz.sbs', 'wishembed.pro', 'mwish.pro',
+               'atabknhs.sbs', 'abkrzkr.sbs', 'abkrzkz.sbs', 'wishembed.pro', 'mwish.pro', 'strmwis.xyz',
                'awish.pro', 'dwish.pro', 'vidmoviesb.xyz', 'embedwish.com', 'cilootv.store',
-               'tuktukcinema.store', 'doodporn.xyz', 'ankrzkz.sbs','volvovideo.top', 'streamwish.site']
+               'tuktukcinema.store', 'doodporn.xyz', 'ankrzkz.sbs', 'volvovideo.top', 'streamwish.site']
     pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|' \
               r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|wishembed|[mad]wish|vidmoviesb|' \
-              r'cilootv|tuktukcinema|embedwish|doodporn|ankrzkz|volvovideo)' \
+              r'cilootv|tuktukcinema|embedwish|doodporn|ankrzkz|volvovideo|strmwis)' \
               r'\.(?:com|to|sbs|pro|xyz|store|top|site))/(?:e/|f/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):

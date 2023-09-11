@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 
 class UpDownResolver(ResolveGeneric):
     name = 'UpDown'
-    domains = ['updown.sbs','updown.icu']
+    domains = ['updown.sbs', 'updown.icu']
     pattern = r'(?://|\.)(.*?updown\.(?:sbs|icu))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
