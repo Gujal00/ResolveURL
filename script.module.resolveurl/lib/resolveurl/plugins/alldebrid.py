@@ -40,7 +40,6 @@ class AllDebridResolver(ResolveUrl):
     domains = ['*']
 
     def __init__(self):
-        self.net = common.Net()
         self.hosters = None
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
