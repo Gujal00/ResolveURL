@@ -1,22 +1,16 @@
-Version 5.1.108 (Sep 3, 2023)
+Version 5.1.109 (Sep 17, 2023)
 - Code Base Changes:
-    - Update User-Agents
+    - pyaes python 3.9+ fix
 
 - Resolvers Added:
-    - updown
-    - vidtube
+    - fileupload
 
 - Resolvers Fixed/Updated:
-    - dembed
-    - goload
-    - hdvid
-    - lulustream
-    - reviewrate
-    - speedostream
-    - vidguard
-    - vimoly
+    - alldebrid
+    - filelions
+    - updown
+    - videooo
     - voesx
-    - vtube
 
 - Resolvers Removed
     - None
