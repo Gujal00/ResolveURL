@@ -23,8 +23,8 @@ from six.moves import urllib_parse
 
 class VideoooResolver(ResolveGeneric):
     name = 'Videooo'
-    domains = ['videooo.news']
-    pattern = r'(?://|\.)(videooo\.news)/(?:embed-)?([^\n]+)'
+    domains = ['videooo.news', 'goplayer1.com']
+    pattern = r'(?://|\.)((?:videooo|goplayer1)\.(?:news|com))/(?:embed-)?([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
