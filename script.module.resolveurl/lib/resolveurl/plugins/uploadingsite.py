@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UploadingSiteResolver(ResolveUrl):
     name = 'UploadingSite'
-    domains = ['uploadingsite.com']
-    pattern = r'(?://|\.)(uploadingsite\.com)/([0-9a-zA-Z]+)'
+    domains = ['uploadingsite.com', 'uploadingsite.info']
+    pattern = r'(?://|\.)(uploadingsite\.(?:com|info))/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
