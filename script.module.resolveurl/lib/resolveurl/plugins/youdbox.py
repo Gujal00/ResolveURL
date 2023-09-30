@@ -17,7 +17,7 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.lib import helpers
+
 
 
 class YouDBoxResolver(ResolveGeneric):
@@ -25,11 +25,6 @@ class YouDBoxResolver(ResolveGeneric):
     domains = ['youdbox.com', 'youdbox.net', 'youdbox.org', 'yodbox.com', 'youdboox.com',
                'youdbox.site', 'youdboox.site']
     pattern = r'(?://|\.)(you?dboo?x\.(?:com|net|org|site))/(?:embed-)?([0-9a-zA-Z]+)'
-
-    def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id)
-        )
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://youdbox.com/embed-{media_id}.html')
