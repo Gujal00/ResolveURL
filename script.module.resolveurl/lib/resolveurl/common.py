@@ -32,6 +32,7 @@ settings_file = os.path.join(addon_path, 'resources', 'settings.xml')
 settings_path = os.path.join(addon_path, 'resources')
 user_settings_file = os.path.join(profile_path, 'settings.xml')
 addon_version = kodi.get_version()
+kodi_version = kodi.kodi_version()
 get_setting = kodi.get_setting
 set_setting = kodi.set_setting
 open_settings = kodi.open_settings

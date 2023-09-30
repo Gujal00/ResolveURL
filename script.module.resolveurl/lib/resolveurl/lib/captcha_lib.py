@@ -49,7 +49,7 @@ def write_img(url=None, bin=None):
     if url:
         bin = net.http_GET(url).nodecode(True).content
     with open(img, 'wb') as file:
-        discard = file.write(bin)
+        _ = file.write(bin)
     return img
 
 
