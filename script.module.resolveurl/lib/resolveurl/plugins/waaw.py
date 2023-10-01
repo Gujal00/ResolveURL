@@ -30,7 +30,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class WaawResolver(ResolveUrl):
     name = 'Waaw'
-    domains = ['waaw.ac', 'netu.ac', 'waaw.tv', 'netu.tv', 'hqq.to', 'doplay.store']
+    domains = ['waaw.ac', 'netu.ac', 'hqq.ac', 'waaw.tv', 'netu.tv', 'hqq.to', 'doplay.store']
     pattern = r'''(?://|\.)((?:waaw|netu|hqq|doplay)\.(?:ac|tv|to|store))/(?:watch_video\.php\?v=|.+?vid=|e/|f/)([a-zA-Z0-9]+)'''
 
     def get_media_url(self, host, media_id):
@@ -116,3 +116,7 @@ class WaawResolver(ResolveUrl):
     @staticmethod
     def random_sha1():
         return ''.join([choice('0123456789abcdef') for x in range(40)])
+
+    @classmethod
+    def isPopup(self):
+        return True

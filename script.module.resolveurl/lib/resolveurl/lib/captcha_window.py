@@ -40,8 +40,20 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.finished = False
         self.orig_x = self.frame_x
         self.orig_y = self.frame_y
-        ctrlBackgound = xbmcgui.ControlImage(self.frame_x - 100, self.frame_y - 100, 600, 600, bg_image)
-        self.addControl(ctrlBackgound)
+        self.addControl(xbmcgui.ControlImage(
+            x=(self.getWidth() - 650) // 2,
+            y=(self.getHeight() - 650) // 2,
+            height=650, width=650,
+            filename=bg_image))
+        self.fadelabel = xbmcgui.ControlFadeLabel(
+            x=(self.getWidth() - 500) // 2,
+            y=(self.getHeight() - 550) // 2,
+            width=500, height=50,
+            textColor='0xFF9FFB05',
+            # alignment=2
+        )
+        self.addControl(self.fadelabel)
+        self.fadelabel.addLabel(common.i18n('waaw_captcha'))
         self.add_controls()
 
     def create_temp_image(self):
@@ -61,10 +73,10 @@ class CaptchaWindow(xbmcgui.WindowDialog):
     def add_controls(self):
         # Define arrow directions, corresponding labels, and sizes
         arrow_info = {
-            "top": ("^", 150, 75),  # Increase width and height
-            "bottom": ("v", 150, 75),  # Increase width and height
-            "left": ("<", 75, 150),  # Increase width and height
-            "right": (">", 75, 150),  # Increase width and height
+            'top': (' ^', 150, 75),  # Increase width and height
+            'bottom': (' v', 150, 75),  # Increase width and height
+            'left': (' <', 75, 150),  # Increase width and height
+            'right': (' >', 75, 150),  # Increase width and height
         }
 
         # Adjust this value to control the space between the button and arrows
@@ -72,21 +84,18 @@ class CaptchaWindow(xbmcgui.WindowDialog):
 
         # Calculate arrow positions and create arrow buttons
         for direction, (label, width, height) in arrow_info.items():
-            if direction == "top":
+            if direction == 'top':
                 x = self.frame_x + (self.width - width) // 2
-                y = self.frame_y - height - arrow_margin
-            elif direction == "bottom":
+                y = self.frame_y - height + arrow_margin
+            elif direction == 'bottom':
                 x = self.frame_x + (self.width - width) // 2
-                y = self.frame_y + self.height + arrow_margin
-            elif direction == "left":
+                y = self.frame_y + self.height - arrow_margin
+            elif direction == 'left':
                 x = self.frame_x - width - arrow_margin
                 y = self.frame_y + (self.height - height) // 2
-            elif direction == "right":
+            elif direction == 'right':
                 x = self.frame_x + self.width + arrow_margin
                 y = self.frame_y + (self.height - height) // 2
-
-            textOffsetX = (width - len(label) * 12) // 2  # Center text horizontally
-            textOffsetY = (height - 12) // 2  # Center text vertically
 
             button = xbmcgui.ControlButton(
                 x,
@@ -94,19 +103,19 @@ class CaptchaWindow(xbmcgui.WindowDialog):
                 width,
                 height,
                 label,
-                textOffsetX=textOffsetX,
-                textOffsetY=textOffsetY,
+                textColor='0xFF9FFB05',
+                alignment=6
             )
 
             # Add arrow button
             self.addControl(button)
-            if direction == "top":
+            if direction == 'top':
                 self.top_arrow = button
-            elif direction == "bottom":
+            elif direction == 'bottom':
                 self.bottom_arrow = button
-            elif direction == "left":
+            elif direction == 'left':
                 self.left_arrow = button
-            elif direction == "right":
+            elif direction == 'right':
                 self.right_arrow = button
 
         captcha_image = xbmcgui.ControlImage(
@@ -115,24 +124,20 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.addControl(captcha_image)
 
         # Calculate the position of the Submit button
-        submit_button_width = 200
+        submit_button_width = 250
         submit_button_height = 100
         submit_button_x = self.frame_x + (self.width - submit_button_width) // 2
         # submit_button_y = self.frame_y + (self.height - submit_button_height) // 2
-        submit_button_y = 475
-        textOffsetX = (
-            submit_button_width - len('Submit') * 12
-        ) // 2  # Center text horizontally
-        textOffsetY = (submit_button_height - 12) // 2  # Center text vertically
+        submit_button_y = 450
 
         submit_button = xbmcgui.ControlButton(
             submit_button_x,
             submit_button_y,
             submit_button_width,
             submit_button_height,
-            'Submit',
-            textOffsetX=textOffsetX,
-            textOffsetY=textOffsetY,
+            common.i18n('submit'),
+            textColor='0xFF9FFB05',
+            alignment=6
         )
         self.addControl(submit_button)
         self.submit_button = submit_button

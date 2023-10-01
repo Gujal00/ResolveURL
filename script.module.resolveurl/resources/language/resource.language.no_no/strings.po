@@ -16,8 +16,8 @@ msgstr ""
 "X-Generator: Poedit 2.2.3\n"
 
 msgctxt "#33000"
-msgid "OpenLoad Stream Authorisation"
-msgstr "OpenLoad strømme-autorisasjon"
+msgid "Move Red square over play icon and submit"
+msgstr "Flytt den røde firkanten over spilleikonet og send inn"
 
 msgctxt "#33001"
 msgid "To play this video, authorisation is required"
@@ -32,8 +32,8 @@ msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
 msgstr "[B][COLOR blue]%s[/COLOR][/B] deretter klikk «Pair»"
 
 msgctxt "#33004"
-msgid "No OpenLoad Authorisation"
-msgstr "Ingen OpenLoad-autorisasjon"
+msgid "Submit"
+msgstr "Sende inn"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"

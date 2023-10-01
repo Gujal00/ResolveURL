@@ -14,8 +14,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#33000"
-msgid "OpenLoad Stream Authorization"
-msgstr "Έγκριση ροής Openload"
+msgid "Move Red square over play icon and submit"
+msgstr "Μετακινήστε το κόκκινο τετράγωνο πάνω από το εικονίδιο αναπαραγωγής και υποβάλετε"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
@@ -30,8 +30,8 @@ msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
 msgstr "[B][COLOR blue]%s[/COLOR][/B] και μετά πατήστε 'Pair'"
 
 msgctxt "#33004"
-msgid "No OpenLoad Authorization"
-msgstr "Μη έγκριση από το Openload"
+msgid "Submit"
+msgstr "υποβάλλουν"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"

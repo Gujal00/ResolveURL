@@ -193,7 +193,7 @@ class HostedMediaFile:
                             return url_list
                         else:
                             stream_url = resolver.get_media_url(self._host, self._media_id)
-                        if stream_url.startswith("//"):
+                        if stream_url and stream_url.startswith("//"):
                             stream_url = 'http:%s' % stream_url
                         if stream_url and self.__test_stream(stream_url):
                             self.__resolvers = [resolver]  # Found a working resolver, throw out the others

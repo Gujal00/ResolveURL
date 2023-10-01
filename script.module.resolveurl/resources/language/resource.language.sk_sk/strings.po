@@ -18,8 +18,8 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 msgctxt "#33000"
-msgid "OpenLoad Stream Authorization"
-msgstr "OpenLoad autorizácia streamu"
+msgid "Move Red square over play icon and submit"
+msgstr "Presuňte červený štvorec cez ikonu hry a odošlite"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
@@ -34,8 +34,8 @@ msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
 msgstr "[B][COLOR blue]%s[/COLOR][/B] a kliknite na 'Pair'"
 
 msgctxt "#33004"
-msgid "No OpenLoad Authorization"
-msgstr "Chýba autorizácia pre OpenLoad"
+msgid "Submit"
+msgstr "Predložiť"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"

@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#33000"
-msgid "OpenLoad Stream Authorisation"
+msgid "Move Red square over play icon and submit"
 msgstr ""
 
 msgctxt "#33001"
@@ -30,7 +30,7 @@ msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
 msgstr ""
 
 msgctxt "#33004"
-msgid "No OpenLoad Authorisation"
+msgid "Submit"
 msgstr ""
 
 msgctxt "#33005"

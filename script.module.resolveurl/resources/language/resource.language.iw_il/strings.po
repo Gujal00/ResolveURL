@@ -16,8 +16,8 @@ msgstr ""
 
 
 msgctxt "#33000"
-msgid "OpenLoad Stream Authorization"
-msgstr "הרשאה להזרמה מ-openLoad"
+msgid "Move Red square over play icon and submit"
+msgstr "העבר את הריבוע האדום מעל סמל המשחק ושלח"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
@@ -32,8 +32,8 @@ msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
 msgstr "[B][COLOR blue]%s[/COLOR][/B] ולחץ על צימוד"
 
 msgctxt "#33004"
-msgid "No OpenLoad Authorization"
-msgstr "אין הרשאה מ-OpenLoad"
+msgid "Submit"
+msgstr "שלח"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"

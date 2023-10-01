@@ -17,11 +17,11 @@
 """
 
 STRINGS = {
-    'ol_auth_header': 33000,
+    'waaw_captcha': 33000,
     'auth_required': 33001,
     'visit_link': 33002,
     'click_pair': 33003,
-    'no_ol_auth': 33004,
+    'submit': 33004,
     'auto_update': 33005,
     'update_url': 33006,
     'decrypt_key': 33007,

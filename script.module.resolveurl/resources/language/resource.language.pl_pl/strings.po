@@ -17,8 +17,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#33000"
-msgid "OpenLoad Stream Authorization"
-msgstr "Autoryzacja Strumienia OpenLoad"
+msgid "Move Red square over play icon and submit"
+msgstr "Przesuń czerwony kwadrat nad ikonę odtwarzania i prześlij"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
@@ -33,8 +33,8 @@ msgid "[B][COLOR blue]%s[/COLOR][/B] then click 'Pair'"
 msgstr "[B][COLOR blue]%s[/COLOR][/B] a następnie kliknij 'Pair'"
 
 msgctxt "#33004"
-msgid "No OpenLoad Authorization"
-msgstr "Brak autoryzacji OpenLoad"
+msgid "Submit"
+msgstr "Składać"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"
