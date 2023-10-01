@@ -30,18 +30,19 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class WaawResolver(ResolveUrl):
     name = 'Waaw'
-    domains = ['waaw.ac', 'netu.ac', 'waaw.tv', 'netu.tv']
-    pattern = r'''(?://|\.)((?:waaw|netu)\.(?:ac|tv))/(?:watch_video\.php\?v=|.+?vid=|e/|f/)([a-zA-Z0-9]+)'''
+    domains = ['waaw.ac', 'netu.ac', 'waaw.tv', 'netu.tv', 'hqq.to', 'doplay.store']
+    pattern = r'''(?://|\.)((?:waaw|netu|hqq|doplay)\.(?:ac|tv|to|store))/(?:watch_video\.php\?v=|.+?vid=|e/|f/)([a-zA-Z0-9]+)'''
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r"'videoid':\s*'(\d+)'", html)
+        r = re.search(r"'videoid':\s*'([^']+)", html)
         if r:
             video_id = r.group(1)
-            adbn = re.search(r"adbn = '(\d+)'", html).group(1)
-            data = {"videoid": video_id, "videokey": media_id, "width": 400, "height": 400}
+            video_key = re.search(r"'videokey':\s*'([^']+)", html).group(1)
+            adbn = re.search(r"adbn\s*=\s*'([^']+)", html).group(1)
+            data = {"videoid": video_id, "videokey": video_key, "width": 400, "height": 400}
             headers.update({
                 'Referer': web_url,
                 'Origin': urllib_parse.urljoin(web_url, '/')[:-1],
@@ -49,6 +50,8 @@ class WaawResolver(ResolveUrl):
             })
             imgurl = urllib_parse.urljoin(web_url, '/player/get_player_image.php')
             html2 = self.net.http_POST(imgurl, form_data=data, headers=headers, jdata=True).content
+            if 'Video not found' in html2:
+                raise ResolverError('Video Not Found')
             json_data = json.loads(html2)
 
             if json_data.get('try_again') == '1':
