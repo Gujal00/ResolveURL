@@ -29,7 +29,9 @@ class VidTubeResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''file:\s*"(?P<url>[^"]+)",label:\s*"(?P<label>[^"]+)"}''']
+            patterns=[r'''file:\s*"(?P<url>[^"]+)",label:\s*"(?P<label>[^"]+)"}'''],
+            generic_patterns=False,
+            referer=False
         )
 
     def get_url(self, host, media_id):
