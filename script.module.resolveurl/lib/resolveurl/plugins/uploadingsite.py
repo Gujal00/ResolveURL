@@ -18,7 +18,7 @@
 
 import re
 from resolveurl import common
-from resolveurl.lib import helpers
+from resolveurl.lib import helpers, captcha_lib
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
@@ -29,26 +29,22 @@ class UploadingSiteResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'Origin': web_url.rsplit('/', 1)[0],
-            'Referer': web_url,
-            'User-Agent': common.RAND_UA
-        }
-        payload = {
-            'op': 'download2',
-            'id': media_id,
-            'rand': '',
-            'referer': web_url,
-            'method_free': '',
-            'method_premium': ''
-        }
+        headers = {'User-Agent': common.RAND_UA}
+        html = self.net.http_GET(web_url, headers=headers).content
+        payload = helpers.get_hidden(html)
+        if not payload:
+            raise ResolverError('File Removed')
+
+        common.kodi.sleep(5000)
+        payload.update(captcha_lib.do_captcha(html))
+        headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': web_url})
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         url = re.search(r'href="([^"]+).+?>\s*Download', html)
         if url:
             headers['verifypeer'] = 'false'
             return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
-        raise ResolverError('File Not Found or Removed')
+        raise ResolverError('File Not Found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
