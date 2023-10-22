@@ -30,8 +30,9 @@ class ClickNUploadResolver(ResolveUrl):
     name = 'ClickNUpload'
     domains = ['clicknupload.to', 'clicknupload.cc', 'clicknupload.co', 'clicknupload.com',
                'clicknupload.me', 'clicknupload.link', 'clicknupload.red', 'clicknupload.org',
-               'clicknupload.club', 'clicknupload.click', 'clicknupload.download']
-    pattern = r'(?://|\.)(clicknupload\.(?:com?|me|link|org|cc|club|to|red|click|download))/(?:f/)?([0-9A-Za-z]+)'
+               'clicknupload.club', 'clicknupload.click', 'clicknupload.download',
+               'clicknupload.vip', 'clickndownload.org']
+    pattern = r'(?://|\.)(clickn(?:up|down)load\.(?:com?|me|link|org|cc|club|to|red|click|download|vip))/(?:f/)?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -58,7 +59,7 @@ class ClickNUploadResolver(ResolveUrl):
         return
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://clicknupload.red/{media_id}')
+        return self._default_get_url(host, media_id, template='https://clicknupload.vip/{media_id}')
 
     @classmethod
     def isPopup(self):
