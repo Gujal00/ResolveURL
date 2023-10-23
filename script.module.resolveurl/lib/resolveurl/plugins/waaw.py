@@ -30,8 +30,10 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class WaawResolver(ResolveUrl):
     name = 'Waaw'
-    domains = ['waaw.ac', 'netu.ac', 'hqq.ac', 'waaw.tv', 'netu.tv', 'hqq.to', 'doplay.store']
-    pattern = r'''(?://|\.)((?:waaw|netu|hqq|doplay)\.(?:ac|tv|to|store))/(?:watch_video\.php\?v=|.+?vid=|e/|f/)([a-zA-Z0-9]+)'''
+    domains = ['waaw.ac', 'netu.ac', 'hqq.ac', 'waaw.tv', 'netu.tv', 'hqq.to',
+               'doplay.store', 'younetu.com']
+    pattern = r'(?://|\.)((?:you)?(?:waaw|netu|hqq|doplay)\.(?:ac|tv|to|store|com))/' \
+              r'(?:watch_video\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
