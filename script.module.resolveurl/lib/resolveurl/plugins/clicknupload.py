@@ -38,7 +38,10 @@ class ClickNUploadResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': web_url}
-        html = self.net.http_GET(web_url, headers=headers).content
+        r = self.net.http_GET(web_url, headers=headers)
+        if web_url != r.get_url():
+            web_url = r.get_url()
+        html = r.content
         if 'File Not Found' not in html:
             tries = 0
             while tries < MAX_TRIES:
