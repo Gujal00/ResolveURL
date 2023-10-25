@@ -44,6 +44,7 @@ class UploadRajaResolver(ResolveUrl):
         html = self.net.http_POST(web_url, headers=headers, form_data=payload).content
         source = re.search(r'href="([^"]+)"\s*class="download', html)
         if source:
+            headers['verifypeer'] = 'false'
             query = urllib_parse.parse_qsl(urllib_parse.urlparse(source.group(1)).query)
             src = query[1][1] if query else source.group(1)
             return src.replace(' ', '%20') + helpers.append_headers(headers)
