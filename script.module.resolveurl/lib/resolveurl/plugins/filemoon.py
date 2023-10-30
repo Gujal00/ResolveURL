@@ -1,6 +1,6 @@
 """
     Plugin for ResolveUrl
-    Copyright (C) 2023 gujal
+    Copyright (C) 2023 shellc0de, gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
