@@ -18,6 +18,7 @@
 
 import json
 import re
+import time
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -64,10 +65,11 @@ class IndaVideoResolver(ResolveUrl):
                 sources = list(set(sources))
             except:
                 pass
-            sources = sorted(sources, key=lambda x: x[0])[::-1]
-            return helpers.pick_source(sources)
+            sources = sorted(sources, key=lambda x: int(x[0]), reverse=True)
+            headers.update({'Referer': 'https://embed.indavideo.hu/'})
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return 'http://amfphp.indavideo.hu/SYm0json.php/player.playerHandler.getVideoData/%s' % (media_id)
+        return 'http://amfphp.indavideo.hu/SYm0json.php/player.playerHandler.getVideoData/%s/?_=%s' % (media_id, int(time.time() * 1000))
