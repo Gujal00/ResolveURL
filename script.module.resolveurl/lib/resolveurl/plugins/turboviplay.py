@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class TurboVIPlayResolver(ResolveGeneric):
     name = 'TurboVIPlay'
-    domains = ['turboviplay.com', 'emturbovid.com']
-    pattern = r'(?://|\.)((?:turboviplay|emturbovid)\.com)/t/([0-9a-zA-Z]+)'
+    domains = ['turboviplay.com', 'emturbovid.com', 'tuborstb.co']
+    pattern = r'(?://|\.)((?:turboviplay|emturbovid|tuborstb)\.com?)/t/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
