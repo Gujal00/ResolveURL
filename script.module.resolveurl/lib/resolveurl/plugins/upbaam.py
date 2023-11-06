@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class UpBaamResolver(ResolveUrl):
     name = 'UpBaam'
     domains = ['upbaam.com', 'cdnupbom.com', 'uupbom.com']
-    pattern = r'(?://|\.)((?:upbaam|cdnupbom|uupbom)\.com)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)((?:cdn)?u*pb[ao]*m)\.com)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
