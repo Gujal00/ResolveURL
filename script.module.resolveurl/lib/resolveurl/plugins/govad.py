@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class GoVadResolver(ResolveGeneric):
     name = 'GoVad'
-    domains = ['govad.xyz']
-    pattern = r'//(.*\.?govad\.xyz)/(?:embed-)?([0-9a-zA-Z-]+)'
+    domains = ['govad.xyz', 'goveed.autos']
+    pattern = r'//(.*\.?gov[ae]*d\.(?:xyz|autos))/(?:embed-)?([0-9a-zA-Z-]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
