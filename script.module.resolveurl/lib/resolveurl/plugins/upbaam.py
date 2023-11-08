@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class UpBaamResolver(ResolveUrl):
     name = 'UpBaam'
     domains = ['upbaam.com', 'cdnupbom.com', 'uupbom.com']
-    pattern = r'(?://|\.)((?:cdn)?u*pb[ao]*m)\.com)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)((?:cdn)?u*pb[ao]*m\.com)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -44,6 +44,12 @@ class UpBaamResolver(ResolveUrl):
         url = re.search(r'id="direct_link".+?href="([^"]+)', html, re.DOTALL)
         if url:
             return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+        else:
+            html = self.net.http_GET(web_url, headers=headers).content
+            payload = helpers.get_hidden(html)
+            url = self.net.http_POST(web_url, form_data=payload, headers=headers, redirect=False).get_redirect_url()
+            if url != web_url:
+                return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 

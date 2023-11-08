@@ -242,7 +242,7 @@ class Net:
         """
         return self._fetch(url, headers=headers, compression=compression, redirect=redirect)
 
-    def http_POST(self, url, form_data, headers={}, compression=True, jdata=False):
+    def http_POST(self, url, form_data, headers={}, compression=True, jdata=False, redirect=True):
         """
         Perform an HTTP POST request.
 
@@ -262,7 +262,7 @@ class Net:
             An :class:`HttpResponse` object containing headers and other
             meta-information about the page and the page content.
         """
-        return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata)
+        return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata, redirect=redirect)
 
     def http_HEAD(self, url, headers={}):
         """
@@ -457,6 +457,12 @@ class HttpResponse:
         a redirect was followed.
         """
         return self._response.geturl()
+
+    def get_redirect_url(self):
+        """
+        Return the redirect URL of the resource retrieved
+        """
+        return self._response.headers.get('location')
 
     def nodecode(self, nodecode):
         """
