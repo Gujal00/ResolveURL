@@ -40,7 +40,8 @@ class VoeResolver(ResolveUrl):
                'availedsmallest.com', 'counterclockwisejacky.com', 'simpulumlamerop.com',
                'metagnathtuggers.com', 'gamoneinterrupted.com', 'chromotypic.com', 'crownmakermacaronicism.com',
                'generatesnitrosate.com', 'yodelswartlike.com', 'figeterpiazine.com', 'strawberriesporail.com',
-               'valeronevijao.com', 'timberwoodanotia.com', 'apinchcaseation.com', 'nectareousoverelate.com']
+               'valeronevijao.com', 'timberwoodanotia.com', 'apinchcaseation.com', 'nectareousoverelate.com',
+               'nonesnanking.com']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|' \
@@ -53,8 +54,9 @@ class VoeResolver(ResolveUrl):
               r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|' \
               r'matriculant401merited|scatch176duplicities|availedsmallest|' \
               r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|' \
-              r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|generatesnitrosate|' \
-              r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|apinchcaseation|' \
+              r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|' \
+              r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|' \
+              r'generatesnitrosate|apinchcaseation|nonesnanking|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
