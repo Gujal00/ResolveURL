@@ -28,8 +28,8 @@ class VidBomResolver(ResolveUrl):
     domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org', 'vedbam.xyz',
                'vadbom.com', 'vidbam.org', 'vadbam.com', 'vadbam.net', 'myviid.com', 'myviid.net', 'myvid.com',
                'vidshare.com', 'vedsharr.com', 'vedshar.com', 'vedshare.com', 'vadshar.com', 'vidshar.org',
-               'viidshar.com', 'vedbam1.online', 'qaz2.vedbam1.online', 'vedbam1.sbs']
-    pattern = r'(?://|\.)((?:v[aie]d[bp][aoe]?m|myvii?d|v[aei]*dshar[er]?)\d*\.(?:com|net|org|xyz|online|sbs))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
+               'viidshar.com', 'vedbam1.online', 'qaz2.vedbam1.online', 'vedbam1.sbs', 'vedbam1.space']
+    pattern = r'(?://|\.)((?:v[aie]d[bp][aoe]?m|myvii?d|v[aei]*dshar[er]?)\d*\.(?:com|net|org|xyz|online|sbs|space))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
