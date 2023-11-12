@@ -1,4 +1,4 @@
-Version 5.1.115 (Nov 7, 2023)
+Version 5.1.116 (Nov 13, 2023)
 - Code Base Changes:
     - None
 
@@ -6,14 +6,12 @@ Version 5.1.115 (Nov 7, 2023)
     - None
 
 - Resolvers Fixed/Updated:
-    - drkvid
     - govad
     - mixdrop
-    - turboviplay
+    - streamwish
     - upbaam
     - vidbom
-    - vidguard
-    - waaw
+    - voesx
 
 - Resolvers Removed
     - None
