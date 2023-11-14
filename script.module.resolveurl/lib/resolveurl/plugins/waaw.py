@@ -31,7 +31,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class WaawResolver(ResolveUrl):
     name = 'Waaw'
     domains = ['waaw.ac', 'netu.ac', 'hqq.ac', 'waaw.tv', 'netu.tv', 'hqq.to',
-               'doplay.store', 'younetu.com', 'stbnetu.xyz']
+               'doplay.store', 'younetu.com', 'stbnetu.xyz', 'waaw.to', 'netu.to',
+               'hqq.to']
     pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay)\.(?:ac|tv|to|store|com|xyz))/' \
               r'(?:watch_video\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9]+)'
 
