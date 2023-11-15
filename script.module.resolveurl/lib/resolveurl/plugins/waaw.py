@@ -32,7 +32,7 @@ class WaawResolver(ResolveUrl):
     name = 'Waaw'
     domains = ['waaw.ac', 'netu.ac', 'hqq.ac',
                'waaw.tv', 'netu.tv', 'hqq.tv',
-               'waav.to', 'netu.to', 'hqq.to',
+               'waaw.to', 'netu.to', 'hqq.to',
                'doplay.store', 'younetu.com', 'stbnetu.xyz']
     pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay)\.(?:ac|tv|to|store|com|xyz))/' \
               r'(?:watch_video\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9]+)'
