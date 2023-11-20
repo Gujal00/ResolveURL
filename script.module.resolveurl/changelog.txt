@@ -1,4 +1,4 @@
-Version 5.1.116 (Nov 13, 2023)
+Version 5.1.117 (Nov 20, 2023)
 - Code Base Changes:
     - None
 
@@ -6,12 +6,12 @@ Version 5.1.116 (Nov 13, 2023)
     - None
 
 - Resolvers Fixed/Updated:
-    - govad
-    - mixdrop
+    - filelions
+    - streamhub
     - streamwish
-    - upbaam
-    - vidbom
+    - vidtube
     - voesx
+    - waaw
 
 - Resolvers Removed
     - None
