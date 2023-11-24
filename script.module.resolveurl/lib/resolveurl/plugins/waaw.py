@@ -33,8 +33,9 @@ class WaawResolver(ResolveUrl):
     domains = ['waaw.ac', 'netu.ac', 'hqq.ac',
                'waaw.tv', 'netu.tv', 'hqq.tv',
                'waaw.to', 'netu.to', 'hqq.to',
-               'doplay.store', 'younetu.com', 'stbnetu.xyz']
-    pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay)\.(?:ac|tv|to|store|com|xyz))/' \
+               'doplay.store', 'younetu.com', 'stbnetu.xyz',
+               'ncdn22.xyz']
+    pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay|ncdn22)\.(?:ac|tv|to|store|com|xyz))/' \
               r'(?:watch_video\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
