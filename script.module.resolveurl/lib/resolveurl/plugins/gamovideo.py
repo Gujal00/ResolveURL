@@ -27,22 +27,12 @@ class GamoVideoResolver(ResolveUrl):
     domains = ['gamovideo.com']
     pattern = r'(?://|\.)(gamovideo\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 
-    def __init__(self):
-        self.net = common.Net()
-
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        r = self.net.http_GET(web_url, headers=headers)
-        cookie = ''
-        for item in r.get_headers(as_dict=True)['Set-Cookie'].split('GMT,'):
-            cookie += item.split('path')[0]
-        headers.update({'Cookie': cookie + 'sugamun=1; invn=1; pfm=1'})
-
+        headers = {'User-Agent': common.CHROME_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
         html += helpers.get_packed_data(html)
         source = re.search(r'''file:\s*["'](?P<url>http[^"']+)["']''', html)
-        headers.pop('Cookie')
         if source:
             return source.group(1) + helpers.append_headers(headers)
 
