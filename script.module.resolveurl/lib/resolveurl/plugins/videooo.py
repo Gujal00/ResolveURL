@@ -23,8 +23,8 @@ from six.moves import urllib_parse
 
 class VideoooResolver(ResolveGeneric):
     name = 'Videooo'
-    domains = ['videooo.news', 'goplayer1.com']
-    pattern = r'(?://|\.)((?:videooo|goplayer1)\.(?:news|com))/(?:embed-)?([^\n]+)'
+    domains = ['videooo.news', 'goplayer1.com', 'goplayer3.com']
+    pattern = r'(?://|\.)((?:videooo|goplayer\d)\.(?:news|com))/(?:embed-)?([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -34,7 +34,7 @@ class VideoooResolver(ResolveGeneric):
             referer = True
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[{file:\s*"(?P<url>[^"]+)'''],
+            patterns=[r'''sources:\s*\[{\s*file:\s*"(?P<url>[^"]+)'''],
             generic_patterns=False,
             referer=referer
         )
