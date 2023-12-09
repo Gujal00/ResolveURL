@@ -1,15 +1,16 @@
-Version 5.1.117 (Nov 20, 2023)
+Version 5.1.118 (Dec 09, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - brplayer
 
 - Resolvers Fixed/Updated:
-    - filelions
-    - streamhub
-    - streamwish
-    - vidtube
+    - gamovideo
+    - mixdrop
+    - streamruby
+    - vembx
+    - videooo
     - voesx
     - waaw
 
