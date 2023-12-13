@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class HexUploadResolver(ResolveUrl):
     name = 'HexUpload'
-    domains = ['hexupload.net']
-    pattern = r'(?://|\.)(hexupload\.net)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['hexupload.net', 'hexload.com']
+    pattern = r'(?://|\.)(hex(?:up)?load\.(?:net|com))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
