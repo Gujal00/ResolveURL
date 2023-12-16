@@ -37,14 +37,14 @@ class VoeResolver(ResolveUrl):
                '30sensualizeexpression.com', '321naturelikefurfuroid.com', '449unceremoniousnasoseptal.com',
                'guidon40hyporadius9.com', 'cyamidpulverulence530.com', 'boonlessbestselling244.com',
                'antecoxalbobbing1010.com', 'matriculant401merited.com', 'scatch176duplicities.com',
-               'availedsmallest.com', 'counterclockwisejacky.com', 'simpulumlamerop.com',
+               'availedsmallest.com', 'counterclockwisejacky.com', 'simpulumlamerop.com', 'paulkitchendark.com',
                'metagnathtuggers.com', 'gamoneinterrupted.com', 'chromotypic.com', 'crownmakermacaronicism.com',
                'generatesnitrosate.com', 'yodelswartlike.com', 'figeterpiazine.com', 'strawberriesporail.com',
                'valeronevijao.com', 'timberwoodanotia.com', 'apinchcaseation.com', 'nectareousoverelate.com',
                'nonesnanking.com', 'kathleenmemberhistory.com', 'stevenimaginelittle.com']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
-              r'reputationsheriffkennethsand|fittingcentermondaysunday|' \
+              r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|' \
               r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|' \
               r'bigclatterhomesguideservice|uptodatefinishconferenceroom|' \
               r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|' \
