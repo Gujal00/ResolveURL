@@ -26,7 +26,7 @@ class VoeResolver(ResolveUrl):
     name = 'Voe'
     domains = ['voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com',
                'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com',
-               'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com',
+               'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com', 'edwardarriveoften.com',
                'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com',
                'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com',
                'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'wolfdyslectic.com',
@@ -46,7 +46,7 @@ class VoeResolver(ResolveUrl):
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|' \
               r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|' \
-              r'bigclatterhomesguideservice|uptodatefinishconferenceroom|' \
+              r'bigclatterhomesguideservice|uptodatefinishconferenceroom|edwardarriveoften|' \
               r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|' \
               r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|' \
               r'745mingiestblissfully|19turanosephantasia|30sensualizeexpression|' \
