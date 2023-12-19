@@ -23,8 +23,12 @@ from resolveurl import common
 
 class CaptchaWindow(xbmcgui.WindowDialog):
     def __init__(self, image, width, height):
-        bg_image = os.path.join(common.addon_path, 'resources', 'images', 'DialogBack1.png')
-        self.box_image = os.path.join(common.addon_path, 'resources', 'images', 'border90.png')
+        bg_image = os.path.join(
+            common.addon_path, 'resources', 'images', 'DialogBack1.png'
+        )
+        self.box_image = os.path.join(
+            common.addon_path, 'resources', 'images', 'border90.png'
+        )
         self.orig_image = image
         self.width = width
         self.height = height
@@ -40,17 +44,21 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.finished = False
         self.orig_x = self.frame_x
         self.orig_y = self.frame_y
-        self.addControl(xbmcgui.ControlImage(
-            x=(self.getWidth() - 650) // 2,
-            y=(self.getHeight() - 650) // 2,
-            height=650, width=650,
-            filename=bg_image))
+        self.addControl(
+            xbmcgui.ControlImage(
+                x=(self.getWidth() - 650) // 2,
+                y=(self.getHeight() - 650) // 2,
+                height=650,
+                width=650,
+                filename=bg_image
+            )
+        )
         self.fadelabel = xbmcgui.ControlFadeLabel(
             x=(self.getWidth() - 500) // 2,
             y=(self.getHeight() - 550) // 2,
-            width=500, height=50,
-            textColor='0xFF9FFB05',
-            # alignment=2
+            width=500,
+            height=50,
+            textColor='0xFF9FFB05'
         )
         self.addControl(self.fadelabel)
         self.fadelabel.addLabel(common.i18n('waaw_captcha'))
@@ -76,7 +84,7 @@ class CaptchaWindow(xbmcgui.WindowDialog):
             'top': (' ^', 150, 75),  # Increase width and height
             'bottom': (' v', 150, 75),  # Increase width and height
             'left': (' <', 75, 150),  # Increase width and height
-            'right': (' >', 75, 150),  # Increase width and height
+            'right': (' >', 75, 150)  # Increase width and height
         }
 
         # Adjust this value to control the space between the button and arrows
@@ -98,13 +106,7 @@ class CaptchaWindow(xbmcgui.WindowDialog):
                 y = self.frame_y + (self.height - height) // 2
 
             button = xbmcgui.ControlButton(
-                x,
-                y,
-                width,
-                height,
-                label,
-                textColor='0xFF9FFB05',
-                alignment=6
+                x, y, width, height, label, textColor='0xFF9FFB05', alignment=6
             )
 
             # Add arrow button
@@ -147,73 +149,62 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         )
         self.addControl(self.border_img)
 
-    def update_border_img(self, x, y):
-        self.border_img.setPosition(self.frame_x + x, self.frame_y + y)
+    def update_border_img(self):
+        self.border_img.setPosition(self.frame_x, self.frame_y)
 
     def close(self):
         if os.path.exists(self.temp_file):
             os.remove(self.temp_file)
         return super(CaptchaWindow, self).close()
 
-    def onControl(self, control):
-        # if left arrow is clicked and border is not at the left edge, move left
-        if control.getId() == self.left_arrow.getId() and self.frame_x > self.orig_x:
-            self.frame_x -= 10
-            self.update_border_img(0, 0)
-        # if right arrow is clicked and border is not at the right edge, move right
-        elif (
-            control.getId() == self.right_arrow.getId()
-            and self.frame_x < self.orig_x + self.width - 90
-        ):
-            self.frame_x += 10
-            self.update_border_img(0, 0)
-        # if up arrow is clicked and border is not at the top edge, move up
-        elif control.getId() == self.top_arrow.getId() and self.frame_y > self.orig_y:
-            self.frame_y -= 10
-            self.update_border_img(0, 0)
-        # if down arrow is clicked and border is not at the bottom edge, move down
-        elif (
-            control.getId() == self.bottom_arrow.getId()
-            and self.frame_y < self.orig_y + self.height - 90
-        ):
-            self.frame_y += 10
-            self.update_border_img(0, 0)
-        # if submit button is clicked, close
-        elif control.getId() == self.submit_button.getId():
-            self.finished = True
-            self.close()
-        else:
-            super(CaptchaWindow, self).onControl(control)
+    def handle_action(self, action_or_control):
+        # if left arrow/control is pressed, move left and jump to the right side if at the left edge
+        if action_or_control in [self.left_arrow.getId(), xbmcgui.ACTION_MOVE_LEFT]:
+            if self.frame_x - 10 >= self.orig_x:
+                self.frame_x -= 10
+            else:
+                self.frame_x = self.orig_x + self.width - 90
+            self.update_border_img()
 
-    def onAction(self, action):
-        # if left arrow is pressed and border is not at the left edge, move left
-        if action == xbmcgui.ACTION_MOVE_LEFT and self.frame_x > self.orig_x:
-            self.frame_x -= 10
-            self.update_border_img(0, 0)
-        # if right arrow is pressed and border is not at the right edge, move right
-        elif (
-            action == xbmcgui.ACTION_MOVE_RIGHT
-            and self.frame_x < self.orig_x + self.width - 90
-        ):
-            self.frame_x += 10
-            self.update_border_img(0, 0)
-        # if up arrow is pressed and border is not at the top edge, move up
-        elif action == xbmcgui.ACTION_MOVE_UP and self.frame_y > self.orig_y:
-            self.frame_y -= 10
-            self.update_border_img(0, 0)
-        # if down arrow is pressed and border is not at the bottom edge, move down
-        elif (
-            action == xbmcgui.ACTION_MOVE_DOWN
-            and self.frame_y < self.orig_y + self.height - 90
-        ):
-            self.frame_y += 10
-            self.update_border_img(0, 0)
+        # if right arrow/control is pressed, move right and jump to the left side if at the right edge
+        elif action_or_control in [self.right_arrow.getId(), xbmcgui.ACTION_MOVE_RIGHT]:
+            if self.frame_x + 10 <= self.orig_x + self.width - 90:
+                self.frame_x += 10
+            else:
+                self.frame_x = self.orig_x
+            self.update_border_img()
+
+        # if up arrow/control is pressed, move up and jump to the bottom if at the top edge
+        elif action_or_control in [self.top_arrow.getId(), xbmcgui.ACTION_MOVE_UP]:
+            if self.frame_y - 10 >= self.orig_y:
+                self.frame_y -= 10
+            else:
+                self.frame_y = self.orig_y + self.height - 90
+            self.update_border_img()
+
+        # if down arrow/control is pressed, move down and jump to the top if at the bottom edge
+        elif action_or_control in [self.bottom_arrow.getId(), xbmcgui.ACTION_MOVE_DOWN]:
+            if self.frame_y + 10 <= self.orig_y + self.height - 90:
+                self.frame_y += 10
+            else:
+                self.frame_y = self.orig_y
+            self.update_border_img()
+
         # if enter is pressed, close
-        elif action == xbmcgui.ACTION_SELECT_ITEM:
+        elif action_or_control in [
+            self.submit_button.getId(),
+            xbmcgui.ACTION_SELECT_ITEM,
+        ]:
             self.finished = True
             self.close()
         # if close button is pressed, close
-        if action == xbmcgui.ACTION_NAV_BACK:
+        if action_or_control == xbmcgui.ACTION_NAV_BACK:
             self.close()
-        else:
-            super(CaptchaWindow, self).onAction(action)
+        elif not isinstance(action_or_control, int):
+            super(CaptchaWindow, self).onAction(action_or_control)
+
+    def onAction(self, action):
+        self.handle_action(action)
+
+    def onControl(self, control):
+        self.handle_action(control.getId())
