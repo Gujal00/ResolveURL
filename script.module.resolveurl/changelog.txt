@@ -1,18 +1,15 @@
-Version 5.1.118 (Dec 09, 2023)
+Version 5.1.119 (Dec 21, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - brplayer
+    - None
 
 - Resolvers Fixed/Updated:
-    - gamovideo
-    - mixdrop
+    - dood
+    - hexupload
     - streamruby
-    - vembx
-    - videooo
     - voesx
-    - waaw
 
 - Resolvers Removed
     - None
