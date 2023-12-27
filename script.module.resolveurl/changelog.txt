@@ -1,15 +1,14 @@
-Version 5.1.119 (Dec 21, 2023)
+Version 5.1.120 (Dec 27, 2023)
 - Code Base Changes:
-    - None
+    - captchawindow rollover support
 
 - Resolvers Added:
-    - None
+    - mediacm
+    - vidhidepro
 
 - Resolvers Fixed/Updated:
-    - dood
-    - hexupload
-    - streamruby
-    - voesx
+    - sendcm
+    - streamwish
 
 - Resolvers Removed
     - None
