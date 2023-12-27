@@ -29,11 +29,11 @@ class StreamWishResolver(ResolveGeneric):
                'awish.pro', 'dwish.pro', 'vidmoviesb.xyz', 'embedwish.com', 'cilootv.store',
                'tuktukcinema.store', 'doodporn.xyz', 'ankrzkz.sbs', 'volvovideo.top', 'streamwish.site',
                'wishfast.top', 'ankrznm.sbs', 'sfastwish.com', 'eghjrutf.sbs', 'eghzrutw.sbs',
-               'playembed.online', 'egsyxurh.sbs', 'egtpgrvh.sbs', 'flaswish.com']
-    pattern = r'(?://|\.)((?:streamwish|ajmidyad|khadhnayad|yadmalik|hayaatieadhab|kharabnahs|' \
-              r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|wishembed|[mad]wish|vidmoviesb|' \
-              r'cilootv|tuktukcinema|embedwish|doodporn|ankrzkz|volvovideo|strmwis|wishfast|ankrznm|' \
-              r'sfastwish|eghjrutf|eghzrutw|playembed|egsyxurh|egtpgrvh|flaswish)' \
+               'playembed.online', 'egsyxurh.sbs', 'egtpgrvh.sbs', 'flaswish.com', 'obeywish.com']
+    pattern = r'(?://|\.)((?:(?:stream|flas|obey|sfast|embed|[mad])wish(?:embed|fast)?|ajmidyad|khadhnayad|' \
+              r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|vidmoviesb|kharabnahs|hayaatieadhab|' \
+              r'cilootv|tuktukcinema|doodporn|ankrzkz|volvovideo|strmwis|ankrznm|yadmalik|' \
+              r'eghjrutf|eghzrutw|playembed|egsyxurh|egtpgrvh)' \
               r'\.(?:com|to|sbs|pro|xyz|store|top|site|online))/(?:e/|f/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
