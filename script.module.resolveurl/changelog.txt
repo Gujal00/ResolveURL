@@ -1,14 +1,12 @@
-Version 5.1.120 (Dec 27, 2023)
+Version 5.1.121 (Dec 28, 2023)
 - Code Base Changes:
-    - captchawindow rollover support
+    - None
 
 - Resolvers Added:
-    - mediacm
-    - vidhidepro
+    - None
 
 - Resolvers Fixed/Updated:
-    - sendcm
-    - streamwish
+    - dood
 
 - Resolvers Removed
     - None
