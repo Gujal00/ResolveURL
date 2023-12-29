@@ -18,7 +18,7 @@
 import re
 import six
 from six.moves import urllib_error, urllib_request, urllib_parse
-import traceback
+import inspect
 import resolveurl
 from resolveurl import common
 
@@ -62,12 +62,14 @@ class HostedMediaFile:
         must pass either ``url`` or ``host`` AND ``media_id``.
     """
 
-    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None, include_popups=None, return_all=False):
+    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None, include_popups=None, return_all=False, subs=False):
         """
         Args:
             url (str): a URL to a web page that represents a piece of media.
             host (str): the host of the media to be represented.
             media_id (str): the unique ID given to the media by the host.
+            return_all (boolean): return all playable files in magnets
+            subs (boolean): return subtitles if included by the embedder
         """
         if not url and not (host and media_id) or (url and (host or media_id)):
             raise ValueError('Set either url, or host AND media_id. No other combinations are valid.')
@@ -76,6 +78,7 @@ class HostedMediaFile:
         self._media_id = media_id
         self._valid_url = None
         self._return_all = return_all
+        self._subs = subs
         self.title = title if title else self._host
 
         if self._url:
@@ -186,23 +189,36 @@ class HostedMediaFile:
                         common.logger.log_debug('Resolving using %s plugin' % resolver.name)
                         resolver.login()
                         self._host, self._media_id = resolver.get_host_and_id(self._url)
+                        if six.PY3:
+                            spec = inspect.getfullargspec(resolver.get_media_url)
+                        else:
+                            spec = inspect.getargspec(resolver.get_media_url)
+                        no_subs_support = 'subs' not in spec.args
+                        subtitles = {}
+
                         if self._return_all and resolver.isUniversal():
                             url_list = resolver.get_media_url(self._host, self._media_id, return_all=self._return_all)
                             self.__resolvers = [resolver]
                             self._valid_url = True
                             return url_list
-                        else:
+                        elif resolver.isUniversal() or self._subs is False or no_subs_support:
                             stream_url = resolver.get_media_url(self._host, self._media_id)
+                        else:
+                            stream_url, subtitles = resolver.get_media_url(self._host, self._media_id, subs=self._subs)
+
                         if stream_url and stream_url.startswith("//"):
                             stream_url = 'http:%s' % stream_url
                         if stream_url and self.__test_stream(stream_url):
                             self.__resolvers = [resolver]  # Found a working resolver, throw out the others
                             self._valid_url = True
+                            if self._subs:
+                                return {'url': stream_url, 'subs': subtitles}
                             return stream_url
             except Exception as e:
                 url = self._url.encode('utf-8') if isinstance(self._url, six.text_type) and six.PY2 else self._url
                 common.logger.log_error('%s Error - From: %s Link: %s: %s' % (type(e).__name__, resolver.name, url, e))
                 if resolver == self.__resolvers[-1]:
+                    import traceback
                     common.logger.log_debug(traceback.format_exc())
                     raise
 

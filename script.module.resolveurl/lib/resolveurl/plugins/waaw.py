@@ -38,12 +38,21 @@ class WaawResolver(ResolveUrl):
     pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay|ncdn22|oyohd)\.(?:ac|tv|to|store|com|xyz|one))/' \
               r'(?:watch_video\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r"'videoid':\s*'([^']+)", html)
         if r:
+            if subs:
+                subtitles = {}
+                s = re.findall(r'<track\s*kind="captions"\s*src="((?!data:)[^"]+)"\s*srclang="([^"]+)', html)
+                if s:
+                    subtitles = {lang: suburl for suburl, lang in s}
+                else:
+                    s = re.search(r'file2sub\("([^"]+)","\w*","([^"]+)', html)
+                    if s:
+                        subtitles = {s.group(2): s.group(1)}
             video_id = r.group(1)
             video_key = re.search(r"'videokey':\s*'([^']+)", html).group(1)
             adbn = re.search(r"adbn\s*=\s*'([^']+)", html).group(1)
@@ -101,6 +110,8 @@ class WaawResolver(ResolveUrl):
             if decrypted_link:
                 strurl = "https:{0}.mp4.m3u8".format(decrypted_link)
                 headers.pop('X-Requested-With')
+                if subs:
+                    return strurl + helpers.append_headers(headers), subtitles
                 return strurl + helpers.append_headers(headers)
         raise ResolverError('Video Link Not Found')
 
