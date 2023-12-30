@@ -19,7 +19,7 @@
 import binascii
 import json
 import re
-from six.moves import urllib_parse
+from six.moves import urllib_parse, urllib_error
 from resolveurl import common
 from resolveurl.lib import helpers, aadecode
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -28,8 +28,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VidGuardResolver(ResolveUrl):
     name = 'VidGuard'
     domains = ['vidguard.to', 'vgfplay.com', 'vgembed.com', 'moflix-stream.day',
-               'v6embed.xyz', 'vid-guard.com', 'vembed.net']
-    pattern = r'(?://|\.)((?:vidguard|vgfplay|vgembed|moflix-stream|v6embed|vid-guard|vembed)' \
+               'v6embed.xyz', 'vid-guard.com', 'vembed.net', 'embedv.net']
+    pattern = r'(?://|\.)((?:vidguard|vgfplay|vgembed|moflix-stream|v6embed|vid-guard|v?embedv?)' \
               r'\.(?:to|com|day|xyz|net))/(?:e|v|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
@@ -37,26 +37,28 @@ class VidGuardResolver(ResolveUrl):
         headers = {'User-Agent': common.FF_USER_AGENT}
         try:
             html = self.net.http_GET(web_url, headers=headers).content
-        except:
+        except urllib_error.HTTPError:
             raise ResolverError('The requested video was not found.')
 
-        r = re.search(r'<script\s*src="(/assets/videojs/ad/[^"]+)', html)
+        r = re.search(r'eval\("window\.ADBLOCKER\s*=\s*false;\\n(.+?);"\);</script', html)
         if r:
-            headers.update({'Referer': web_url})
-            html = self.net.http_GET(urllib_parse.urljoin(web_url, r.group(1)), headers=headers).content
-            aa_decoded = aadecode.decode(html, alt=True)
-            sources = json.loads(aa_decoded[11:]).get('stream')
-            sources = [(x.get('Label'), x.get('URL')) for x in sources]
+            r = r.group(1).replace('\\u002b', '+')
+            r = r.replace('\\u0027', "'")
+            r = r.replace('\\u0022', '"')
+            r = r.replace('\\/', '/')
+            r = r.replace('\\\\', '\\')
+            r = r.replace('\\"', '"')
+            aa_decoded = aadecode.decode(r, alt=True)
+            stream_url = json.loads(aa_decoded[11:]).get('stream')
             headers.update({'Referer': urllib_parse.urljoin(web_url, '/')})
-            stream_url = helpers.pick_source(helpers.sort_sources_list(sources))
             return self.sig_decode(stream_url) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        hosts = ['vidguard', 'vid-guard', 'vgfplay', 'vgembed']
+        hosts = ['vidguard', 'vid-guard', 'vgfplay', 'vgembed', 'vembed.net']
         if any(x in host for x in hosts):
-            host = 'vembed.net'
+            host = 'embedv.net'
         return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}')
 
     # Adapted from PHP code by vb6rocod
