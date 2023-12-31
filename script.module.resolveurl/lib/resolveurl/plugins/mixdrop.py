@@ -27,8 +27,8 @@ class MixDropResolver(ResolveUrl):
     domains = ['mixdrop.co', 'mixdrop.to', 'mixdrop.sx', 'mixdrop.bz', 'mixdrop.ch',
                'mixdrp.co', 'mixdrp.to', 'mixdrop.gl', 'mixdrop.club', 'mixdroop.bz',
                'mixdroop.co', 'mixdrop.vc', 'mixdrop.ag', 'mdy48tn97.com',
-               'md3b0j6hj.com', 'mdbekjwqa.pw']
-    pattern = r'(?://|\.)((?:mixdro*p|mdy48tn97|md3b0j6hj|mdbekjwqa)\.(?:c[ho]m?|to|sx|bz|gl|club|vc|ag|pw))/(?:f|e)/(\w+)'
+               'md3b0j6hj.com', 'mdbekjwqa.pw', 'mdfx9dc8n.net']
+    pattern = r'(?://|\.)((?:mixdro*p|md(?:3b0j6hj|bekjwqa|fx9dc8n|y48tn97))\.(?:c[ho]m?|to|sx|bz|gl|club|vc|ag|pw|net))/(?:f|e)/(\w+)'
 
     def get_media_url(self, host, media_id):
         if host.endswith('.club'):
