@@ -27,8 +27,8 @@ class VoeResolver(ResolveUrl):
     domains = ['voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com',
                'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com',
                'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com', 'edwardarriveoften.com',
-               'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com',
-               'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com',
+               'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com', 'kennethofficialitem.com',
+               'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com', 'lukecomparetwo.com',
                'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'wolfdyslectic.com',
                'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com',
                'realfinanceblogcenter.com', 'tinycat-voe-fashion.com', '35volitantplimsoles5.com',
@@ -43,7 +43,7 @@ class VoeResolver(ResolveUrl):
                'valeronevijao.com', 'timberwoodanotia.com', 'apinchcaseation.com', 'nectareousoverelate.com',
                'nonesnanking.com', 'kathleenmemberhistory.com', 'stevenimaginelittle.com']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
-    pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
+    pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|' \
               r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|' \
               r'bigclatterhomesguideservice|uptodatefinishconferenceroom|edwardarriveoften|' \
@@ -51,7 +51,7 @@ class VoeResolver(ResolveUrl):
               r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|' \
               r'745mingiestblissfully|19turanosephantasia|30sensualizeexpression|' \
               r'321naturelikefurfuroid|449unceremoniousnasoseptal|guidon40hyporadius9|' \
-              r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|' \
+              r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|' \
               r'matriculant401merited|scatch176duplicities|availedsmallest|stevenimaginelittle|' \
               r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|' \
               r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|' \
@@ -69,6 +69,12 @@ class VoeResolver(ResolveUrl):
             r = eval(r.group(1))
             r = helpers.b64decode(''.join(r)[::-1])
             return r + helpers.append_headers(headers)
+
+        r = re.search(r"let\s*wc0\s*=\s*'([^']+)", html)
+        if r:
+            import json
+            r = json.loads(helpers.b64decode(r.group(1)))
+            return r.get('file') + helpers.append_headers(headers)
 
         sources = helpers.scrape_sources(
             html,
