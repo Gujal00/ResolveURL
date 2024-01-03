@@ -29,7 +29,7 @@ class VidGuardResolver(ResolveUrl):
     name = 'VidGuard'
     domains = ['vidguard.to', 'vgfplay.com', 'vgembed.com', 'moflix-stream.day',
                'v6embed.xyz', 'vid-guard.com', 'vembed.net', 'embedv.net']
-    pattern = r'(?://|\.)((?:vidguard|vgfplay|vgembed|moflix-stream|v6embed|vid-guard|v?embedv?)' \
+    pattern = r'(?://|\.)((?:vid-?guard|vgfplay|moflix-stream|v?[g6]?embedv?)' \
               r'\.(?:to|com|day|xyz|net))/(?:e|v|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):

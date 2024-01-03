@@ -1,12 +1,15 @@
-Version 5.1.121 (Dec 28, 2023)
+Version 5.1.122 (Jan 03, 2024)
 - Code Base Changes:
-    - None
+    - Subtitle scraping support
 
 - Resolvers Added:
-    - None
+    - streamgzzz
 
 - Resolvers Fixed/Updated:
-    - dood
+    - dembed
+    - mixdrop
+    - streamwish
+    - vidguard
 
 - Resolvers Removed
     - None

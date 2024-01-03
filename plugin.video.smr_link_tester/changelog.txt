@@ -1,3 +1,7 @@
+Version 1.1.11 (Jan 3, 2024)
+- add subtitle support
+- add inputstream adaptive support for hls
+
 Version 1.1.10 (Aug 1, 2022)
 - adjust setInfo for Kodi 20 and above
 
