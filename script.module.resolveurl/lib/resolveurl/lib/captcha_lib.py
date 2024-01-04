@@ -71,7 +71,7 @@ def do_captcha(html, base_url=None):
     elif ccapimg and base_url:
         return {'secimgkey': ccapimg.group(1), 'secimginp': do_ccapimg_captcha(base_url + 'ccapimg?key=' + ccapimg.group(1))}
     else:
-        captcha = re.compile(r"left:(\d+)px;padding-top:\d+px;'>&#(.+?);<").findall(html)
+        captcha = re.compile(r'''left:(\d+)px;padding-top:\d+px;['"]>&#(.+?);<''').findall(html)
         result = sorted(captcha, key=lambda ltr: int(ltr[0]))
         solution = ''.join(str(int(num[1]) - 48) for num in result)
         if solution:
