@@ -28,9 +28,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VidGuardResolver(ResolveUrl):
     name = 'VidGuard'
     domains = ['vidguard.to', 'vgfplay.com', 'vgembed.com', 'moflix-stream.day',
-               'v6embed.xyz', 'vid-guard.com', 'vembed.net', 'embedv.net']
-    pattern = r'(?://|\.)((?:vid-?guard|vgfplay|moflix-stream|v?[g6]?embedv?)' \
-              r'\.(?:to|com|day|xyz|net))/(?:e|v|d)/([0-9a-zA-Z]+)'
+               'v6embed.xyz', 'vid-guard.com', 'vembed.net', 'embedv.net', 'fslinks.org']
+    pattern = r'(?://|\.)((?:vid-?guard|vgfplay|fslinks|moflix-stream|v?[g6]?embedv?)' \
+              r'\.(?:to|com|day|xyz|org|net))/(?:e|v|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -50,8 +50,12 @@ class VidGuardResolver(ResolveUrl):
             r = r.replace('\\"', '"')
             aa_decoded = aadecode.decode(r, alt=True)
             stream_url = json.loads(aa_decoded[11:]).get('stream')
-            headers.update({'Referer': urllib_parse.urljoin(web_url, '/')})
-            return self.sig_decode(stream_url) + helpers.append_headers(headers)
+            if stream_url:
+                if isinstance(stream_url, list):
+                    sources = [(x.get('Label'), x.get('URL')) for x in stream_url]
+                    stream_url = helpers.pick_source(helpers.sort_sources_list(sources))
+                headers.update({'Referer': urllib_parse.urljoin(web_url, '/')})
+                return self.sig_decode(stream_url) + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
