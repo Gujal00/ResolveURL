@@ -54,6 +54,8 @@ class VidGuardResolver(ResolveUrl):
                 if isinstance(stream_url, list):
                     sources = [(x.get('Label'), x.get('URL')) for x in stream_url]
                     stream_url = helpers.pick_source(helpers.sort_sources_list(sources))
+                if not stream_url.startswith('https://'):
+                    stream_url = re.sub(':/*', '://', stream_url)
                 headers.update({'Referer': urllib_parse.urljoin(web_url, '/')})
                 return self.sig_decode(stream_url) + helpers.append_headers(headers)
 
