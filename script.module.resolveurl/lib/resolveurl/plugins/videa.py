@@ -32,7 +32,7 @@ class VideaResolver(ResolveUrl):
     videa_secret = 'xHb0ZvME5q8CBcoQi6AngerDu3FGO9fkUlwPmLVY_RTzj2hJIS4NasXWKy1td7p'
     key = ''
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         result = self.net.http_GET(web_url)
 
@@ -42,6 +42,12 @@ class VideaResolver(ResolveUrl):
             videaXml = rc4.decrypt(videaXml, self.key)
         sources = re.findall(r'video_source\s*name="(?P<label>[^"]+).*exp="(?P<exp>[^"]+)[^>]+>(?P<url>[^<]+)', videaXml)
 
+        if subs:
+            subtitles = {}
+            s = re.findall(r'<subtitle\s*src="(?P<url>[^"]+)"\s*title="(?P<label>[^"]+)"', videaXml)
+            if s:
+                subtitles = {lang: 'https:' + suburl.replace('&amp;', '&') for suburl, lang in s}
+
         if sources:
             tmpSources = []
             for index, source in enumerate(sources):
@@ -50,6 +56,8 @@ class VideaResolver(ResolveUrl):
             url = 'https:' + source[2] if source[2].startswith('//') else source[2]
             hash = re.search(r'<hash_value_%s>([^<]+)<' % source[0], videaXml).group(1)
             direct_url = "%s?md5=%s&expires=%s" % (url, hash, source[1])
+            if subs:
+                return direct_url.replace('&amp;', '&'), subtitles
             return direct_url.replace('&amp;', '&')
 
         raise ResolverError('Stream not found')
