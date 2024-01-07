@@ -30,8 +30,8 @@ class OKResolver(ResolveUrl):
     header = {'User-Agent': common.OPERA_USER_AGENT}
     qual_map = {'ultra': '2160', 'quad': '1440', 'full': '1080', 'hd': '720', 'sd': '480', 'low': '360', 'lowest': '240', 'mobile': '144'}
 
-    def get_media_url(self, host, media_id):
-        vids = self.__get_Metadata(media_id)
+    def get_media_url(self, host, media_id, subs=False):
+        vids, subtitles = self.__get_Metadata(media_id, subs)
         if type(vids) == dict:
             sources = []
             for entry in vids['urls']:
@@ -47,12 +47,14 @@ class OKResolver(ResolveUrl):
             source = source + helpers.append_headers(self.header)
         else:
             source = vids
+        if subs:
+            return source, subtitles
         return source
 
     def __replaceQuality(self, qual):
         return self.qual_map.get(qual.lower(), '000')
 
-    def __get_Metadata(self, media_id):
+    def __get_Metadata(self, media_id, subs):
         url = "http://www.ok.ru/dk"
         data = {'cmd': 'videoPlayerMetadata', 'mid': media_id}
         data = urllib_parse.urlencode(data)
@@ -61,6 +63,13 @@ class OKResolver(ResolveUrl):
 
         if 'error' in json_data:
             raise ResolverError('File Not Found or removed')
+        
+        subtitles = {}
+        if subs and 'movie' in json_data and 'subtitleTracks' in json_data['movie']:
+            for sub in json_data['movie']['subtitleTracks']:
+                if 'url' in sub and 'language' in sub:
+                    suburl = 'https:' + sub['url'] if sub['url'].startswith('//') else sub['url']
+                    subtitles[sub['language']] = suburl + helpers.append_headers(self.header)
 
         if len(json_data['videos']) > 0:
             info = dict()
@@ -72,7 +81,7 @@ class OKResolver(ResolveUrl):
             html = self.net.http_POST(url, data, headers=headers).content
             json_data = json.loads(html)
             info = json_data['hlsMasterPlaylistUrl'] + helpers.append_headers(headers)
-        return info
+        return info, subtitles
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'http://{host}/videoembed/{media_id}')
