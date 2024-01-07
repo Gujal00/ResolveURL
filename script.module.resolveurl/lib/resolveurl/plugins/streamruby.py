@@ -29,7 +29,7 @@ class StreamRubyResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.FF_USER_AGENT, 'Accept-Language': 'en-US,en;q=0.5'}
         html = self.net.http_GET(web_url, headers=headers).content
         html += helpers.get_packed_data(html)
         master_url = re.search(r'''sources:\s*\[(?:{src:|{file:)?\s*['"]([^'"]+)''', html)
