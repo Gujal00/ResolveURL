@@ -32,7 +32,7 @@ class OKResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id, subs=False):
         vids, subtitles = self.__get_Metadata(media_id, subs)
-        if type(vids) == dict:
+        if isinstance(vids, dict):
             sources = []
             for entry in vids['urls']:
                 quality = self.__replaceQuality(entry['name'])
@@ -63,7 +63,7 @@ class OKResolver(ResolveUrl):
 
         if 'error' in json_data:
             raise ResolverError('File Not Found or removed')
-        
+
         subtitles = {}
         if subs and 'movie' in json_data and 'subtitleTracks' in json_data['movie']:
             for sub in json_data['movie']['subtitleTracks']:
