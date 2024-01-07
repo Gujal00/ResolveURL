@@ -29,7 +29,8 @@ class VidMolyResolver(ResolveGeneric):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{file:"(?P<url>[^"]+)'''],
-            result_blacklist=['.mpd']
+            result_blacklist=['.mpd'],
+            referer=True
         )
 
     def get_url(self, host, media_id):
