@@ -1,15 +1,21 @@
-Version 5.1.122 (Jan 03, 2024)
+Version 5.1.123 (Jan 13, 2024)
 - Code Base Changes:
-    - Subtitle scraping support
+    - None
 
 - Resolvers Added:
-    - streamgzzz
+    - freedl
+    - prefiles
+    - uptomega
+    - worlduploads
 
 - Resolvers Fixed/Updated:
-    - dembed
-    - mixdrop
-    - streamwish
+    - dood
+    - ok
+    - streamruby
+    - videa
     - vidguard
+    - vidmoly
+    - voe
 
 - Resolvers Removed
     - None
