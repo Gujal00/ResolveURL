@@ -57,17 +57,21 @@ class DoodStreamResolver(ResolveUrl):
 
         if subs:
             subtitles = {}
-            for src, label in re.findall(r'''dsplayer\.addRemoteTextTrack\({src:'([^']+)',\s*label:'([^']+)',kind:'captions\'''', html, re.DOTALL):
-                subtitles[label] = src if src.startswith('http') else 'https:' + src
+            matches = re.findall(r"""dsplayer\.addRemoteTextTrack\({src:'([^']+)',\s*label:'([^']*)',kind:'captions'""", html)
+            if matches:
+                matches = [(src, label) for src, label in matches if len(label) > 1]
+                for src, label in matches:
+                    subtitles[label] = 'https:' + src if src.startswith('//') else src
 
         match = re.search(r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''', html, re.DOTALL)
         if match:
             token = match.group(2)
             url = 'https://{0}{1}'.format(host, match.group(1))
             html = self.net.http_GET(url, headers=headers).content
+            vid_src = self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
             if subs:
-                return self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers), subtitles
-            return self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
+                return vid_src, subtitles
+            return vid_src
 
         raise ResolverError('Video Link Not Found')
 
