@@ -215,7 +215,7 @@ def scrape_subtitles(html, rurl='', scheme='http', patterns=None, generic_patter
     if patterns is None:
         patterns = []
 
-    def __parse_to_dict(_html, site_url, regex):
+    def __parse_to_dict(_html, regex):
         labels = []
         subs = []
         for r in re.finditer(regex, _html, re.DOTALL):
@@ -228,7 +228,7 @@ def scrape_subtitles(html, rurl='', scheme='http', patterns=None, generic_patter
             if subs_url.startswith('//'):
                 subs_url = scheme + ':' + subs_url
             elif subs_url.startswith('/'):
-                subs_url = urllib_parse.urljoin(site_url, subs_url)
+                subs_url = urllib_parse.urljoin(rurl, subs_url)
             if '://' not in subs_url or (subs_url in subs):
                 continue
             labels.append(label)
@@ -244,8 +244,8 @@ def scrape_subtitles(html, rurl='', scheme='http', patterns=None, generic_patter
 
     subtitles = {}
     if generic_patterns or not patterns:
-        subtitles.update(__parse_to_dict(html, rurl, r'''{file:\s*["'](?P<url>[^"']+)["'],\s*label:\s*["'](?P<label>[^"']+)["'],\s*kind:\s*["']captions["']'''))
-        subtitles.update(__parse_to_dict(html, rurl, r'''<track\s*kind=['"]?subtitles['"]?\s*src=['"](?P<url>[^'"]+)['"]\s*srclang=['"](?P<label>[^'"]+)'''))
+        subtitles.update(__parse_to_dict(html, r'''{file:\s*["'](?P<url>[^"']+)["'],\s*label:\s*["'](?P<label>[^"']+)["'],\s*kind:\s*["']captions["']'''))
+        subtitles.update(__parse_to_dict(html, r'''<track\s*kind=['"]?subtitles['"]?\s*src=['"](?P<url>[^'"]+)['"]\s*srclang=['"](?P<label>[^'"]+)'''))
 
     for regex in patterns:
         subtitles.update(__parse_to_dict(html, regex))

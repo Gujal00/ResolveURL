@@ -50,7 +50,7 @@ class ResolveGeneric(ResolveUrl):
         ___
         helpers.get_media_url result_blacklist: |list of str| : list of strings to blacklist in source results
         """
-        return helpers.get_media_url(self.get_url(host, media_id)).replace(' ', '%20')
+        return helpers.get_media_url(self.get_url(host, media_id))
 
     def get_url(self, host, media_id):
         """
