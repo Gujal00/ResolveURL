@@ -1,24 +1,21 @@
-Version 5.1.123 (Jan 13, 2024)
+Version 5.1.124 (Jan 15, 2024)
 - Code Base Changes:
-    - None
+    - Genereic resolver subtitle scraping support
 
 - Resolvers Added:
-    - freedl
-    - prefiles
-    - uptomega
-    - worlduploads
+    - None
 
 - Resolvers Fixed/Updated:
+    - aliez
+    - cloudb
     - dood
-    - ok
-    - streamruby
-    - videa
-    - vidguard
     - vidmoly
-    - voe
+    - vidoza
 
 - Resolvers Removed
-    - None
+    - avideo
+    - anonfiles
+    - chromecast
 
 - Languages Added/Updated
     - None
