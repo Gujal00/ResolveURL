@@ -25,12 +25,13 @@ class VidMolyResolver(ResolveGeneric):
     domains = ['vidmoly.me', 'vidmoly.to', 'vidmoly.net']
     pattern = r'(?://|\.)(vidmoly\.(?:me|to|net))/(?:embed-|w/)?([0-9a-zA-Z]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{file:"(?P<url>[^"]+)'''],
             result_blacklist=['.mpd'],
-            referer=True
+            referer=True,
+            subs=subs
         )
 
     def get_url(self, host, media_id):
