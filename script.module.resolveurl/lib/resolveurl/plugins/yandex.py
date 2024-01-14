@@ -30,7 +30,7 @@ class YandexResolver(ResolveGeneric):
             self.get_url(host, media_id),
             patterns=[r'''dimension":\s*"(?P<label>[\d]{3,4}p?)".+?"url":\s*"(?P<url>[^"]+)'''],
             generic_patterns=False
-        ).replace(' ', '%20')
+        )
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://yadi.sk/i/{media_id}')

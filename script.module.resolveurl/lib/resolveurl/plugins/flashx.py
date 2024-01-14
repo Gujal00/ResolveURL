@@ -39,7 +39,12 @@ class FlashXResolver(ResolveUrl):
             result = self.__auth_ip(media_id)
 
         if result:
-            return helpers.get_media_url(result, patterns=[r'''src:\s*["'](?P<url>[^"']+).+?res:\s*(?P<label>\d+)'''], result_blacklist=["trailer"], generic_patterns=False).replace(' ', '%20')
+            return helpers.get_media_url(
+                result,
+                patterns=[r'''src:\s*["'](?P<url>[^"']+).+?res:\s*(?P<label>\d+)'''],
+                result_blacklist=["trailer"],
+                generic_patterns=False
+            )
 
         raise ResolverError(i18n('no_ip_authorization'))
 
