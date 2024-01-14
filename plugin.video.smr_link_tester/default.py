@@ -246,9 +246,7 @@ def play_link(link):
     listitem = xbmcgui.ListItem(path=stream_url)
     # listitem.setContentLookup(False)
     if subs:
-        langs = list(subs.keys())
-        subtitle = subs.get(langs[0])
-        listitem.setSubtitles([subtitle])
+        listitem.setSubtitles(list(subs.values()))
     kodiver = kodi.get_kodi_version().major
     if kodiver > 16 and ('.mpd' in stream_url or ia):
         if kodiver < 19:

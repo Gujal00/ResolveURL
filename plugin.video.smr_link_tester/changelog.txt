@@ -1,3 +1,6 @@
+Version 1.1.12 (Jan 14, 2024)
+- add all found subtitles to lisitem
+
 Version 1.1.11 (Jan 3, 2024)
 - add subtitle support
 - add inputstream adaptive support for hls
