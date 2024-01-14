@@ -1,6 +1,7 @@
 """
     Plugin for ResolveURL
     Copyright (C) 2011 t0mm0
+                  2024 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,17 +32,16 @@ class AliezResolver(ResolveGeneric):
             self.get_url(host, media_id),
             patterns=[r'''file:\s*['"](?P<url>[^'"]+)'''],
             generic_patterns=False
-        ).replace(' ', '%20')
+        )
 
     def get_host_and_id(self, url):
         r = re.search(self.pattern, url, re.I)
         if r:
             r = list(filter(None, r.groups()))
-            r = [r[0], '%s|%s' % (r[1], r[2])]
+            r = [r[0], '%s/%s' % (r[1], r[2])]
             return r
         else:
             return False
 
     def get_url(self, host, media_id):
-        media_id = media_id.split('|')
-        return self._default_get_url(host, media_id, template='http://emb.apl215.me/player/video.php?id=%s&s=%s&w=590&h=332' % (media_id[0], media_id[1]))
+        return self._default_get_url(host, media_id, template='http://{host}/video/{media_id}/')
