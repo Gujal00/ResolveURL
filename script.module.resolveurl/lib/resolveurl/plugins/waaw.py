@@ -45,14 +45,12 @@ class WaawResolver(ResolveUrl):
         r = re.search(r"'videoid':\s*'([^']+)", html)
         if r:
             if subs:
-                subtitles = {}
-                s = re.findall(r'<track\s*kind="captions"\s*src="((?!data:)[^"]+)"\s*srclang="([^"]+)', html)
-                if s:
-                    subtitles = {lang: suburl for suburl, lang in s}
-                else:
-                    s = re.search(r'file2sub\("([^"]+)","\w*","([^"]+)', html)
-                    if s:
-                        subtitles = {s.group(2): s.group(1)}
+                patterns = [
+                    r'<track\s*kind="captions"\s*src="(?P<url>(?!data:)[^"]+)"\s*srclang="(?P<label>[^"]+)',
+                    r'file2sub\("(?P<url>[^"]+)","\w*","(?P<label>[^"]+)',
+                    r'addRemoteTextTrack\({kind:\s*"captions".+?label:\s*"(?P<label>[^"]+).+?src:\s*"(?P<url>[^"]+)'
+                ]
+                subtitles = helpers.scrape_subtitles(html, patterns=patterns, generic_patterns=False)
             video_id = r.group(1)
             video_key = re.search(r"'videokey':\s*'([^']+)", html).group(1)
             adbn = re.search(r"adbn\s*=\s*'([^']+)", html).group(1)
