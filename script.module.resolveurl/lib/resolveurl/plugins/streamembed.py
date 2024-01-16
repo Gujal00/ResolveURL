@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamEmbedResolver(ResolveUrl):
     name = 'StreamEmbed'
-    domains = ['bullstream.xyz', 'mp4player.site']
-    pattern = r'(?://|\.)((?:bullstream|mp4player)\.(?:xyz|site))/watch\?v=([0-9a-zA-Z]+)'
+    domains = ['bullstream.xyz', 'mp4player.site', 'watch.gxplayer.xyz']
+    pattern = r'(?://|\.)((?:bullstream|mp4player|watch.gxplayer)\.(?:xyz|site))/watch\?v=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
