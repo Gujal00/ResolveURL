@@ -398,7 +398,7 @@ def get_redirect_url(url, headers={}, form_data=None):
     return response.headers.get('location') or url
 
 
-def girc(page_data, url, co):
+def girc(page_data, url, co=None):
     """
     Code adapted from https://github.com/vb6rocod/utils/
     Copyright (C) 2019 vb6rocod
@@ -412,6 +412,8 @@ def girc(page_data, url, co):
     aurl = 'https://www.google.com/recaptcha/api2'
     key = re.search(r'(?:src="{0}\?.*?render|data-sitekey)="?([^"]+)'.format(rurl), page_data)
     if key:
+        if co is None:
+            co = b64encode((url[:-1] + ':443')).replace('=', '')
         key = key.group(1)
         rurl = '{0}?render={1}'.format(rurl, key)
         page_data1 = net.http_GET(rurl, headers=hdrs).content

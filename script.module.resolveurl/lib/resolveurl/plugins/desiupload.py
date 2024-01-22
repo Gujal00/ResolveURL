@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2023 shellc0de
+    Copyright (C) 2023 shellc0de, gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 """
 
 import re
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -29,19 +30,28 @@ class DesiuploadResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        rurl = 'https://{}/'.format(host)
-        headers = {
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        r = self.net.http_GET(web_url, headers=headers)
+        if web_url != r.get_url():
+            web_url = r.get_url()
+        html = r.content
+        rurl = urllib_parse.urljoin(web_url, '/')
+        token = helpers.girc(html, rurl)
+        headers.update({
             'Origin': rurl[:-1],
-            'Referer': rurl,
-            'User-Agent': common.RAND_UA
-        }
-        payload = {
-            'op': 'download2',
-            'id': media_id,
-            'referer': rurl
-        }
+            'Referer': web_url
+        })
+        payload = helpers.get_hidden(html)
+        payload.update({
+            'referer': '',
+            'method_free': '',
+            'method_premium': '',
+            'adblock_detected': 0,
+            'g-recaptcha-response': token
+        })
+        common.kodi.sleep(5000)
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
-        source = re.search(r'href="([^"]+).+?>\s*Download', html)
+        source = re.search(r'id="direct_link".+?href="([^"]+)', html, re.DOTALL)
         if source:
             headers['verifypeer'] = 'false'
             return source.group(1).replace(' ', '%20') + helpers.append_headers(headers)

@@ -17,10 +17,11 @@
 """
 
 import re
-from six.moves import urllib_parse
 from resolveurl import common
-from resolveurl.lib import helpers
+from resolveurl.lib import helpers, captcha_lib
 from resolveurl.resolver import ResolveUrl, ResolverError
+
+MAX_TRIES = 3
 
 
 class UploadRajaResolver(ResolveUrl):
@@ -30,25 +31,25 @@ class UploadRajaResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'Origin': web_url.rsplit('/', 1)[0],
-            'Referer': web_url,
-            'User-Agent': common.RAND_UA
-        }
-        payload = {
-            'op': 'download2',
-            'id': media_id,
-            'rand': '',
-            'referer': 'https://{}/'.format(host)
-        }
-        html = self.net.http_POST(web_url, headers=headers, form_data=payload).content
-        source = re.search(r'href="([^"]+)"\s*class="download', html)
-        if source:
-            headers['verifypeer'] = 'false'
-            query = urllib_parse.parse_qsl(urllib_parse.urlparse(source.group(1)).query)
-            src = query[1][1] if query else source.group(1)
-            return src.replace(' ', '%20') + helpers.append_headers(headers)
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'Referer': web_url}
+        r = self.net.http_GET(web_url, headers=headers)
+        if web_url != r.get_url():
+            web_url = r.get_url()
+        html = r.content
+        if 'File Not Found' not in html:
+            tries = 0
+            while tries < MAX_TRIES:
+                payload = helpers.get_hidden(html)
+                payload.update(captcha_lib.do_captcha(html))
+                common.kodi.sleep(3000)
+                html = self.net.http_POST(web_url, headers=headers, form_data=payload).content
+                source = re.search(r'id="direct_link".+?href="([^"]+)', html, re.DOTALL)
+                if source:
+                    return source.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
+                common.kodi.sleep(8000)
+                tries = tries + 1
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):

@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2022 shellc0de
+    Copyright (C) 2022 shellc0de, gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
+import random
+import string
 from resolveurl import common
 from resolveurl.lib import helpers, captcha_lib
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -38,13 +39,21 @@ class UploadingSiteResolver(ResolveUrl):
         common.kodi.sleep(5000)
         payload.update(captcha_lib.do_captcha(html))
         headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': web_url})
-        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
-        url = re.search(r'href="([^"]+).+?>\s*Download', html)
-        if url:
+        url = self.net.http_POST(web_url, form_data=payload, headers=headers, redirect=False).get_redirect_url()
+        if url != web_url:
             headers['verifypeer'] = 'false'
-            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+            return url.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found')
 
     def get_url(self, host, media_id):
+        media_id += '?{0}'.format(makeid(14))
         return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
+
+
+def makeid(chars):
+    random_seed = ''
+    characters = string.ascii_letters + string.digits
+    for i in range(chars):
+        random_seed += random.choice(characters)
+    return random_seed

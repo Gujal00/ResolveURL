@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2022 shellc0de
+    Copyright (C) 2022 shellc0de, gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,19 +30,26 @@ class UploadEverResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'Origin': web_url.rsplit('/', 1)[0],
-            'Referer': web_url,
-            'User-Agent': common.RAND_UA
-        }
-        payload = {
-            'op': 'download2',
-            'id': media_id,
-            'rand': '',
-            'referer': web_url,
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        r = self.net.http_GET(web_url, headers=headers)
+        if web_url != r.get_url():
+            web_url = r.get_url()
+        html = r.content
+        rurl = urllib_parse.urljoin(web_url, '/')
+        token = helpers.girc(html, rurl)
+        headers.update({
+            'Origin': rurl[:-1],
+            'Referer': web_url
+        })
+        payload = helpers.get_hidden(html)
+        payload.update({
+            'referer': '',
             'method_free': '',
-            'method_premium': ''
-        }
+            'method_premium': '',
+            'adblock_detected': 0,
+            'g-recaptcha-response': token
+        })
+        common.kodi.sleep(10000)
         html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
         url = re.search(r'btn\s*btn-dow\s*(?:recaptchav2)?"\s*href="(http[^"]+)', html)
         if url:
