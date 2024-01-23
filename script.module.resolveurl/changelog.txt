@@ -1,21 +1,21 @@
-Version 5.1.124 (Jan 15, 2024)
+Version 5.1.125 (Jan 23, 2024)
 - Code Base Changes:
-    - Genereic resolver subtitle scraping support
-
-- Resolvers Added:
     - None
 
+- Resolvers Added:
+    - veev
+
 - Resolvers Fixed/Updated:
-    - aliez
-    - cloudb
-    - dood
-    - vidmoly
-    - vidoza
+    - desiupload
+    - streamembed
+    - uploadever
+    - uploadingsite
+    - uploadraja
+    - voe
+    - waaw
 
 - Resolvers Removed
-    - avideo
-    - anonfiles
-    - chromecast
+    - None
 
 - Languages Added/Updated
     - None
