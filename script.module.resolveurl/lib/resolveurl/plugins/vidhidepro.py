@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class VidHideProResolver(ResolveGeneric):
     name = 'VidHidePro'
-    domains = ['vidhidepro.com']
-    pattern = r'(?://|\.)(vidhidepro\.com)/(?:s|v|f|embed)/([0-9a-zA-Z]+)'
+    domains = ['vidhidepro.com', 'vidhidevip.com']
+    pattern = r'(?://|\.)(vidhide(?:pro|vip)\.com)/(?:s|v|f|embed)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
