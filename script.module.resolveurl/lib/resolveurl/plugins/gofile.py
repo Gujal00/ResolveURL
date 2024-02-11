@@ -38,11 +38,11 @@ class GoFileResolver(ResolveUrl):
             raise ResolverError('Unable to retrieve token!')
 
         r = self.net.http_GET('https://{}/dist/js/alljs.js'.format(host), headers=headers).content
-        wtoken = re.search(r'websiteToken\s*=\s*"([^"]+)', r)
+        wtoken = re.search(r'fetchData\.wt\s*=\s*"([^"]+)', r)
         if not wtoken:
             raise ResolverError('Unable to retrieve websiteToken!')
 
-        content_url = '{}/getContent?contentId={}&token={}&websiteToken={}'.format(
+        content_url = '{}/getContent?contentId={}&token={}&wt={}'.format(
             base_api, media_id, token, wtoken.group(1)
         )
         r = self.net.http_GET(content_url, headers=headers).content
