@@ -244,7 +244,7 @@ def scrape_subtitles(html, rurl='', scheme='http', patterns=None, generic_patter
 
     subtitles = {}
     if generic_patterns or not patterns:
-        subtitles.update(__parse_to_dict(html, r'''{file:\s*["'](?P<url>[^"']+)["'],\s*label:\s*["'](?P<label>[^"']+)["'],\s*kind:\s*["']captions["']'''))
+        subtitles.update(__parse_to_dict(html, r'''{\s*file:\s*["'](?P<url>[^"']+)["'],\s*label:\s*["'](?P<label>[^"']+)["'],\s*kind:\s*["']captions["']'''))
         subtitles.update(__parse_to_dict(html, r'''<track\s*kind=['"]?subtitles['"]?\s*src=['"](?P<url>[^'"]+)['"]\s*srclang=['"](?P<label>[^'"]+)'''))
         subtitles.update(__parse_to_dict(html, r'''<track\s*kind="captions"\s*label="(?P<label>[^"]+)"\s*srclang="[^"]+"\s*src="(?P<url>[^"]+)"'''))
 
