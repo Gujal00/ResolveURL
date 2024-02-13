@@ -1,21 +1,23 @@
-Version 5.1.125 (Jan 23, 2024)
+Version 5.1.126 (Feb 13, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - veev
+    - brbeast
 
 - Resolvers Fixed/Updated:
-    - desiupload
-    - streamembed
-    - uploadever
-    - uploadingsite
-    - uploadraja
-    - voe
-    - waaw
+    - doodstream
+    - gofile
+    - mixdrop
+    - streamruby
+    - streamwish
+    - uqload
+    - vidhide
+    - vtube
+    - vudeo
 
 - Resolvers Removed
-    - None
+    - streamz
 
 - Languages Added/Updated
     - None
