@@ -357,7 +357,7 @@ class Net:
             else:
                 response = urllib_request.urlopen(req, timeout=15)
         except urllib_error.HTTPError as e:
-            if e.code == 403 and 'cloudflare' in e.hdrs.get('Expect-CT', ''):
+            if e.code == 403 and 'cloudflare' in e.hdrs.get('server', ''):
                 import ssl
                 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
                 ctx.set_alpn_protocols(['http/1.1'])
