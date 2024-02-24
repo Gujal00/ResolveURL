@@ -35,4 +35,4 @@ class VidMolyResolver(ResolveGeneric):
         )
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://vidmoly.net/{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://vidmoly.net/embed-{media_id}.html')
