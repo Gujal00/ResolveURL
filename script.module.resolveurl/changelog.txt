@@ -1,23 +1,17 @@
-Version 5.1.126 (Feb 13, 2024)
+Version 5.1.127 (Feb 24, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - brbeast
+    - maxstream
 
 - Resolvers Fixed/Updated:
-    - doodstream
-    - gofile
-    - mixdrop
-    - streamruby
-    - streamwish
-    - uqload
-    - vidhide
-    - vtube
-    - vudeo
+    - userscloud
+    - vidmoly
+    - voesx
 
 - Resolvers Removed
-    - streamz
+    - None
 
 - Languages Added/Updated
     - None
