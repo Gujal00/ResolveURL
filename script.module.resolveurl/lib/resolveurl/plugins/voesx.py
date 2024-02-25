@@ -30,7 +30,7 @@ class VoeResolver(ResolveUrl):
                'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com', 'kennethofficialitem.com',
                'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com', 'lukecomparetwo.com',
                'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'wolfdyslectic.com',
-               'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com',
+               'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com', 'jayservicestuff.com',
                'realfinanceblogcenter.com', 'tinycat-voe-fashion.com', '35volitantplimsoles5.com',
                '20demidistance9elongations.com', 'telyn610zoanthropy.com', 'toxitabellaeatrebates306.com',
                'greaseball6eventual20.com', '745mingiestblissfully.com', '19turanosephantasia.com',
@@ -49,7 +49,7 @@ class VoeResolver(ResolveUrl):
               r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|' \
               r'bigclatterhomesguideservice|uptodatefinishconferenceroom|edwardarriveoften|' \
               r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|' \
-              r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|' \
+              r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|jayservicestuff|' \
               r'745mingiestblissfully|19turanosephantasia|30sensualizeexpression|sandrataxeight|' \
               r'321naturelikefurfuroid|449unceremoniousnasoseptal|guidon40hyporadius9|' \
               r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|' \
@@ -81,7 +81,7 @@ class VoeResolver(ResolveUrl):
         r = re.search(r"let\s*(?:wc0|[0-9a-f]+)\s*=\s*'([^']+)", html)
         if r:
             import json
-            r = json.loads(helpers.b64decode(r.group(1)))
+            r = json.loads(helpers.b64decode(r.group(1))[::-1])
             stream_url = r.get('file') + helpers.append_headers(headers)
             if subs:
                 return stream_url, subtitles
