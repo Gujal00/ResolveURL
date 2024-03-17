@@ -1,10 +1,10 @@
-Version 2.1.41 (Feb 24, 2024)
+Version 2.1.42 (Mar 17, 2024)
 
 - Resolvers Added:
-    - javclan
+    - None
  
 - Resolvers Fixed/Updated:
-    - None
+    - xvideos
 
 - Resolvers Removed
     - None
