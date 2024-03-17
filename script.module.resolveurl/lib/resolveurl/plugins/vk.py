@@ -46,6 +46,7 @@ class VKResolver(ResolveUrl):
             sources.sort(key=lambda x: int(x[0]), reverse=True)
             source = helpers.pick_source(sources)
             if source:
+                headers.pop('X-Requested-With')
                 return source + helpers.append_headers(headers)
 
         raise ResolverError('No video found')
