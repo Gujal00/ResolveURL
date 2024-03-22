@@ -28,7 +28,7 @@ class MixDropResolver(ResolveUrl):
                'mixdrp.co', 'mixdrp.to', 'mixdrop.gl', 'mixdrop.club', 'mixdroop.bz',
                'mixdroop.co', 'mixdrop.vc', 'mixdrop.ag', 'mdy48tn97.com',
                'md3b0j6hj.com', 'mdbekjwqa.pw', 'mdfx9dc8n.net', 'mixdropjmk.pw',
-               'mixdrop21.net', 'mixdrop.is', 'mixdrop.si']
+               'mixdrop21.net', 'mixdrop.is', 'mixdrop.si', 'mixdrop23.net']
     pattern = r'(?://|\.)((?:mixdro*p\d*(?:jmk)?|md(?:3b0j6hj|bekjwqa|fx9dc8n|y48tn97))\.' \
               r'(?:c[ho]m?|to|sx|bz|gl|club|vc|ag|pw|net|is|si))/(?:f|e)/(\w+)'
 
