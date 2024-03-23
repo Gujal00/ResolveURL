@@ -28,7 +28,7 @@ from six.moves import urllib_parse
 class VlalaComResolver(ResolveUrl):
     name = 'VlalaCom'
     domains = ['videoslala.com']
-    pattern = r'(?://|\.)(videoslala\.com)/(?:v|e|embed)/([^\n]+)'
+    pattern = r'(?://)((?:.*\.)?videoslala\.com)/(?:v|e|embed)/([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -41,7 +41,7 @@ class VlalaComResolver(ResolveUrl):
         if not referer:
             referer = urllib_parse.urljoin(web_url, '/')
 
-        headers = {'User-Agent': common.SAFARI_USER_AGENT,
+        headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': referer}
 
         html = self.net.http_GET(web_url, headers=headers).content
@@ -54,7 +54,11 @@ class VlalaComResolver(ResolveUrl):
             data = json.loads(r.group(1))
             src = data.get('sources', {}).get('file')
             if src:
-                headers.update({'Origin': 'https://{}'.format(host), 'verifypeer': 'false'})
+                headers.update({
+                    'Referer': 'https://{}/'.format(host),
+                    'Origin': 'https://{}'.format(host),
+                    'verifypeer': 'false'
+                })
                 return src + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
