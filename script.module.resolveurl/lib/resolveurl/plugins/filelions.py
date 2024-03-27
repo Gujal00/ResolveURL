@@ -25,10 +25,11 @@ class FileLionsResolver(ResolveGeneric):
     domains = ['filelions.com', 'filelions.to', 'ajmidyadfihayh.sbs', 'alhayabambi.sbs', 'techradar.ink',
                'moflix-stream.click', 'azipcdn.com', 'mlions.pro', 'alions.pro', 'dlions.pro',
                'filelions.live', 'motvy55.store', 'filelions.xyz', 'lumiawatch.top', 'filelions.online',
-               'javplaya.com', 'fviplions.com', 'egsyxutd.sbs', 'filelions.site', 'filelions.co']
+               'javplaya.com', 'fviplions.com', 'egsyxutd.sbs', 'filelions.site', 'filelions.co',
+               'vidhide.com', 'vidhidepro.com', 'vidhidevip.com']
     pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|motvy55|' \
-              r'[mad]lions|lumiawatch|javplaya|fviplions|egsyxutd)\.' \
-              r'(?:com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site))/(?:v|f|d)/([0-9a-zA-Z]+)'
+              r'[mad]lions|lumiawatch|javplaya|fviplions|egsyxutd|vidhide(?:pro|vip)?)\.' \
+              r'(?:com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site))/(?:s|v|f|d|embed)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
