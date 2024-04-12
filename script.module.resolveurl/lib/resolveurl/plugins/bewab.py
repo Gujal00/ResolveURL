@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2021 gujal
+    Copyright (C) 2024 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -9,36 +9,29 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
-from six.moves import urllib_parse
 
 
-class VideoooResolver(ResolveGeneric):
-    name = 'Videooo'
-    domains = ['videooo.news', 'goplayer1.com', 'goplayer3.com']
-    pattern = r'(?://|\.)((?:videooo|goplayer\d)\.(?:news|com))/(?:embed-)?([^\n]+)'
+class BewabResolver(ResolveGeneric):
+    name = 'Bewab'
+    domains = ['cdn.bewab.co']
+    pattern = r'(?://|\.)(cdn\.bewab\.co)/(?:embed-)?([0-9a-zA-Z]+)'
 
-    def get_media_url(self, host, media_id, subs=False):
-        if '$$' in media_id:
-            media_id, referer = media_id.split('$$')
-            referer = urllib_parse.urljoin(referer, '/')
-        else:
-            referer = False
+    def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{\s*file:\s*"(?P<url>[^"]+)'''],
             generic_patterns=False,
-            referer=referer,
-            subs=subs
+            referer=False
         )
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')

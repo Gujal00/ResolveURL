@@ -1,14 +1,14 @@
-Version 5.1.129 (Mar 24, 2024)
+Version 5.1.130 (Apr 13, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - viralweb8
+    - bewab
+    - asumanaksoy
 
 - Resolvers Fixed/Updated:
-    - mixdrop
-    - vidmojo
-    - vk
+    - filelions
+    - videooo
 
 - Resolvers Removed
     - None
