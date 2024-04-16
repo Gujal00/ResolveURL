@@ -50,6 +50,11 @@ class DubokuResolver(ResolveUrl):
             elif encrypt == 2:
                 url = urllib_parse.unquote(helpers.duboku_decode(url))
                 url_next = urllib_parse.unquote(helpers.duboku_decode(url_next))
+                html = self.net.http_GET('https://{0}/static/player/vidjs25.php'.format(host), headers=headers).content
+                match = re.search(r"encodeURIComponent\('([^']+)'\)", html)
+                if match:
+                    url += '?sign=' + urllib_parse.quote_plus(match.group(1))
+                    url_next += '?sign=' + urllib_parse.quote_plus(match.group(1))
 
             if url.startswith('http'):
                 return url + helpers.append_headers(headers)
