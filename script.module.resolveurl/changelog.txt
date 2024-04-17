@@ -1,14 +1,18 @@
-Version 5.1.130 (Apr 13, 2024)
+Version 5.1.131 (Apr 18, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - bewab
-    - asumanaksoy
+    - None
 
 - Resolvers Fixed/Updated:
+    - dembed
+    - duboku
     - filelions
-    - videooo
+    - streamwish
+    - turboviplay
+    - uploadingsite
+    - vidguard
 
 - Resolvers Removed
     - None
