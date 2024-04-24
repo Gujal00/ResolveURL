@@ -21,7 +21,7 @@ from resolveurl.lib import helpers
 from resolveurl.lib import captcha_lib
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from six.moves import urllib_parse
+from six.moves import urllib_parse, urllib_error
 
 MAX_TRIES = 3
 
@@ -35,13 +35,16 @@ class FreeDLResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': web_url}
-        html = self.net.http_GET(web_url, headers=headers).content
+        try:
+            html = self.net.http_GET(web_url, headers=headers).content
+        except urllib_error.HTTPError:
+            raise ResolverError('The requested video was deleted.')
         if 'File Not Found' not in html:
             tries = 0
             while tries < MAX_TRIES:
                 data = helpers.get_hidden(html)
                 data.update(captcha_lib.do_captcha(html))
-                common.kodi.sleep(31000)
+                common.kodi.sleep(61000)
                 html = self.net.http_POST(web_url, data, headers=headers).content
                 r = re.search(r'class="done.+?href="([^"]+)', html, re.DOTALL)
                 if r:
@@ -55,7 +58,7 @@ class FreeDLResolver(ResolveUrl):
         return
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}/')
+        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
 
     @classmethod
     def isPopup(self):

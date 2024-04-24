@@ -18,18 +18,25 @@
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
+from six.moves import urllib_parse
+
 
 class ReviewRateResolver(ResolveGeneric):
     name = 'ReviewRate'
-    domains = ['reviewrate.net']
-    pattern = r'(?://)((?:.*\.)?reviewrate\.net)/(?:embed-embed-|embed-)?([0-9a-zA-Z]+)'
+    domains = ['reviewrate.net', 'w5.gamezone.cam']
+    pattern = r'(?://)((?:.*\.)?(?:reviewrate|w5.gamezone)\.(?:net|cam))/(?:embed-)?([0-9a-zA-Z-$:/.]+)'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            referer=False,
+            referer=referer,
             verifypeer=False
         )
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}')
