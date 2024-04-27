@@ -1,4 +1,4 @@
-Version 5.1.131 (Apr 18, 2024)
+Version 5.1.132 (Apr 27, 2024)
 - Code Base Changes:
     - None
 
@@ -6,13 +6,20 @@ Version 5.1.131 (Apr 18, 2024)
     - None
 
 - Resolvers Fixed/Updated:
-    - dembed
-    - duboku
+    - clicknupload
+    - drop
     - filelions
+    - freedl
+    - govad
+    - ok
+    - reviewrate
     - streamwish
-    - turboviplay
-    - uploadingsite
+    - upbaam
+    - updown
+    - vidbom
     - vidguard
+    - vk
+    - voe
 
 - Resolvers Removed
     - None

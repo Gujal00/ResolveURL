@@ -33,6 +33,9 @@ if hmf:
     resolved = hmf.resolve()
 ```
 
+:pencil: You can pass referer url along with the embed url by joining them with `$$` when required as shown below  
+url: _embed_url_`$$`_referer_url_
+
 You can ask Resolveurl to look for subtitles if supported by plugin
 
 ```python
