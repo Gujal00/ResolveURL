@@ -29,9 +29,10 @@ class VidBomResolver(ResolveUrl):
                'vedbam.xyz', 'myvid.com', 'vidshar.org', 'vedbam1.space', 'vedbam1.store',
                'vadbom.com', 'vidbam.org', 'vadbam.com', 'vadbam.net', 'myviid.com', 'myviid.net',
                'vidshare.com', 'vedsharr.com', 'vedshar.com', 'vedshare.com', 'vadshar.com',
-               'viidshar.com', 'vedbam1.online', 'qaz2.vedbam1.online', 'vedbam1.sbs']
-    pattern = r'(?://|\.)((?:v[aie]d[bp][aoe]?m|myvii?d|v[aei]*dshar[er]?)\d*\.' \
-              r'(?:com|net|org|xyz|online|sbs|space|store))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
+               'viidshar.com', 'vedbam1.online', 'qaz2.vedbam1.online', 'vedbam1.sbs',
+               '1vid1shar.space', 'vdbtm.shop']
+    pattern = r'(?://|\.)((?:(?:cdn|vbn)\d*\.)?(?:v[aie]?d[bp][aoet]?m|myvii?d|\d?v[aei]*d\d?shar[er]?)\d*\.' \
+              r'(?:com|net|org|xyz|online|sbs|space|store|shop))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

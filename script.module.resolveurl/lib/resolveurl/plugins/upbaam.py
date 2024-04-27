@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -24,8 +23,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UpBaamResolver(ResolveUrl):
     name = 'UpBaam'
-    domains = ['upbaam.com', 'cdnupbom.com', 'uupbom.com', 'upgobom.space']
-    pattern = r'(?://|\.)((?:cdn)?u*pg?o?b[ao]*m\.(?:com|space))/([0-9a-zA-Z]+)'
+    domains = ['upbaam.com', 'cdnupbom.com', 'uupbom.com', 'upgobom.space', 'top15top.shop']
+    pattern = r'(?://|\.)((?:tgb\d*\.)?(?:(?:cdn)?u*pg?o?b[ao]*m|top15top)\.(?:com|space|shop))/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -34,23 +33,12 @@ class UpBaamResolver(ResolveUrl):
             'Referer': web_url,
             'User-Agent': common.RAND_UA
         }
-        payload = {
-            'op': 'download2',
-            'id': media_id,
-            'rand': '',
-            'referer': web_url
-        }
-        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
-        url = re.search(r'id="direct_link".+?href="([^"]+)', html, re.DOTALL)
-        if url:
-            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
-        else:
-            html = self.net.http_GET(web_url, headers=headers).content
-            payload = helpers.get_hidden(html)
-            url = self.net.http_POST(web_url, form_data=payload, headers=headers, redirect=False).get_redirect_url()
-            if url != web_url:
-                return url.replace(' ', '%20') + helpers.append_headers(headers)
-
+        html = self.net.http_GET(web_url, headers=headers).content
+        payload = helpers.get_hidden(html)
+        payload.update({"method_free": "Free Download >>"})
+        url = self.net.http_POST(web_url, form_data=payload, headers=headers, redirect=False).get_redirect_url()
+        if url != web_url:
+            return url.replace(' ', '%20') + helpers.append_headers(headers)
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):

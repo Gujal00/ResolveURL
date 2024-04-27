@@ -40,19 +40,20 @@ class DropResolver(ResolveUrl):
             headers.update({'Referer': web_url,
                             'Origin': 'https://{0}'.format(host)})
             html = self.net.http_POST(web_url, form_data=data, headers=headers).content
-            tries = 0
-            while tries < MAX_TRIES:
-                data = helpers.get_hidden(html)
-                data.update({"method_free": "Free Download >>"})
-                data.update(captcha_lib.do_captcha(html))
-                common.kodi.sleep(15000)
-                html = self.net.http_POST(web_url, form_data=data, headers=headers).content
-                r = re.search(r'''<a\s*href="([^"]+)"\s*class="btn-download''', html, re.DOTALL)
-                if r:
-                    # headers.update({'verifypeer': 'false'})
-                    return r.group(1).replace(' ', '%20') + helpers.append_headers(headers)
-                tries += 1
-            raise ResolverError('Unable to locate link')
+            if 'No such file with this filename' not in html:
+                tries = 0
+                while tries < MAX_TRIES:
+                    data = helpers.get_hidden(html)
+                    data.update({"method_free": "Free Download >>"})
+                    data.update(captcha_lib.do_captcha(html))
+                    common.kodi.sleep(15000)
+                    html = self.net.http_POST(web_url, form_data=data, headers=headers).content
+                    r = re.search(r'''<a\s*href="([^"]+)"\s*class="btn-download''', html, re.DOTALL)
+                    if r:
+                        # headers.update({'verifypeer': 'false'})
+                        return r.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+                    tries += 1
+                raise ResolverError('Unable to locate link')
 
         raise ResolverError('File removed')
 

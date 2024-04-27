@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class OKResolver(ResolveUrl):
     name = 'OKRu'
     domains = ['ok.ru', 'odnoklassniki.ru']
-    pattern = r'(?://|\.)(ok\.ru|odnoklassniki\.ru)/(?:videoembed|video|live)/(\d+)'
+    pattern = r'(?://|\.)((?:games\.)?ok\.ru|odnoklassniki\.ru)/(?:videoembed|video|live)/(\d+)'
     header = {'User-Agent': common.OPERA_USER_AGENT}
     qual_map = {'ultra': '2160', 'quad': '1440', 'full': '1080', 'hd': '720', 'sd': '480', 'low': '360', 'lowest': '240', 'mobile': '144'}
 
