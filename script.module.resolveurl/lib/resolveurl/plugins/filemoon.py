@@ -27,8 +27,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class FileMoonResolver(ResolveUrl):
     name = 'FileMoon'
     domains = ['filemoon.sx', 'filemoon.to', 'filemoon.in', 'filemoon.link', 'filemoon.nl',
-               'filemoon.wf', 'cinegrab.com', 'filemoon.eu', 'filemoon.art', 'moonmov.pro']
-    pattern = r'(?://|\.)((?:filemoon|cinegrab|moonmov)\.(?:sx|to|in|link|nl|wf|com|eu|art|pro))' \
+               'filemoon.wf', 'cinegrab.com', 'filemoon.eu', 'filemoon.art', 'moonmov.pro',
+               'kerapoxy.cc']
+    pattern = r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy)\.(?:sx|to|in|link|nl|wf|com|eu|art|pro|cc))' \
               r'/(?:e|d|download)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
