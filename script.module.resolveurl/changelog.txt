@@ -1,4 +1,4 @@
-Version 5.1.132 (Apr 27, 2024)
+Version 5.1.133 (May 6, 2024)
 - Code Base Changes:
     - None
 
@@ -6,19 +6,9 @@ Version 5.1.132 (Apr 27, 2024)
     - None
 
 - Resolvers Fixed/Updated:
-    - clicknupload
-    - drop
     - filelions
-    - freedl
-    - govad
-    - ok
-    - reviewrate
     - streamwish
-    - upbaam
-    - updown
-    - vidbom
-    - vidguard
-    - vk
+    - veev
     - voe
 
 - Resolvers Removed
