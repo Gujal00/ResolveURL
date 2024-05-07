@@ -63,9 +63,9 @@ class VidGuardResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        hosts = ['vidguard', 'vid-guard', 'vgfplay', 'vgembed', 'vembed.net']
+        hosts = ['vidguard', 'vid-guard', 'vgfplay', 'vgembed', 'vembed.net', 'embedv.net']
         if any(x in host for x in hosts):
-            host = 'embedv.net'
+            host = 'listeamed.net'
         return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}')
 
     # Adapted from PHP code by vb6rocod
