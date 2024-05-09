@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -37,8 +38,19 @@ class UpBaamResolver(ResolveUrl):
         payload = helpers.get_hidden(html)
         payload.update({"method_free": "Free Download >>"})
         url = self.net.http_POST(web_url, form_data=payload, headers=headers, redirect=False).get_redirect_url()
-        if url != web_url:
+        if url and url != web_url:
             return url.replace(' ', '%20') + helpers.append_headers(headers)
+        payload = {
+            'op': 'download2',
+            'id2': media_id,
+            'rand': '',
+            'referer': web_url
+        }
+        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
+        url = re.search(r'direct_link".+?>\s*<a\s*href="([^"]+)', html)
+        if url:
+            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):

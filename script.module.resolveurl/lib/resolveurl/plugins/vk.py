@@ -40,7 +40,7 @@ class VKResolver(ResolveUrl):
         except:
             oid, video_id = re.findall('(.*)_(.*)', media_id)[0]
 
-        if not oid.startswith('doc'):
+        if 'doc/' not in media_id and not media_id.startswith('doc'):
             oid = oid.replace('video', '')
             sources = self.__get_sources(oid, video_id, headers)
             if sources:
@@ -51,13 +51,13 @@ class VKResolver(ResolveUrl):
                     return source + helpers.append_headers(headers)
 
         html = self.net.http_GET(self.get_url(host, media_id), headers=headers).content
-        if media_id.startswith('doc'):
+        if 'doc/' in media_id or media_id.startswith('doc'):
             jd = re.search(r'Docs\.initDoc\(({.+?})\)', html)
         else:
             jd = re.search(r'var\s*playerParams\s*=\s*(.+?});', html)
         if jd:
             jd = json.loads(jd.group(1))
-            if media_id.startswith('doc'):
+            if 'doc/' in media_id or media_id.startswith('doc'):
                 source = jd.get('docUrl')
             else:
                 source = jd.get('params')[0].get('hls')
@@ -98,7 +98,7 @@ class VKResolver(ResolveUrl):
         return sources
 
     def get_url(self, host, media_id):
-        if media_id.startswith('doc'):
+        if 'doc/' in media_id or media_id.startswith('doc'):
             url = 'https://vk.com/%s' % (media_id)
         else:
             media_id = media_id.replace('video', '')
