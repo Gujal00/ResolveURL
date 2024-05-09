@@ -16,12 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
+import re,requests
 import json
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-
 
 class GoFileResolver(ResolveUrl):
     name = 'GoFile'
@@ -30,26 +29,26 @@ class GoFileResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'Origin': 'https://{0}'.format(host),
+                   'Referer': 'https://{0}/'.format(host)
+                   }
         base_api = 'https://api.gofile.io'
-        r = self.net.http_GET('{}/createAccount'.format(base_api), headers=headers)
+        r = requests.post('{}/accounts'.format(base_api), headers=headers)
         token = json.loads(r.content).get('data').get('token')
         if not token:
             raise ResolverError('Unable to retrieve token!')
 
         r = self.net.http_GET('https://{}/dist/js/alljs.js'.format(host), headers=headers).content
-        wtoken = re.search(r'fetchData\.wt\s*=\s*"([^"]+)', r)
+        wtoken = re.search(r'fetchData\s*=\s*{\s*wt:\s*"([^"]+)', r)
         if not wtoken:
             raise ResolverError('Unable to retrieve websiteToken!')
-
-        content_url = '{}/getContent?contentId={}&token={}&wt={}'.format(
-            base_api, media_id, token, wtoken.group(1)
-        )
+        headers.update({"Authorization": "Bearer" + " " + token})
+        content_url = '{}/contents/{}?wt={}&cache=true'.format(base_api, media_id, wtoken.group(1))
         r = self.net.http_GET(content_url, headers=headers).content
-        data = json.loads(r).get('data').get('contents')
+        data = json.loads(r).get('data').get('children')
         if not data:
             raise ResolverError('This file does not exist.')
-
         headers.update({'Cookie': 'accountToken={}'.format(token)})
         sources = [(data[x].get('size'), data[x].get('link')) for x in data]
         return helpers.pick_source(sources, False) + helpers.append_headers(headers)
