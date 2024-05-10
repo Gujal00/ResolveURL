@@ -38,7 +38,7 @@ class QiwiResolver(ResolveUrl):
         r = re.search(r'class="page_TextHeading__VsM7r">([^"]+)</h1>', html)
         if r:
             ext = r.group(1).split('.')[-1]
-            source = f"https://spyderrock.com/{media_id}.{ext}"
+            source = "https://spyderrock.com/{0}.{1}".format(media_id,ext)
             return source + helpers.append_headers(headers)
         raise ResolverError('File Not Found or removed')
     
