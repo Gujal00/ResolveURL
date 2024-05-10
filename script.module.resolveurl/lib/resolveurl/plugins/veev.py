@@ -34,7 +34,7 @@ class VeevResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.CHROME_USER_AGENT, 'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
-        f = re.search(r'{\s*fc\s*:\s*"([^"]+)', html)
+        f = re.search(r'[{,]\s*fc\s*:\s*"([^"]+)', html)
         if f:
             ch = veev_decode(f.group(1))
             params = {
