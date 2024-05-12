@@ -41,7 +41,7 @@ class MixDropResolver(ResolveUrl):
                    'Referer': rurl,
                    'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'location\s*=\s*"([^"]+)', html)
+        r = re.search(r'''location\s*=\s*["']([^'"]+)''', html)
         if r:
             web_url = 'https://{0}{1}'.format(host, r.group(1))
             html = self.net.http_GET(web_url, headers=headers).content
