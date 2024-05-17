@@ -29,13 +29,13 @@ net = common.Net()
 IMG_FILE = 'captcha_img.gif'
 
 
-def get_response(img, x=450, y=0, w=400, h=130):
+def get_response(img, x=450, y=225, w=400, h=130):
     try:
         img = xbmcgui.ControlImage(x, y, w, h, img)
         wdlg = xbmcgui.WindowDialog()
         wdlg.addControl(img)
         wdlg.show()
-        common.kodi.sleep(3000)
+        common.kodi.sleep(5000)
         solution = common.kodi.get_keyboard(common.i18n('letters_image'))
         if not solution:
             raise Exception('captcha_error')
@@ -136,7 +136,8 @@ def do_xfilecaptcha(captcha_url):
     common.logger.log_debug('XFileLoad ReCaptcha: %s' % captcha_url)
     if captcha_url.startswith('//'):
         captcha_url = 'http:' + captcha_url
-    solution = get_response(captcha_url)
+    captcha_img = write_img(captcha_url)
+    solution = get_response(captcha_img)
     return {'code': solution}
 
 
