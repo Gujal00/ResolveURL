@@ -17,6 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -37,7 +38,7 @@ class SendResolver(ResolveUrl):
             url = helpers.get_redirect_url(burl, headers=headers, form_data=data)
             if url != burl:
                 headers.update({'Referer': web_url})
-                return url + helpers.append_headers(headers)
+                return urllib_parse.quote(url, '/:') + helpers.append_headers(headers)
             else:
                 raise ResolverError('Unable to locate File')
         else:
