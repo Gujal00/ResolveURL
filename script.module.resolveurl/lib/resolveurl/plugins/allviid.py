@@ -21,8 +21,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class AllViidResolver(ResolveGeneric):
     name = 'AllViid'
-    domains = ['allviid.xyz']
-    pattern = r'(?://|\.)(allviid\.xyz)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['allviid.xyz', 'all-vid.autos']
+    pattern = r'(?://|\.)(all-?vi*d\.(?:xyz|autos))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
