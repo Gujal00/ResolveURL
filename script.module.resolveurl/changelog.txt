@@ -1,20 +1,19 @@
-Version 5.1.134 (May 12, 2024)
+Version 5.1.135 (May 19, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - bowfile
-    - qiwi
+    - 1cloudfile
+    - dailyuploads
+    - darkibox
+    - uploady
 
 - Resolvers Fixed/Updated:
-    - clicknupload
-    - gofile
-    - mixdrop
+    - allviid
+    - dembed
+    - send
     - streamwish
-    - veev
-    - vidguard
-    - vk
-    - upbaam
+    - voe
 
 - Resolvers Removed
     - None
