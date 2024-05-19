@@ -22,7 +22,7 @@ from resolveurl.lib import helpers
 class AllViidResolver(ResolveGeneric):
     name = 'AllViid'
     domains = ['allviid.xyz', 'all-vid.autos']
-    pattern = r'(?://|\.)(i.all-?vi*d\.(?:xyz|autos))/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(.*?all-?vi*d\.(?:xyz|autos))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
