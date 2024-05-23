@@ -38,7 +38,10 @@ class VKResolver(ResolveUrl):
             query = urllib_parse.parse_qs(media_id)
             oid, video_id = query['oid'][0], query['id'][0]
         except:
-            oid, video_id = re.findall('(.*)_(.*)', media_id)[0]
+            if '_' in media_id:
+                oid, video_id = re.findall('(.*)_(.*)', media_id)[0]
+            else:
+                pass
 
         if 'doc/' not in media_id and not media_id.startswith('doc'):
             oid = oid.replace('video', '')
