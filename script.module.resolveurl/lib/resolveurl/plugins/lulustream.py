@@ -22,14 +22,15 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class LuluStreamResolver(ResolveGeneric):
     name = 'LuluStream'
-    domains = ['lulustream.com', 'luluvdo.com']
-    pattern = r'(?://|\.)(lulu(?:stream|vdo)\.com)/(?:e/|d/)?([0-9a-zA-Z]+)'
+    domains = ['lulustream.com', 'luluvdo.com', 'kinoger.pw']
+    pattern = r'(?://|\.)((?:lulu(?:stream|vdo)|kinoger)\.(?:com|pw))/(?:e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)'''],
-            generic_patterns=False
+            generic_patterns=False,
+            referer=False
         )
 
     def get_url(self, host, media_id):
