@@ -64,15 +64,37 @@ def get_ua():
 
 class NoRedirection(urllib_request.HTTPRedirectHandler):
     def http_error_302(self, req, fp, code, msg, headers):
-        infourl = urllib_response.addinfourl(fp, headers, req.get_full_url() if six.PY2 else req.full_url)
-        infourl.status = code
-        infourl.code = code
-        return infourl
+        class CustomResponse:
+            def __init__(self, fp, headers, url, code):
+                self.fp = fp
+                self.headers = headers
+                self.url = url
+                self._code = code
+
+            @property
+            def code(self):
+                return self._code
+
+            @property
+            def status(self):
+                return self._code
+
+            def read(self):
+                return self.fp.read()
+
+            def geturl(self):
+                return self.url
+
+            def info(self):
+                return self.headers
+
+        url = req.get_full_url() if six.PY2 else req.full_url
+        return CustomResponse(fp, headers, url, code)
+
     http_error_300 = http_error_302
     http_error_301 = http_error_302
     http_error_303 = http_error_302
     http_error_307 = http_error_302
-
 
 class Net:
     """
