@@ -33,8 +33,10 @@ class VeevResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.CHROME_USER_AGENT, 'Referer': web_url}
-        html = self.net.http_GET(web_url, headers=headers).content
-        f = re.search(r'[{,]\s*fc\s*:\s*"([^"]+)', html)
+        r = self.net.http_GET(web_url, headers=headers)
+        if r.get_url() != web_url:
+            media_id = r.get_url().split('/')[-1]
+        f = re.search(r'window\._vvto.+?fc\s*:\s*"([^"]+)', r.content)
         if f:
             ch = veev_decode(f.group(1))
             params = {
@@ -47,7 +49,7 @@ class VeevResolver(ResolveUrl):
             durl = urllib_parse.urljoin(web_url, '/dl') + '?' + urllib_parse.urlencode(params)
             jresp = self.net.http_GET(durl, headers=headers).content
             jresp = json.loads(jresp).get('file')
-            if jresp.get('file_status') == 'OK':
+            if jresp and jresp.get('file_status') == 'OK':
                 str_url = decode_url(veev_decode(jresp.get('dv')[0].get('s')), build_array(ch)[0])
                 return str_url + helpers.append_headers(headers)
             raise ResolverError('Video removed')
