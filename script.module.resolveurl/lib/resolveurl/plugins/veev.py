@@ -36,7 +36,8 @@ class VeevResolver(ResolveUrl):
         r = self.net.http_GET(web_url, headers=headers)
         if r.get_url() != web_url:
             media_id = r.get_url().split('/')[-1]
-        f = re.search(r'window\._vvto.+?fc\s*:\s*"([^"]+)', r.content)
+        # Dancing as requested
+        f = re.search(r'>window\._vvto.+?fc\s*:\s*"([^"]+)', r.content)
         if f:
             ch = veev_decode(f.group(1))
             params = {
