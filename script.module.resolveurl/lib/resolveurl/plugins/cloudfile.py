@@ -18,6 +18,7 @@
 
 import binascii
 import re
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -35,7 +36,7 @@ class CloudFileResolver(ResolveUrl):
         r = re.search(r'getNextDownloadPageLink\("([^"]+)', html)
         if r:
             source = ''.join([chr((x if isinstance(x, int) else ord(x)) ^ 117) for x in binascii.unhexlify(r.group(1))])
-            return source + helpers.append_headers(headers)
+            return urllib_parse.quote(source, '/:?=') + helpers.append_headers(headers)
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
