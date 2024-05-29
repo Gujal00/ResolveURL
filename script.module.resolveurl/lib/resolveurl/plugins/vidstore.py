@@ -16,32 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 from resolveurl.lib import helpers
-from resolveurl import common
-from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class VidStoreResolver(ResolveUrl):
+class VidStoreResolver(ResolveGeneric):
     name = 'VidStore'
     domains = ['vidstore.me']
     pattern = r'(?://|\.)(vidstore\.me)/(.+)'
 
-    def get_media_url(self, host, media_id):
-        web_url = self.get_url(host, media_id)
-
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        html = self.net.http_GET(web_url, headers=headers).content
-
-        sources = re.findall(r'''<source\s+src\s*=\s*['"]([^'"]+).+?label\s*=\s*['"]([^'"]+)''', html, re.DOTALL)
-        if sources:
-            sources = [(i[1], i[0]) for i in sources]
-            sources = sorted(sources, key=lambda x: x[0], reverse=True)
-            source = 'http://www.%s%s' % (host, helpers.pick_source(sources))
-            headers['Referer'] = web_url
-            source = helpers.get_redirect_url(source, headers=headers)
-            return source + helpers.append_headers(headers)
-        raise ResolverError('File not found')
+    def get_media_url(self, host, media_id, subs=False):
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            referer=True,
+            subs=subs,
+        )
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://www.{host}/{media_id}')
