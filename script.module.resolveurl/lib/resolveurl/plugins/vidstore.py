@@ -28,6 +28,8 @@ class VidStoreResolver(ResolveGeneric):
     def get_media_url(self, host, media_id, subs=False):
         return helpers.get_media_url(
             self.get_url(host, media_id),
+            patterns=[r'''<source\s*src=['"](?P<url>[^'"]+)['"]\s*type=['"]video/mp4['"]'''],
+            generic_patterns=False,
             referer=True,
             subs=subs,
         )
