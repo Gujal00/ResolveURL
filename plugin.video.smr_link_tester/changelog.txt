@@ -1,5 +1,8 @@
+Version 1.1.13 (Jun 1, 2024)
+- Not set manifest_type on Kodi21 and above
+
 Version 1.1.12 (Jan 14, 2024)
-- add all found subtitles to lisitem
+- add all found subtitles to listitem
 
 Version 1.1.11 (Jan 3, 2024)
 - add subtitle support

@@ -254,15 +254,19 @@ def play_link(link):
         else:
             listitem.setProperty('inputstream', 'inputstream.adaptive')
         if '.mpd' in stream_url:
-            listitem.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+            if kodiver < 21:
+                listitem.setProperty('inputstream.adaptive.manifest_type', 'mpd')
             listitem.setMimeType('application/dash+xml')
         else:
-            listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+            if kodiver < 21:
+                listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
             listitem.setMimeType('application/vnd.apple.mpegurl')
         listitem.setContentLookup(False)
         if '|' in stream_url:
             stream_url, strhdr = stream_url.split('|')
             listitem.setProperty('inputstream.adaptive.stream_headers', strhdr)
+            if kodiver > 19:
+                listitem.setProperty('inputstream.adaptive.manifest_headers', strhdr)
             listitem.setPath(stream_url)
 
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
