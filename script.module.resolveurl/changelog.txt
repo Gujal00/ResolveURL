@@ -1,18 +1,20 @@
-Version 5.1.135 (May 19, 2024)
+Version 5.1.136 (June 1, 2024)
 - Code Base Changes:
-    - None
+    - net.py updated to support Python 3.12
+    - helpers.py updated to handle relative path
 
 - Resolvers Added:
-    - 1cloudfile
-    - dailyuploads
-    - darkibox
-    - uploady
+    - amdahost
+    - gphoto
 
 - Resolvers Fixed/Updated:
+    - 1cloudfile
     - allviid
-    - dembed
-    - send
-    - streamwish
+    - lulustream
+    - uploady
+    - vidmoly
+    - vidstore
+    - vk
     - voe
 
 - Resolvers Removed
