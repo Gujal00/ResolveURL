@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class SendResolver(ResolveUrl):
     name = 'Send'
     domains = ['send.cm', 'sendit.cloud']
-    pattern = r'(?://|\.)(send(?:it)?\.(?:cm|cloud))/(?:f/embed/)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(send(?:it)?\.(?:cm|cloud))/(?:f/embed/)?((?:d/)?[0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
