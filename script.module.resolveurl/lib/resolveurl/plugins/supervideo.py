@@ -24,30 +24,32 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class SuperVideoResolver(ResolveUrl):
     name = 'SuperVideo'
-    domains = ['supervideo.tv']
-    pattern = r'(?://|\.)(supervideo\.tv)/(?:embed-|e/)?([0-9a-zA-Z]+)'
+    domains = ['supervideo.tv', 'supervideo.cc']
+    pattern = r'(?://|\.)(supervideo\.(?:tv|cc))/(?:embed-|e/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers=headers).content
-        source = re.search(r"download_video.+?'o','([^']+)", html)
-        if source:
-            dl_url = 'https://{0}/dl?op=download_orig&id={1}&mode=o&hash={2}'.format(host, media_id, source.group(1))
-            html2 = self.net.http_GET(dl_url, headers=headers).content
-            r = re.search(r'btn_direct-download"\s*href="([^"]+)', html2)
-            if r:
-                return r.group(1) + helpers.append_headers(headers)
 
         pdata = helpers.get_packed_data(html)
         if pdata:
-            html = pdata
-        sources = helpers.scrape_sources(html,
-                                         patterns=[r'''{\s*file:\s*"(?P<url>[^"]+)"\s*}'''],
-                                         generic_patterns=False)
-        if sources:
-            return helpers.pick_source(sources) + helpers.append_headers(headers)
+            sources = helpers.scrape_sources(
+                pdata,
+                patterns=[r'''{\s*file:\s*"(?P<url>[^"]+)"\s*}'''],
+                generic_patterns=False
+            )
+            if sources:
+                return helpers.pick_source(sources) + helpers.append_headers(headers)
+
+        source = re.search(r"download_video.+?'([^']+)','([^']+)'\)", html)
+        if source:
+            dl_url = 'https://{0}/dl?op=download_orig&id={1}&mode={2}&hash={3}'.format(host, media_id, source.group(1), source.group(2))
+            html = self.net.http_GET(dl_url, headers=headers).content
+            r = re.search(r'btn_direct-download"\s*href="([^"]+)', html)
+            if r:
+                return r.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
