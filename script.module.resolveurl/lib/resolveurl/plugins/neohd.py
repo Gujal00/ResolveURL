@@ -29,7 +29,7 @@ class NeoHDResolver(ResolveUrl):
     domains = ['neohd.xyz', 'ninjahd.one']
     pattern = r'(?://|\.)((?:neo|ninja)hd\.(?:xyz|one))/embed/([0-9a-zA-Z-]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
@@ -40,11 +40,20 @@ class NeoHDResolver(ResolveUrl):
                             'Origin': 'https://{0}'.format(host)})
             aurl = 'https://{0}/api/?{1}&_={2}'.format(host, r.group(1), int(time.time() * 1000))
             jd = json.loads(self.net.http_GET(aurl, headers=headers).content)
-            url = jd.get('sources')[0].get('file').replace(' ', '%20')
+            url = jd.get('sources')[0].get('file')
             if url.startswith('//'):
                 url = 'https:' + url
             headers.pop('X-Requested-With')
-            return url + helpers.append_headers(headers)
+            url = url.replace(' ', '%20') + helpers.append_headers(headers)
+
+            if subs:
+                subtitles = {}
+                tracks = jd.get('tracks')
+                if tracks:
+                    subtitles = {x.get('label'): x.get('file') for x in tracks}
+                return url, subtitles
+
+            return url
 
         raise ResolverError('File Not Found or Removed')
 
