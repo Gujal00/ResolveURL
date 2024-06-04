@@ -194,15 +194,16 @@ def edit_link(index, path):
 def play_link(link):
     logger.log('Playing Link: |%s|' % (link), log_utils.LOGDEBUG)
     ia = False
+    debrid = link.startswith('magnet')
     if link.startswith('ia://'):
         ia = True
         link = link[5:]
     if link.endswith('$$all'):
-        hmf = resolveurl.HostedMediaFile(url=link[:-5], return_all=True)
+        hmf = resolveurl.HostedMediaFile(url=link[:-5], include_universal=debrid, return_all=True)
     elif link.endswith('$$subs'):
-        hmf = resolveurl.HostedMediaFile(url=link[:-6], subs=True)
+        hmf = resolveurl.HostedMediaFile(url=link[:-6], include_universal=debrid, subs=True)
     else:
-        hmf = resolveurl.HostedMediaFile(url=link)
+        hmf = resolveurl.HostedMediaFile(url=link, include_universal=debrid)
     if not hmf:
         logger.log('Indirect hoster_url not supported by smr: %s' % (link))
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
