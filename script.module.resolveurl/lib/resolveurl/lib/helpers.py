@@ -806,4 +806,4 @@ def b64decode(t, binary=False):
 
 
 def b64encode(b):
-    return six.ensure_str(base64.b64encode(six.b(b)))
+    return six.ensure_str(base64.b64encode(b if isinstance(b, bytes) else six.b(b)))
