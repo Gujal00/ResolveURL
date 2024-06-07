@@ -1,19 +1,14 @@
-Version 5.1.137 (June 3, 2024)
+Version 5.1.138 (June 7, 2024)
 - Code Base Changes:
-    - None
+    - fix base64 decode regression error
 
 - Resolvers Added:
-    - None
+    - fileone
 
 - Resolvers Fixed/Updated:
-    - filelions
-    - filemoon
-    - mixdrop
-    - send
-    - streamwish
-    - supervideo
-    - vidstore
-    - voe
+    - dembed
+    - neohd
+    - veev
 
 - Resolvers Removed
     - None
