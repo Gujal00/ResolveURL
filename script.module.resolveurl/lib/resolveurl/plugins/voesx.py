@@ -44,7 +44,7 @@ class VoeResolver(ResolveUrl):
                'nonesnanking.com', 'kathleenmemberhistory.com', 'stevenimaginelittle.com', 'jamiesamewalk.com',
                'bradleyviewdoctor.com', 'sandrataxeight.com', 'graceaddresscommunity.com', 'shannonpersonalcost.com',
                'cindyeyefinal.com', 'michaelapplysome.com', 'sethniceletter.com', 'brucevotewithin.com',
-               'rebeccaneverbase.com']
+               'rebeccaneverbase.com', 'loriwithinfamily.com']
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|' \
@@ -61,7 +61,7 @@ class VoeResolver(ResolveUrl):
               r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|' \
               r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|' \
               r'jamiesamewalk|bradleyviewdoctor|graceaddresscommunity|shannonpersonalcost|cindyeyefinal|' \
-              r'rebeccaneverbase|' \
+              r'rebeccaneverbase|loriwithinfamily|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
