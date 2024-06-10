@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class FileGramResolver(ResolveGeneric):
     name = 'FileGram'
     domains = ['filegram.to']
-    pattern = r'(?://|\.)(filegram\.to)/(?:d/)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(filegram\.to)/(?:d/|embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
