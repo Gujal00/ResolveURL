@@ -205,7 +205,7 @@ def play_link(link):
     else:
         hmf = resolveurl.HostedMediaFile(url=link, include_universal=debrid)
     if not hmf:
-        logger.log('Indirect hoster_url not supported by smr: %s' % (link))
+        logger.log('Indirect hoster_url not supported by smr: %s' % (link), log_utils.LOGDEBUG)
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
         return False
     resolvers = [item.name for item in hmf.get_resolvers(validated=True)]
