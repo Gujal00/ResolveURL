@@ -22,8 +22,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class VidozaResolver(ResolveGeneric):
     name = 'Vidoza'
-    domains = ['vidoza.net', 'vidoza.co']
-    pattern = r'(?://|\.)(vidoza\.(?:net|co))/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['vidoza.net', 'vidoza.co', 'videzz.net']
+    pattern = r'(?://|\.)(vid(?:oza|ezz)\.(?:net|co))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         return helpers.get_media_url(
