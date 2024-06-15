@@ -69,7 +69,10 @@ class DoodStreamResolver(ResolveUrl):
             token = match.group(2)
             url = 'https://{0}{1}'.format(host, match.group(1))
             html = self.net.http_GET(url, headers=headers).content
-            vid_src = self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
+            if 'cloudflarestorage.' in html:
+                vid_src = html.strip() + helpers.append_headers(headers)
+            else:
+                vid_src = self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
             if subs:
                 return vid_src, subtitles
             return vid_src

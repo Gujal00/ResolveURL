@@ -41,8 +41,8 @@ class VeevResolver(ResolveUrl):
         items = re.findall(r'>window\._vvto.+?fc\s*:\s*"([^"]+)', html)
         if items:
             for f in items:
-                if '@' not in f and ' ' not in f:
-                    ch = veev_decode(f)
+                ch = veev_decode(f)
+                if ch != f:
                     params = {
                         'op': 'player_api',
                         'cmd': 'gi',
@@ -56,8 +56,8 @@ class VeevResolver(ResolveUrl):
                     if jresp and jresp.get('file_status') == 'OK':
                         str_url = decode_url(veev_decode(jresp.get('dv')[0].get('s')), build_array(ch)[0])
                         return str_url + helpers.append_headers(headers)
-
             raise ResolverError('Video removed')
+
         raise ResolverError('Unable to locate video')
 
     def get_url(self, host, media_id):
