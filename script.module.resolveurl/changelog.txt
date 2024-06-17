@@ -1,14 +1,18 @@
-Version 5.1.138 (June 7, 2024)
+Version 5.1.139 (June 17, 2024)
 - Code Base Changes:
-    - fix base64 decode regression error
+    - None
 
 - Resolvers Added:
-    - fileone
+    - bunnycdn
+    - filegram
 
 - Resolvers Fixed/Updated:
-    - dembed
-    - neohd
-    - veev
+    - doodstream
+    - filemoon
+    - govad
+    - vidoza
+    - vidstore
+    - voesx
 
 - Resolvers Removed
     - None
