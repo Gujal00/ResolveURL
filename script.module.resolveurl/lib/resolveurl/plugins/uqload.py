@@ -28,7 +28,8 @@ class UQLoadResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[['"](?P<url>[^'"]+)''']
+            patterns=[r'''sources:\s*\[['"](?P<url>[^'"]+)'''],
+            referer=False
         )
 
     def get_url(self, host, media_id):
