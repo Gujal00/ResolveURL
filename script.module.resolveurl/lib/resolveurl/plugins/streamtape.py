@@ -29,10 +29,10 @@ class StreamTapeResolver(ResolveUrl):
                'strcloud.link', 'strtpe.link', 'streamtape.cc', 'scloud.online', 'stape.fun',
                'streamadblockplus.com', 'shavetape.cash', 'streamtape.to', 'streamta.site',
                'streamadblocker.xyz', 'tapewithadblock.org', 'adblocktape.wiki', 'antiadtape.com',
-               'streamtape.xyz', 'tapeblocker.com', 'streamnoads.com']
+               'streamtape.xyz', 'tapeblocker.com', 'streamnoads.com', 'tapeadvertisement.com']
     pattern = r'(?://|\.)(' \
               r'(?:s(?:tr)?(?:eam|have)?|tapewith)?(?:adblock(?:er|plus)?|antiad|noads)?' \
-              r'(?:ta?p?e?|cloud)?(?:blocker)?\.' \
+              r'(?:ta?p?e?|cloud)?(?:blocker|advertisement)?\.' \
               r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki)' \
               r')/(?:e|v)/([0-9a-zA-Z]+)'
 
