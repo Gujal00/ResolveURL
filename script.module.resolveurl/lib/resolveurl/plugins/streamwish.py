@@ -38,7 +38,7 @@ class StreamWishResolver(ResolveGeneric):
               r'cilootv|tuktukcinema|doodporn|ankrzkz|volvovideo|strmwis|ankrznm|yadmalik|khadhnayad|' \
               r'eghjrutf|eghzrutw|playembed|egsyxurh|egtpgrvh|uqloads|javsw|cinemathek|trgsfjll|fsdcmo|' \
               r'anime4low|mohahhda|ma2d|dancima|swhoi|gsfqzmqu|jodwish|swdyu)' \
-              r'\.(?:com|to|sbs|pro|xyz|store|top|site|online|me|shop))/(?:e/|f/)?([0-9a-zA-Z$:/.]+)'
+              r'\.(?:com|to|sbs|pro|xyz|store|top|site|online|me|shop))/(?:e/|f/|d/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
