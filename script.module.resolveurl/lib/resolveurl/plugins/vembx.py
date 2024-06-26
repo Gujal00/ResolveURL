@@ -33,7 +33,8 @@ class VemBXResolver(ResolveGeneric):
                 r'''{file:"(?P<url>[^"]+)"}'''
             ],
             generic_patterns=False,
-            referer=False
+            referer=False,
+            verifypeer=False
         )
 
     def get_url(self, host, media_id):
