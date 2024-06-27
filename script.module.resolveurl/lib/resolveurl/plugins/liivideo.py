@@ -1,6 +1,7 @@
 """
     Plugin for ResolveURL
     Copyright (C) 2020 gujal
+    Copyright (C) 2024 MrDini123 (github.com/movieshark)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,22 +17,51 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl import common
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
 
 
-class LiiVideoResolver(ResolveGeneric):
+class LiiVideoResolver(ResolveUrl):
     name = 'LiiVideo'
-    domains = ['liivideo.com', 'liiivideo.com']
-    pattern = r'(?://|\.)(liii?video\.com)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['liivideo.com', 'liiivideo.com', 'cimastream.xyz']
+    pattern = r'(?://|\.)(liii?video\.com|cimastream\.xyz)/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''file:"(?P<url>[^"]+)'''],
-            generic_patterns=False,
-            result_blacklist=['.mpd']
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA}
+        data = {
+            'op': 'embed',
+            'file_code': media_id,
+            'auto': 1,
+            'referer': '' # intentionally blank
+        }
+        dl_url = urllib_parse.urljoin(web_url, '/dl')
+        html = self.net.http_POST(dl_url, data, headers=headers).content
+        sources = helpers.scrape_sources(
+            html,
+            result_blacklist=['.mpd'],
+            patterns=[r'file:"(?P<url>[^"]+)'],
+            generic_patterns=False
         )
+        if sources:
+            return helpers.pick_source(sources) + helpers.append_headers(headers)
+
+        # alternative method using download page
+        html = self.net.http_GET(web_url, headers=headers).content
+        form = helpers.get_hidden(html, 'F1')
+        if form:
+            html = self.net.http_POST(dl_url, form, headers=headers).content
+            sources = helpers.scrape_sources(
+                html,
+                result_blacklist=['.mpd'],
+                patterns=[r'href="(?P<url>https://[^"]+)"[^>]+>Direct Download Link'],
+                generic_patterns=False
+            )
+            if sources:
+                return helpers.pick_source(sources) + helpers.append_headers(headers)
+        raise ResolverError('No video found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}_n')
