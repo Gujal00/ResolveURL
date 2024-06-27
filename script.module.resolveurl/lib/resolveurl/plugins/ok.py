@@ -17,6 +17,7 @@
 """
 
 import json
+from re import search
 from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
@@ -53,16 +54,35 @@ class OKResolver(ResolveUrl):
 
     def __replaceQuality(self, qual):
         return self.qual_map.get(qual.lower(), '000')
+    
+    def __get_Embed(self, media_id):
+        url = "http://www.ok.ru/videoembed/{0}".format(media_id)
+        html = self.net.http_GET(url, headers=self.header).content
+        if "notFound" in html:
+            raise ResolverError('File Not Found or removed')
+        match = search(r'<div data-module="OKVideo" data-movie-id="[^"]+" data-options="({[^"]+)"', html)
+        if not match:
+            raise ResolverError('File Not Found or removed')
+        json_data = json.loads(match.group(1).replace('&quot;', '"').replace('&amp;', '&'))
+        if not json_data.get("flashvars", {}).get("metadata"):
+            raise ResolverError('File Not Found or removed')
+        json_data = json.loads(json_data["flashvars"]["metadata"])
+        return json_data
+
 
     def __get_Metadata(self, media_id, subs):
-        url = "http://www.ok.ru/dk"
-        data = {'cmd': 'videoPlayerMetadata', 'mid': media_id}
+        url = "http://www.ok.ru/dk?cmd=videoPlayerMetadata"
+        data = {'mid': media_id}
         data = urllib_parse.urlencode(data)
         html = self.net.http_POST(url, data, headers=self.header).content
         json_data = json.loads(html)
 
         if 'error' in json_data:
-            raise ResolverError('File Not Found or removed')
+            if "notFound" in json_data['error']:
+                # special case when only the embed is available
+                json_data = self.__get_Embed(media_id)
+            else:
+                raise ResolverError('File Not Found or removed')
 
         subtitles = {}
         if subs and 'movie' in json_data and 'subtitleTracks' in json_data['movie']:
