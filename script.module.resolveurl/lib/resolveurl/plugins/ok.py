@@ -17,14 +17,14 @@
 """
 
 import json
-from re import search
+import re
 from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class OKResolver(ResolveUrl):
+class OKRuResolver(ResolveUrl):
     name = 'OKRu'
     domains = ['ok.ru', 'odnoklassniki.ru']
     pattern = r'(?://|\.)((?:games\.)?ok\.ru|odnoklassniki\.ru)/(?:videoembed|video|live)/(\d+)'
@@ -54,21 +54,19 @@ class OKResolver(ResolveUrl):
 
     def __replaceQuality(self, qual):
         return self.qual_map.get(qual.lower(), '000')
-    
+
     def __get_Embed(self, media_id):
         url = "http://www.ok.ru/videoembed/{0}".format(media_id)
         html = self.net.http_GET(url, headers=self.header).content
-        if "notFound" in html:
-            raise ResolverError('File Not Found or removed')
-        match = search(r'<div data-module="OKVideo" data-movie-id="[^"]+" data-options="({[^"]+)"', html)
-        if not match:
-            raise ResolverError('File Not Found or removed')
-        json_data = json.loads(match.group(1).replace('&quot;', '"').replace('&amp;', '&'))
-        if not json_data.get("flashvars", {}).get("metadata"):
-            raise ResolverError('File Not Found or removed')
-        json_data = json.loads(json_data["flashvars"]["metadata"])
-        return json_data
-
+        if "notFound" not in html:
+            match = re.search(r'<div\s*data-module="OKVideo"\s*data-movie-id="[^"]+"\s*data-options="({[^"]+)"', html)
+            if match:
+                json_data = json.loads(match.group(1).replace('&quot;', '"').replace('&amp;', '&'))
+                metadata = json_data.get("flashvars", {}).get("metadata")
+                if metadata:
+                    json_data = json.loads(metadata)
+                    return json_data
+        raise ResolverError('File Not Found or removed')
 
     def __get_Metadata(self, media_id, subs):
         url = "http://www.ok.ru/dk?cmd=videoPlayerMetadata"
