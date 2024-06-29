@@ -1,17 +1,18 @@
-Version 5.1.139 (June 17, 2024)
+Version 5.1.140 (June 29, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - bunnycdn
-    - filegram
+    - None
 
 - Resolvers Fixed/Updated:
-    - doodstream
-    - filemoon
-    - govad
-    - vidoza
-    - vidstore
+    - liivideo
+    - okru
+    - streamtape
+    - streamwish
+    - uqload
+    - veev
+    - vembx
     - voesx
 
 - Resolvers Removed
