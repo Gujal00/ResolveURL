@@ -69,6 +69,12 @@ class VoeResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
+        if 'const currentUrl' in html:
+            r = re.search(r'''window\.location\.href\s*=\s*'([^']+)''', html)
+            if r:
+                web_url = r.group(1)
+                html = self.net.http_GET(web_url, headers=headers).content
+
         if subs:
             subtitles = helpers.scrape_subtitles(html, web_url)
 
