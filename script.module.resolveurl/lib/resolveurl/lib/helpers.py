@@ -268,7 +268,8 @@ def get_media_url(
         url, result_blacklist=None, subs=False,
         patterns=None, generic_patterns=True,
         subs_patterns=None, generic_subs_patterns=True,
-        referer=True, redirect=True, verifypeer=True):
+        referer=True, redirect=True,
+        ssl_verify=True, verifypeer=True):
     if patterns is None:
         patterns = []
     if subs_patterns is None:
@@ -280,7 +281,7 @@ def get_media_url(
         result_blacklist = [result_blacklist]
 
     result_blacklist = list(set(result_blacklist + ['.smil']))  # smil(not playable) contains potential sources, only blacklist when called from here
-    net = common.Net()
+    net = common.Net(ssl_verify=ssl_verify)
     headers = {'User-Agent': common.RAND_UA}
     rurl = urllib_parse.urljoin(url, '/')
     if isinstance(referer, six.string_types):
