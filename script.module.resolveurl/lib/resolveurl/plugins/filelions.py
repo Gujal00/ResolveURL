@@ -32,7 +32,7 @@ class FileLionsResolver(ResolveGeneric):
     pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|motvy55|' \
               r'[mad]lions|lumiawatch|javplaya|javlion|fviplions|egsyxutd|fdewsdc|vidhide(?:pro|vip|pre)?|' \
               r'anime7u|coolciima|gsfomqu)' \
-              r'\.(?:com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site))/(?:s|v|f|d|embed|file)/([0-9a-zA-Z$:/.]+)'
+              r'\.(?:com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site))/(?:s|v|f|d|embed|file|download)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
