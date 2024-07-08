@@ -64,17 +64,19 @@ class FileMoonResolver(ResolveUrl):
             surl = helpers.tear_decode(edata.get('file'), edata.get('seed'))
             if surl:
                 headers.pop('X-Requested-With')
+                headers["verifypeer"] = "false"
                 return surl + helpers.append_headers(headers)
         else:
             r = re.search(r'sources:\s*\[{\s*file:\s*"([^"]+)', html, re.DOTALL)
             if r:
                 headers.update({
                     'Referer': web_url,
-                    'Origin': urllib_parse.urljoin(web_url, '/')[:-1]
+                    'Origin': urllib_parse.urljoin(web_url, '/')[:-1],
+                    "verifypeer": "false"
                 })
                 return r.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
