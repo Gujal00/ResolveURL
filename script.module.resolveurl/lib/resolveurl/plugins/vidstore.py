@@ -56,15 +56,17 @@ class VidStoreResolver(ResolveUrl):
             passwords = dict(re.findall(r'(?:",)?([^:]+):"([^"]+)', passwords.group(1)))
             url = re.search(r'settings={.+?url:"([^"]+)', html).group(1)
             html = self.net.http_GET(url + "?_=" + str(int(time() * 1000)), headers=headers).content
-            username = re.search(r'user_name":"([^"]+)', html).group(1)
-            password = passwords.get(username)
-            if not password:
-                raise ResolverError('Password not found')
-            url = "%s%s/%s" % (url, password, "?_=" + str(int(time() * 1000)))
-            html = self.net.http_GET(url, headers=headers).content
             data = loads(html)
-            # taken from indavideo resolver
             if data['success'] == '1':
+                if not data.get('data', {}).get('video_files'):
+                    username = data['data']['user_name']
+                    password = passwords.get(username)
+                    if not password:
+                        raise ResolverError('Password not found')
+                    url = "%s%s/%s" % (url, password, "?_=" + str(int(time() * 1000)))
+                    html = self.net.http_GET(url, headers=headers).content
+                    data = loads(html)
+                # taken from indavideo resolver
                 video_files = data['data']['video_files']
                 if not video_files:
                     raise ResolverError('File removed')
