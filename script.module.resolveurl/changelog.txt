@@ -1,14 +1,17 @@
-Version 5.1.141 (July 08, 2024)
+Version 5.1.142 (July 10, 2024)
 - Code Base Changes:
-    - add ssl_verify option to Generic Resolver
+    - None
 
 - Resolvers Added:
-    - cimanow
+    - dzen
 
 - Resolvers Fixed/Updated:
-    - mixdrop
-    - streamwish
-    - voesx
+    - doodstream
+    - filelions
+    - filemoon
+    - hexload
+    - indavideo
+    - uqload
 
 - Resolvers Removed
     - None
