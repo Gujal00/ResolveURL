@@ -30,7 +30,7 @@ class FileMoonResolver(ResolveUrl):
                'filemoon.wf', 'cinegrab.com', 'filemoon.eu', 'filemoon.art', 'moonmov.pro',
                'kerapoxy.cc', 'furher.in', '1azayf9w.xyz']
     pattern = r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w)\.(?:sx|to|in|link|nl|wf|com|eu|art|pro|cc|xyz))' \
-              r'/(?:e|d|download)/([0-9a-zA-Z$:/.]+)'
+              r'/(?:e|d|download)/([0-9a-zA-Z$:/._-]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -39,12 +39,19 @@ class FileMoonResolver(ResolveUrl):
         else:
             referer = False
 
+        if '/' in media_id:
+            media_id = media_id.split('/')[0]
+
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         if referer:
             headers.update({'Referer': referer})
 
         html = self.net.http_GET(web_url, headers=headers).content
+        if '<h1>Page not found</h1>' in html:
+            web_url = web_url.replace('/e/', '/d/')
+            html = self.net.http_GET(web_url, headers=headers).content
+
         html += helpers.get_packed_data(html)
         r = re.search(r'var\s*postData\s*=\s*(\{.+?\})', html, re.DOTALL)
         if r:
@@ -79,4 +86,4 @@ class FileMoonResolver(ResolveUrl):
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
