@@ -18,6 +18,7 @@
 
 import re
 import json
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -62,7 +63,7 @@ class HexUploadResolver(ResolveUrl):
         url = re.search(r"ldl.ld\('([^']+)", html)
         if url:
             url = helpers.b64decode(url.group(1))
-            return url.replace(' ', '%20') + helpers.append_headers(headers)
+            return urllib_parse.quote(url, ':/?=&') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
