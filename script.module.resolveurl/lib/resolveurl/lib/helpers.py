@@ -171,7 +171,7 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
                 try:
                     stream_url = b64decode(stream_url)
                 except:
-                    continue
+                    stream_url = urllib_parse.urljoin(url, stream_url)
             if stream_url.startswith('//'):
                 stream_url = scheme + ':' + stream_url
             elif stream_url.startswith('/'):
