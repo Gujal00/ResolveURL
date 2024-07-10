@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class UpStreamResolver(ResolveUrl):
     name = 'UpStream'
     domains = ['upstream.to']
-    pattern = r'(?://|\.)(upstream\.to)/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(upstream\.to)/(?:embed-|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
