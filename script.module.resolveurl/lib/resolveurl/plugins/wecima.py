@@ -39,10 +39,10 @@ class WecimaResolver(ResolveUrl):
                    'Referer': referer,
                    'X-Requested-With': 'XMLHttpRequest'}
         html = self.net.http_GET(web_url, headers=headers).content
-        sources = re.search(r'source\s*src="(?P<url>[^"]+)', html).group(1)
+        sources = re.search(r'source\s*src="(?P<url>[^"]+)', html)
         if sources:
             headers.pop('X-Requested-With')
-            return sources.replace(' ', '%20')+ helpers.append_headers(headers)
+            return urllib_parse.quote(sources.group(1), ':/?=&') + helpers.append_headers(headers)
         raise ResolverError('No video found')
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/run/{media_id}')
