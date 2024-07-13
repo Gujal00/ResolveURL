@@ -29,7 +29,8 @@ class AmdaHostResolver(ResolveGeneric):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             referer=True,
-            patterns=[r'''id="myVideo.+?data-src="(?P<url>[^"]+)'''],
+            patterns=[r'''id="myVideo.+?data-src="(?P<url>[^"]+)''',
+                      r'''<source[^>]+?src="(?P<url>[^"]+)'''],
             generic_patterns=False,
             subs=subs
         )

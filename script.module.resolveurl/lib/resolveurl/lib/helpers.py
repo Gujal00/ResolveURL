@@ -168,13 +168,11 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
             match = r.groupdict()
             stream_url = match['url']
             if not (stream_url.startswith('http') or stream_url.startswith('/')):
-                try:
+                if re.search("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$", stream_url):
                     stream_url = b64decode(stream_url)
-                except:
-                    continue
             if stream_url.startswith('//'):
                 stream_url = scheme + ':' + stream_url
-            elif stream_url.startswith('/'):
+            elif not stream_url.startswith('http'):
                 stream_url = urllib_parse.urljoin(url, stream_url)
             stream_url = stream_url.replace('&amp;', '&')
 
