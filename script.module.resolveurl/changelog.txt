@@ -1,17 +1,14 @@
-Version 5.1.142 (July 10, 2024)
+Version 5.1.143 (July 21, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - dzen
+    - wecima
 
 - Resolvers Fixed/Updated:
-    - doodstream
-    - filelions
-    - filemoon
-    - hexload
-    - indavideo
-    - uqload
+    - amdahost
+    - upstream
+    - voesx
 
 - Resolvers Removed
     - None
