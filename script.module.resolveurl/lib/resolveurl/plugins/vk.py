@@ -34,18 +34,21 @@ class VKResolver(ResolveUrl):
                    'Referer': 'https://vk.com/',
                    'Origin': 'https://vk.com'}
 
+        video_list = ''
         try:
             query = urllib_parse.parse_qs(media_id)
             oid, video_id = query['oid'][0], query['id'][0]
         except:
             if '_' in media_id:
                 oid, video_id = re.findall('(.*)_(.*)', media_id)[0]
+                if 'list=' in media_id:
+                    video_list = re.findall('list=(.*)', media_id)[0]
             else:
                 pass
 
         if 'doc/' not in media_id and not media_id.startswith('doc'):
             oid = oid.replace('video', '')
-            sources = self.__get_sources(oid, video_id, headers)
+            sources = self.__get_sources(oid, video_id, headers, video_list)
             if sources:
                 sources.sort(key=lambda x: int(x[0]), reverse=True)
                 source = helpers.pick_source(sources)
@@ -69,13 +72,21 @@ class VKResolver(ResolveUrl):
 
         raise ResolverError('No video found')
 
-    def __get_sources(self, oid, video_id, headers={}):
+    def __get_sources(self, oid, video_id, headers={}, video_list=''):
         sources_url = 'https://vk.com/al_video.php?act=show'
         data = {
             'act': 'show',
             'al': 1,
             'video': '{0}_{1}'.format(oid, video_id)
         }
+        if video_list:
+            data.update({
+                'list': video_list,
+                'load_playlist': 1,
+                'module': 'direct',
+                'show_next': 1,
+                'playlist_id': '{0}_-2'.format(oid)
+            })
         headers.update({'X-Requested-With': 'XMLHttpRequest'})
         html = self.net.http_POST(sources_url, form_data=data, headers=headers).content
 
@@ -95,7 +106,7 @@ class VKResolver(ResolveUrl):
                 if item.startswith('url'):
                     sources.append((item[3:], js_data.get(item)))
             if not sources:
-                str_url = js_data.get('hls')
+                str_url = js_data.get('hls') or js_data.get('hls_live')
                 if str_url:
                     sources = [('360', str_url)]
         return sources
