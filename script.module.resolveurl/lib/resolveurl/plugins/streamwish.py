@@ -32,8 +32,8 @@ class StreamWishResolver(ResolveGeneric):
                'playembed.online', 'egsyxurh.sbs', 'egtpgrvh.sbs', 'flaswish.com', 'obeywish.com',
                'cdnwish.com', 'javsw.me', 'cinemathek.online', 'trgsfjll.sbs', 'fsdcmo.sbs',
                'anime4low.sbs', 'mohahhda.site', 'ma2d.store', 'dancima.shop', 'swhoi.com',
-               'gsfqzmqu.sbs', 'jodwish.com', 'swdyu.com', 'strwish.com']
-    pattern = r'(?://|\.)((?:(?:stream|flas|obey|sfast|str|embed|[mad]|cdn)?wish(?:embed|fast)?|ajmidyad|' \
+               'gsfqzmqu.sbs', 'jodwish.com', 'swdyu.com', 'strwish.com', 'asnwish.com']
+    pattern = r'(?://|\.)((?:(?:stream|flas|obey|sfast|str|embed|[mad]|cdn|asn)?wish(?:embed|fast)?|ajmidyad|' \
               r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|vidmoviesb|kharabnahs|hayaatieadhab|' \
               r'cilootv|tuktukcinema|doodporn|ankrzkz|volvovideo|strmwis|ankrznm|yadmalik|khadhnayad|' \
               r'eghjrutf|eghzrutw|playembed|egsyxurh|egtpgrvh|uqloads|javsw|cinemathek|trgsfjll|fsdcmo|' \
