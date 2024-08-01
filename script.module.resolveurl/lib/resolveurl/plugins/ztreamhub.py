@@ -22,8 +22,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class ZtreamHubResolver(ResolveGeneric):
     name = 'ZtreamHub'
-    domains = ['ztreamhub.com', 'lylxan.com']
-    pattern = r'(?://|\.)((?:ztreamhub|lylxan)\.com)/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
+    domains = ['ztreamhub.com', 'lylxan.com', 'zxhulu.com']
+    pattern = r'(?://|\.)((?:ztreamhub|lylxan|zxhulu)\.com)/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
