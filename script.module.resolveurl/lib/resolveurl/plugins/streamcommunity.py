@@ -17,7 +17,6 @@
 """
 
 import re
-import json
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -35,35 +34,35 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.business', 'streamingcommunity.org', 'streamingcommunity.best',
                'streamingcommunity.agency', 'streamingcommunity.blog', 'streamingcommunity.tech',
                'streamingcommunity.golf', 'streamingcommunity.city', 'streamingcommunity.help',
-               'streamingcommunity.blue', 'streamingcommunity.codes', 'streamingcommunity.bet']
+               'streamingcommunity.blue', 'streamingcommunity.codes', 'streamingcommunity.bet',
+               'streamingcommunity.photos']
     pattern = r'(?://|\.)(streamingcommunity\.' \
         r'(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar|top|' \
-        r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes|bet))' \
+        r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes|bet|photos))' \
         r'/watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r'''scws_id&quot;:(\d+)''', html)
+        match = re.search(r'''<iframe.+?src="([^"]+)''', html, re.DOTALL)
         if match:
-            scws_id = match.group(1)
+            vix = match.group(1).replace('&amp;', '&')
             headers.update({'Referer': web_url})
-            html = self.net.http_GET('https://scws.work/videos/' + scws_id, headers=headers).content
-            a = json.loads(html).get('client_ip')
-            url = 'https://scws.work/master/{0}?{1}'.format(scws_id, self.get_token(a))
-            return url + helpers.append_headers(headers)
+            html = self.net.http_GET(vix, headers=headers).content
+            params = re.search(r'''window\.masterPlaylist\s*=\s*([^<]+)''', html)
+            if params:
+                params = params.group(1)
+                surl = re.search(r"url:\s*'([^']+)", params)
+                tok = re.search(r"token':\s*'([^']+)", params)
+                exp = re.search(r"expires':\s*'([^']+)", params)
+                if surl and tok and exp:
+                    url = '{0}&token={1}&expires={2}&h=1'.format(surl.group(1), tok.group(1), exp.group(1))
+                    return url + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://streamingcommunity.bet/watch/{media_id}')
-
-    def get_token(self, a):
-        import time
-        from hashlib import md5
-        t = int(time.time() + 172800)
-        s = '{0}{1} Yc8U6r8KjAKAepEA'.format(t, a)
-        c = helpers.b64encode(md5(s.encode('utf-8')).digest())
-        c = c.replace('=', '').replace('+', '-').replace('/', '_')
-        return 'token={0}&expires={1}&n=1'.format(c, t)
+        if '?e=' in media_id:
+            media_id = media_id.replace('?e=', '?episode_id=')
+        return self._default_get_url(host, media_id, template='https://streamingcommunity.photos/iframe/{media_id}')
