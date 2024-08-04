@@ -1,17 +1,25 @@
-Version 5.1.143 (July 21, 2024)
+Version 5.1.144 (August 04, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - wecima
+    - None
 
 - Resolvers Fixed/Updated:
-    - amdahost
-    - upstream
+    - filemoon
+    - lulustream
+    - streamcommunity
+    - streamwish
+    - vidguard
+    - vidspeed
+    - vk
     - voesx
+    - waaw
+    - zstreamhub
 
 - Resolvers Removed
-    - None
+    - mycloud
+    - streamrapid
 
 - Languages Added/Updated
     - None
