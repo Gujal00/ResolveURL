@@ -18,7 +18,7 @@
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
-
+from six.moves import urllib_parse
 
 class FileGramResolver(ResolveGeneric):
     name = 'FileGram'
@@ -26,10 +26,16 @@ class FileGramResolver(ResolveGeneric):
     pattern = r'(?://|\.)(filegram\.to)/(?:d/|embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{\s*file:\s*"(?P<url>[^"]+)'''],
-            generic_patterns=False
+            generic_patterns=False,
+            referer=referer
         )
 
     def get_url(self, host, media_id):
