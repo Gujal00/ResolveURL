@@ -34,8 +34,8 @@ class WaawResolver(ResolveUrl):
                'waaw.tv', 'netu.tv', 'hqq.tv',
                'waaw.to', 'netu.to', 'hqq.to',
                'doplay.store', 'younetu.com', 'stbnetu.xyz',
-               'ncdn22.xyz', 'oyohd.one']
-    pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay|ncdn22|oyohd)\.(?:ac|tv|to|store|com|xyz|one))/' \
+               'ncdn22.xyz', 'oyohd.one', 'player.sorozatok.me']
+    pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay|ncdn22|oyohd|player\.sorozatok)\.(?:ac|tv|to|store|com|xyz|one|me))/' \
               r'(?:(?:watch_video|embed_player)\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id, subs=False):
