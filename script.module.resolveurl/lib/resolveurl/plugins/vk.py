@@ -66,7 +66,8 @@ class VKResolver(ResolveUrl):
             if 'doc/' in media_id or media_id.startswith('doc'):
                 source = jd.get('docUrl')
             else:
-                source = jd.get('params')[0].get('hls')
+                params = jd.get('params')[0]
+                source = params.get('hls') or params.get('hls_ondemand')
             if source:
                 return source + helpers.append_headers(headers)
 
