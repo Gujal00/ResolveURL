@@ -40,7 +40,7 @@ class StreamWishResolver(ResolveGeneric):
               r'anime4low|mohahhda|ma2d|dancima|swhoi|gsfqzmqu|jodwish|swdyu)' \
               r'\.(?:com|to|sbs|pro|xyz|store|top|site|online|me|shop))/(?:e/|f/|d/)?([0-9a-zA-Z$:/.]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
             referer = urllib_parse.urljoin(referer, '/')
@@ -50,7 +50,8 @@ class StreamWishResolver(ResolveGeneric):
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)'''],
             generic_patterns=False,
-            referer=referer
+            referer=referer,
+            subs=subs
         )
 
     def get_url(self, host, media_id):

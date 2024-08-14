@@ -41,16 +41,16 @@ class VidStoreResolver(ResolveUrl):
             patterns=[r'''<source\s*src=['"](?P<url>[^'"]+)['"]\s*type=['"]video/mp4['"]\s*label=['"](?P<label>[^'"]+)'''],
             generic_patterns=False
         )
-        
+
         if subs:
             subtitles = helpers.scrape_subtitles(html, web_url)
-        
+
         if sources:
             stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
             if subs:
                 return stream_url, subtitles
             return stream_url
-        
+
         if "indavideo.hu" in html:
             passwords = re.search(r'var passwords={(.+?)}', html)
             passwords = dict(re.findall(r'(?:",)?([^:]+):"([^"]+)', passwords.group(1)))

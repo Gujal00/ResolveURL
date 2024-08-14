@@ -39,15 +39,14 @@ class VidMolyResolver(ResolveUrl):
 
         if subs:
             subtitles = helpers.scrape_subtitles(html, web_url)
-        
+
         if sources:
             stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
             if subs:
                 return stream_url, subtitles
             return stream_url
-        
+
         raise ResolverError('No video found')
-            
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://vidmoly.net/embed-{media_id}.html')
