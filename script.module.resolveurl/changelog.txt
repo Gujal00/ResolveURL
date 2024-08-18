@@ -1,4 +1,4 @@
-Version 5.1.144 (August 04, 2024)
+Version 5.1.145 (August 18, 2024)
 - Code Base Changes:
     - None
 
@@ -6,20 +6,18 @@ Version 5.1.144 (August 04, 2024)
     - None
 
 - Resolvers Fixed/Updated:
+    - filegram
     - filemoon
     - lulustream
-    - streamcommunity
+    - streamruby
     - streamwish
-    - vidguard
-    - vidspeed
+    - updown
     - vk
     - voesx
     - waaw
-    - zstreamhub
 
 - Resolvers Removed
-    - mycloud
-    - streamrapid
+    - wolfstream
 
 - Languages Added/Updated
     - None
