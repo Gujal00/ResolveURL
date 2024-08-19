@@ -143,7 +143,7 @@ class GoogleResolver(ResolveUrl):
         elif 'drive.google' in link or 'docs.google' in link:
             link = re.findall('/file/.*?/([^/]+)', link)[0]
             link = 'https://drive.google.com/get_video_info?docid=' + link
-            response = self.net.http_GET(link)
+            response = self.net.http_GET(link, headers=self.headers)
             sources = self._parse_gdocs(response.content)
         elif 'youtube.googleapis.com' in link:
             cid = re.search(r'cid=([\w]+)', link)
