@@ -17,6 +17,7 @@
 """
 
 import re
+from six.moves import urllib_parse
 from binascii import unhexlify
 from resolveurl.lib import helpers
 from resolveurl import common
@@ -26,11 +27,20 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class SwiftLoadResolver(ResolveUrl):
     name = 'SwiftLoad'
     domains = ['swiftload.io']
-    pattern = r'(?://|\.)(swiftload\.io)/(?:d|e|v)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(swiftload\.io)/(?:d|e|v)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         web_url = self.get_url(host, media_id)
-        headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
+        if not referer:
+            referer = urllib_parse.urljoin(web_url, '/')
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': referer}
+        web_url = self.get_url(host, media_id)
 
         html = self.net.http_GET(web_url, headers=headers).content
         match = re.search(r'''id="swhash"\s*value="([^"]+).+?src:\s*decrypt\('([^']+)''', html, re.DOTALL)
