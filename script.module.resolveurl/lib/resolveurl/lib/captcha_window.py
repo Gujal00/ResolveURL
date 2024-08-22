@@ -65,6 +65,7 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.add_controls()
 
     def create_temp_image(self):
+        self.remove_temp_image()
         temp_file = os.path.join(common.profile_path, 'captcha_img.jpg')
         with open(temp_file, 'wb') as binary_file:
             binary_file.write(self.orig_image)
@@ -152,9 +153,12 @@ class CaptchaWindow(xbmcgui.WindowDialog):
     def update_border_img(self):
         self.border_img.setPosition(self.frame_x, self.frame_y)
 
-    def close(self):
+    def remove_temp_image(self):
         if os.path.exists(self.temp_file):
             os.remove(self.temp_file)
+
+    def close(self):
+        self.remove_temp_image()
         return super(CaptchaWindow, self).close()
 
     def handle_action(self, action_or_control):
