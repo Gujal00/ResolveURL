@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#33000"
 msgid "Move Red square over play icon and submit"
-msgstr "Mozgassa a piros négyzetet a lejátszás ikon fölé, és küldje be"
+msgstr "Mozgasd a piros négyzetet a lejátszás ikon fölé, és menj a 'Beküldés' gombra"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
@@ -46,7 +46,7 @@ msgstr "Automatikus frissítés Url-címe"
 
 msgctxt "#33007"
 msgid "Decryption Key"
-msgstr "Feloldó kulcs"
+msgstr "Titkosítási kulcs"
 
 msgctxt "#33008"
 msgid "TheVideo.me Stream Authorization"
@@ -70,7 +70,7 @@ msgstr "Gyorsítótár használata"
 
 msgctxt "#33013"
 msgid "Reset Function Cache"
-msgstr "Gyorsítótár tisztítása"
+msgstr "Gyorsítótár megtisztítása"
 
 msgctxt "#33014"
 msgid "Universal Resolvers"
@@ -134,7 +134,7 @@ msgstr "Elsődleges link automatikus kiválasztása"
 
 msgctxt "#33029"
 msgid "(Re)Authorize My Account"
-msgstr "Saját hozzáférés (úrjra) autorizálás"
+msgstr "Saját hozzáférés (újra) autorizálása"
 
 msgctxt "#33030"
 msgid "Reset My Authorization"
@@ -150,7 +150,7 @@ msgstr "Írd be a képen látható karaktereket"
 
 msgctxt "#33033"
 msgid "Captcha Error"
-msgstr "Captha hiba"
+msgstr "Captcha hiba"
 
 msgctxt "#33034"
 msgid "Choose the link"
@@ -166,7 +166,7 @@ msgstr "Nem található video link"
 
 msgctxt "#33037"
 msgid "Captcha Round: %s [I](2 Rounds is typical)[/I]"
-msgstr "Captcha kör: %s [I](Általában 2 kör)[/I]"
+msgstr "%s. Captcha: [I](Általában 2x jelenik meg)[/I]"
 
 msgctxt "#33038"
 msgid "Cancel"
@@ -194,7 +194,7 @@ msgstr "AllDebrid Resolver autorizáció sikeres"
 
 msgctxt "#33047"
 msgid "Enable PopUps"
-msgstr "pop upok engedélyezése"
+msgstr "Felugró ablakok engedélyezése"
 
 msgctxt "#33048"
 msgid "API Key"
@@ -206,7 +206,7 @@ msgstr "Torrent támogatás"
 
 msgctxt "#33050"
 msgid "Cached torrents only"
-msgstr "Csak tárolt torrentek"
+msgstr "Csak gyorsítótárazott torrentek"
 
 msgctxt "#33051"
 msgid "Premiumize Authorization Reset"
@@ -226,11 +226,11 @@ msgstr "Linksnappy Resolver autorizáció sikeres"
 
 msgctxt "#33055"
 msgid "Download rate:"
-msgstr "Letöltési arány:"
+msgstr "Letöltési sebesség:"
 
 msgctxt "#33056"
 msgid "Peers:"
-msgstr "Peers:"
+msgstr "Kapcsolatok:"
 
 msgctxt "#33057"
 msgid "seconds"
@@ -238,7 +238,7 @@ msgstr "másodperc"
 
 msgctxt "#33058"
 msgid "Cached filehosts only"
-msgstr "Csak a gyorsítótárban tárolt fájlgazda"
+msgstr "Csak a gyorsítótárban tárolt filehostok"
 
 msgctxt "#33059"
 msgid "JetLoad Stream Authorization"
@@ -250,11 +250,11 @@ msgstr "Uptobox Stream autorizáció"
 
 msgctxt "#33061"
 msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "Látogassa meg ezt a linket: [B][COLOR blue]{0}[/COLOR][/B]"
+msgstr "Látogasd meg ezt a linket: [B][COLOR blue]{0}[/COLOR][/B]"
 
 msgctxt "#33062"
 msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Írja be a PIN kódot [B][COLOR blue]{0}[/COLOR][/B] formátumban, majd kattintson a 'Fiók összekapcsolása' elemre"
+msgstr "Írd be a PIN kódot [B][COLOR blue]{0}[/COLOR][/B] formátumban, majd kattints a 'Fiók összekapcsolása' elemre"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"
@@ -266,15 +266,15 @@ msgstr "Debrid-Link Resolver autorizáció sikeres"
 
 msgctxt "#33065"
 msgid "Clear Finished torrents from account"
-msgstr "Kész torrentek törlése a számláról"
+msgstr "Kész torrentek törlése a fiókból"
 
 msgctxt "#33066"
 msgid "minutes"
-msgstr "percek"
+msgstr "perc"
 
 msgctxt "#33067"
 msgid "hours"
-msgstr "órák"
+msgstr "óra"
 
 msgctxt "#33068"
 msgid "Uptobox Authorisation Reset"
@@ -290,23 +290,23 @@ msgstr "email"
 
 msgctxt "#33071"
 msgid "Only cached torrents are allowed to be initiated"
-msgstr "Csak a gyorsítótárazott torrentek kezdeményezhetők"
+msgstr "Csak a gyorsítótárazott torrentek indíthatók el"
 
 msgctxt "#33072"
 msgid "No stream returned"
-msgstr "Nem tért vissza a patak"
+msgstr "Stream nem elérhető"
 
 msgctxt "#33073"
 msgid "Transfer"
-msgstr "Átruházás"
+msgstr "Átvitel"
 
 msgctxt "#33074"
 msgid "Cancelled by user"
-msgstr "A felhasználó törölte"
+msgstr "Megszakítva a felhasználó által"
 
 msgctxt "#33075"
 msgid "Please validate your Email with Alldebrid before authorising"
-msgstr "Az engedélyezés előtt ellenőrizze e-mail-címét az Alldebrid szolgáltatással"
+msgstr "Autorizáció előtt ellenőrizd az e-mail-címed az Alldebrid szolgáltatásban"
 
 msgctxt "#33076"
 msgid "This account is banned"
@@ -318,7 +318,7 @@ msgstr "Torrent mentése UptoBoxba az AllDebriden keresztül"
 
 msgctxt "#33078"
 msgid "Downloading at"
-msgstr "Letöltés itt:"
+msgstr "Letöltés:"
 
 msgctxt "#33079"
 msgid "Uploading at"
@@ -334,7 +334,7 @@ msgstr "nak"
 
 msgctxt "#33082"
 msgid "Keep transferring to AllDebrid Cloud in the background?"
-msgstr "Folytatja az átvitelt az AllDebrid Cloudba a háttérben?"
+msgstr "Folytatod az átvitelt az AllDebrid Cloudba a háttérben?"
 
 msgctxt "#33083"
 msgid "Goto URL"
@@ -342,7 +342,7 @@ msgstr "Ugrás az URL-re"
 
 msgctxt "#33084"
 msgid "When prompted, enter"
-msgstr "Amikor a rendszer kéri, írja be"
+msgstr "Amikor a rendszer kéri, írd be"
 
 msgctxt "#33085"
 msgid "Authorisation"
@@ -358,7 +358,7 @@ msgstr "Torrent hozzáférés nem elérhető"
 
 msgctxt "#33088"
 msgid "Authorisation Failed"
-msgstr "Az engedélyezés nem sikerült"
+msgstr "Az autorizáció nem sikerült"
 
 msgctxt "#33089"
 msgid "No usable link returned"
@@ -394,8 +394,8 @@ msgstr "Torrent beszerzése a Real-Debrid Cloudból"
 
 msgctxt "#33101"
 msgid "Clean Settings File"
-msgstr "Tisztítsa meg a beállítási fájlt"
+msgstr "Beállítások megtisztítása"
 
 msgctxt "#33102"
 msgid "Settings File cleaned"
-msgstr "Beállítások fájl megtisztítva"
+msgstr "Beállítások megtisztítva"
