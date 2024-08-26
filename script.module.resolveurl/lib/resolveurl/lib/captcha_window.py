@@ -32,7 +32,6 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.orig_image = image
         self.width = width
         self.height = height
-        self.temp_file = self.create_temp_image()
         self.border_img = None
         self.frame_x = (self.getWidth() - self.width) // 2  # Centered horizontally
         self.frame_y = (self.getHeight() - self.height) // 2  # Centered vertically
@@ -44,6 +43,7 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.finished = False
         self.orig_x = self.frame_x
         self.orig_y = self.frame_y
+        self.create_temp_image()
         self.addControl(
             xbmcgui.ControlImage(
                 x=(self.getWidth() - 650) // 2,
@@ -65,11 +65,10 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.add_controls()
 
     def create_temp_image(self):
+        self.temp_file = os.path.join(common.profile_path, 'captcha_img.jpg')
         self.remove_temp_image()
-        temp_file = os.path.join(common.profile_path, 'captcha_img.jpg')
-        with open(temp_file, 'wb') as binary_file:
+        with open(self.temp_file, 'wb') as binary_file:
             binary_file.write(self.orig_image)
-        return temp_file
 
     @property
     def solution_x(self):
