@@ -1,16 +1,15 @@
-Version 5.1.146 (August 26, 2024)
+Version 5.1.147 (September 5, 2024)
 - Code Base Changes:
-    - delete old captcha image before getting new
+    - Fix captcha window property missing
 
 - Resolvers Added:
-    - swiftload
+    - udrop
 
 - Resolvers Fixed/Updated:
-    - dembed
-    - gdrive
+    - voe
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - Hungarian
+    - None
