@@ -216,6 +216,9 @@ class RealDebridResolver(ResolveUrl):
                 url = '%s/%s/%s' % (rest_base_url, check_cache_path, _hash)
                 result = self.net.http_GET(url, headers=self.headers).content
                 js_result = json.loads(result)
+                # this can be an empty list if uncached
+                if isinstance(js_result, list):
+                    return {}
                 _hash_info = js_result.get(_hash, {})
                 if isinstance(_hash_info, dict):
                     if len(_hash_info.get('rd')) > 0:
