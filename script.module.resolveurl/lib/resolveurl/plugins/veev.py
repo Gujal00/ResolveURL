@@ -27,8 +27,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VeevResolver(ResolveUrl):
     name = 'Veev'
-    domains = ['veev.to']
-    pattern = r'(?://|\.)(veev\.to)/(?:e|d)/([0-9a-zA-Z]+)'
+    domains = ['veev.to', 'kinoger.pw']
+    pattern = r'(?://|\.)((?:veev|kinoger)\.(?:to|pw))/(?:e|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
