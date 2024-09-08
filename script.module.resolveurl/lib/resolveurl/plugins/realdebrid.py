@@ -216,11 +216,12 @@ class RealDebridResolver(ResolveUrl):
                 url = '%s/%s/%s' % (rest_base_url, check_cache_path, _hash)
                 result = self.net.http_GET(url, headers=self.headers).content
                 js_result = json.loads(result)
-                _hash_info = js_result.get(_hash, {})
-                if isinstance(_hash_info, dict):
-                    if len(_hash_info.get('rd')) > 0:
-                        logger.log_debug('Real-Debrid: %s is readily available to stream' % _hash)
-                        return _hash_info
+                if js_result:
+                    _hash_info = js_result.get(_hash, {})
+                    if isinstance(_hash_info, dict):
+                        if len(_hash_info.get('rd')) > 0:
+                            logger.log_debug('Real-Debrid: %s is readily available to stream' % _hash)
+                            return _hash_info
             except Exception as e:
                 common.logger.log_warning("Real-Debrid Error: CHECK CACHE | %s" % e)
                 raise
