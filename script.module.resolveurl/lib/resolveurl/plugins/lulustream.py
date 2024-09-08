@@ -22,8 +22,8 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class LuluStreamResolver(ResolveGeneric):
     name = 'LuluStream'
-    domains = ['lulustream.com', 'luluvdo.com', 'lulu.st', 'kinoger.pw', '732eg54de642sa.sbs']
-    pattern = r'(?://|\.)((?:lulu(?:stream|vdo)?|kinoger|732eg54de642sa)\.(?:com|pw|sbs|st))/(?:e/|d/)?([0-9a-zA-Z]+)'
+    domains = ['lulustream.com', 'luluvdo.com', 'lulu.st', '732eg54de642sa.sbs']
+    pattern = r'(?://|\.)((?:lulu(?:stream|vdo)?|732eg54de642sa)\.(?:com|sbs|st))/(?:e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
