@@ -23,8 +23,8 @@ from six.moves import urllib_parse
 
 class WecimaResolver(ResolveUrl):
     name = 'Wecima'
-    domains = ['wecima.show']
-    pattern = r'(?://|\.)(wecima\.show)/run/([^\n]+)'
+    domains = ['wecima.show', 'wecima.movie']
+    pattern = r'(?://|\.)(wecima\.(?:show|movie))/run/([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
