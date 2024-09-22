@@ -21,7 +21,7 @@ from resolveurl.lib import helpers
 from resolveurl.lib import captcha_lib
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from six.moves import urllib_parse, urllib_error
+from six.moves import urllib_error
 
 MAX_TRIES = 3
 
@@ -46,9 +46,11 @@ class FreeDLResolver(ResolveUrl):
                 data.update(captcha_lib.do_captcha(html))
                 common.kodi.sleep(61000)
                 html = self.net.http_POST(web_url, data, headers=headers).content
-                r = re.search(r'class="done.+?href="([^"]+)', html, re.DOTALL)
+                headers.update({'Referer': 'https://{0}/'.format(host),
+                                'Origin':'https://{0}'.format(host)})
+                r = re.search(r'''sources:\s*\[{\s*src:\s*"([^"]+)''', html, re.DOTALL)
                 if r:
-                    return urllib_parse.quote(r.group(1), '/:') + helpers.append_headers(headers)
+                    return r.group(1) + helpers.append_headers(headers)
 
                 common.kodi.sleep(4000)
                 tries = tries + 1
