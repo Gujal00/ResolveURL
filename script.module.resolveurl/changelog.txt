@@ -1,15 +1,26 @@
-Version 5.1.147 (September 5, 2024)
+Version 5.1.148 (October 4, 2024)
 - Code Base Changes:
-    - Fix captcha window property missing
+    - None
 
 - Resolvers Added:
-    - udrop
+    - adramas
+    - gett
+    - moflix
+    - streamsilk
+    - terabox
+    - vistream
 
 - Resolvers Fixed/Updated:
-    - voe
+    - clicknupload
+    - filelions
+    - freedk
+    - realdebrid
+    - streamwish
+    - veev
+    - wecima
 
 - Resolvers Removed
-    - None
+    - kinoger.pw
 
 - Languages Added/Updated
     - None
