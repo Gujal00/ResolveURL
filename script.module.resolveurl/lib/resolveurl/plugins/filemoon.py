@@ -51,6 +51,13 @@ class FileMoonResolver(ResolveUrl):
             headers.update({'Referer': referer})
 
         html = self.net.http_GET(web_url, headers=headers).content
+
+        if 'iframe src' in html:
+            r = re.search(r'iframe src="(.*?)"', html, re.DOTALL)
+            if r:
+                r = r.group(1)
+                html = self.net.http_GET(r, headers=headers).content
+
         if '<h1>Page not found</h1>' in html:
             web_url = web_url.replace('/e/', '/d/')
             html = self.net.http_GET(web_url, headers=headers).content
