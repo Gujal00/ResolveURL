@@ -33,9 +33,9 @@ class CloudFileResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'getNextDownloadPageLink\("([^"]+)', html)
+        r = re.search(r'"([^"]+)","DOWNLOAD', html, re.IGNORECASE)
         if r:
-            source = ''.join([chr((x if isinstance(x, int) else ord(x)) ^ 117) for x in binascii.unhexlify(r.group(1))])
+            source = ''.join([chr(((x if isinstance(x, int) else ord(x)) ^ 15) ^ 117) for x in binascii.unhexlify(r.group(1))])
             return urllib_parse.quote(source, '/:?=') + helpers.append_headers(headers)
         raise ResolverError('Video Link Not Found')
 
