@@ -29,14 +29,14 @@ class VixStreamResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {'User-Agent': common.IOS_USER_AGENT,
+                   'Referer': 'https://{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'var\s*_[0-9a-f]+\s*=\s*"([^"]+)', html)
         if r:
             res = self.decode_vix(r.group(1))
             su = re.search(r'sources:\s*\[{file:"([^"]+)', res)
             if su:
-                headers.update({'Referer': 'https://{0}/'.format(host)})
                 src = helpers.get_redirect_url(su.group(1), headers)
                 return src + helpers.append_headers(headers)
 
