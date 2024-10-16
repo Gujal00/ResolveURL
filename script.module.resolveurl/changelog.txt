@@ -1,26 +1,18 @@
-Version 5.1.148 (October 4, 2024)
+Version 5.1.149 (October 16, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - adramas
-    - gett
-    - moflix
-    - streamsilk
-    - terabox
-    - vistream
+    - None
 
 - Resolvers Fixed/Updated:
-    - clicknupload
-    - filelions
-    - freedk
-    - realdebrid
+    - cloudfile
+    - filemoon
     - streamwish
-    - veev
-    - wecima
+    - vixstream
 
 - Resolvers Removed
-    - kinoger.pw
+    - None
 
 - Languages Added/Updated
     - None
