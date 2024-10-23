@@ -33,13 +33,13 @@ class StreamWishResolver(ResolveGeneric):
                'cdnwish.com', 'javsw.me', 'cinemathek.online', 'trgsfjll.sbs', 'fsdcmo.sbs',
                'anime4low.sbs', 'mohahhda.site', 'ma2d.store', 'dancima.shop', 'swhoi.com',
                'gsfqzmqu.sbs', 'jodwish.com', 'swdyu.com', 'strwish.com', 'asnwish.com',
-               'wishonly.site', 'playerwish.com', 'katomen.store', 'hlswish.com']
+               'wishonly.site', 'playerwish.com', 'katomen.store', 'hlswish.com', 'streamwish.fun']
     pattern = r'(?://|\.)((?:(?:stream|flas|obey|sfast|str|embed|[mad]|cdn|asn|player|hls)?wish(?:embed|fast|only)?|ajmidyad|' \
               r'atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|vidmoviesb|kharabnahs|hayaatieadhab|' \
               r'cilootv|tuktukcinema|doodporn|ankrzkz|volvovideo|strmwis|ankrznm|yadmalik|khadhnayad|' \
               r'eghjrutf|eghzrutw|playembed|egsyxurh|egtpgrvh|uqloads|javsw|cinemathek|trgsfjll|fsdcmo|' \
               r'anime4low|mohahhda|ma2d|dancima|swhoi|gsfqzmqu|jodwish|swdyu|katomen)' \
-              r'\.(?:com|to|sbs|pro|xyz|store|top|site|online|me|shop))/(?:e/|f/|d/)?([0-9a-zA-Z$:/.]+)'
+              r'\.(?:com|to|sbs|pro|xyz|store|top|site|online|me|shop|fun))/(?:e/|f/|d/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         if '$$' in media_id:
