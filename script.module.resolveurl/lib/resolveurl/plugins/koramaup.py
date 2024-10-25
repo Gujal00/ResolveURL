@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2020 gujal
+    Copyright (C) 2024 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,5 +54,5 @@ class KoramaUpResolver(ResolveUrl):
         ch = binascii.unhexlify(ct)
         surl = ''
         for i in range(len(ch)):
-            surl += chr(ch[i] ^ 122)
+            surl += chr((ch[i] if isinstance(ch[i], int) else ord(ch[i])) ^ 122)
         return surl
