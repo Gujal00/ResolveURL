@@ -24,28 +24,27 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 from six.moves import urllib_parse
 
 
-
 class TeraBoxResolver(ResolveUrl):
     name = 'Terabox'
-    domains = ['terabox.com']
-    pattern = r'(?://|\.)(terabox\.com)/sharing/embed\?surl=([0-9a-zA-Z-_]+)'
+    domains = ['terabox.com', 'terabox.app']
+    pattern = r'(?://|\.)(terabox\.(?:com|app))/sharing/(?:embed|link)\?surl=([0-9a-zA-Z-_]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        
+
         r = re.search(r'''"jsToken":"function%20fn%28a%29%7Bwindow.jsToken%20%3D%20a%7D%3Bfn%28%22([^"]+)%22%29''', html, re.DOTALL)
         if r:
             jsToken = r.group(1)
             app_id = '250528'
-            teralink = 'https://www.terabox.com/api/shorturlinfo?app_id={0}&web=1&channel=dubox&clienttype=0&jsToken={1}&shorturl=1{2}&root=1&scene='.format(app_id,jsToken,media_id)
+            teralink = 'https://www.{0}/api/shorturlinfo?app_id={1}&web=1&channel=dubox&clienttype=0&jsToken={2}&shorturl=1{3}&root=1&scene='.format(host, app_id, jsToken, media_id)
             headers.update({
-                    'X-Requested-With': 'XMLHttpRequest',
-                    "referer": web_url,
+                'X-Requested-With': 'XMLHttpRequest',
+                "referer": web_url,
             })
             resp = json.loads(self.net.http_GET(teralink, headers=headers).content)
-            m3u8 = 'https://www.terabox.com/share/extstreaming.m3u8'
+            m3u8 = 'https://www.{0}/share/extstreaming.m3u8'.format(host)
             timestamp = int(time.time() * 1000)
             params = {
                 'app_id': app_id,
@@ -58,13 +57,10 @@ class TeraBoxResolver(ResolveUrl):
                 'sign': resp["sign"],
                 'timestamp': timestamp,
             }
-            m3u8 = 'https://www.terabox.com/share/extstreaming.m3u8?{0}'.format(urllib_parse.urlencode(params))
+            m3u8 = 'https://www.{0}/share/extstreaming.m3u8?{1}'.format(host, urllib_parse.urlencode(params))
             return m3u8
-            
 
         raise ResolverError('Unable to locate link')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/sharing/embed?surl={media_id}')
-
-    
+        return self._default_get_url(host, media_id, template='https://www.{host}/sharing/embed?surl={media_id}')
