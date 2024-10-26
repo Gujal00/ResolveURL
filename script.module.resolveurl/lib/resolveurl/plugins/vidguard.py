@@ -31,7 +31,7 @@ class VidGuardResolver(ResolveUrl):
                'v6embed.xyz', 'vid-guard.com', 'vembed.net', 'embedv.net', 'fslinks.org',
                'bembed.net', 'listeamed.net', 'gsfjzmqu.sbs', 'go-streamer.net']
     pattern = r'(?://|\.)((?:vid-?guard|vgfplay|fslinks|moflix-stream|listeamed|go-streamer|gsfjzmqu|v?[g6b]?embedv?)' \
-              r'\.(?:to|com|day|xyz|org|net|sbs))/(?:e|v|d)/([0-9a-zA-Z:$/]+)'
+              r'\.(?:to|com|day|xyz|org|net|sbs))/(?:e|v|d)/([0-9a-zA-Z:$/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -40,8 +40,6 @@ class VidGuardResolver(ResolveUrl):
         else:
             referer = False
         web_url = self.get_url(host, media_id)
-        if not referer:
-            referer = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': referer}
         try:
