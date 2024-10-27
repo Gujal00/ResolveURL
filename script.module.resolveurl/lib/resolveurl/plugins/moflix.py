@@ -34,12 +34,12 @@ class MoflixStreamResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''Contents\s*=\s*'([^']+)''', html)
+        r = re.search(r'''Encrypted\s*=\s*'([^']+)''', html)
         if r:
             data = json.loads(r.group(1))
             ct = data.get('ct')
             salt = codecs.decode(data.get('s'), 'hex')
-            dt = jscrypto.decode(ct, '1FHuaQhhcsKgpTRB', salt)
+            dt = jscrypto.decode(ct, '=JV[t}{trEV=Ilh5', salt)
             r = re.search(r'file:\s*\\"([^"]+)', dt)
             if r:
                 murl = r.group(1).replace('\\', '')
