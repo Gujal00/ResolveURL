@@ -34,13 +34,13 @@ class CdaResolver(ResolveUrl):
         headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
 
         html = self.net.http_GET(web_url, headers=headers).content
-        match = re.search(r'''player_data=['"]([^'"]+)''', html)
+        match = re.search(r'''player_data=['"](.*?)['"]\s*tabindex''', html)
         if match:
             qdata = json.loads(match.group(1).replace('&quot;', '"')).get('video', {}).get('qualities')
             sources = [(q, '?wersja={0}'.format(q)) for q in qdata.keys() if q != 'auto']
             if len(sources) > 1:
                 html = self.net.http_GET(web_url + helpers.pick_source(helpers.sort_sources_list(sources)), headers=headers).content
-                match = re.search(r'''player_data=['"]([^'"]+)''', html)
+                match = re.search(r'''player_data=['"](.*?)['"]\s*tabindex''', html)
             src = json.loads(match.group(1).replace('&quot;', '"')).get('video').get('file')
             if len(src) < 1:
                 raise ResolverError('DRM protected Video Link')
