@@ -1,16 +1,15 @@
-Version 5.1.150 (October 26, 2024)
+Version 5.1.151 (November 4, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - kinoger
-    - koramaup
-    - turbovid
+    - None
 
 - Resolvers Fixed/Updated:
-    - filelions
-    - streamwish
-    - uqload
+    - cda
+    - dailymotion
+    - moflix
+    - terabox
     - vidguard
 
 - Resolvers Removed
