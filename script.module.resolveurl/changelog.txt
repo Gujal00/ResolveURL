@@ -1,16 +1,15 @@
-Version 5.1.151 (November 4, 2024)
+Version 5.1.152 (November 11, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - vinovo
 
 - Resolvers Fixed/Updated:
-    - cda
-    - dailymotion
-    - moflix
-    - terabox
-    - vidguard
+    - filelions
+    - filemoon
+    - turboviplay
+    - voe
 
 - Resolvers Removed
     - None
