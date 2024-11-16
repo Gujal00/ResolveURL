@@ -31,11 +31,8 @@ class VinovoResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        r = self.net.http_GET(web_url, headers=headers)
-        if web_url != r.get_url():
-            web_url = r.get_url()
-        html = r.content
+        headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
+        html = self.net.http_GET(web_url, headers=headers).content
         t = re.search(r'name="token"\s*content="([^"]+)', html)
         s = re.search(r'<video.+?data-base="([^"]+)', html)
         if subs:
