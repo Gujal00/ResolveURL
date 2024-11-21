@@ -29,10 +29,10 @@ class FileLionsResolver(ResolveGeneric):
                'javplaya.com', 'fviplions.com', 'egsyxutd.sbs', 'filelions.site', 'filelions.co',
                'vidhide.com', 'vidhidepro.com', 'vidhidevip.com', 'javlion.xyz', 'fdewsdc.sbs',
                'techradar.ink', 'anime7u.com', 'coolciima.online', 'gsfomqu.sbs', 'vidhidepre.com', 'vidhideplus.com',
-               'katomen.online', 'vidhide.fun', 'vidhidehub.com']
+               'katomen.online', 'vidhide.fun', 'vidhidehub.com', 'dhtpre.com']
     pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|motvy55|' \
               r'[mad]lions|lumiawatch|javplaya|javlion|fviplions|egsyxutd|fdewsdc|vidhide(?:pro|vip|pre|plus|hub)?|' \
-              r'anime7u|coolciima|gsfomqu|katomen)' \
+              r'anime7u|coolciima|gsfomqu|katomen|dhtpre)' \
               r'\.(?:com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site|fun))/(?:s|v|f|d|embed|file|download)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
