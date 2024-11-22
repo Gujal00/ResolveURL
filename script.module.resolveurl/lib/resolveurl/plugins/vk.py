@@ -26,13 +26,14 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VKResolver(ResolveUrl):
     name = 'VK'
-    domains = ['vk.com']
-    pattern = r'(?://|\.)(vk\.com)/(?:video_ext\.php\?)?(.+)'
+    domains = ['vk.com', 'vkvideo.ru']
+    pattern = r'(?://|\.)(vk(?:video)?\.(?:com|ru))/(?:video_ext\.php\?)?(.+)'
 
     def get_media_url(self, host, media_id):
+        ref = 'https://{0}/'.format(host)
         headers = {'User-Agent': common.EDGE_USER_AGENT,
-                   'Referer': 'https://vk.com/',
-                   'Origin': 'https://vk.com'}
+                   'Referer': ref,
+                   'Origin': ref[:-1]}
 
         video_list = ''
         try:
@@ -48,7 +49,7 @@ class VKResolver(ResolveUrl):
 
         if 'doc/' not in media_id and not media_id.startswith('doc'):
             oid = oid.replace('video', '')
-            sources = self.__get_sources(oid, video_id, headers, video_list)
+            sources = self.__get_sources(host, oid, video_id, headers, video_list)
             if sources:
                 sources.sort(key=lambda x: int(x[0]), reverse=True)
                 source = helpers.pick_source(sources)
@@ -73,8 +74,8 @@ class VKResolver(ResolveUrl):
 
         raise ResolverError('No video found')
 
-    def __get_sources(self, oid, video_id, headers={}, video_list=''):
-        sources_url = 'https://vk.com/al_video.php?act=show'
+    def __get_sources(self, host, oid, video_id, headers={}, video_list=''):
+        sources_url = 'https://{0}/al_video.php?act=show'.format(host)
         data = {
             'act': 'show',
             'al': 1,
@@ -114,8 +115,8 @@ class VKResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         if 'doc/' in media_id or media_id.startswith('doc'):
-            url = 'https://vk.com/%s' % (media_id)
+            url = 'https://{0}/{1}'.format(host, media_id)
         else:
             media_id = media_id.replace('video', '')
-            url = 'https://vk.com/video_ext.php?%s' % (media_id)
+            url = 'https://{0}/video_ext.php?{1}'.format(host, media_id)
         return url
