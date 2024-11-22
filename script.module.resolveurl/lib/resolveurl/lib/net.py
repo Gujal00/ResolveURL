@@ -224,7 +224,7 @@ class Net:
         opener = urllib_request.build_opener(*handlers)
         urllib_request.install_opener(opener)
 
-    def http_GET(self, url, headers={}, compression=True, redirect=True):
+    def http_GET(self, url, headers={}, compression=True, redirect=True, timeout=20):
         """
         Perform an HTTP GET request.
 
@@ -242,9 +242,9 @@ class Net:
             An :class:`HttpResponse` object containing headers and other
             meta-information about the page and the page content.
         """
-        return self._fetch(url, headers=headers, compression=compression, redirect=redirect)
+        return self._fetch(url, headers=headers, compression=compression, redirect=redirect, timeout=timeout)
 
-    def http_POST(self, url, form_data, headers={}, compression=True, jdata=False, redirect=True):
+    def http_POST(self, url, form_data, headers={}, compression=True, jdata=False, redirect=True, timeout=20):
         """
         Perform an HTTP POST request.
 
@@ -264,7 +264,7 @@ class Net:
             An :class:`HttpResponse` object containing headers and other
             meta-information about the page and the page content.
         """
-        return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata, redirect=redirect)
+        return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata, redirect=redirect, timeout=timeout)
 
     def http_HEAD(self, url, headers={}):
         """
@@ -312,7 +312,7 @@ class Net:
         response = urllib_request.urlopen(request)
         return HttpResponse(response)
 
-    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False, redirect=True):
+    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False, redirect=True, timeout=20):
         """
         Perform an HTTP GET or POST request.
 
@@ -355,9 +355,9 @@ class Net:
         try:
             if not redirect:
                 opener = urllib_request.build_opener(NoRedirection())
-                response = opener.open(req, timeout=20)
+                response = opener.open(req, timeout=timeout)
             else:
-                response = urllib_request.urlopen(req, timeout=15)
+                response = urllib_request.urlopen(req, timeout=timeout)
         except urllib_error.HTTPError as e:
             if e.code == 403 and 'cloudflare' in e.hdrs.get('server', ''):
                 import ssl
@@ -366,7 +366,7 @@ class Net:
                 handlers = [urllib_request.HTTPSHandler(context=ctx)]
                 opener = urllib_request.build_opener(*handlers)
                 try:
-                    response = opener.open(req, timeout=15)
+                    response = opener.open(req, timeout=timeout)
                 except urllib_error.HTTPError as e:
                     if e.code == 403:
                         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
@@ -374,7 +374,7 @@ class Net:
                         handlers = [urllib_request.HTTPSHandler(context=ctx)]
                         opener = urllib_request.build_opener(*handlers)
                         try:
-                            response = opener.open(req, timeout=15)
+                            response = opener.open(req, timeout=timeout)
                         except urllib_error.HTTPError as e:
                             response = e
             else:

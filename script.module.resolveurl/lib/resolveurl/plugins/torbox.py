@@ -66,7 +66,7 @@ class TorBoxResolver(ResolveUrl):
     def __post(self, endpoint, data, empty=None):
         try:
             url = "{0}/{1}".format(self.api_url, endpoint)
-            result = self.net.http_POST(url, form_data=data, headers=self.headers).content
+            result = self.net.http_POST(url, form_data=data, headers=self.headers, timeout=90).content
             if not result:
                 return empty
             result = json.loads(result)
