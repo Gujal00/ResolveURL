@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolverError, ResolveUrl
 from six.moves import urllib_error, urllib_parse
 
 logger = common.log_utils.Logger.get_logger(__name__)
-# logger.disable()
+logger.disable()
 
 AGENT = "ResolveURL for Kodi"
 VERSION = common.addon_version
@@ -78,7 +78,6 @@ class TorBoxResolver(ResolveUrl):
 
     def __create_torrent(self, magnet):
         result = self.__post("torrents/createtorrent", {"magnet": magnet}, {})
-        logger.log_warning("Create torrent: %s" % result)
         return result
 
     def __check_cache(self, btih):
@@ -86,7 +85,6 @@ class TorBoxResolver(ResolveUrl):
             "torrents/checkcached",
             {"hash": btih, "format": "list", "list_files": False},
         )
-        logger.log_warning("Check cache: %s" % result)
         return bool(result)
 
     def __get_info(self, torrent_id):
@@ -121,7 +119,6 @@ class TorBoxResolver(ResolveUrl):
     # we prefix with tb:$file_id| to indicate which file to download
     # then handle it when re-resolving
     def __get_file_id(self, media_id):
-        logger.log_warning("Media ID: %s" % media_id)
         r = re.search(r"""tb:(\d*)\|(magnet:.*)""", media_id, re.I)
         if not r or len(r.groups()) < 2:
             return (None, media_id)
@@ -130,8 +127,6 @@ class TorBoxResolver(ResolveUrl):
     def get_media_url(self, host, media_id, cached_only=False, return_all=False):
         with common.kodi.ProgressDialog("ResolveURL TorBox") as d:
             (file_id, media_id) = self.__get_file_id(media_id)
-            logger.log_warning("File ID: %s" % file_id)
-            logger.log_warning("Media ID: %s" % media_id)
             btih = self.__get_hash(media_id)
             d.update(0, line2="Checking cache...")
             cached = self.__check_cache(btih)
@@ -180,20 +175,17 @@ class TorBoxResolver(ResolveUrl):
                 }
                 for f in files
             ]
-            logger.log_warning("Links: %s" % links)
             return links
 
         # allow user to pick if multiple files
         if len(files) > 1 and file_id is None:
             links = [[f.get("short_name"), f.get("id")] for f in files]
             links.sort(key=lambda x: x[1])
-            logger.log_warning("Links: %s" % links)
             file_id = helpers.pick_source(links, auto_pick=False)
         else:
             file_id = 0
 
         download_link = self.__download_link(torrent_id, file_id)
-        logger.log_warning("Download link: %s" % download_link)
         return download_link
 
     def get_url(self, host, media_id):
