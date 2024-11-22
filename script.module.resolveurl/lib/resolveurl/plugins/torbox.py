@@ -39,7 +39,7 @@ class TorBoxResolver(ResolveUrl):
 
     def __init__(self):
         self.hosters = None
-        self.hosts = ["magnet"]
+        self.hosts = ["magnet", "tb"]
         self.headers = {
             "User-Agent": USER_AGENT,
             "Authorization": "Bearer %s" % self.__get_token(),
@@ -54,7 +54,9 @@ class TorBoxResolver(ResolveUrl):
                 result = self.net.http_GET(url, headers=self.headers).content
             if data:
                 url = "{0}/{1}".format(self.api_url, endpoint)
-                result = self.net.http_POST(url, form_data=data, headers=self.headers, timeout=90).content
+                result = self.net.http_POST(
+                    url, form_data=data, headers=self.headers, timeout=90
+                ).content
             if not result:
                 return empty
             result = json.loads(result)
@@ -74,9 +76,7 @@ class TorBoxResolver(ResolveUrl):
         return self.__api(endpoint, data=data, empty=empty)
 
     def __create_torrent(self, magnet) -> dict | None:
-        result = self.__post(
-            "torrents/createtorrent", {"magnet": magnet}, {}
-        )
+        result = self.__post("torrents/createtorrent", {"magnet": magnet}, {})
         logger.log_warning("Create torrent: %s" % result)
         return result
 
@@ -94,17 +94,17 @@ class TorBoxResolver(ResolveUrl):
         )
         return result
 
-    def __check_existing(self, btih) -> str | None:
+    def __check_existing(self, btih) -> (str | None, str | None):
         torrents = self.__get("torrents/mylist", {"bypass_cache": True}, [])
         for torrent in torrents:
             if torrent.get("hash") == btih:
                 return (torrent.get("id"), torrent.get("name"))
         return (None, None)
 
-    def __download_link(self, torrent_id) -> str | None:
+    def __download_link(self, torrent_id, file_id) -> str | None:
         return self.__get(
             "torrents/requestdl",
-            {"torrent_id": torrent_id, "token": self.__get_token()},
+            {"torrent_id": torrent_id, "file_id": file_id, "token": self.__get_token()},
         )
 
     def __get_token(self) -> str:
@@ -116,12 +116,24 @@ class TorBoxResolver(ResolveUrl):
             return None
         return r.group(2)
 
+    # hacky workaround to get return_all working
+    # we prefix with tb:$file_id| to indicate which file to download
+    # then handle it when re-resolving
+    def __get_file_id(self, media_id) -> (int, str):
+        logger.log_warning("Media ID: %s" % media_id)
+        r = re.search(r"""tb:(\d*)\|(magnet:.*)""", media_id, re.I)
+        if not r or len(r.groups()) < 2:
+            return (0, media_id)
+        return (int(r.group(1)), r.group(2))
+
     def get_media_url(
         self, host, media_id, cached_only=False, return_all=False
     ) -> str | None:
-        # TODO: handle return_all
-        # TODO: handle multiple files
+        # TODO: handle multiple files without return_all gracefully
         with common.kodi.ProgressDialog("ResolveURL TorBox") as d:
+            (file_id, media_id) = self.__get_file_id(media_id)
+            logger.log_warning("File ID: %s" % file_id)
+            logger.log_warning("Media ID: %s" % media_id)
             btih = self.__get_hash(media_id)
             d.update(0, line2="Checking cache...")
             cached = self.__check_cache(btih)
@@ -140,7 +152,7 @@ class TorBoxResolver(ResolveUrl):
             d.update(0, line1=torrent_name)
 
             if not torrent_id:
-                raise ResolverError('Errror adding torrent')
+                raise ResolverError("Errror adding torrent")
 
             ready = cached
             while not ready:
@@ -157,9 +169,15 @@ class TorBoxResolver(ResolveUrl):
                     raise ResolverError("Cancelled by user")
                 common.kodi.sleep(1500)
 
-            download_link = self.__download_link(torrent_id)
-            logger.log_warning("Download link: %s" % download_link)
-            return download_link
+        if return_all:
+            files = self.__get_info(torrent_id).get("files", [])
+            links = [{"name": f.get("short_name"), "link": "tb:%s|%s" % (f.get("id"), media_id)} for f in files]
+            logger.log_warning("Links: %s" % links)
+            return links
+
+        download_link = self.__download_link(torrent_id, file_id)
+        logger.log_warning("Download link: %s" % download_link)
+        return download_link
 
     def get_url(self, host, media_id):
         return media_id
@@ -168,7 +186,8 @@ class TorBoxResolver(ResolveUrl):
         return "torbox.app", url
 
     def valid_url(self, url, host):
-        btih = self.__get_hash(url)
+        (file_id, media_id) = self.__get_file_id(url)
+        btih = self.__get_hash(media_id)
         return bool(btih)
 
     @classmethod
