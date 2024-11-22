@@ -76,12 +76,12 @@ class TorBoxResolver(ResolveUrl):
     def __post(self, endpoint, data, empty=None):
         return self.__api(endpoint, data=data, empty=empty)
 
-    def __create_torrent(self, magnet) -> dict | None:
+    def __create_torrent(self, magnet):
         result = self.__post("torrents/createtorrent", {"magnet": magnet}, {})
         logger.log_warning("Create torrent: %s" % result)
         return result
 
-    def __check_cache(self, btih) -> bool:
+    def __check_cache(self, btih):
         result = self.__get(
             "torrents/checkcached",
             {"hash": btih, "format": "list", "list_files": False},
@@ -89,29 +89,29 @@ class TorBoxResolver(ResolveUrl):
         logger.log_warning("Check cache: %s" % result)
         return bool(result)
 
-    def __get_info(self, torrent_id) -> bool:
+    def __get_info(self, torrent_id):
         result = self.__get(
             "torrents/mylist", {"id": torrent_id, "bypass_cache": True}, {}
         )
         return result
 
-    def __check_existing(self, btih) -> (str | None, str | None):
+    def __check_existing(self, btih):
         torrents = self.__get("torrents/mylist", {"bypass_cache": True}, [])
         for torrent in torrents:
             if torrent.get("hash") == btih:
                 return (torrent.get("id"), torrent.get("name"))
         return (None, None)
 
-    def __download_link(self, torrent_id, file_id) -> str | None:
+    def __download_link(self, torrent_id, file_id):
         return self.__get(
             "torrents/requestdl",
             {"torrent_id": torrent_id, "file_id": file_id, "token": self.__get_token()},
         )
 
-    def __get_token(self) -> str:
+    def __get_token(self):
         return self.get_setting("apikey")
 
-    def __get_hash(self, media_id) -> str | None:
+    def __get_hash(self, media_id):
         r = re.search("""magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)""", media_id, re.I)
         if not r or len(r.groups()) < 2:
             return None
@@ -120,16 +120,14 @@ class TorBoxResolver(ResolveUrl):
     # hacky workaround to get return_all working
     # we prefix with tb:$file_id| to indicate which file to download
     # then handle it when re-resolving
-    def __get_file_id(self, media_id) -> (int, str):
+    def __get_file_id(self, media_id):
         logger.log_warning("Media ID: %s" % media_id)
         r = re.search(r"""tb:(\d*)\|(magnet:.*)""", media_id, re.I)
         if not r or len(r.groups()) < 2:
             return (None, media_id)
         return (int(r.group(1)), r.group(2))
 
-    def get_media_url(
-        self, host, media_id, cached_only=False, return_all=False
-    ) -> str | None:
+    def get_media_url(self, host, media_id, cached_only=False, return_all=False):
         with common.kodi.ProgressDialog("ResolveURL TorBox") as d:
             (file_id, media_id) = self.__get_file_id(media_id)
             logger.log_warning("File ID: %s" % file_id)
