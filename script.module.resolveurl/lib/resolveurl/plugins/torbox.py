@@ -208,7 +208,7 @@ class TorBoxResolver(ResolveUrl):
         (file_id, media_id) = self.__get_file_id(url)
         btih = self.__get_hash(media_id)
         # only supporting torrents through this plugin for now
-        return bool(btih) and self.get_setting("torrents")
+        return bool(btih) and self.get_setting("torrents") == "true"
 
     @classmethod
     def get_settings_xml(cls):
@@ -235,6 +235,6 @@ class TorBoxResolver(ResolveUrl):
     def _is_enabled(cls):
         return (
             cls.get_setting("enabled") == "true"
+            and cls.get_setting("torrents") == "true"
             and cls.get_setting("apikey")
-            and cls.get_setting("torrents")
         )
