@@ -21,6 +21,7 @@ import re
 
 from resolveurl import common
 from resolveurl.common import i18n
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolverError, ResolveUrl
 from six.moves import urllib_error, urllib_parse
 
@@ -123,13 +124,12 @@ class TorBoxResolver(ResolveUrl):
         logger.log_warning("Media ID: %s" % media_id)
         r = re.search(r"""tb:(\d*)\|(magnet:.*)""", media_id, re.I)
         if not r or len(r.groups()) < 2:
-            return (0, media_id)
+            return (None, media_id)
         return (int(r.group(1)), r.group(2))
 
     def get_media_url(
         self, host, media_id, cached_only=False, return_all=False
     ) -> str | None:
-        # TODO: handle multiple files without return_all gracefully
         with common.kodi.ProgressDialog("ResolveURL TorBox") as d:
             (file_id, media_id) = self.__get_file_id(media_id)
             logger.log_warning("File ID: %s" % file_id)
@@ -148,7 +148,6 @@ class TorBoxResolver(ResolveUrl):
                 d.update(0, line2="Not in list, adding...")
                 torrent = self.__create_torrent(media_id)
                 torrent_id = torrent.get("torrent_id")
-                torrent_name = torrent.get("name")
 
             if d.is_canceled():
                 raise ResolverError("Cancelled by user")
@@ -161,6 +160,7 @@ class TorBoxResolver(ResolveUrl):
             ready = cached
             while not ready:
                 info = self.__get_info(torrent_id)
+                torrent_name = info.get("name")
                 ready = info.get("download_present", False)
                 if ready:
                     break
@@ -172,8 +172,9 @@ class TorBoxResolver(ResolveUrl):
                     raise ResolverError("Cancelled by user")
                 common.kodi.sleep(1500)
 
+        files = self.__get_info(torrent_id).get("files", [])
+
         if return_all:
-            files = self.__get_info(torrent_id).get("files", [])
             links = [
                 {
                     "name": f.get("short_name"),
@@ -183,6 +184,15 @@ class TorBoxResolver(ResolveUrl):
             ]
             logger.log_warning("Links: %s" % links)
             return links
+
+        # allow user to pick if multiple files
+        if len(files) > 1 and file_id is None:
+            links = [[f.get("short_name"), f.get("id")] for f in files]
+            links.sort(key=lambda x: x[1])
+            logger.log_warning("Links: %s" % links)
+            file_id = helpers.pick_source(links, auto_pick=False)
+        else:
+            file_id = 0
 
         download_link = self.__download_link(torrent_id, file_id)
         logger.log_warning("Download link: %s" % download_link)
