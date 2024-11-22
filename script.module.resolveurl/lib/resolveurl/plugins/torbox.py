@@ -161,17 +161,22 @@ class TorBoxResolver(ResolveUrl):
                 if ready:
                     break
                 progress = int(info.get("progress", 0) * 100)
-                filename = info.get("name")
                 state = "State: %s" % info.get("download_state")
                 eta = "ETA: %ss" % info.get("eta")
-                d.update(progress, line1=filename, line2=state, line3=eta)
+                d.update(progress, line1=torrent_name, line2=state, line3=eta)
                 if d.is_canceled():
                     raise ResolverError("Cancelled by user")
                 common.kodi.sleep(1500)
 
         if return_all:
             files = self.__get_info(torrent_id).get("files", [])
-            links = [{"name": f.get("short_name"), "link": "tb:%s|%s" % (f.get("id"), media_id)} for f in files]
+            links = [
+                {
+                    "name": f.get("short_name"),
+                    "link": "tb:%s|%s" % (f.get("id"), media_id),
+                }
+                for f in files
+            ]
             logger.log_warning("Links: %s" % links)
             return links
 
