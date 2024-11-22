@@ -45,12 +45,16 @@ class TorBoxResolver(ResolveUrl):
             "Authorization": "Bearer %s" % self.__get_token(),
         }
 
-    def __get(self, endpoint, query, empty=None):
+    def __api(self, endpoint, query=None, data=None, empty=None):
         try:
-            url = "{0}/{1}?{2}".format(
-                self.api_url, endpoint, urllib_parse.urlencode(query)
-            )
-            result = self.net.http_GET(url, headers=self.headers).content
+            if query:
+                url = "{0}/{1}?{2}".format(
+                    self.api_url, endpoint, urllib_parse.urlencode(query)
+                )
+                result = self.net.http_GET(url, headers=self.headers).content
+            if data:
+                url = "{0}/{1}".format(self.api_url, endpoint)
+                result = self.net.http_POST(url, form_data=data, headers=self.headers, timeout=90).content
             if not result:
                 return empty
             result = json.loads(result)
@@ -59,25 +63,15 @@ class TorBoxResolver(ResolveUrl):
             return empty
         except urllib_error.HTTPError as e:
             if e.code == 429:
-                common.kodi.sleep(3000)
-                return self.__get(endpoint, query, empty)
+                common.kodi.sleep(1500)
+                return self.__api(endpoint, query, data, empty)
             return empty
 
+    def __get(self, endpoint, query, empty=None):
+        return self.__api(endpoint, query=query, empty=empty)
+
     def __post(self, endpoint, data, empty=None):
-        try:
-            url = "{0}/{1}".format(self.api_url, endpoint)
-            result = self.net.http_POST(url, form_data=data, headers=self.headers, timeout=90).content
-            if not result:
-                return empty
-            result = json.loads(result)
-            if result.get("success"):
-                return result.get("data")
-            return empty
-        except urllib_error.HTTPError as e:
-            if e.code == 429:
-                common.kodi.sleep(3000)
-                return self.__post(endpoint, data, empty)
-            return empty
+        return self.__api(endpoint, data=data, empty=empty)
 
     def __create_torrent(self, magnet) -> dict | None:
         result = self.__post(
