@@ -88,18 +88,18 @@ class TorBoxResolver(ResolveUrl):
         logger.log_warning("Check cache: %s" % result)
         return bool(result)
 
-    def __check_ready(self, torrent_id) -> bool:
+    def __get_info(self, torrent_id) -> bool:
         result = self.__get(
             "torrents/mylist", {"id": torrent_id, "bypass_cache": True}, {}
         )
-        return result.get("download_present", False)
+        return result
 
     def __check_existing(self, btih) -> str | None:
         torrents = self.__get("torrents/mylist", {"bypass_cache": True}, [])
         for torrent in torrents:
             if torrent.get("hash") == btih:
-                return torrent.get("id")
-        return None
+                return (torrent.get("id"), torrent.get("name"))
+        return (None, None)
 
     def __download_link(self, torrent_id) -> str | None:
         return self.__get(
@@ -121,38 +121,45 @@ class TorBoxResolver(ResolveUrl):
     ) -> str | None:
         # TODO: handle return_all
         # TODO: handle multiple files
-        btih = self.__get_hash(media_id)
-        logger.log_warning("BTIH: %s" % btih)
-        cached = self.__check_cache(btih)
-        logger.log_warning("Cached: %s" % cached)
+        with common.kodi.ProgressDialog("ResolveURL TorBox") as d:
+            btih = self.__get_hash(media_id)
+            d.update(0, line2="Checking cache...")
+            cached = self.__check_cache(btih)
 
-        if not cached and cached_only:
-            raise ResolverError("TorBox: {0}".format(i18n("cached_torrents_only")))
+            if not cached and cached_only:
+                raise ResolverError("TorBox: {0}".format(i18n("cached_torrents_only")))
 
-        # check if it's in your list
-        torrent_id = self.__check_existing(btih)
-        logger.log_warning("Torrent ID: %s" % torrent_id)
-        if not torrent_id:
-            # if not, add it
-            torrent_id = self.__create_torrent(media_id).get("torrent_id")
-            logger.log_warning("Torrent ID: %s" % torrent_id)
+            d.update(0, line2="Checking list...")
+            (torrent_id, torrent_name) = self.__check_existing(btih)
+            if not torrent_id:
+                d.update(0, line2="Not in list, adding...")
+                torrent = self.__create_torrent(media_id)
+                torrent_id = torrent.get("torrent_id")
+                torrent_name = torrent.get("name")
 
-        # error adding torrent, abort
-        if not torrent_id:
-            logger.log_warning("Failed to add torrent - aborting.")
-            return None
+            d.update(0, line1=torrent_name)
 
-        # loop until it's ready
-        # TODO: show progress dialog
-        ready = cached
-        while not ready:
-            logger.log_warning("Waiting for torrent to be ready...")
-            common.kodi.sleep(3000)
-            ready = self.__check_ready(torrent_id)
+            if not torrent_id:
+                raise ResolverError('Errror adding torrent')
 
-        download_link = self.__download_link(torrent_id)
-        logger.log_warning("Download link: %s" % download_link)
-        return download_link
+            ready = cached
+            while not ready:
+                info = self.__get_info(torrent_id)
+                ready = info.get("download_present", False)
+                if ready:
+                    break
+                progress = int(info.get("progress", 0) * 100)
+                filename = info.get("name")
+                state = "State: %s" % info.get("download_state")
+                eta = "ETA: %ss" % info.get("eta")
+                d.update(progress, line1=filename, line2=state, line3=eta)
+                if d.is_canceled():
+                    raise ResolverError("Cancelled by user")
+                common.kodi.sleep(1500)
+
+            download_link = self.__download_link(torrent_id)
+            logger.log_warning("Download link: %s" % download_link)
+            return download_link
 
     def get_url(self, host, media_id):
         return media_id
