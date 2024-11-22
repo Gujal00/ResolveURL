@@ -138,6 +138,7 @@ class TorBoxResolver(ResolveUrl):
             d.update(0, line2="Checking cache...")
             cached = self.__check_cache(btih)
 
+            cached_only = self.get_setting("cached_only") == "true" or cached_only
             if not cached and cached_only:
                 raise ResolverError("TorBox: {0}".format(i18n("cached_torrents_only")))
 
@@ -148,6 +149,9 @@ class TorBoxResolver(ResolveUrl):
                 torrent = self.__create_torrent(media_id)
                 torrent_id = torrent.get("torrent_id")
                 torrent_name = torrent.get("name")
+
+            if d.is_canceled():
+                raise ResolverError("Cancelled by user")
 
             d.update(0, line1=torrent_name)
 
@@ -193,17 +197,34 @@ class TorBoxResolver(ResolveUrl):
     def valid_url(self, url, host):
         (file_id, media_id) = self.__get_file_id(url)
         btih = self.__get_hash(media_id)
-        return bool(btih)
+        # only supporting torrents through this plugin for now
+        return bool(btih) and self.get_setting("torrents")
 
     @classmethod
     def get_settings_xml(cls):
         xml = super(cls, cls).get_settings_xml(include_login=False)
         xml.append(
-            '<setting id="%s_apikey" enable="eq(-1,true)" type="text" label="%s" default=""/>'
+            '<setting id="%s_torrents" type="bool" label="%s" default="true"/>'
+            % (cls.__name__, i18n("torrents"))
+        )
+        xml.append(
+            '<setting id="%s_cached_only" enable="eq(-1,true)" type="bool" label="%s" default="false" />'
+            % (cls.__name__, i18n("cached_only"))
+        )
+        xml.append(
+            '<setting id="%s_apikey" enable="eq(-3,true)" type="text" label="%s" default=""/>'
             % (cls.__name__, "API Key")
         )
         return xml
 
     @classmethod
-    def isUniversal(self):
+    def isUniversal(cls):
         return True
+
+    @classmethod
+    def _is_enabled(cls):
+        return (
+            cls.get_setting("enabled") == "true"
+            and cls.get_setting("apikey")
+            and cls.get_setting("torrents")
+        )
