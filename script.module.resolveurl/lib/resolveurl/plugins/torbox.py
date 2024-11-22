@@ -148,12 +148,13 @@ class TorBoxResolver(ResolveUrl):
             logger.log_warning("Failed to add torrent - aborting.")
             return None
 
-        # loop until check_ready is true, skip if cached
-        # TODO: is it really always ready if cached?
+        # loop until it's ready
         # TODO: show progress dialog
-        while not (cached and self.__check_ready(torrent_id)):
+        ready = cached
+        while not ready:
             logger.log_warning("Waiting for torrent to be ready...")
             common.kodi.sleep(3000)
+            ready = self.__check_ready(torrent_id)
 
         download_link = self.__download_link(torrent_id)
         logger.log_warning("Download link: %s" % download_link)
