@@ -71,8 +71,6 @@ class RealDebridResolver(ResolveUrl):
                     heading = 'Resolve URL Real-Debrid {0}'.format(i18n('transfer'))
                     line1 = torrent_info.get('filename')
                     if status == 'magnet_conversion':
-                        if self.get_setting('cached_only') == 'true' or cached_only:
-                            raise ResolverError('Real-Debrid: {0}'.format(i18n('cached_torrents_only')))
                         line2 = i18n('rd_save')
                         line3 = '{0} seeders'.format(torrent_info.get('seeders'))
                         _TIMEOUT = 100  # seconds
