@@ -46,7 +46,6 @@ add_magnet_path = 'torrents/addMagnet'
 torrents_info_path = 'torrents/info'
 select_files_path = 'torrents/selectFiles'
 torrents_delete_path = 'torrents/delete'
-check_cache_path = 'torrents/instantAvailability'
 
 
 class RealDebridResolver(ResolveUrl):
@@ -63,15 +62,14 @@ class RealDebridResolver(ResolveUrl):
         try:
             self.headers.update({'Authorization': 'Bearer %s' % self.get_setting('token')})
             if media_id.lower().startswith('magnet:'):
-                cached = self.__check_cache(media_id)
-                if not cached and (self.get_setting('cached_only') == 'true' or cached_only):
-                    raise ResolverError('Real-Debrid: {0}'.format(i18n('cached_torrents_only')))
                 torrent_id = self.__add_magnet(media_id)
                 if not torrent_id == "":
                     torrent_info = self.__torrent_info(torrent_id)
+                    status = torrent_info.get('status')
+                    if not status in ['downloaded', 'waiting_files_selection'] and (self.get_setting('cached_only') == 'true' or cached_only):
+                        raise ResolverError('Real-Debrid: {0}'.format(i18n('cached_torrents_only')))
                     heading = 'Resolve URL Real-Debrid {0}'.format(i18n('transfer'))
                     line1 = torrent_info.get('filename')
-                    status = torrent_info.get('status')
                     if status == 'magnet_conversion':
                         line2 = i18n('rd_save')
                         line3 = '{0} seeders'.format(torrent_info.get('seeders'))
@@ -122,12 +120,14 @@ class RealDebridResolver(ResolveUrl):
                             torrent_info = self.__torrent_info(torrent_id)
                             status = torrent_info.get('status')
                             if not status == 'downloaded':
+                                if self.get_setting('cached_only') == 'true' or cached_only:
+                                    raise ResolverError('Real-Debrid: {0}'.format(i18n('cached_torrents_only')))
                                 file_size = torrent_info.get('bytes') if return_all else _video.get('bytes')
                                 file_size = round(float(file_size) / (1000 ** 3), 2)
-                                if cached:
-                                    line2 = i18n('rd_get')
-                                else:
+                                if status in ['uploading', 'queued']:
                                     line2 = i18n('rd_save')
+                                else:
+                                    line2 = i18n('rd_get')
                                 line3 = status
                                 with common.kodi.ProgressDialog(heading, line1, line2, line3) as pd:
                                     while not status == 'downloaded':
@@ -207,26 +207,6 @@ class RealDebridResolver(ResolveUrl):
                         links.append(link)
 
             return helpers.pick_source(links)
-
-    def __check_cache(self, media_id):
-        r = re.search('''magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)''', media_id, re.I)
-        if r:
-            _hash = r.group(2).lower()
-            try:
-                url = '%s/%s/%s' % (rest_base_url, check_cache_path, _hash)
-                result = self.net.http_GET(url, headers=self.headers).content
-                js_result = json.loads(result)
-                if js_result:
-                    _hash_info = js_result.get(_hash, {})
-                    if isinstance(_hash_info, dict):
-                        if len(_hash_info.get('rd')) > 0:
-                            logger.log_debug('Real-Debrid: %s is readily available to stream' % _hash)
-                            return _hash_info
-            except Exception as e:
-                common.logger.log_warning("Real-Debrid Error: CHECK CACHE | %s" % e)
-                raise
-
-        return {}
 
     def __torrent_info(self, torrent_id):
         try:
