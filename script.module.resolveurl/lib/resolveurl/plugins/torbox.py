@@ -94,7 +94,11 @@ class TorBoxResolver(ResolveUrl):
         return (None, None)
 
     def __create_torrent(self, magnet):
-        result = self.__post("torrents/createtorrent", {"magnet": magnet}, {})
+        result = self.__post(
+            "torrents/createtorrent",
+            {"magnet": magnet, "seed": 3, "allow_zip": False},
+            {},
+        )
         return result
 
     def __get_torrent_info(self, torrent_id):
