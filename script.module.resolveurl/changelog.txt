@@ -1,15 +1,18 @@
-Version 5.1.152 (November 11, 2024)
+Version 5.1.153 (November 24, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - vinovo
+    - torbox
 
 - Resolvers Fixed/Updated:
     - filelions
-    - filemoon
-    - turboviplay
-    - voe
+    - premiumize
+    - realdebrid
+    - reviewrate
+    - streamwish
+    - vinovo
+    - vk
 
 - Resolvers Removed
     - None
