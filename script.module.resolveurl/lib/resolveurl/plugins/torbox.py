@@ -86,13 +86,6 @@ class TorBoxResolver(ResolveUrl):
         )
         return bool(result)
 
-    def __check_torrent_existing(self, btih):
-        torrents = self.__get("torrents/mylist", {"bypass_cache": True}, [])
-        for torrent in torrents:
-            if torrent.get("hash") == btih:
-                return (torrent.get("id"), torrent.get("name"))
-        return (None, None)
-
     def __create_torrent(self, magnet):
         result = self.__post(
             "torrents/createtorrent",
@@ -127,13 +120,6 @@ class TorBoxResolver(ResolveUrl):
             {"web_id": webdl_id, "file_id": file_id, "token": self.__get_token()},
         )
 
-    def __check_webdl_existing(self, url):
-        downloads = self.__get("webdl/mylist", {"bypass_cache": True}, [])
-        for webdl in downloads:
-            if webdl.get("original_url") == url:
-                return (webdl.get("id"), webdl.get("name"))
-        return (None, None)
-
     def __get_token(self):
         return self.get_setting("apikey")
 
@@ -158,41 +144,30 @@ class TorBoxResolver(ResolveUrl):
         with common.kodi.ProgressDialog("ResolveURL TorBox") as d:
             (file_id, media_id) = self.__get_file_id(media_id)
             btih = self.__get_hash(media_id)
-            d.update(0, line2="Checking cache...")
-            cached = self.__check_torrent_cached(btih)
 
+            d.update(0, line1="Checking cache...")
+            cached = self.__check_torrent_cached(btih)
             cached_only = self.get_setting("cached_only") == "true" or cached_only
             if not cached and cached_only:
                 raise ResolverError("TorBox: {0}".format(i18n("cached_torrents_only")))
 
-            d.update(0, line2="Checking list...")
-            (torrent_id, torrent_name) = self.__check_torrent_existing(btih)
-            if not torrent_id:
-                d.update(0, line2="Not in list, adding...")
-                torrent = self.__create_torrent(media_id)
-                torrent_id = torrent.get("torrent_id")
-
-            if d.is_canceled():
-                raise ResolverError("Cancelled by user")
-
-            d.update(0, line1=torrent_name)
-
+            d.update(0, line1="Adding torrent...")
+            torrent_id = self.__create_torrent(media_id).get("torrent_id")
             if not torrent_id:
                 raise ResolverError("Errror adding torrent")
 
             ready = cached
             while not ready:
                 info = self.__get_torrent_info(torrent_id)
-                torrent_name = info.get("name")
                 ready = info.get("download_present", False)
                 if ready:
                     break
-                progress = int(info.get("progress", 0) * 100)
-                state = "State: %s" % info.get("download_state")
-                eta = "ETA: %ss" % info.get("eta")
-                d.update(progress, line1=torrent_name, line2=state, line3=eta)
                 if d.is_canceled():
                     raise ResolverError("Cancelled by user")
+                torrent_name = info.get("name")
+                progress = int(info.get("progress", 0) * 100)
+                status = "%s (ETA: %ss)" % (info.get("download_state"), info.get("eta"))
+                d.update(progress, line1=status, line2=torrent_name)
                 common.kodi.sleep(1500)
 
         files = self.__get_torrent_info(torrent_id).get("files", [])
@@ -225,35 +200,25 @@ class TorBoxResolver(ResolveUrl):
             (file_id, media_id) = self.__get_file_id(media_id)
 
             # can't check cache with just a url, so skip
+            # otherwise, follow similar implementation as torrents
 
-            d.update(0, line2="Checking list...")
-            (webdl_id, webdl_name) = self.__check_webdl_existing(media_id)
-            if not webdl_id:
-                d.update(0, line2="Not in list, adding...")
-                webdl = self.__create_webdl(media_id)
-                webdl_id = webdl.get("webdownload_id")
-
-            if d.is_canceled():
-                raise ResolverError("Cancelled by user")
-
-            d.update(0, line1=webdl_name)
-
+            d.update(0, line1="Adding web download...")
+            webdl_id = self.__create_webdl(media_id).get("webdownload_id")
             if not webdl_id:
                 raise ResolverError("Errror adding web download")
 
             ready = False
             while not ready:
                 info = self.__get_webdl_info(webdl_id)
-                webdl_name = info.get("name")
                 ready = info.get("download_present", False)
                 if ready:
                     break
-                progress = int(info.get("progress", 0) * 100)
-                state = "State: %s" % info.get("download_state")
-                eta = "ETA: %ss" % info.get("eta")
-                d.update(progress, line1=webdl_name, line2=state, line3=eta)
                 if d.is_canceled():
                     raise ResolverError("Cancelled by user")
+                webdl_name = info.get("name")
+                progress = int(info.get("progress", 0) * 100)
+                status = "%s (ETA: %ss)" % (info.get("download_state"), info.get("eta"))
+                d.update(progress, line1=status, line2=webdl_name)
                 common.kodi.sleep(1500)
 
         files = self.__get_webdl_info(webdl_id).get("files", [])
@@ -304,8 +269,6 @@ class TorBoxResolver(ResolveUrl):
         # handle multi-file hack
         if url.startswith("tb:"):
             return True
-
-        # TODO: should .torrent file downloads work?
 
         # magnet link
         if url.startswith("magnet:"):
