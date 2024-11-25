@@ -167,7 +167,12 @@ class TorBoxResolver(ResolveUrl):
                 torrent_name = info.get("name")
                 progress = int(info.get("progress", 0) * 100)
                 status = "%s (ETA: %ss)" % (info.get("download_state"), info.get("eta"))
-                d.update(progress, line1=status, line2=torrent_name)
+                d.update(
+                    progress,
+                    line1="Waiting for download...",
+                    line2=status,
+                    line3=torrent_name,
+                )
                 common.kodi.sleep(1500)
 
         files = self.__get_torrent_info(torrent_id).get("files", [])
@@ -218,7 +223,12 @@ class TorBoxResolver(ResolveUrl):
                 webdl_name = info.get("name")
                 progress = int(info.get("progress", 0) * 100)
                 status = "%s (ETA: %ss)" % (info.get("download_state"), info.get("eta"))
-                d.update(progress, line1=status, line2=webdl_name)
+                d.update(
+                    progress,
+                    line1="Waiting for download...",
+                    line2=status,
+                    line3=webdl_name,
+                )
                 common.kodi.sleep(1500)
 
         files = self.__get_webdl_info(webdl_id).get("files", [])
@@ -291,7 +301,7 @@ class TorBoxResolver(ResolveUrl):
     def get_all_hosters(self):
         try:
             result = self.__get("webdl/hosters", None, [])
-            hosts = [h.get("domain") for h in result]
+            hosts = [h.get("domain") for h in result if h.get("status", False)]
         except Exception as e:
             logger.log_error("Error getting TorBox hosts: %s" % (e))
             hosts = []
