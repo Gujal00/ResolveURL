@@ -252,7 +252,6 @@ class TorBoxResolver(ResolveUrl):
         else:
             file_id = 0
 
-        file_id = 0
         download_link = self.__request_webdl_download(webdl_id, file_id)
         return download_link
 
