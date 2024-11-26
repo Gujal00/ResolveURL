@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import json
 import re
 from resolveurl import common
 from resolveurl.lib import helpers
@@ -31,11 +32,12 @@ class StreamEmbedResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
-        data = re.search(r'sniff\("\w+","(\d+)","(\w+)"', html)
+        data = re.search(r'var\s*video\s*=\s*(.*?);\s', html)
         if data:
             headers.update({'Accept': '*/*', 'Referer': web_url})
-            url = 'https://{}/m3u8/{}/{}/master.txt?s=1&cache=1'.format(
-                host, data.group(1), data.group(2)
+            data = json.loads(data.group(1))
+            url = 'https://{}/m3u8/{}/{}/master.txt?s=1&id={}&cache=1'.format(
+                host, data.get('uid'), data.get('md5'), data.get('id')
             )
             html = self.net.http_GET(url, headers=headers).content
             if 'type=audio' not in html.lower():
