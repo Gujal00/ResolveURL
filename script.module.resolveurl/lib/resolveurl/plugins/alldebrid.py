@@ -50,16 +50,7 @@ class AllDebridResolver(ResolveUrl):
                 r = re.search('''magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)''', media_id, re.I)
                 if r:
                     _hash = r.group(2)
-                    if self.__check_cache(_hash):
-                        logger.log_debug('AllDebrid: BTIH {0} is readily available to stream'.format(_hash))
-                        transfer_id = self.__create_transfer(_hash)
-                    else:
-                        if self.get_setting('cached_only') == 'true' or cached_only:
-                            raise ResolverError('AllDebrid: {0}'.format(i18n('cached_torrents_only')))
-                        else:
-                            transfer_id = self.__create_transfer(_hash)
-                            self.__initiate_transfer(transfer_id)
-
+                    transfer_id = self.__create_transfer(_hash, cached_only=cached_only)
                     transfer_info = self.__list_transfer(transfer_id)
                     if return_all:
                         sources = [{'name': link.get('filename').split('/')[-1], 'link': link.get('link')}
@@ -108,26 +99,6 @@ class AllDebridResolver(ResolveUrl):
 
         raise ResolverError('AllDebrid: {0}'.format(i18n('no_stream')))
 
-    def __check_cache(self, media_id):
-        url = '{0}/magnet/instant?agent={1}&apikey={2}&magnets[]={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), media_id.lower())
-        result = self.net.http_GET(url, headers=self.headers).content
-        result = json.loads(result)
-        if result.get('status') == "success":
-            magnets = result.get('data').get('magnets')
-            for magnet in magnets:
-                if media_id.lower() == magnet.get('magnet').lower() or media_id.lower() == magnet.get('hash').lower():
-                    response = magnet.get('instant', False)
-                    return response
-        else:
-            ecode = result.get('error', {}).get('code', '')
-            if ecode == "AUTH_BLOCKED":
-                logger.log_debug('Exception during AD auth: {0}'.format(ecode))
-                raise ResolverError(i18n('validate'))
-            elif ecode == "AUTH_USER_BANNED":
-                logger.log_debug('Exception during AD auth: {0}'.format(ecode))
-                raise ResolverError(i18n('banned'))
-            return False
-
     def __list_transfer(self, transfer_id):
         url = '{0}/magnet/status?agent={1}&apikey={2}&id={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), transfer_id)
         result = json.loads(self.net.http_GET(url, headers=self.headers).content)
@@ -149,15 +120,20 @@ class AllDebridResolver(ResolveUrl):
                 raise ResolverError(i18n('banned'))
             return {}
 
-    def __create_transfer(self, media_id):
+    def __create_transfer(self, media_id, cached_only=False):
         url = '{0}/magnet/upload?agent={1}&apikey={2}&magnets[]={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), media_id)
         result = json.loads(self.net.http_GET(url, headers=self.headers).content)
         if result.get('status', False) == "success":
             logger.log_debug('Transfer successfully started to the AllDebrid cloud')
             magnets = result.get('data').get('magnets')
-            for magnet in magnets:
-                if media_id in magnet.get('magnet') or media_id.lower() == magnet.get('hash').lower():
-                    return magnet.get('id')
+            magnet = [m for m in magnets if media_id in m.get('magnet') or media_id.lower() == m.get('hash').lower()]
+            if magnet:
+                transfer_id = magnet[0].get('id')
+                if not magnet[0].get('ready', False):
+                    if self.get_setting('cached_only') == 'true' or cached_only:
+                        raise ResolverError('AllDebrid: {0}'.format(i18n('cached_torrents_only')))
+                    self.__initiate_transfer(transfer_id)
+                return transfer_id
         else:
             ecode = result.get('error', {}).get('code', '')
             if ecode == "AUTH_BLOCKED":
