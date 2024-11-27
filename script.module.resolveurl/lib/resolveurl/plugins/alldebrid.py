@@ -27,7 +27,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
-AGENT = 'ResolveURL for Kodi'
+AGENT = 'ResolveURL'
 VERSION = common.addon_version
 USER_AGENT = '{0}/{1}'.format(AGENT, VERSION)
 FORMATS = common.VIDEO_FORMATS
@@ -131,6 +131,7 @@ class AllDebridResolver(ResolveUrl):
                 transfer_id = magnet[0].get('id')
                 if not magnet[0].get('ready', False):
                     if self.get_setting('cached_only') == 'true' or cached_only:
+                        self.__delete_transfer(transfer_id)
                         raise ResolverError('AllDebrid: {0}'.format(i18n('cached_torrents_only')))
                     self.__initiate_transfer(transfer_id)
                 return transfer_id
