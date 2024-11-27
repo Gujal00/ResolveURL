@@ -28,7 +28,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
-AGENT = 'ResolveURL for Kodi'
+AGENT = 'ResolveURL'
 VERSION = common.addon_version
 USER_AGENT = '{0}/{1}'.format(AGENT, VERSION)
 FORMATS = common.VIDEO_FORMATS
