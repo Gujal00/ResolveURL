@@ -1,18 +1,17 @@
-Version 5.1.153 (November 24, 2024)
+Version 5.1.154 (November 27, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - torbox
+    - None
 
 - Resolvers Fixed/Updated:
-    - filelions
-    - premiumize
+    - alldebrid
+    - debridlink
     - realdebrid
-    - reviewrate
+    - streamembed
     - streamwish
-    - vinovo
-    - vk
+    - voe
 
 - Resolvers Removed
     - None
