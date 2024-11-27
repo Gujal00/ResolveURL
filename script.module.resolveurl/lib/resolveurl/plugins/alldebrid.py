@@ -19,6 +19,7 @@
 import re
 from six.moves import urllib_parse, urllib_error
 import json
+import xbmcgui
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.common import i18n
@@ -27,7 +28,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
-AGENT = 'ResolveURL'
+AGENT = 'ResolveURL for Kodi'
 VERSION = common.addon_version
 USER_AGENT = '{0}/{1}'.format(AGENT, VERSION)
 FORMATS = common.VIDEO_FORMATS
@@ -58,11 +59,19 @@ class AllDebridResolver(ResolveUrl):
                                    if any(link.get('filename').lower().endswith(x) for x in FORMATS)]
                         return sources
                     else:
-                        sources = [(link.get('size'), link.get('link'))
+                        sources = [(link.get('size'), link.get('link'), link.get('filename'))
                                    for link in transfer_info.get('links')
                                    if any(link.get('filename').lower().endswith(x) for x in FORMATS)]
-                        media_id = max(sources)[1]
-                        self.__delete_transfer(transfer_id)
+                    # Prompt user to select a source if there are multiple options
+                    if len(sources) > 1:
+                        source_labels = [f"{source[2]}" for source in sources]
+                        dialog = xbmcgui.Dialog()
+                        selected_index = dialog.select("Select Source", source_labels)
+                        if selected_index == -1:
+                            raise ResolverError('AllDebrid: No source selected')
+                        media_id = sources[selected_index][1]
+                    else:
+                        media_id = sources[0][1]
 
             url = '{0}/link/unlock?agent={1}&apikey={2}&link={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), urllib_parse.quote_plus(media_id))
             result = self.net.http_GET(url, headers=self.headers).content
@@ -131,7 +140,6 @@ class AllDebridResolver(ResolveUrl):
                 transfer_id = magnet[0].get('id')
                 if not magnet[0].get('ready', False):
                     if self.get_setting('cached_only') == 'true' or cached_only:
-                        self.__delete_transfer(transfer_id)
                         raise ResolverError('AllDebrid: {0}'.format(i18n('cached_torrents_only')))
                     self.__initiate_transfer(transfer_id)
                 return transfer_id
