@@ -18,7 +18,7 @@
 
 import re
 import json
-from six.moves import urllib_parse, urllib_error
+from six.moves import urllib_error
 from resolveurl import common
 from resolveurl.common import i18n
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -27,7 +27,7 @@ logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
 CLIENT_ID = 'TH7yOa_pgRD1MRyIs6496Q'
-USER_AGENT = 'ResolveURL for Kodi/{0}'.format(common.addon_version)
+USER_AGENT = 'ResolveURL/{0}'.format(common.addon_version)
 FORMATS = common.VIDEO_FORMATS
 
 api_url = 'https://debrid-link.fr/api/v2'
@@ -45,18 +45,11 @@ class DebridLinkResolver(ResolveUrl):
     def get_media_url(self, host, media_id, retry=False, cached_only=False, return_all=False):
         try:
             if media_id.lower().startswith('magnet:') or '.torrent' in media_id.lower():
-                if self.__check_cache(media_id):
-                    logger.log_debug('Debrid-Link: BTIH {0} is readily available to stream'.format(media_id))
-                    transfer_id = self.__create_transfer(media_id)
+                transfer_id = self.__create_transfer(media_id, cached_only=cached_only)
+                if transfer_id:
+                    self.__initiate_transfer(transfer_id)
                 else:
-                    if self.get_setting('cached_only') == 'true' or cached_only:
-                        raise ResolverError('Debrid-Link: {0}'.format(i18n('cached_torrents_only')))
-                    else:
-                        transfer_id = self.__create_transfer(media_id)
-                        if transfer_id:
-                            self.__initiate_transfer(transfer_id)
-                        else:
-                            raise ResolverError('Debrid-Link {0}'.format(i18n('queue_fail')))
+                    raise ResolverError('Debrid-Link {0}'.format(i18n('queue_fail')))
 
                 if transfer_id:
                     transfer_info = self.__list_transfer(transfer_id)
@@ -109,42 +102,6 @@ class DebridLinkResolver(ResolveUrl):
 
         raise ResolverError(i18n('no_usable'))
 
-    def __check_cache(self, media_id, retry=False):
-        if media_id.startswith('magnet:'):
-            media_id = re.findall('''magnet:.+?urn:[a-zA-Z0-9]+:([a-zA-Z0-9]+)''', media_id.lower(), re.I)[0]
-        else:
-            media_id = urllib_parse.quote_plus(media_id)
-        try:
-            url = '{0}/seedbox/cached?url={1}'.format(api_url, media_id)
-            result = json.loads(self.net.http_GET(url, headers=self.headers).content)
-            if result.get('success', False):
-                if isinstance(result.get('value'), dict):
-                    if media_id in list(result.get('value').keys()):
-                        return True
-        except urllib_error.HTTPError as e:
-            if not retry and e.code == 401:
-                if self.get_setting('refresh'):
-                    self.refresh_token()
-                    return self.__check_cache(media_id, retry=True)
-                else:
-                    self.reset_authorization()
-                    raise ResolverError(i18n('auth_fail'))
-            else:
-                try:
-                    js_result = json.loads(e.read())
-                    if 'error' in js_result:
-                        msg = js_result.get('error')
-                    else:
-                        msg = 'Unknown Error (1)'
-                except:
-                    msg = 'Unknown Error (2)'
-                raise ResolverError('Debrid-Link Error: {0} ({1})'.format(msg, e.code))
-        except Exception as e:
-            if "'list' object" not in e:
-                raise ResolverError('Debrid-Link Error: {0}'.format(e))
-
-        return False
-
     def __list_transfer(self, transfer_id):
         try:
             url = '{0}/seedbox/{1}/infos'.format(api_url, transfer_id)
@@ -156,19 +113,20 @@ class DebridLinkResolver(ResolveUrl):
 
         return {}
 
-    def __create_transfer(self, media_id):
-        try:
-            url = '{0}/seedbox/add'.format(api_url)
-            data = {'url': media_id,
-                    'async': 'true'}
-            js_result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
-            if js_result.get('value'):
-                logger.log_debug('Transfer successfully started to the Debrid-Link cloud')
-                return js_result.get('value').get('id')
-        except:
-            pass
-
-        return ""
+    def __create_transfer(self, media_id, cached_only=False):
+        url = '{0}/seedbox/add'.format(api_url)
+        data = {'url': media_id,
+                'async': 'true'}
+        js_result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
+        js_result = js_result.get('value')
+        if js_result:
+            torrent_id = js_result.get('id')
+            if js_result.get('downloadPercent') < 100 and (self.get_setting('cached_only') == 'true' or cached_only):
+                url = '{0}/seedbox/{1}/remove'.format(api_url, torrent_id)
+                _ = self.net.http_DELETE(url, headers=self.headers)
+                raise ResolverError('Debrid-Link: {0}'.format(i18n('cached_torrents_only')))
+            logger.log_debug('Transfer successfully started to the Debrid-Link cloud')
+            return torrent_id
 
     def __initiate_transfer(self, transfer_id, interval=5):
         try:
