@@ -168,7 +168,8 @@ class DebridLinkResolver(ResolveUrl):
                             )
                             if not keep_transfer:
                                 self.__delete_transfer(transfer_id)
-                            raise ResolverError('Transfer ID {0} :: {1}'.format(transfer_id, i18n('user_cancelled')))
+                            logger.log_debug('ResolveURL Debrid-Link Transfer ID {0} :: {1}'.format(transfer_id, i18n('user_cancelled')))
+                            return
             return
 
         except Exception as e:
