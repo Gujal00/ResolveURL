@@ -85,7 +85,8 @@ class RealDebridResolver(ResolveUrl):
                                     )
                                     if not keep_transfer:
                                         self.__delete_torrent(torrent_id)
-                                    raise ResolverError('Real-Debrid: Torrent ID  {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                    logger.log_debug('Real-Debrid: Torrent ID {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                    return
                                 elif any(x in status for x in STALLED):
                                     self.__delete_torrent(torrent_id)
                                     raise ResolverError('Real-Debrid: Torrent ID %s has stalled | REASON: %s' % (torrent_id, status))
@@ -153,7 +154,8 @@ class RealDebridResolver(ResolveUrl):
                                             )
                                             if not keep_transfer:
                                                 self.__delete_torrent(torrent_id)
-                                            raise ResolverError('Real-Debrid: Torrent ID {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                            logger.log_debug('Real-Debrid: Torrent ID {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                            return
                                         elif any(x in status for x in STALLED):
                                             self.__delete_torrent(torrent_id)
                                             raise ResolverError('Real-Debrid: Torrent ID %s has stalled | REASON: %s' % (torrent_id, status))

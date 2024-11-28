@@ -185,7 +185,8 @@ class AllDebridResolver(ResolveUrl):
                             )
                             if not keep_transfer:
                                 self.__delete_transfer(transfer_id)
-                            raise ResolverError('{0} ID {1} :: {2}'.format(i18n('transfer'), transfer_id, i18n('user_cancelled')))
+                            logger.log_debug('ResolveURL AllDebrid {0} ID {1} :: {2}'.format(i18n('transfer'), transfer_id, i18n('user_cancelled')))
+                            return
                         elif 5 <= transfer_info.get('statusCode') <= 10:
                             self.__delete_transfer(transfer_id)
                             raise ResolverError('{0} ID {1} :: {2}'.format(i18n('transfer'), transfer_id, transfer_info.get('status')))
