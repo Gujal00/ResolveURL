@@ -36,12 +36,12 @@ class GoFileResolver(ResolveUrl):
                    }
         base_api = 'https://api.gofile.io'
         r = self.net.http_POST('{}/accounts'.format(base_api), form_data="{}", headers=headers)
-        token = json.loads(r.content).get('data').get('token')
+        token = json.loads(r.content).get('data', {}).get('token')
         if not token:
             raise ResolverError('Unable to retrieve token!')
 
-        r = self.net.http_GET('https://{}/dist/js/alljs.js'.format(host), headers=headers).content
-        wtoken = re.search(r'fetchData\s*=\s*{\s*wt:\s*"([^"]+)', r)
+        r = self.net.http_GET('https://{}/dist/js/global.js'.format(host), headers=headers).content
+        wtoken = re.search(r'wt\s*=\s*"([^"]+)', r)
         if not wtoken:
             raise ResolverError('Unable to retrieve websiteToken!')
 
