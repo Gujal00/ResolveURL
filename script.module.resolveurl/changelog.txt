@@ -1,4 +1,4 @@
-Version 5.1.154 (November 27, 2024)
+Version 5.1.155 (December 08, 2024)
 - Code Base Changes:
     - None
 
@@ -9,7 +9,10 @@ Version 5.1.154 (November 27, 2024)
     - alldebrid
     - debridlink
     - realdebrid
-    - streamembed
+    - freedl
+    - gofile
+    - kinoger
+    - streamtape
     - streamwish
     - voe
 
