@@ -229,8 +229,8 @@ class AllDebridResolver(ResolveUrl):
             if js_data.get('status', False) == "success":
                 js_data = js_data.get('data')
                 regexes = [value.get('regexp') for _, value in js_data.get('hosts', {}).items()
-                           if value.get('status', False)]
-                hosters = [re.compile(regex) for regex in regexes]
+                           if value.get('status', False) or value.get('name') == 'alldebrid']
+                hosters = [re.compile(regex[0] if isinstance(regex, list) else regex) for regex in regexes]
                 logger.log_debug('AllDebrid hosters : {0}'.format(len(hosters)))
                 regexes = [value.get('regexp') for _, value in js_data.get('streams', {}).items()]
                 streamers = []
