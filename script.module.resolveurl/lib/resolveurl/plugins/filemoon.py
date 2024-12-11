@@ -52,7 +52,8 @@ class FileMoonResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'<iframe\s*src="([^"]+)', html, re.DOTALL)
         if r:
-            headers.update({'accept-language': 'en-US,en;q=0.9'})
+            headers.update({'accept-language': 'en-US,en;q=0.9',
+                            'sec-fetch-dest': 'iframe'})
             web_url = r.group(1)
             html = self.net.http_GET(web_url, headers=headers).content
         if '<h1>Page not found</h1>' in html:
