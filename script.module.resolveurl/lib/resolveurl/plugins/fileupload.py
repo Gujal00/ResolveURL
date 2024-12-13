@@ -33,7 +33,6 @@ class FileUploadResolver(ResolveGeneric):
             generic_patterns=False,
             referer=False,
             verifypeer=False
-            
         )
 
     def get_url(self, host, media_id):
