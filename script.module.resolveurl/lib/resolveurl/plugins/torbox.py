@@ -46,7 +46,7 @@ class TorBoxResolver(ResolveUrl):
             "Authorization": "Bearer %s" % self.__get_token(),
         }
 
-    def __api(self, endpoint, query=None, data=None, empty=None):
+    def __api(self, endpoint, query=None, data=None, empty=None, json_data=False):
         try:
             if query:
                 url = "{0}/{1}?{2}".format(
@@ -56,7 +56,11 @@ class TorBoxResolver(ResolveUrl):
             if data:
                 url = "{0}/{1}".format(self.api_url, endpoint)
                 result = self.net.http_POST(
-                    url, form_data=data, headers=self.headers, timeout=90
+                    url,
+                    data,
+                    headers=self.headers,
+                    timeout=90,
+                    jdata=json_data,
                 ).content
             if not query and not data:
                 url = "{0}/{1}".format(self.api_url, endpoint)
@@ -76,8 +80,8 @@ class TorBoxResolver(ResolveUrl):
     def __get(self, endpoint, query, empty=None):
         return self.__api(endpoint, query=query, empty=empty)
 
-    def __post(self, endpoint, data, empty=None):
-        return self.__api(endpoint, data=data, empty=empty)
+    def __post(self, endpoint, data, empty=None, json_data=False):
+        return self.__api(endpoint, data=data, empty=empty, json_data=json_data)
 
     def __check_torrent_cached(self, btih):
         result = self.__get(
@@ -106,6 +110,13 @@ class TorBoxResolver(ResolveUrl):
             {"torrent_id": torrent_id, "file_id": file_id, "token": self.__get_token()},
         )
 
+    def __delete_torrent(self, torrent_id):
+        return self.__post(
+            "torrents/controltorrent",
+            {"torrent_id": torrent_id, "operation": "delete"},
+            json_data=True,
+        )
+
     def __create_webdl(self, url):
         result = self.__post("webdl/createwebdownload", {"link": url})
         return result
@@ -118,6 +129,13 @@ class TorBoxResolver(ResolveUrl):
         return self.__get(
             "webdl/requestdl",
             {"web_id": webdl_id, "file_id": file_id, "token": self.__get_token()},
+        )
+
+    def __delete_webdl(self, webdl_id):
+        return self.__post(
+            "webdl/controlwebdownload",
+            {"webdl_id": webdl_id, "operation": "delete"},
+            json_data=True,
         )
 
     def __get_token(self):
@@ -196,6 +214,10 @@ class TorBoxResolver(ResolveUrl):
             file_id = 0
 
         download_link = self.__request_torrent_download(torrent_id, file_id)
+
+        if self.get_setting("clear_finished") == "true":
+            self.__delete_torrent(torrent_id)
+
         return download_link
 
     def __get_media_url_webdl(
@@ -253,6 +275,10 @@ class TorBoxResolver(ResolveUrl):
             file_id = 0
 
         download_link = self.__request_webdl_download(webdl_id, file_id)
+
+        if self.get_setting("clear_finished") == "true":
+            self.__delete_webdl(webdl_id)
+
         return download_link
 
     def get_media_url(self, host, media_id, cached_only=False, return_all=False):
@@ -285,6 +311,9 @@ class TorBoxResolver(ResolveUrl):
             return bool(btih) and self.get_setting("torrents") == "true"
 
         # webdl
+        if not self.get_setting("web_downloads") == "true":
+            return False
+
         try:
             host = urllib_parse.urlparse(url).hostname
         except:
@@ -318,7 +347,15 @@ class TorBoxResolver(ResolveUrl):
             % (cls.__name__, i18n("cached_only"))
         )
         xml.append(
-            '<setting id="%s_apikey" enable="eq(-3,true)" type="text" label="%s" default=""/>'
+            '<setting id="%s_web_downloads" type="bool" label="%s" default="true"/>'
+            % (cls.__name__, "Web Download Support")
+        )
+        xml.append(
+            '<setting id="%s_clear_finished" type="bool" label="%s" default="true"/>'
+            % (cls.__name__, "Clear Finished downloads from account")
+        )
+        xml.append(
+            '<setting id="%s_apikey" enable="eq(-5,true)" type="text" label="%s" default=""/>'
             % (cls.__name__, "API Key")
         )
         return xml
