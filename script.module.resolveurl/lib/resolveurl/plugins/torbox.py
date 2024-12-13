@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolverError, ResolveUrl
 from six.moves import urllib_error, urllib_parse
 
 logger = common.log_utils.Logger.get_logger(__name__)
-# logger.disable()
+logger.disable()
 
 AGENT = "ResolveURL for Kodi"
 VERSION = common.addon_version
@@ -253,7 +253,7 @@ class TorBoxResolver(ResolveUrl):
                 )
                 common.kodi.sleep(1500)
 
-        # TODO: don't think web downloads can have multiple files
+        # don't think web downloads can have multiple files right now
         # but this might handle it if they ever do
         files = self.__get_webdl_info(webdl_id).get("files", [])
 
