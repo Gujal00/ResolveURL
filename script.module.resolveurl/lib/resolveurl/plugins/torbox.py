@@ -253,8 +253,9 @@ class TorBoxResolver(ResolveUrl):
                 )
                 common.kodi.sleep(1500)
 
+        # TODO: don't think web downloads can have multiple files
+        # but this might handle it if they ever do
         files = self.__get_webdl_info(webdl_id).get("files", [])
-        logger.log_warning("TorBox WebDL Files: %s" % (files))
 
         if return_all:
             links = [
