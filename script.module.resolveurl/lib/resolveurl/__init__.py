@@ -64,7 +64,7 @@ def load_external_plugins():
                 common.logger.log_debug('Loaded %s as %s from %s' % (imp, mod_name, filename))
 
 
-def relevant_resolvers(domain=None, include_universal=None, include_popups=None, include_external=False, include_disabled=False, order_matters=False, priority=False):
+def relevant_resolvers(domain=None, include_universal=None, include_popups=None, include_external=False, include_disabled=False, order_matters=False):
     if include_external:
         load_external_plugins()
 
@@ -91,8 +91,7 @@ def relevant_resolvers(domain=None, include_universal=None, include_popups=None,
         relevant.sort(key=lambda x: x._get_priority())
     
     # Add attribute priority
-    if priority:
-        for i in relevant: i.priority = i._get_priority()
+    for i in relevant: i.priority = i._get_priority()
 
     common.logger.log_debug('Relevant Resolvers: %s' % relevant)
     return relevant
