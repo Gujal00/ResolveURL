@@ -301,30 +301,33 @@ class TorBoxResolver(ResolveUrl):
         if not self.hosts:
             self.hosts = self.get_all_hosters()
 
-        if not url:
-            return False
+        if url:
+            # handle multi-file hack
+            if url.startswith("tb:"):
+                return True
 
-        # handle multi-file hack
-        if url.startswith("tb:"):
-            return True
+            # magnet link
+            if url.startswith("magnet:"):
+                btih = self.__get_hash(url)
+                return bool(btih) and self.get_setting("torrents") == "true"
 
-        # magnet link
-        if url.startswith("magnet:"):
-            btih = self.__get_hash(url)
-            return bool(btih) and self.get_setting("torrents") == "true"
+            # webdl
+            if not self.get_setting("web_downloads") == "true":
+                return False
 
-        # webdl
-        if not self.get_setting("web_downloads") == "true":
-            return False
+            try:
+                host = urllib_parse.urlparse(url).hostname
+            except:
+                host = "unknown"
 
-        try:
-            host = urllib_parse.urlparse(url).hostname
-        except:
-            host = "unknown"
+            host = host.replace("www.", "")
+            if any(host in item for item in self.hosts):
+                return True
 
-        host = host.replace("www.", "")
-        if any(host in item for item in self.hosts):
-            return True
+        elif host:
+            host = host.replace('www.', '')
+            if any(host in item for item in self.hosts):
+                return True
 
         return False
 
