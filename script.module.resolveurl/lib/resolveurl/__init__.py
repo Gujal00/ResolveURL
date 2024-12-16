@@ -89,6 +89,9 @@ def relevant_resolvers(domain=None, include_universal=None, include_popups=None,
 
     if order_matters:
         relevant.sort(key=lambda x: x._get_priority())
+    
+    # Add attribute priority
+    for i in relevant: i.priority = i._get_priority()
 
     common.logger.log_debug('Relevant Resolvers: %s' % relevant)
     return relevant
