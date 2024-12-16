@@ -31,6 +31,7 @@ logger.disable()
 AGENT = "ResolveURL for Kodi"
 VERSION = common.addon_version
 USER_AGENT = "{0}/{1}".format(AGENT, VERSION)
+FORMATS = common.VIDEO_FORMATS
 
 
 class TorBoxResolver(ResolveUrl):
@@ -194,6 +195,7 @@ class TorBoxResolver(ResolveUrl):
                 common.kodi.sleep(1500)
 
         files = self.__get_torrent_info(torrent_id).get("files", [])
+        files = [f for f in files if any(f["name"].lower().endswith(x) for x in FORMATS)]
 
         if return_all:
             links = [
@@ -299,30 +301,33 @@ class TorBoxResolver(ResolveUrl):
         if not self.hosts:
             self.hosts = self.get_all_hosters()
 
-        if not url:
-            return False
+        if url:
+            # handle multi-file hack
+            if url.startswith("tb:"):
+                return True
 
-        # handle multi-file hack
-        if url.startswith("tb:"):
-            return True
+            # magnet link
+            if url.startswith("magnet:"):
+                btih = self.__get_hash(url)
+                return bool(btih) and self.get_setting("torrents") == "true"
 
-        # magnet link
-        if url.startswith("magnet:"):
-            btih = self.__get_hash(url)
-            return bool(btih) and self.get_setting("torrents") == "true"
+            # webdl
+            if not self.get_setting("web_downloads") == "true":
+                return False
 
-        # webdl
-        if not self.get_setting("web_downloads") == "true":
-            return False
+            try:
+                host = urllib_parse.urlparse(url).hostname
+            except:
+                host = "unknown"
 
-        try:
-            host = urllib_parse.urlparse(url).hostname
-        except:
-            host = "unknown"
+            host = host.replace("www.", "")
+            if any(host in item for item in self.hosts):
+                return True
 
-        host = host.replace("www.", "")
-        if any(host in item for item in self.hosts):
-            return True
+        elif host:
+            host = host.replace('www.', '')
+            if any(host in item for item in self.hosts):
+                return True
 
         return False
 
@@ -331,6 +336,8 @@ class TorBoxResolver(ResolveUrl):
         try:
             result = self.__get("webdl/hosters", None, [])
             hosts = [h.get("domain") for h in result if h.get("status", False)]
+            if self.get_setting("torrents") == "true":
+                hosts.extend(["torrent", "magnet"])
         except Exception as e:
             logger.log_error("Error getting TorBox hosts: %s" % (e))
             hosts = []
