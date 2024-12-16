@@ -336,6 +336,8 @@ class TorBoxResolver(ResolveUrl):
         try:
             result = self.__get("webdl/hosters", None, [])
             hosts = [h.get("domain") for h in result if h.get("status", False)]
+            if self.get_setting("torrents") == "true":
+                hosts.extend(["torrent", "magnet"])
         except Exception as e:
             logger.log_error("Error getting TorBox hosts: %s" % (e))
             hosts = []
