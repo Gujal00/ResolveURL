@@ -31,6 +31,7 @@ logger.disable()
 AGENT = "ResolveURL for Kodi"
 VERSION = common.addon_version
 USER_AGENT = "{0}/{1}".format(AGENT, VERSION)
+FORMATS = common.VIDEO_FORMATS
 
 
 class TorBoxResolver(ResolveUrl):
@@ -194,6 +195,7 @@ class TorBoxResolver(ResolveUrl):
                 common.kodi.sleep(1500)
 
         files = self.__get_torrent_info(torrent_id).get("files", [])
+        files = [f for f in files if any(f["name"].lower().endswith(x) for x in FORMATS)]
 
         if return_all:
             links = [
