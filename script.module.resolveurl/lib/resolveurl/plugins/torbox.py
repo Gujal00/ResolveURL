@@ -207,13 +207,13 @@ class TorBoxResolver(ResolveUrl):
             ]
             return links
 
-        # allow user to pick if multiple files
         if len(files) > 1 and file_id is None:
-            links = [[f.get("short_name"), f.get("id")] for f in files]
-            links.sort(key=lambda x: x[1])
-            file_id = helpers.pick_source(links, auto_pick=False)
+            _file = max(files, key=lambda x: x.get("size"))
+            file_id = _file.get("id")
+        elif file_id:
+            pass
         else:
-            file_id = 0
+            file_id = files[0]["id"]
 
         download_link = self.__request_torrent_download(torrent_id, file_id)
 
@@ -325,7 +325,7 @@ class TorBoxResolver(ResolveUrl):
                 return True
 
         elif host:
-            host = host.replace('www.', '')
+            host = host.replace("www.", "")
             if any(host in item for item in self.hosts):
                 return True
 
