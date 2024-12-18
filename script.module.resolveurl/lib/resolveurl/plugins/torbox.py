@@ -208,8 +208,8 @@ class TorBoxResolver(ResolveUrl):
             return links
 
         if len(files) > 1 and file_id is None:
-            file = max(files, key=lambda x: x.get("size"))
-            file_id = file.get("id")
+            _file = max(files, key=lambda x: x.get("size"))
+            file_id = _file.get("id")
         elif file_id:
             pass
         else:
