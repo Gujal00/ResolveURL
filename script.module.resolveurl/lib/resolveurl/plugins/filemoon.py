@@ -45,7 +45,8 @@ class FileMoonResolver(ResolveUrl):
             media_id = media_id.split('/')[0]
 
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {'User-Agent': common.RAND_UA,
+                   'Cookie': '__ddg1_=PZYJSmASXDCQGP6auJU9; __ddg2_=hxAe1bBqtlYhVSik'}
         if referer:
             headers.update({'Referer': referer})
 
