@@ -1,20 +1,21 @@
-Version 5.1.155 (December 08, 2024)
+Version 5.1.156 (December 25, 2024)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - bigwarp
 
 - Resolvers Fixed/Updated:
-    - alldebrid
-    - debridlink
-    - realdebrid
-    - freedl
-    - gofile
+    - dood
+    - filelions
+    - filemoon
     - kinoger
-    - streamtape
+    - sendcm
     - streamwish
-    - voe
+    - torbox
+    - turboviplay
+    - veev
+    - vidguard
 
 - Resolvers Removed
     - None
