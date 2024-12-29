@@ -17,6 +17,7 @@
 """
 
 import re
+from six.moves import urllib_parse
 from resolveurl.lib import helpers, jsunhunt
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -25,11 +26,18 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class StreamSilkResolver(ResolveUrl):
     name = 'StreamSilk'
     domains = ['streamsilk.com']
-    pattern = r'(?://|\.)(streamsilk\.com)/(?:d|p)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(streamsilk\.com)/(?:d|p)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
+        if referer:
+            headers.update({'Referer': referer})
         html = self.net.http_GET(web_url, headers=headers).content
         if jsunhunt.detect(html):
             html = jsunhunt.unhunt(html)
