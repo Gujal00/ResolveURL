@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class StreamSilkResolver(ResolveUrl):
     name = 'StreamSilk'
     domains = ['streamsilk.com']
-    pattern = r'(?://|\.)(streamsilk\.com)/(?:d|p)/([0-9a-zA-Z$:/.]+)'
+    pattern = r'(?://|\.)(streamsilk\.com)/(?:d|p|v)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
