@@ -36,8 +36,10 @@ class GooglePhotosResolver(ResolveUrl):
         r = self.net.http_GET(web_url, headers=headers, redirect=False)
         if r.get_redirect_url():
             web_url = r.get_redirect_url()
-            r = self.net.http_GET(web_url, headers=headers)
-        f_url = re.search(r'<a\s+class="[^"]*"\s+tabindex="0"\s+jsaction="click:[^"]*"\s+href="([^"]+)"', r.content)
+            r = self.net.http_GET(web_url, headers=headers).content
+        else:
+            r = r.content
+        f_url = re.search(r'<a\s+class="[^"]*"\s+tabindex="0"\s+jsaction="click:[^"]*"\s+href="([^"]+)"', r)
         if f_url:
             f_url = f_url.group(1)
             if f_url.startswith('.'):
@@ -45,12 +47,12 @@ class GooglePhotosResolver(ResolveUrl):
             elif f_url.startswith('/'):
                 f_url = urllib_parse.urljoin(web_url, f_url)
             r = self.net.http_GET(f_url, headers=headers).content
-            f_url = re.search(r'''data-url\s*=\s*('|")(?P<link>(?:(?!\1).)+)''', r)
-            if f_url:
-                r = self.net.http_GET(f_url.group('link') + "=mm,hls-vm-vf,dr.sdr,sdrCodec.vp9.h264?cpn=%s&alr=true" % self._get_random_cpn(), headers=headers)
-                url = r.get_headers(as_dict=True).get('Content-Location')
-                headers.update({"Origin": "https://youtube.googleapis.com"})
-                return url + helpers.append_headers(headers)
+        f_url = re.search(r'''data-url\s*=\s*('|")(?P<link>(?:(?!\1).)+)''', r)
+        if f_url:
+            r = self.net.http_GET(f_url.group('link') + "=mm,hls-vm-vf,dr.sdr,sdrCodec.vp9.h264?cpn=%s&alr=true" % self._get_random_cpn(), headers=headers)
+            url = r.get_headers(as_dict=True).get('Content-Location')
+            headers.update({"Origin": "https://youtube.googleapis.com"})
+            return url + helpers.append_headers(headers)
 
         ResolverError('Unable to locate video')
 
