@@ -43,6 +43,7 @@ class FreeDLResolver(ResolveUrl):
             tries = 0
             while tries < MAX_TRIES:
                 data = helpers.get_hidden(html)
+                data.update({"download_free": "1"})
                 data.update(captcha_lib.do_captcha(html))
                 common.kodi.sleep(60000)
                 html = self.net.http_POST(web_url, data, headers=headers).content
