@@ -16,10 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import codecs
 import re
-import json
-from resolveurl.lib.jscrypto import jscrypto
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -27,29 +24,60 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class MoflixStreamResolver(ResolveUrl):
     name = 'MoflixStream'
-    domains = ['moflix-stream.fans']
-    pattern = r'(?://|\.)(moflix-stream\.fans)/(?:d|v)/([0-9a-zA-Z]+)'
+    domains = ['moflix-stream.fans', 'boosteradx.online', 'mov18plus.cloud', 'moviesapi.club']
+    pattern = r'(?://|\.)((?:moflix-stream|boosteradx|mov18plus|w1\.moviesapi)\.(?:fans|online|cloud|club))/(?:d|v)/([0-9a-zA-Z]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
+        if 'moviesapi' in host:
+            headers.update({'Referer': 'https://moviesapi.club/'})
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'''Encrypted\s*=\s*'([^']+)''', html)
         if r:
-            data = json.loads(r.group(1))
-            ct = data.get('ct')
-            salt = codecs.decode(data.get('s'), 'hex')
-            dt = jscrypto.decode(ct, '=JV[t}{trEV=Ilh5', salt)
-            r = re.search(r'file:\s*\\"([^"]+)', dt)
+            html2 = self.mf_decrypt(r.group(1))
+            r = re.search(r'file"?:\s*"([^"]+)', html2)
             if r:
-                murl = r.group(1).replace('\\', '')
+                murl = r.group(1)
                 headers.update({
                     'Referer': 'https://{0}/'.format(host),
                     'Origin': 'https://{0}'.format(host)
                 })
-                return murl + helpers.append_headers(headers)
+                stream_url = murl + helpers.append_headers(headers)
+                if subs:
+                    subtitles = {}
+                    s = re.search(r'subtitle"?:\s*"([^"]+)', html2)
+                    if s:
+                        subs = s.group(1).split(',')
+                        subtitles = {x.split(']')[0][1:]: x.split(']')[1] for x in subs}
+                    return stream_url, subtitles
+                return stream_url
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}/')
+
+    @staticmethod
+    def mf_decrypt(data):
+        """
+        (c) 2024 MrDini123
+        """
+        import base64
+        import zlib
+        lookup_table = {
+            "!": "a",
+            "@": "b",
+            "#": "c",
+            "$": "d",
+            "%": "e",
+            "^": "f",
+            "&": "g",
+            "*": "h",
+            "(": "i",
+            ")": "j",
+        }
+        data = base64.b64decode(data)
+        s = zlib.decompress(bytes(int(bin(byte)[2:].zfill(8)[::-1], 2) for byte in data)).decode('latin-1')
+        s = "".join(lookup_table.get(char, char) for char in s)
+        return base64.b64decode(s).decode('latin-1')
