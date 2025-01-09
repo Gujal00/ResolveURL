@@ -255,6 +255,7 @@ def scrape_subtitles(html, rurl='', scheme='http', patterns=None, generic_patter
         subtitles.update(__parse_to_dict(html, r'''<track\s*kind=['"]?(?:captions|subtitles)['"]?\s*src=['"](?P<url>[^'"]+)['"]\s*srclang=['"](?P<label>[^'"]+)'''))
         subtitles.update(__parse_to_dict(html, r'''<track\s*kind="(?:captions|subtitles)"\s*label="(?P<label>[^"]+)"\s*srclang="[^"]+"\s*src="(?P<url>[^"]+)'''))
         subtitles.update(__parse_to_dict(html, r'''"tracks":.+?"kind":\s*"captions",\s*"file":\s*"(?P<url>[^"]+).+?"label":\s*"(?P<label>[^"]+)'''))
+        subtitles.update(__parse_to_dict(html, r'''"file":\s*"(?P<url>[^"]+).+?"label":\s*"(?P<label>[^"]+)","kind":"(?:captions|subtitles)"'''))
 
     for regex in patterns:
         subtitles.update(__parse_to_dict(html, regex))

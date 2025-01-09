@@ -45,11 +45,12 @@ class MoflixStreamResolver(ResolveUrl):
                 })
                 stream_url = murl + helpers.append_headers(headers)
                 if subs:
-                    subtitles = {}
-                    s = re.search(r'subtitle"?:\s*"([^"]+)', html2)
-                    if s:
-                        subs = s.group(1).split(',')
-                        subtitles = {x.split(']')[0][1:]: x.split(']')[1] for x in subs}
+                    subtitles = helpers.scrape_subtitles(html2, web_url)
+                    if not subtitles:
+                        s = re.search(r'subtitle"?:\s*"([^"]+)', html2)
+                        if s:
+                            subs = s.group(1).split(',')
+                            subtitles = {x.split(']')[0][1:]: x.split(']')[1] for x in subs}
                     return stream_url, subtitles
                 return stream_url
 
