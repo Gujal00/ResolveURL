@@ -84,15 +84,6 @@ class VoeResolver(ResolveUrl):
         if subs:
             subtitles = helpers.scrape_subtitles(html, web_url)
 
-        r = re.search(r'uttf0\((\[[^)]+)', html)
-        if r:
-            r = eval(r.group(1))
-            r = helpers.b64decode(''.join(r)[::-1])
-            stream_url = r + helpers.append_headers(headers)
-            if subs:
-                return stream_url, subtitles
-            return stream_url
-
         r = re.search(r"let\s*(?:wc0|[0-9a-f]+)\s*=\s*'([^']+)", html)
         if r:
             import json
