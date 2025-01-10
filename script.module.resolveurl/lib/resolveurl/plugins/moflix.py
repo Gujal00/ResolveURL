@@ -27,7 +27,7 @@ class MoflixStreamResolver(ResolveUrl):
     name = 'MoflixStream'
     domains = ['moflix-stream.fans', 'boosteradx.online', 'mov18plus.cloud', 'moviesapi.club', 'boosterx.stream']
     pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|w1\.moviesapi)\.(?:fans|online|cloud|club|stream))/' \
-              r'(?:d|v)/([0-9a-zA-Z$:/.]+)'
+              r'(?:d|v)/([0-9a-zA-Z$:/.-_]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         headers = {'User-Agent': common.RAND_UA}
