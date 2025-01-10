@@ -17,6 +17,7 @@
 """
 
 import re
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -25,13 +26,18 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class MoflixStreamResolver(ResolveUrl):
     name = 'MoflixStream'
     domains = ['moflix-stream.fans', 'boosteradx.online', 'mov18plus.cloud', 'moviesapi.club', 'boosterx.stream']
-    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|w1\.moviesapi)\.(?:fans|online|cloud|club|stream))/(?:d|v)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|w1\.moviesapi)\.(?:fans|online|cloud|club|stream))/' \
+              r'(?:d|v)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id, subs=False):
-        web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
-        if 'moviesapi' in host:
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+            headers.update({'Referer': referer})
+        elif 'moviesapi' in host:
             headers.update({'Referer': 'https://moviesapi.club/'})
+        web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'''Encrypted\s*=\s*'([^']+)''', html)
         if r:
