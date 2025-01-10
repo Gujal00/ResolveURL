@@ -25,10 +25,11 @@ class BigWarpResolver(ResolveGeneric):
     domains = ['bigwarp.io']
     pattern = r'(?://|\.)(bigwarp\.io)/(?:e/)?([0-9a-zA-Z=]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''file\s*:\s*['"](?P<url>[^'"]+)['"],\s*label\s*:\s*['"](?P<label>\d+p?)''']
+            patterns=[r'''file\s*:\s*['"](?P<url>[^'"]+)['"],\s*label\s*:\s*['"](?P<label>\d+p?)'''],
+            subs=subs
         )
 
     def get_url(self, host, media_id):
