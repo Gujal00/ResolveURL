@@ -298,7 +298,7 @@ def get_media_url(
         headers.update({'verifypeer': 'false'})
     source_list = scrape_sources(html, result_blacklist, scheme, patterns, generic_patterns, rurl)
     source = pick_source(source_list)
-    source = urllib_parse.quote(source, '/:?=&') + append_headers(headers)
+    source = urllib_parse.quote(source, '/:?=&!') + append_headers(headers)
     if subs:
         subtitles = scrape_subtitles(html, rurl, scheme, subs_patterns, generic_subs_patterns)
         return source, subtitles

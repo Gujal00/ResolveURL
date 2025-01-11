@@ -286,7 +286,7 @@ class HostedMediaFile:
                 headers.pop('verifypeer')
             request = urllib_request.Request(stream_url.split('|')[0], headers=headers)
             # only do a HEAD request for non m3u8 streams
-            if '.m3u8' not in stream_url:
+            if '.m3u8' not in stream_url and '/hls/' not in stream_url:
                 request.get_method = lambda: 'HEAD'
             #  set urlopen timeout to 15 seconds
             http_code = urllib_request.urlopen(request, timeout=15).getcode()
