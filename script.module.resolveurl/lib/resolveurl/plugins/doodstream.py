@@ -30,8 +30,8 @@ class DoodStreamResolver(ResolveUrl):
     domains = ['dood.watch', 'doodstream.com', 'dood.to', 'dood.so', 'dood.cx', 'dood.la', 'dood.ws',
                'dood.sh', 'doodstream.co', 'dood.pm', 'dood.wf', 'dood.re', 'dood.yt', 'dooood.com',
                'dood.stream', 'ds2play.com', 'doods.pro', 'ds2video.com', 'd0o0d.com', 'do0od.com',
-               'd0000d.com', 'd000d.com', 'dood.li', 'dood.work']
-    pattern = r'(?://|\.)((?:do*0*o*0*ds?(?:tream)?|ds2(?:play|video))\.' \
+               'd0000d.com', 'd000d.com', 'dood.li', 'dood.work', 'dooodster.com']
+    pattern = r'(?://|\.)((?:do*0*o*0*ds?(?:tream|ter)?|ds2(?:play|video))\.' \
               r'(?:com?|watch|to|s[ho]|cx|l[ai]|w[sf]|pm|re|yt|stream|pro|work))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
