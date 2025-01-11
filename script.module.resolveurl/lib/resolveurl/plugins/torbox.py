@@ -333,14 +333,15 @@ class TorBoxResolver(ResolveUrl):
 
     @common.cache.cache_method(cache_limit=8)
     def get_all_hosters(self):
+        hosts = []
         try:
             result = self.__get("webdl/hosters", None, [])
-            hosts = [h.get("domain") for h in result if h.get("status", False)]
+            hosts = [h.get("domains") for h in result if h.get("status", False)]
+            hosts = [host for sublist in hosts for host in sublist]
             if self.get_setting("torrents") == "true":
                 hosts.extend(["torrent", "magnet"])
         except Exception as e:
             logger.log_error("Error getting TorBox hosts: %s" % (e))
-            hosts = []
         return hosts
 
     @classmethod
