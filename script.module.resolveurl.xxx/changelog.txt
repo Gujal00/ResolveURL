@@ -1,10 +1,10 @@
-Version 2.1.42 (Mar 17, 2024)
+Version 2.1.43 (January 13, 2025)
 
 - Resolvers Added:
-    - None
+    - fapcat
  
 - Resolvers Fixed/Updated:
-    - xvideos
+    - None
 
 - Resolvers Removed
-    - None
+    - vartuc
