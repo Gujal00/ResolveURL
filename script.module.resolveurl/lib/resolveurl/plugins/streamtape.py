@@ -37,7 +37,7 @@ class StreamTapeResolver(ResolveUrl):
               r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki)' \
               r')/(?:e|v)/([0-9a-zA-Z]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {
             'User-Agent': common.FF_USER_AGENT,
@@ -59,13 +59,21 @@ class StreamTapeResolver(ResolveUrl):
                 p1 = re.findall(r'"([^"]*)', part)[0]
                 p2 = 0
                 if 'substring' in part:
-                    subs = re.findall(r'substring\((\d+)', part)
-                    for sub in subs:
+                    subst = re.findall(r'substring\((\d+)', part)
+                    for sub in subst:
                         p2 += int(sub)
                 src_url += p1[p2:]
             src_url += '&stream=1'
             src_url = 'https:' + src_url if src_url.startswith('//') else src_url
-            return helpers.get_redirect_url(src_url, headers) + helpers.append_headers(headers)
+            src_url = helpers.get_redirect_url(src_url, headers) + helpers.append_headers(headers)
+            if subs:
+                subtitles = {}
+                s = re.findall(r'<track\s*label="([^"]+)"\s*src="([^"]+)"\s*kind="captions"', r)
+                if s:
+                    subtitles = {lang: surl for lang, surl in s}
+                return src_url, subtitles
+            return src_url
+
         raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
