@@ -21,6 +21,7 @@ import re
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+from six.moves import urllib_parse
 
 
 class KoramaUpResolver(ResolveUrl):
@@ -42,7 +43,7 @@ class KoramaUpResolver(ResolveUrl):
             url = helpers.get_redirect_url(uri, headers=headers)
             if url != uri:
                 headers.pop('Cookie')
-                return url + helpers.append_headers(headers)
+                return urllib_parse.quote(url, '/:=&?') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or removed')
 
