@@ -23,6 +23,7 @@ from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 from six.moves import urllib_parse
 
+
 class KoramaUpResolver(ResolveUrl):
     name = 'KoramaUp'
     domains = ['koramaup.com']
