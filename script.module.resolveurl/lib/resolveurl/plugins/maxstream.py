@@ -30,7 +30,8 @@ class MaxStreamResolver(ResolveGeneric):
             self.get_url(host, media_id),
             patterns=[r'''file:\s*"(?P<url>[^"]+)'''],
             generic_patterns=False,
-            referer=True
+            referer=True,
+            subs=subs
         )
 
     def get_url(self, host, media_id):

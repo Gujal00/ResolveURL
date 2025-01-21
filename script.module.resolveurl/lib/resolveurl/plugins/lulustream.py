@@ -25,12 +25,13 @@ class LuluStreamResolver(ResolveGeneric):
     domains = ['lulustream.com', 'luluvdo.com', 'lulu.st', '732eg54de642sa.sbs']
     pattern = r'(?://|\.)((?:lulu(?:stream|vdo)?|732eg54de642sa)\.(?:com|sbs|st))/(?:e/|d/)?([0-9a-zA-Z]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)'''],
             generic_patterns=False,
-            referer=False
+            referer=False,
+            subs=subs
         )
 
     def get_url(self, host, media_id):
