@@ -22,17 +22,15 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 class ForaFileResolver(ResolveGeneric):
     name = 'ForaFile'
-    domains = ['forafile.com']
-    pattern = r'(?://|\.)(forafile\.com)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['forafile.com', 'asjp1j93c1.sbs']
+    pattern = r'(?://|\.)((?:forafile|asjp1j93c1)\.(?:com|sbs))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''file:\s*'(?P<url>[^']+)'''],
             generic_patterns=False,
-            referer=False,
-            ssl_verify=False,
-            verifypeer=False
+            referer=False
         )
 
     def get_url(self, host, media_id):
