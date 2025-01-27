@@ -71,11 +71,10 @@ class MoflixStreamResolver(ResolveUrl):
         return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}/')
 
     @staticmethod
-    def mf_decrypt(data):
+    def mf_decrypt_lut(data):
         """
         (c) 2024 MrDini123
         """
-        import base64
         import zlib
         lookup_table = {
             "!": "a",
@@ -89,7 +88,21 @@ class MoflixStreamResolver(ResolveUrl):
             "(": "i",
             ")": "j",
         }
-        data = base64.b64decode(data)
+        data = helpers.b64decode(data, binary=True)
         s = zlib.decompress(bytes(int(bin(byte)[2:].zfill(8)[::-1], 2) for byte in data)).decode('latin-1')
         s = "".join(lookup_table.get(char, char) for char in s)
-        return base64.b64decode(s).decode('latin-1')
+        return helpers.b64decode(s)
+
+    @staticmethod
+    def mf_decrypt(data):
+        """
+        (c) 2025 MrDini123
+        """
+        import binascii
+        from resolveurl.lib import pyaes
+        data = helpers.b64decode(data, binary=True)
+        key = binascii.unhexlify('f24db4c64a239529e65a8870784994b1f4c7ea8b9eed79aa96b7f0d2828ba9db')
+        decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, data[:16]))
+        ddata = decryptor.feed(data[16:])
+        ddata += decryptor.feed()
+        return ddata.decode('utf-8')
