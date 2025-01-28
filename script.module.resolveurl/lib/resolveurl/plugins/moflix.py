@@ -39,7 +39,7 @@ class MoflixStreamResolver(ResolveUrl):
             headers.update({'Referer': 'https://moviesapi.club/'})
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''Encrypted\s*=\s*'([^']+)''', html)
+        r = re.search(r'''Encrypted(?:_Content)?\s*=\s*'([^']+)''', html)
         if r:
             html2 = self.mf_decrypt(r.group(1))
             r = re.search(r'file"?:\s*"([^"]+)', html2)
@@ -101,7 +101,8 @@ class MoflixStreamResolver(ResolveUrl):
         import binascii
         from resolveurl.lib import pyaes
         data = helpers.b64decode(data, binary=True)
-        key = binascii.unhexlify('f24db4c64a239529e65a8870784994b1f4c7ea8b9eed79aa96b7f0d2828ba9db')
+        # v4.4
+        key = binascii.unhexlify('53b98dd01dfb9f08bf3b88609e3ec310618cee02896b7b6df8a31f30de7a435b')
         decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, data[:16]))
         ddata = decryptor.feed(data[16:])
         ddata += decryptor.feed()
