@@ -21,7 +21,7 @@ import sys
 import os
 import shutil
 import ssl
-from six import string_types
+import six
 from resources.lib.url_dispatcher import URL_Dispatcher
 from resources.lib import log_utils
 from resources.lib import kodi
@@ -68,17 +68,24 @@ def open_dir(path):
 
     if LINK_FILE in files:
         link_file = os.path.join(path, LINK_FILE)
-        with open(link_file) as f:
-            for i, line in enumerate(f):
-                item = line.split('|')
-                link = item[0].strip()
-                if not link:
-                    continue
-                try:
-                    label = item[1]
-                except:
-                    label = item[0]
-                make_link(i, link, label, path)
+        if six.PY3:
+            with open(link_file, 'r', encoding='utf-8') as f:
+                for i, line in enumerate(f):
+                    item = line.split('|')
+                    link = item[0].strip()
+                    if not link:
+                        continue
+                    label = item[1] if len(item) > 1 else item[0]
+                    make_link(i, link, label, path)
+        else:
+            with open(link_file, 'r') as f:
+                for i, line in enumerate(f):
+                    item = line.split('|')
+                    link = item[0].strip()
+                    if not link:
+                        continue
+                    label = item[1] if len(item) > 1 else item[0]
+                    make_link(i, link, label, path)
 
     kodi.set_content('files')
     kodi.end_of_directory(cache_to_disc=False)
@@ -143,11 +150,18 @@ def add_link(link=None, name=None, refresh=True, path=None):
             os.mkdir(os.path.dirname(path))
 
         path = os.path.join(path, LINK_FILE)
-        with open(path, 'a') as f:
-            line = '|'.join(result)
-            if not line.endswith('\n'):
-                line += '\n'
-            f.write(line)
+        if six.PY3:
+            with open(path, 'a', encoding='utf-8') as f:
+                line = '|'.join(result)
+                if not line.endswith('\n'):
+                    line += '\n'
+                f.write(line)
+        else:
+            with open(path, 'a') as f:
+                line = '|'.join(result)
+                if not line.endswith('\n'):
+                    line += '\n'
+                f.write(line.encode('utf8'))
 
         if refresh:
             kodi.refresh_container()
@@ -162,11 +176,18 @@ def resolveurl_settings():
 def delete_link(index, path):
     path = os.path.join(path, LINK_FILE)
     new_lines = []
-    with open(path) as f:
-        for i, line in enumerate(f):
-            if i == int(index):
-                continue
-            new_lines.append(line)
+    if six.PY3:
+        with open(path, encoding='utf-8') as f:
+            for i, line in enumerate(f):
+                if i == int(index):
+                    continue
+                new_lines.append(line)
+    else:
+        with open(path) as f:
+            for i, line in enumerate(f):
+                if i == int(index):
+                    continue
+                new_lines.append(line)
 
     write_links(path, new_lines)
     kodi.refresh_container()
@@ -176,15 +197,24 @@ def delete_link(index, path):
 def edit_link(index, path):
     path = os.path.join(path, LINK_FILE)
     new_lines = []
-    with open(path) as f:
-        for i, line in enumerate(f):
-            if i == int(index):
-                item = line.split('|')
-                result = prompt_for_link(*item)
-                if result:
-                    line = '|'.join(result)
-
-            new_lines.append(line)
+    if six.PY3:
+        with open(path, encoding='utf-8') as f:
+            for i, line in enumerate(f):
+                if i == int(index):
+                    item = line.split('|')
+                    result = prompt_for_link(*item)
+                    if result:
+                        line = '|'.join(result)
+                new_lines.append(line)
+    else:
+        with open(path) as f:
+            for i, line in enumerate(f):
+                if i == int(index):
+                    item = line.split('|')
+                    result = prompt_for_link(*item)
+                    if result:
+                        line = '|'.join(result)
+                new_lines.append(line)
 
     write_links(path, new_lines)
     kodi.refresh_container()
@@ -198,12 +228,13 @@ def play_link(link):
     if link.startswith('ia://'):
         ia = True
         link = link[5:]
+    elif link.endswith('$$subs'):
+        link = link[:-6]
+
     if link.endswith('$$all'):
         hmf = resolveurl.HostedMediaFile(url=link[:-5], include_universal=debrid, return_all=True)
-    elif link.endswith('$$subs'):
-        hmf = resolveurl.HostedMediaFile(url=link[:-6], include_universal=debrid, subs=True)
     else:
-        hmf = resolveurl.HostedMediaFile(url=link, include_universal=debrid)
+        hmf = resolveurl.HostedMediaFile(url=link, include_universal=debrid, subs=True)
     if not hmf:
         logger.log('Indirect hoster_url not supported by smr: %s' % (link), log_utils.LOGDEBUG)
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
@@ -222,13 +253,11 @@ def play_link(link):
             stream_url = allfiles[item].get('link')
             if resolveurl.HostedMediaFile(stream_url):
                 stream_url = resolveurl.resolve(stream_url)
-        elif link.endswith('$$subs'):
+        else:
             resp = hmf.resolve()
             stream_url = resp.get('url')
             subs = resp.get('subs')
-        else:
-            stream_url = hmf.resolve()
-        if not stream_url or not isinstance(stream_url, string_types):
+        if not stream_url or not isinstance(stream_url, six.string_types):
             try:
                 msg = stream_url.msg
             except:
@@ -261,7 +290,7 @@ def play_link(link):
         else:
             if kodiver < 21:
                 listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-            listitem.setMimeType('application/vnd.apple.mpegurl')
+            listitem.setMimeType('application/x-mpegURL')
         listitem.setContentLookup(False)
         if '|' in stream_url:
             stream_url, strhdr = stream_url.split('|')
@@ -270,16 +299,25 @@ def play_link(link):
                 listitem.setProperty('inputstream.adaptive.manifest_headers', strhdr)
             listitem.setPath(stream_url)
 
+    # xbmcgui.Window(10000).clearProperty('script.trakt.ids')
+    # xbmcgui.Window(10000).setProperty('script.trakt.ids', "{'id': 0}")
+
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
 
 
 def write_links(path, links):
-    with open(path, 'w') as f:
-        for line in links:
-            if not line.endswith('\n'):
-                line += '\n'
-
-            f.write(line)
+    if six.PY3:
+        with open(path, 'w', encoding='utf-8') as f:
+            for line in links:
+                if not line.endswith('\n'):
+                    line += '\n'
+                f.write(line)
+    else:
+        with open(path, 'w') as f:
+            for line in links:
+                if not line.endswith('\n'):
+                    line += '\n'
+                f.write(line.encode('utf-8'))
 
 
 def prompt_for_link(old_link='', old_name=''):
@@ -332,6 +370,7 @@ def main(argv=None):
         argv = sys.argv
     queries = kodi.parse_query(sys.argv[2])
     logger.log('Version: |%s| Queries: |%s|' % (kodi.get_version(), queries))
+    logger.log('Kodi: |%s.%s|' % (kodi.get_kodi_version().major, kodi.get_kodi_version().minor))
     logger.log('Running on: Python %s|%s' % (sys.version, ssl.OPENSSL_VERSION))
     logger.log('Args: |%s|' % (argv))
 

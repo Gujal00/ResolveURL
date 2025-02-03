@@ -39,7 +39,7 @@ class MoflixStreamResolver(ResolveUrl):
             headers.update({'Referer': 'https://moviesapi.club/'})
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''(?:Encrypted(?:_Content)?|Matrix)\s*=\s*'([^']+)''', html)
+        r = re.search(r'''(?:Encrypted(?:_Content)?|Matrixs?)\s*=\s*'([^']+)''', html)
         if r:
             html2 = self.mf_decrypt(r.group(1), headers['User-Agent'])
             r = re.search(r'file"?:\s*"([^"]+)', html2)
@@ -68,7 +68,7 @@ class MoflixStreamResolver(ResolveUrl):
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}/')
+        return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}')
 
     @staticmethod
     def mf_decrypt_lut(data):
@@ -102,8 +102,8 @@ class MoflixStreamResolver(ResolveUrl):
         from resolveurl.lib import pyaes
         import six
         data = helpers.b64decode(data, binary=True)
-        # v4.5
-        key = sha256(six.b("0-4_xSb3ikmo]&v%D,&7" + ua)).digest()
+        # v4.6
+        key = sha256(six.b('Fvv0O(0ep+X,q-Z+')).digest()
         decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, data[:16]))
         ddata = decryptor.feed(data[16:])
         ddata += decryptor.feed()

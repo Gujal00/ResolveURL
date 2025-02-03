@@ -1,3 +1,7 @@
+Version 1.1.14 (Feb 2, 2025)
+- Allow labels in non English characters
+- Resolve subtitles by default if available, no need for $$subs
+
 Version 1.1.13 (Jun 1, 2024)
 - Not set manifest_type on Kodi21 and above
 

@@ -1,29 +1,24 @@
-Version 5.1.157 (January 13, 2025)
+Version 5.1.158 (Febryary 2, 2025)
 - Code Base Changes:
-    - helpers subtitle pattern
+    - None
 
 - Resolvers Added:
-    - embedojo.net
-    - forafile
-    - vcdnlare
-    - wootly
+    - droplare
+    - uploadhub
 
 - Resolvers Fixed/Updated:
     - bigwarp
-    - doodstream
     - filelions
-    - freedl
-    - gphotos
-    - mixdrop
+    - forafile
+    - koromaup
     - moflix
-    - reviewrate
-    - streamsilk
-    - terabox
-    - voesx
-
+    - streamtape
+    - streeamwish
+    - voe
+    - wecima
 
 - Resolvers Removed
-    - mvidoo
+    - None
 
 - Languages Added/Updated
     - None
