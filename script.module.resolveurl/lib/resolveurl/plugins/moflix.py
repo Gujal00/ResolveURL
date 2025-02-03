@@ -39,9 +39,9 @@ class MoflixStreamResolver(ResolveUrl):
             headers.update({'Referer': 'https://moviesapi.club/'})
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''(?:Encrypted(?:_Content)?|Matrixs?)\s*=\s*'([^']+)''', html)
+        r = re.search(r'''(?:Encrypted(?:_Content)?|Matrixs?|Firexs?)\s*=\s*'([^']+)''', html)
         if r:
-            html2 = self.mf_decrypt(r.group(1), headers['User-Agent'])
+            html2 = self.mf_decrypt(r.group(1))
             r = re.search(r'file"?:\s*"([^"]+)', html2)
             if r:
                 murl = r.group(1)
@@ -94,17 +94,15 @@ class MoflixStreamResolver(ResolveUrl):
         return helpers.b64decode(s)
 
     @staticmethod
-    def mf_decrypt(data, ua):
+    def mf_decrypt(data):
         """
         (c) 2025 MrDini123
         """
-        from hashlib import sha256
-        from resolveurl.lib import pyaes
         import six
-        data = helpers.b64decode(data, binary=True)
-        # v4.6
-        key = sha256(six.b('Fvv0O(0ep+X,q-Z+')).digest()
-        decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, data[:16]))
-        ddata = decryptor.feed(data[16:])
-        ddata += decryptor.feed()
-        return ddata.decode('utf-8')
+        # v7.1
+        key = "TGRKeQCC8yrxC;5)"
+        ddata = ''.join(
+            six.unichr(int(data[i:i+3]) ^ six.byte2int(six.b(key[i//3 % len(key)])))
+            for i in range(0, len(data), 3)
+        )
+        return ddata
