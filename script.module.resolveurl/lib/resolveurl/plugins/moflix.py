@@ -39,7 +39,7 @@ class MoflixStreamResolver(ResolveUrl):
             headers.update({'Referer': 'https://moviesapi.club/'})
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''(?:Encrypted(?:_Content)?|Matrixs?|Firexs?)\s*=\s*'([^']+)''', html)
+        r = re.search(r'''const\s*\w*\s*=\s*'([^']+)''', html)
         if r:
             html2 = self.mf_decrypt(r.group(1))
             r = re.search(r'file"?:\s*"([^"]+)', html2)
@@ -99,10 +99,13 @@ class MoflixStreamResolver(ResolveUrl):
         (c) 2025 MrDini123
         """
         import six
-        # v7.1
-        key = "TGRKeQCC8yrxC;5)"
+        import binascii
+        # v7.3
+        key = six.b("CQ0KveLh[lZN6jP5")
+        data = binascii.unhexlify(data)
+        kl = len(key)
         ddata = ''.join(
-            six.unichr(int(data[i:i+3]) ^ six.byte2int(six.b(key[i//3 % len(key)])))
-            for i in range(0, len(data), 3)
+            six.unichr((data[i] ^ key[i % kl]) if six.PY3 else (ord(data[i]) ^ ord(key[i % kl])))
+            for i in range(len(data))
         )
         return ddata
