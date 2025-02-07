@@ -25,8 +25,13 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class MoflixStreamResolver(ResolveUrl):
     name = 'MoflixStream'
-    domains = ['moflix-stream.fans', 'boosteradx.online', 'mov18plus.cloud', 'moviesapi.club', 'boosterx.stream']
-    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|w1\.moviesapi)\.(?:fans|online|cloud|club|stream))/' \
+    domains = [
+        'moflix-stream.fans', 'boosteradx.online', 'mov18plus.cloud',
+        'moviesapi.club', 'boosterx.stream', 'vidstreamnew.xyz',
+        'boltx.stream', 'chillx.top', 'watchx.top', 'bestx.stream'
+    ]
+    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|w1\.moviesapi|vidstreamnew|chillx|watchx|bestx|boltx)\.' \
+              r'(?:fans|online|cloud|club|stream|xyz|top))/' \
               r'(?:d|v)/([0-9a-zA-Z$:/.-_]+)'
 
     def get_media_url(self, host, media_id, subs=False):
