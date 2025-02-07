@@ -26,8 +26,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class UpVidResolver(ResolveUrl):
     name = 'UpVid'
     domains = ['upvid.co', 'upvid.pro', 'upvid.live', 'upvid.host', 'upvid.biz', 'upvid.cloud',
-               'opvid.org', 'opvid.online']
-    pattern = r'(?://|\.)((?:up|op)vid\.(?:co|org|pro|live|host|biz|cloud|online))/(?:embed-)?([0-9a-zA-Z]+)'
+               'opvid.org', 'opvid.online', 'turbovid.org', 'turbovid.co']
+    pattern = r'(?://|\.)((?:up|op|turbo)vid\.(?:co|org|pro|live|host|biz|cloud|online))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -51,7 +51,7 @@ class UpVidResolver(ResolveUrl):
                 aa_text = aadecode.decode(aa_text.group(1))
             key = re.search(r"func\.inner[^(]+\('([^']+)", aa_text)
             if key:
-                shtml = self.dec(r.group(1).replace('\n', ''), key.group(1))
+                shtml = helpers.arc4(key.group(1), r.group(1))
                 src = re.search(r"'src',\s*'([^']+)", shtml)
                 if src:
                     return src.group(1) + helpers.append_headers(headers)
@@ -60,29 +60,3 @@ class UpVidResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
-
-    def dec(self, o, r):
-        o = helpers.b64decode(o, binary=True)
-        n = 0
-        a = ''
-        e = list(range(256))
-        for f in range(256):
-            n = (n + e[f] + ord(r[f % len(r)])) % 256
-            t = e[f]
-            e[f] = e[n]
-            e[n] = t
-
-        f = 0
-        n = 0
-        for h in range(len(o)):
-            f = (f + 1) % 256
-            n = (n + e[f]) % 256
-            t = e[f]
-            e[f] = e[n]
-            e[n] = t
-            if helpers.PY3:
-                a += chr(o[h] ^ e[(e[f] + e[n]) % 256])
-            else:
-                a += chr(ord(o[h]) ^ e[(e[f] + e[n]) % 256])
-
-        return a
