@@ -1,3 +1,6 @@
+Version 1.1.15 (Feb 7, 2025)
+- Allow disabling Adult resolvers in settings
+
 Version 1.1.14 (Feb 2, 2025)
 - Allow labels in non English characters
 - Resolve subtitles by default if available, no need for $$subs

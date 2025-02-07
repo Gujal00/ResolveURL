@@ -27,8 +27,9 @@ from resources.lib import log_utils
 from resources.lib import kodi
 
 logger = log_utils.Logger.get_logger()
+xxx_enabled = kodi.get_setting('xxx_plugins') == 'true'
 xxx_plugins_path = 'special://home/addons/script.module.resolveurl.xxx/resources/plugins/'
-if xbmcvfs.exists(xxx_plugins_path):
+if xxx_enabled and xbmcvfs.exists(xxx_plugins_path):
     resolveurl.add_plugin_dirs(kodi.translatePath(xxx_plugins_path))
 
 

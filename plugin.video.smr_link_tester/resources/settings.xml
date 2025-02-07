@@ -1,3 +1,6 @@
 <settings>
-        <setting id="addon_debug" type="bool" label="Addon debug" default="true"/>
+	<category label="General">
+		<setting id="addon_debug" type="bool" label="Addon debug" default="true"/>
+		<setting id="xxx_plugins" type="bool" label="Include Adult resolvers" default="false"/>
+	</category>
 </settings>
