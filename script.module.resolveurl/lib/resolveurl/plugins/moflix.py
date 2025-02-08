@@ -105,8 +105,8 @@ class MoflixStreamResolver(ResolveUrl):
         """
         import six
         import binascii
-        # v7.3
-        key = six.b("CQ0KveLh[lZN6jP5")
+        # Func ID: yaIm2u
+        key = six.b("HG1I}V!u$IR6Rxdf")
         data = binascii.unhexlify(data)
         kl = len(key)
         ddata = ''.join(
