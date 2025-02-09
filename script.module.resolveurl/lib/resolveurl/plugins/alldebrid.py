@@ -17,7 +17,7 @@
 """
 
 import re
-from six.moves import urllib_parse, urllib_error
+from six.moves import urllib_error
 import json
 from resolveurl.lib import helpers
 from resolveurl import common
@@ -43,6 +43,8 @@ class AllDebridResolver(ResolveUrl):
         self.hosters = None
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
+        if self.get_setting('token'):
+            self.headers.update({'Authorization': 'Bearer {0}'.format(self.get_setting('token'))})
 
     def get_media_url(self, host, media_id, cached_only=False, return_all=False):
         try:
@@ -53,19 +55,27 @@ class AllDebridResolver(ResolveUrl):
                     transfer_id = self.__create_transfer(_hash, cached_only=cached_only)
                     transfer_info = self.__list_transfer(transfer_id)
                     if return_all:
-                        sources = [{'name': link.get('filename').split('/')[-1], 'link': link.get('link')}
-                                   for link in transfer_info.get('links')
-                                   if any(link.get('filename').lower().endswith(x) for x in FORMATS)]
+                        sources = [{'name': link.get('n'), 'link': link.get('l')}
+                                   for link in transfer_info.get('files')
+                                   if any(link.get('n').lower().endswith(x) for x in FORMATS)]
+                        sources = []
+                        for link in transfer_info.get('files'):
+                            for e in link.get('e'):
+                                if any(e.get('n').lower().endswith(x) for x in FORMATS):
+                                    sources.append({'name': e.get('n'), 'link': e.get('l')})
                         return sources
                     else:
-                        sources = [(link.get('size'), link.get('link'))
-                                   for link in transfer_info.get('links')
-                                   if any(link.get('filename').lower().endswith(x) for x in FORMATS)]
+                        sources = []
+                        for link in transfer_info.get('files'):
+                            for e in link.get('e'):
+                                if any(e.get('n').lower().endswith(x) for x in FORMATS):
+                                    sources.append((e.get('s'), e.get('l')))
                         media_id = max(sources)[1]
                         self.__delete_transfer(transfer_id)
 
-            url = '{0}/link/unlock?agent={1}&apikey={2}&link={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), urllib_parse.quote_plus(media_id))
-            result = self.net.http_GET(url, headers=self.headers).content
+            url = api_url + '/link/unlock'
+            data = {'link': media_id}
+            result = self.net.http_POST(url, form_data=data, headers=self.headers).content
         except urllib_error.HTTPError as e:
             try:
                 js_result = json.loads(e.read())
@@ -90,9 +100,9 @@ class AllDebridResolver(ResolveUrl):
                     fid = js_result.get('data').get('id')
                     sources = [(str(source.get("quality")), source.get("id")) for source in sources if '+' not in source.get("id")]
                     sid = helpers.pick_source(helpers.sort_sources_list(sources))
-                    url = '{0}/link/streaming?agent={1}&apikey={2}&id={3}&stream={4}' \
-                          .format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), fid, sid)
-                    result = self.net.http_GET(url, headers=self.headers).content
+                    url = api_url + '/link/streaming'
+                    data = {'id': fid, 'stream': sid}
+                    result = self.net.http_POST(url, form_data=data, headers=self.headers).content
                     js_data = json.loads(result)
                     if js_data.get('data').get('link'):
                         return js_data.get('data').get('link')
@@ -100,11 +110,12 @@ class AllDebridResolver(ResolveUrl):
         raise ResolverError('AllDebrid: {0}'.format(i18n('no_stream')))
 
     def __list_transfer(self, transfer_id):
-        url = '{0}/magnet/status?agent={1}&apikey={2}&id={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), transfer_id)
-        result = json.loads(self.net.http_GET(url, headers=self.headers).content)
+        url = api_url + '.1/magnet/status'
+        data = {'id': transfer_id}
+        result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
         if result.get('status', False) == "success":
             magnets = result.get('data').get('magnets')
-            if type(magnets) is list:
+            if isinstance(magnets, list):
                 for magnet in magnets:
                     if transfer_id == magnet.get('id'):
                         return magnet
@@ -121,8 +132,9 @@ class AllDebridResolver(ResolveUrl):
             return {}
 
     def __create_transfer(self, media_id, cached_only=False):
-        url = '{0}/magnet/upload?agent={1}&apikey={2}&magnets[]={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), media_id)
-        result = json.loads(self.net.http_GET(url, headers=self.headers).content)
+        url = api_url + '/magnet/upload'
+        data = {'magnets': media_id}
+        result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
         if result.get('status', False) == "success":
             logger.log_debug('Transfer successfully started to the AllDebrid cloud')
             magnets = result.get('data').get('magnets')
@@ -201,8 +213,9 @@ class AllDebridResolver(ResolveUrl):
 
     def __delete_transfer(self, transfer_id):
         try:
-            url = '{0}/magnet/delete?agent={1}&apikey={2}&id={3}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'), transfer_id)
-            response = self.net.http_GET(url, headers=self.headers).content
+            url = api_url + '/magnet/delete'
+            data = {'id': transfer_id}
+            response = self.net.http_POST(url, form_data=data, headers=self.headers).content
             result = json.loads(response)
             if result.get('status', False) == "success":
                 if 'deleted' in response.get('data').get('message'):
@@ -222,7 +235,7 @@ class AllDebridResolver(ResolveUrl):
     @common.cache.cache_method(cache_limit=8)
     def get_all_hosters(self):
         hosters = []
-        url = '{0}/user/hosts?agent={1}&apikey={2}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'))
+        url = api_url + '.1/user/hosts'
         try:
             result = self.net.http_GET(url, headers=self.headers).content
             js_data = json.loads(result)
@@ -239,9 +252,6 @@ class AllDebridResolver(ResolveUrl):
                         streamers.append(re.compile(regex))
                     except:
                         pass
-                logger.log_debug('AllDebrid Streamers : {0}'.format(len(streamers)))
-                hosters.extend(streamers)
-                logger.log_debug('AllDebrid Total hosters : {0}'.format(len(hosters)))
             else:
                 logger.log_error('Error getting AD Hosters')
         except Exception as e:
@@ -251,12 +261,11 @@ class AllDebridResolver(ResolveUrl):
     @common.cache.cache_method(cache_limit=8)
     def get_hosts(self):
         hosts = []
-        url = '{0}/hosts/domains?agent={1}&apikey={2}'.format(api_url, urllib_parse.quote_plus(AGENT), self.get_setting('token'))
+        url = api_url + '/hosts/domains'
         try:
             js_result = self.net.http_GET(url, headers=self.headers).content
             js_data = json.loads(js_result)
             if js_data.get('status', False) == "success":
-                # hosts = [host.replace('www.', '') for host in js_data.get('hosts', [])]
                 hosts = js_data.get('data').get('hosts')
                 hosts.extend(js_data.get('data').get('streams'))
                 if self.get_setting('torrents') == 'true':
@@ -295,10 +304,14 @@ class AllDebridResolver(ResolveUrl):
             self.authorize_resolver()
 
     def reset_authorization(self):
+        try:
+            self.headers.pop('Authorization')
+        except:
+            pass
         self.set_setting('token', '')
 
     def authorize_resolver(self):
-        url = '{0}/pin/get?agent={1}'.format(api_url, urllib_parse.quote_plus(AGENT))
+        url = api_url + '.1/pin/get'
         js_result = self.net.http_GET(url, headers=self.headers).content
         js_data = json.loads(js_result).get('data')
         line1 = '{0}: {1}'.format(i18n('goto_url'), js_data.get('base_url'))
@@ -307,30 +320,35 @@ class AllDebridResolver(ResolveUrl):
             'ResolveUrl AllDebrid {0}'.format(i18n('authorisation')), line1, line2,
             countdown=js_data.get('expires_in', 120)
         ) as cd:
-            result = cd.start(self.__check_auth, [js_data.get('check_url')])
+            result = cd.start(self.__check_auth, [js_data.get('check'), js_data.get('pin')])
 
         # cancelled
         if result is None:
             return
-        return self.__get_token(js_data.get('check_url'))
+        return self.__get_token(js_data.get('check'), js_data.get('pin'))
 
-    def __get_token(self, url):
+    def __get_token(self, token, pin):
+        url = api_url + '/pin/check'
+        data = {'pin': pin, 'check': token}
         try:
-            js_data = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            js_data = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
             if js_data.get("status", False) == "success":
                 js_data = js_data.get('data')
                 token = js_data.get('apikey', '')
                 logger.log_debug('Authorizing All Debrid Result: |{0}|'.format(token))
                 self.set_setting('token', token)
+                self.headers.update({'Authorization': 'Bearer {0}'.format(token)})
                 return True
         except Exception as e:
             logger.log_debug('All Debrid Authorization Failed: {0}'.format(e))
             return False
 
-    def __check_auth(self, url):
+    def __check_auth(self, token, pin):
         activated = False
+        url = api_url + '/pin/check'
+        data = {'pin': pin, 'check': token}
         try:
-            js_data = json.loads(self.net.http_GET(url, headers=self.headers).content)
+            js_data = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
             if js_data.get("status", False) == "success":
                 js_data = js_data.get('data')
                 activated = js_data.get('activated', False)
