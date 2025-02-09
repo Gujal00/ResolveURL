@@ -1,24 +1,19 @@
-Version 5.1.158 (Febryary 2, 2025)
+Version 5.1.159 (February 9, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - droplare
-    - uploadhub
+    - None
 
 - Resolvers Fixed/Updated:
-    - bigwarp
-    - filelions
-    - forafile
-    - koromaup
+    - alldebrid
+    - filemoon
+    - freedl
     - moflix
-    - streamtape
-    - streeamwish
-    - voe
-    - wecima
+    - upvid
 
 - Resolvers Removed
-    - None
+    - chillx
 
 - Languages Added/Updated
     - None
