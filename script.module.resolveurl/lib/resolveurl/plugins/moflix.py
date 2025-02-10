@@ -35,7 +35,10 @@ class MoflixStreamResolver(ResolveUrl):
               r'(?:d|v)/([0-9a-zA-Z$:/.-_]+)'
 
     def get_media_url(self, host, media_id, subs=False):
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {
+            'User-Agent': common.RAND_UA,
+            'Accept': 'text/html'
+        }
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
             referer = urllib_parse.urljoin(referer, '/')
@@ -50,6 +53,7 @@ class MoflixStreamResolver(ResolveUrl):
             r = re.search(r'file"?:\s*"([^"]+)', html2)
             if r:
                 murl = r.group(1)
+                headers.pop('Accept')
                 headers.update({
                     'Referer': 'https://{0}/'.format(host),
                     'Origin': 'https://{0}'.format(host)
@@ -104,13 +108,19 @@ class MoflixStreamResolver(ResolveUrl):
         (c) 2025 MrDini123
         """
         import six
-        import binascii
-        # Func ID: yaIm2u
-        key = six.b("HG1I}V!u$IR6Rxdf")
-        data = binascii.unhexlify(data)
-        kl = len(key)
-        ddata = ''.join(
-            six.unichr((data[i] ^ key[i % kl]) if six.PY3 else (ord(data[i]) ^ ord(key[i % kl])))
-            for i in range(len(data))
-        )
+        # Func ID: mOreFf
+        key = six.b("~%aRg@&H3&QEK1QV")
+        data = helpers.b64decode(data, binary=True)
+        key2 = data[:16]
+        data = data[16:]
+        if six.PY2:
+            ddata = ''.join(
+                six.unichr(ord(data[i]) ^ ord(key[i % len(key)]) ^ ord(key2[i % len(key2)]))
+                for i in range(len(data))
+            )
+        else:
+            ddata = ''.join(
+                six.unichr(data[i] ^ key[i % len(key)] ^ key2[i % len(key2)])
+                for i in range(len(data))
+            )
         return ddata
