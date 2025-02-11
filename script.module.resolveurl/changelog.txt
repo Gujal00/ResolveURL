@@ -1,4 +1,4 @@
-Version 5.1.159 (February 9, 2025)
+Version 5.1.160 (February 11, 2025)
 - Code Base Changes:
     - None
 
@@ -6,14 +6,12 @@ Version 5.1.159 (February 9, 2025)
     - None
 
 - Resolvers Fixed/Updated:
-    - alldebrid
-    - filemoon
-    - freedl
+    - kinoger
     - moflix
-    - upvid
+    - streamruby
 
 - Resolvers Removed
-    - chillx
+    - None
 
 - Languages Added/Updated
     - None
