@@ -37,7 +37,7 @@ class MoflixStreamResolver(ResolveUrl):
     def get_media_url(self, host, media_id, subs=False):
         headers = {
             'User-Agent': common.RAND_UA,
-            'Accept': 'text/html'
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
