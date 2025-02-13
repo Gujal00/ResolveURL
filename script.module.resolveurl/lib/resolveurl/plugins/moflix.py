@@ -37,7 +37,8 @@ class MoflixStreamResolver(ResolveUrl):
     def get_media_url(self, host, media_id, subs=False):
         headers = {
             'User-Agent': common.RAND_UA,
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'en-US,en;q=0.9'
         }
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
@@ -108,8 +109,8 @@ class MoflixStreamResolver(ResolveUrl):
         (c) 2025 MrDini123
         """
         import six
-        # Func ID: mOreFf
-        key = six.b("~%aRg@&H3&QEK1QV")
+        # Func ID: TetNDo
+        key = six.b("l%sn3@bJvcg0IuJV")
         data = helpers.b64decode(data, binary=True)
         key2 = data[:16]
         data = data[16:]
