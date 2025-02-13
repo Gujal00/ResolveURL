@@ -60,14 +60,14 @@ class AllDebridResolver(ResolveUrl):
                                    if any(link.get('n').lower().endswith(x) for x in FORMATS)]
                         sources = []
                         for link in transfer_info.get('files'):
-                            for e in link.get('e'):
+                            for e in link.get('e') or [link]:
                                 if any(e.get('n').lower().endswith(x) for x in FORMATS):
                                     sources.append({'name': e.get('n'), 'link': e.get('l')})
                         return sources
                     else:
                         sources = []
                         for link in transfer_info.get('files'):
-                            for e in link.get('e'):
+                            for e in link.get('e') or [link]:
                                 if any(e.get('n').lower().endswith(x) for x in FORMATS):
                                     sources.append((e.get('s'), e.get('l')))
                         media_id = max(sources)[1]
