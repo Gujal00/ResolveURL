@@ -1,4 +1,4 @@
-Version 5.1.160 (February 11, 2025)
+Version 5.1.161 (February 13, 2025)
 - Code Base Changes:
     - None
 
@@ -6,7 +6,7 @@ Version 5.1.160 (February 11, 2025)
     - None
 
 - Resolvers Fixed/Updated:
-    - kinoger
+    - alldebrid
     - moflix
     - streamruby
 
