@@ -35,7 +35,7 @@ class CimaNowResolver(ResolveGeneric):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''<source\s*src="(?P<url>[^"]+).+?size="(?P<label>[^"]+)''',
-                      r'''(?P<label>[\d]+.+?).+?\s*(?P<url>[^"]+)'''
+                      r'''\[(?P<label>[\d]+.+?)\]\s*(?P<url>[^"]+)'''
                       ],
             generic_patterns=False,
             referer=referer,
