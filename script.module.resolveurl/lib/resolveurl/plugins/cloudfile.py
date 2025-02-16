@@ -36,6 +36,7 @@ class CloudFileResolver(ResolveUrl):
         r = re.search(r'"([^"]+)","DOWNLOAD', html, re.IGNORECASE)
         if r:
             source = ''.join([chr(((x if isinstance(x, int) else ord(x)) ^ 15) ^ 117) for x in binascii.unhexlify(r.group(1))])
+            headers.update({'verifypeer': 'false'})
             return urllib_parse.quote(source, '/:?=') + helpers.append_headers(headers)
         raise ResolverError('Video Link Not Found')
 
