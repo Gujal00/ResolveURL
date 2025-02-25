@@ -236,7 +236,7 @@ def scrape_subtitles(html, rurl='', scheme='http', patterns=None, generic_patter
                 subs_url = scheme + ':' + subs_url
             elif subs_url.startswith('/'):
                 subs_url = urllib_parse.urljoin(rurl, subs_url)
-            if '://' not in subs_url or (subs_url in subs):
+            if ('://' not in subs_url) or (subs_url in subs) or ('empty' in subs_url):
                 continue
             labels.append(label)
             subs.append(subs_url)
