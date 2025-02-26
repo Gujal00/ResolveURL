@@ -29,9 +29,9 @@ class FileMoonResolver(ResolveUrl):
     domains = ['filemoon.sx', 'filemoon.to', 'filemoon.in', 'filemoon.link', 'filemoon.nl',
                'filemoon.wf', 'cinegrab.com', 'filemoon.eu', 'filemoon.art', 'moonmov.pro',
                'kerapoxy.cc', 'furher.in', '1azayf9w.xyz', '81u6xl9d.xyz', 'smdfs40r.skin',
-               'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol']
+               'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun']
     pattern = r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|' \
-              r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x)' \
+              r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo)' \
               r'\.(?:sx|to|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol))' \
               r'/(?:e|d|download)/([0-9a-zA-Z$:/._-]+)'
 
