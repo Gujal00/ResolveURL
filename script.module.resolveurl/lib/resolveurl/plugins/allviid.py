@@ -19,6 +19,7 @@
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
 
+
 class AllViidResolver(ResolveGeneric):
     name = 'AllViid'
     domains = ['allviid.xyz', 'all-vid.autos']

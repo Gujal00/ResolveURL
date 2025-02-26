@@ -28,18 +28,15 @@ class MoflixStreamResolver(ResolveUrl):
     domains = [
         'moflix-stream.fans', 'boosteradx.online', 'mov18plus.cloud',
         'moviesapi.club', 'boosterx.stream', 'vidstreamnew.xyz',
-        'boltx.stream', 'chillx.top', 'watchx.top', 'bestx.stream'
+        'boltx.stream', 'chillx.top', 'watchx.top', 'bestx.stream',
+        'https://playerx.stream/', 'https://vidstreaming.xyz/'
     ]
-    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|w1\.moviesapi|vidstreamnew|chillx|watchx|bestx|boltx)\.' \
+    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|w1\.moviesapi|vidstream(?:new|ing)|(?:chill|watch|best|bolt|player)x)\.' \
               r'(?:fans|online|cloud|club|stream|xyz|top))/' \
               r'(?:d|v)/([0-9a-zA-Z$:/.-_]+)'
 
     def get_media_url(self, host, media_id, subs=False):
-        headers = {
-            'User-Agent': common.RAND_UA,
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'Accept-Language': 'en-US,en;q=0.9'
-        }
+        headers = {'User-Agent': common.RAND_UA}
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
             referer = urllib_parse.urljoin(referer, '/')
@@ -48,13 +45,12 @@ class MoflixStreamResolver(ResolveUrl):
             headers.update({'Referer': 'https://moviesapi.club/'})
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search(r'''const\s*\w*\s*=\s*'([^']+)''', html)
+        r = re.search(r'''(?:const|var|let|window\.)\s*\w*\s*=\s*'([^']+)''', html)
         if r:
             html2 = self.mf_decrypt(r.group(1))
             r = re.search(r'file"?:\s*"([^"]+)', html2)
             if r:
                 murl = r.group(1)
-                headers.pop('Accept')
                 headers.update({
                     'Referer': 'https://{0}/'.format(host),
                     'Origin': 'https://{0}'.format(host)
@@ -81,47 +77,16 @@ class MoflixStreamResolver(ResolveUrl):
         return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}')
 
     @staticmethod
-    def mf_decrypt_lut(data):
-        """
-        (c) 2024 MrDini123
-        """
-        import zlib
-        lookup_table = {
-            "!": "a",
-            "@": "b",
-            "#": "c",
-            "$": "d",
-            "%": "e",
-            "^": "f",
-            "&": "g",
-            "*": "h",
-            "(": "i",
-            ")": "j",
-        }
-        data = helpers.b64decode(data, binary=True)
-        s = zlib.decompress(bytes(int(bin(byte)[2:].zfill(8)[::-1], 2) for byte in data)).decode('latin-1')
-        s = "".join(lookup_table.get(char, char) for char in s)
-        return helpers.b64decode(s)
-
-    @staticmethod
     def mf_decrypt(data):
         """
-        (c) 2025 MrDini123
+        (c) 2025 MrDini123, yogesh-hacker
         """
-        import six
-        # Func ID: TetNDo
-        key = six.b("l%sn3@bJvcg0IuJV")
+        # Func ID: AkeGtWh
+        import binascii
+        from resolveurl.lib import pyaes
         data = helpers.b64decode(data, binary=True)
-        key2 = data[:16]
-        data = data[16:]
-        if six.PY2:
-            ddata = ''.join(
-                six.unichr(ord(data[i]) ^ ord(key[i % len(key)]) ^ ord(key2[i % len(key2)]))
-                for i in range(len(data))
-            )
-        else:
-            ddata = ''.join(
-                six.unichr(data[i] ^ key[i % len(key)] ^ key2[i % len(key2)])
-                for i in range(len(data))
-            )
-        return ddata
+        key = binascii.unhexlify(helpers.b64decode('ZmJlYTcyMGU5MDY0NDE3Mzg1MDc0MjMzOThiYTcwMjg5ZTQwNjJmZTU2NGFhNTU5OTY5OWZhNjA2NDVmNzdjZA=='))
+        decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, data[:16]))
+        ddata = decryptor.feed(data[16:])
+        ddata += decryptor.feed()
+        return ddata.decode('utf-8')
