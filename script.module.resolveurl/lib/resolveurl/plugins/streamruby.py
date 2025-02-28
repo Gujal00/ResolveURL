@@ -41,7 +41,6 @@ class StreamRubyResolver(ResolveUrl):
             stream_url = master_url.group(1) + helpers.append_headers(headers)
             if subs:
                 subtitles = helpers.scrape_subtitles(html, web_url)
-                subtitles.pop("Upload captions")
                 return stream_url, subtitles
             return stream_url
 
