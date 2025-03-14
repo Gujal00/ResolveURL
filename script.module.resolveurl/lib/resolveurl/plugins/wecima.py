@@ -21,10 +21,12 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl import common
 from six.moves import urllib_parse
 
+
 class WecimaResolver(ResolveUrl):
     name = 'Wecima'
-    domains = ['wecima.show', 'wecima.movie', 'wecima.stream', 'wecima.watch', 'vbn1.t4ce4ma.shop']
-    pattern = r'(?://|\.)((?:wecima|vbn1\.t4ce4ma)\.(?:show|movie|stream|watch|shop))/run/([^\n]+)'
+    domains = ['wecima.show', 'wecima.movie', 'wecima.stream', 'wecima.watch',
+               'vbn1.t4ce4ma.shop', 'vbn2.t4ce4ma.shop']
+    pattern = r'(?://|\.)((?:wecima|vbn[12]\.t4ce4ma)\.(?:show|movie|stream|watch|shop))/run/([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
@@ -44,5 +46,6 @@ class WecimaResolver(ResolveUrl):
             headers.pop('X-Requested-With')
             return urllib_parse.quote(sources.group(1), ':/?=&') + helpers.append_headers(headers)
         raise ResolverError('No video found')
+
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/run/{media_id}')
