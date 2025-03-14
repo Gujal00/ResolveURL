@@ -80,7 +80,7 @@ class DoodStreamResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        if host in ['dood.la']:
+        if host in ['dood.la', 'dood.yt']:
             host = 'doodstream.com'
         return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
 
