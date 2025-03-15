@@ -1,22 +1,24 @@
-Version 5.1.162 (February 26, 2025)
+Version 5.1.163 (March 16, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - asianload
-    - abstream
+    - None
 
 - Resolvers Fixed/Updated:
-    - cimanow
-    = cloudfile
-    = filemoon
-    = forafile
-    - freedl
-    - moflix
+    - bigwarp
+    - doodstream
+    - filelions
+    - filemoon
+    - fileone
     - streamruby
+    - streamwish
+    - vidguard
+    - voesx
+    - wecima
 
 - Resolvers Removed
-    - vidcloud9
+    - None
 
 - Languages Added/Updated
     - None
