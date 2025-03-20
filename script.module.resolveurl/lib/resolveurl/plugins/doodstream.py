@@ -38,7 +38,7 @@ class DoodStreamResolver(ResolveUrl):
         if any(host.endswith(x) for x in ['.cx', '.wf']):
             host = 'dood.so'
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
+        headers = {'User-Agent': common.IPAD_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
 
         r = self.net.http_GET(web_url, headers=headers)
@@ -80,7 +80,7 @@ class DoodStreamResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        if host in ['dood.la', 'dood.yt']:
+        if host not in ['doodstream.com', 'vidply.com']:
             host = 'doodstream.com'
         return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
 
