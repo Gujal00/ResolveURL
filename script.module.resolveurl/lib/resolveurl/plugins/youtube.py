@@ -23,7 +23,7 @@ from resolveurl.lib import kodi
 class YouTubeResolver(ResolveUrl):
     name = 'YouTube'
     domains = ['youtube.com', 'youtu.be', 'youtube-nocookie.com']
-    pattern = r'''https?://(?:[0-9A-Z-]+\.)?(?:(youtu\.be|youtube(?:-nocookie)?\.com)/?\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|</a>))[?=&+%\w.-]*'''
+    pattern = r'''(?://|\.)(?:[0-9A-Z-]+\.)?(?:(youtu\.be|youtube(?:-nocookie)?\.com)/?\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|</a>))[?=&+%\w.-]*'''
 
     def get_media_url(self, host, media_id):
         return 'plugin://plugin.video.youtube/play/?video_id={0}'.format(media_id)
