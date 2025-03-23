@@ -81,6 +81,7 @@ class FileMoonResolver(ResolveUrl):
             surl = helpers.tear_decode(edata.get('file'), edata.get('seed'))
             if surl:
                 headers.pop('X-Requested-With')
+                headers.pop('Cookie')
                 headers["verifypeer"] = "false"
                 return surl + helpers.append_headers(headers)
         else:
