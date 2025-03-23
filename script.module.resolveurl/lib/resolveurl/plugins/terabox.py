@@ -20,6 +20,7 @@ import json
 import re
 import time
 from resolveurl import common
+from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 from six.moves import urllib_parse
 
@@ -44,21 +45,25 @@ class TeraBoxResolver(ResolveUrl):
                 "referer": web_url,
             })
             resp = json.loads(self.net.http_GET(teralink, headers=headers).content)
-            m3u8 = 'https://www.{0}/share/extstreaming.m3u8'.format(host)
-            timestamp = int(time.time() * 1000)
             params = {
                 'app_id': app_id,
                 'channel': 'dubox',
                 'clienttype': 0,
                 'uk': resp["uk"],
                 'shareid': resp["shareid"],
-                'type': 'M3U8_AUTO_1080',
+                'type': 'M3U8_FLV_264_480',
                 'fid': resp["list"][0]["fs_id"],
                 'sign': resp["sign"],
-                'timestamp': timestamp,
+                'jsToken': jsToken,
+                'timestamp': int(time.time()),
+                'esl': 1,
+                'isplayer': 1,
+                'ehps': 1,
+                'web': 1
             }
-            m3u8 = 'https://www.{0}/share/extstreaming.m3u8?{1}'.format(host, urllib_parse.urlencode(params))
-            return m3u8
+            m3u8 = 'https://www.{0}/share/streaming?{1}'.format(host, urllib_parse.urlencode(params))
+            headers.pop('X-Requested-With')
+            return m3u8 + helpers.append_headers(headers)
 
         raise ResolverError('Unable to locate link')
 
