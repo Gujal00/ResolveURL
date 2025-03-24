@@ -37,29 +37,32 @@ class WootlyResolver(ResolveUrl):
         if r:
             cookiestr = resp1.get_headers(as_dict=True).get('Set-Cookie', '').split(';')[0]
             headers.update({'Referer': web_url, 'Cookie': cookiestr})
-            resp2 = self.net.http_GET(r.group(1), headers=headers)
-            cookiestr += '; {0}'.format(resp2.get_headers(as_dict=True).get('Set-Cookie', '').split(';')[0])
-            data = {'qdf': 1}
+            data = {'qdfx': 1}
             headers.update({'Origin': ref[:-1], 'Cookie': cookiestr})
             html = self.net.http_POST(r.group(1), form_data=data, headers=headers).content
             tk = re.search(r'tk="([^"]+)', html)
             vd = re.search(r'vd="([^"]+)', html)
             c = re.search(r',\s*c="([^"]+)', html)
-            cn = re.search(r',\s*cn="([^"]+)', html)
-            cv = re.search(r',\s*cv="([^"]+)', html)
-            if all([tk, vd, c, cn, cv]):
+            if all([tk, vd, c]):
                 url2 = urllib_parse.urljoin(r.group(1), c.group(1))
                 params = {'t': tk.group(1), 'id': vd.group(1)}
                 url2 += '?{0}'.format(urllib_parse.urlencode(params))
-                cookiestr += '; {0}={1}'.format(cn.group(1), cv.group(1))
-                headers.update({'Cookie': cookiestr})
                 headers.pop('Origin')
                 resp = self.net.http_GET(url2, headers=headers).content
                 if resp:
+                    resp2 = True
                     headers = {'Referer': ref, 'User-Agent': common.RAND_UA}
-                    while '.mp4' not in resp:
-                        resp = helpers.get_redirect_url(resp, headers=headers)
-                    return resp + helpers.append_headers(headers)
+                    while '.mp4' not in resp and resp2:
+                        resp2 = helpers.get_redirect_url(resp, headers=headers)
+                        if resp2 == resp:
+                            resp2 = False
+                            break
+                        else:
+                            resp = resp2
+                            resp2 = True
+
+                    if resp2:
+                        return resp + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
