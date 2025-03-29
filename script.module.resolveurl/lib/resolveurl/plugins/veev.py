@@ -37,7 +37,7 @@ class VeevResolver(ResolveUrl):
         if r.get_url() != web_url:
             media_id = r.get_url().split('/')[-1]
         # Still dancing
-        items = re.findall(r'''[\.\s]fc\s*[:=]\s*['"]([^'"]+)''', r.content)
+        items = re.findall(r'''[\.\s']fc(?:'])?\s*[:=]\s*['"]([^'"]+)''', r.content)
         if items:
             for f in items[::-1]:
                 ch = veev_decode(f)
@@ -55,6 +55,8 @@ class VeevResolver(ResolveUrl):
                     if jresp and jresp.get('file_status') == 'OK':
                         str_url = decode_url(veev_decode(jresp.get('dv')[0].get('s')), build_array(ch)[0])
                         return str_url + helpers.append_headers(headers)
+                    raise ResolverError('Video removed')
+
             raise ResolverError('Unable to locate video')
 
         raise ResolverError('Video removed')
