@@ -210,7 +210,7 @@ class TorBoxResolver(ResolveUrl):
         if len(files) > 1 and file_id is None:
             _file = max(files, key=lambda x: x.get("size"))
             file_id = _file.get("id")
-        elif file_id:
+        elif isinstance(file_id, int):
             pass
         else:
             file_id = files[0]["id"]
