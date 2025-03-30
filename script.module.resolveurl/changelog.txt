@@ -1,19 +1,15 @@
-Version 5.1.164 (March 23, 2025)
+Version 5.1.165 (March 31, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - loadx
-    - speedfiles
-    - vidembed
+    - savefiles
 
 - Resolvers Fixed/Updated:
-    - bigwarp
-    - doodstream
-    - filemoon
-    - streamwish
-    - youtube
-    - wecima
+    - filelions
+    - torbox
+    - veev
+    - wootly
 
 - Resolvers Removed
     - None
