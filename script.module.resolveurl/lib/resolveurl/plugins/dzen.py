@@ -33,14 +33,13 @@ class DzenResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         sources = helpers.scrape_sources(
             html,
-            patterns=[r"(?P<url>https://[^\"']+\.m3u8)"],
+            patterns=[r'''(?P<url>https://[^\"']+\.m3u8[^"]*)'''],
             generic_patterns=False
         )
         if sources:
             headers.pop('Cookie')
             return helpers.pick_source(sources) + helpers.append_headers(headers)
         raise ResolverError('No video found')
-
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
