@@ -89,7 +89,7 @@ class VoeResolver(ResolveUrl):
         if r:
             import json
             r = json.loads(helpers.b64decode(r.group(1))[::-1])
-            stream_url = r.get('file') + helpers.append_headers(headers)
+            stream_url = r.get('file', r.get('source')) + helpers.append_headers(headers)
             if subs:
                 return stream_url, subtitles
             return stream_url
