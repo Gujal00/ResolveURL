@@ -24,31 +24,33 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VoeResolver(ResolveUrl):
     name = 'Voe'
-    domains = ['voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com',
-               'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com',
-               'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com', 'edwardarriveoften.com',
-               'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com', 'kennethofficialitem.com',
-               'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com', 'lukecomparetwo.com',
-               'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'wolfdyslectic.com',
-               'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com', 'jayservicestuff.com',
-               'realfinanceblogcenter.com', 'tinycat-voe-fashion.com', '35volitantplimsoles5.com',
-               '20demidistance9elongations.com', 'telyn610zoanthropy.com', 'toxitabellaeatrebates306.com',
-               'greaseball6eventual20.com', '745mingiestblissfully.com', '19turanosephantasia.com',
-               '30sensualizeexpression.com', '321naturelikefurfuroid.com', '449unceremoniousnasoseptal.com',
-               'guidon40hyporadius9.com', 'cyamidpulverulence530.com', 'boonlessbestselling244.com',
-               'antecoxalbobbing1010.com', 'matriculant401merited.com', 'scatch176duplicities.com',
-               'availedsmallest.com', 'counterclockwisejacky.com', 'simpulumlamerop.com', 'paulkitchendark.com',
-               'metagnathtuggers.com', 'gamoneinterrupted.com', 'chromotypic.com', 'crownmakermacaronicism.com',
-               'generatesnitrosate.com', 'yodelswartlike.com', 'figeterpiazine.com', 'strawberriesporail.com',
-               'valeronevijao.com', 'timberwoodanotia.com', 'apinchcaseation.com', 'nectareousoverelate.com',
-               'nonesnanking.com', 'kathleenmemberhistory.com', 'stevenimaginelittle.com', 'jamiesamewalk.com',
-               'bradleyviewdoctor.com', 'sandrataxeight.com', 'graceaddresscommunity.com', 'shannonpersonalcost.com',
-               'cindyeyefinal.com', 'michaelapplysome.com', 'sethniceletter.com', 'brucevotewithin.com',
-               'rebeccaneverbase.com', 'loriwithinfamily.com', 'roberteachfinal.com', 'erikcoldperson.com',
-               'jasminetesttry.com', 'heatherdiscussionwhen.com', 'robertplacespace.com', 'alleneconomicmatter.com',
-               'josephseveralconcern.com', 'donaldlineelse.com', 'lisatrialidea.com', 'toddpartneranimal.com',
-               'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
-               'maxfinishseveral.com', 'chuckle-tube.com','kristiesoundsimply.com']
+    domains = [
+        'voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com',
+        'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com',
+        'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com', 'edwardarriveoften.com',
+        'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com', 'kennethofficialitem.com',
+        'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com', 'lukecomparetwo.com',
+        'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'wolfdyslectic.com',
+        'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com', 'jayservicestuff.com',
+        'realfinanceblogcenter.com', 'tinycat-voe-fashion.com', '35volitantplimsoles5.com',
+        '20demidistance9elongations.com', 'telyn610zoanthropy.com', 'toxitabellaeatrebates306.com',
+        'greaseball6eventual20.com', '745mingiestblissfully.com', '19turanosephantasia.com',
+        '30sensualizeexpression.com', '321naturelikefurfuroid.com', '449unceremoniousnasoseptal.com',
+        'guidon40hyporadius9.com', 'cyamidpulverulence530.com', 'boonlessbestselling244.com',
+        'antecoxalbobbing1010.com', 'matriculant401merited.com', 'scatch176duplicities.com',
+        'availedsmallest.com', 'counterclockwisejacky.com', 'simpulumlamerop.com', 'paulkitchendark.com',
+        'metagnathtuggers.com', 'gamoneinterrupted.com', 'chromotypic.com', 'crownmakermacaronicism.com',
+        'generatesnitrosate.com', 'yodelswartlike.com', 'figeterpiazine.com', 'strawberriesporail.com',
+        'valeronevijao.com', 'timberwoodanotia.com', 'apinchcaseation.com', 'nectareousoverelate.com',
+        'nonesnanking.com', 'kathleenmemberhistory.com', 'stevenimaginelittle.com', 'jamiesamewalk.com',
+        'bradleyviewdoctor.com', 'sandrataxeight.com', 'graceaddresscommunity.com', 'shannonpersonalcost.com',
+        'cindyeyefinal.com', 'michaelapplysome.com', 'sethniceletter.com', 'brucevotewithin.com',
+        'rebeccaneverbase.com', 'loriwithinfamily.com', 'roberteachfinal.com', 'erikcoldperson.com',
+        'jasminetesttry.com', 'heatherdiscussionwhen.com', 'robertplacespace.com', 'alleneconomicmatter.com',
+        'josephseveralconcern.com', 'donaldlineelse.com', 'lisatrialidea.com', 'toddpartneranimal.com',
+        'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
+        'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com'
+    ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
               r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|' \
@@ -85,11 +87,11 @@ class VoeResolver(ResolveUrl):
         if subs:
             subtitles = helpers.scrape_subtitles(html, web_url)
 
-        r = re.search(r"let\s*(?:wc0|[0-9a-f]+)\s*=\s*'([^']+)", html)
+        r = re.search(r"(?:let|var)\s*(?:wc0|[0-9a-f]+)\s*=\s*'([^']+)", html)
         if r:
             import json
             r = json.loads(helpers.b64decode(r.group(1))[::-1])
-            stream_url = r.get('file', r.get('source')) + helpers.append_headers(headers)
+            stream_url = r.get('file', r.get('direct_access_url', r.get('source'))) + helpers.append_headers(headers)
             if subs:
                 return stream_url, subtitles
             return stream_url
