@@ -44,14 +44,17 @@ class CdaResolver(ResolveUrl):
             src = json.loads(match.group(1).replace('&quot;', '"')).get('video').get('file')
             if len(src) < 1:
                 raise ResolverError('DRM protected Video Link')
-            return self.cda_decode(src) + helpers.append_headers(headers)
+            if not src.startswith('http'):
+                src = self.cda_decode(src)
+            return src + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://ebd.cda.pl/647x500/{media_id}/vfilm')
 
-    def cda_decode(self, a):
+    @staticmethod
+    def cda_decode(a):
         a = a.replace("_XDDD", "")
         a = a.replace("_CDA", "")
         a = a.replace("_ADC", "")
