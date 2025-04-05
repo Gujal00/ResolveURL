@@ -26,8 +26,11 @@ from six.moves import urllib_parse
 
 class KinoGerResolver(ResolveUrl):
     name = 'KinoGer'
-    domains = ['kinoger.re', 'shiid4u.upn.one', 'moflix.upns.xyz', 'player.upn.one', 'wasuytm.store']
-    pattern = r'(?://|\.)((?:kinoger|wasuytm|(?:shiid4u|player)\.upn|moflix\.upns)\.(?:re|one|xyz|store))/#([A-Za-z0-9]+)'
+    domains = [
+        'kinoger.re', 'shiid4u.upn.one', 'moflix.upns.xyz', 'player.upn.one',
+        'wasuytm.store', 'ultrastream.online'
+    ]
+    pattern = r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|moflix\.upns)\.(?:re|one|xyz|store|online))/#([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
