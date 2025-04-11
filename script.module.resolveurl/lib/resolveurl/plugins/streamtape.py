@@ -25,16 +25,18 @@ from six.moves import urllib_error
 
 class StreamTapeResolver(ResolveUrl):
     name = 'StreamTape'
-    domains = ['streamtape.com', 'strtape.cloud', 'streamtape.net', 'streamta.pe', 'streamtape.site',
-               'strcloud.link', 'strtpe.link', 'streamtape.cc', 'scloud.online', 'stape.fun',
-               'streamadblockplus.com', 'shavetape.cash', 'streamtape.to', 'streamta.site',
-               'streamadblocker.xyz', 'tapewithadblock.org', 'adblocktape.wiki', 'antiadtape.com',
-               'streamtape.xyz', 'tapeblocker.com', 'streamnoads.com', 'tapeadvertisement.com',
-               'tapeadsenjoyer.com', 'watchadsontape.com']
+    domains = [
+        'streamtape.com', 'strtape.cloud', 'streamtape.net', 'streamta.pe', 'streamtape.site',
+        'strcloud.link', 'strcloud.club', 'strtpe.link', 'streamtape.cc', 'scloud.online', 'stape.fun',
+        'streamadblockplus.com', 'shavetape.cash', 'streamtape.to', 'streamta.site',
+        'streamadblocker.xyz', 'tapewithadblock.org', 'adblocktape.wiki', 'antiadtape.com',
+        'streamtape.xyz', 'tapeblocker.com', 'streamnoads.com', 'tapeadvertisement.com',
+        'tapeadsenjoyer.com', 'watchadsontape.com'
+    ]
     pattern = r'(?://|\.)(' \
               r'(?:s(?:tr)?(?:eam|have)?|tapewith|watchadson)?(?:adblock(?:er|plus)?|antiad|noads)?' \
               r'(?:ta?p?e?|cloud)?(?:blocker|advertisement|adsenjoyer)?\.' \
-              r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki)' \
+              r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki|club)' \
               r')/(?:e|v)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
