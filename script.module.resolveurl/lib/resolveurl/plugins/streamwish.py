@@ -52,7 +52,10 @@ class StreamWishResolver(ResolveGeneric):
             referer = False
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)'''],
+            patterns=[
+                r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)''',
+                r'''links\s*=.+?hls[24]":\s*"(?P<url>[^"]+)'''
+            ],
             generic_patterns=False,
             referer=referer,
             subs=subs
