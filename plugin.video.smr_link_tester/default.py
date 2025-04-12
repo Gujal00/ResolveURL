@@ -235,7 +235,7 @@ def play_link(link):
     if link.endswith('$$all'):
         hmf = resolveurl.HostedMediaFile(url=link[:-5], include_universal=debrid, return_all=True)
     else:
-        hmf = resolveurl.HostedMediaFile(url=link, include_universal=debrid, subs=True)
+        hmf = resolveurl.HostedMediaFile(url=link, include_universal=True, subs=True)
     if not hmf:
         logger.log('Indirect hoster_url not supported by smr: %s' % (link), log_utils.LOGDEBUG)
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
@@ -296,7 +296,12 @@ def play_link(link):
         if '|' in stream_url:
             stream_url, strhdr = stream_url.split('|')
             listitem.setProperty('inputstream.adaptive.stream_headers', strhdr)
-            if kodiver > 19:
+            if kodiver > 21.8:
+                listitem.setProperty('inputstream.adaptive.common_headers', strhdr)
+            elif kodiver > 19.8:
+                listitem.setProperty('inputstream.adaptive.manifest_headers', strhdr)
+                listitem.setProperty('inputstream.adaptive.stream_params', strhdr)
+            elif kodiver > 19:
                 listitem.setProperty('inputstream.adaptive.manifest_headers', strhdr)
             listitem.setPath(stream_url)
 

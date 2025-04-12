@@ -1,3 +1,6 @@
+Version 1.1.16 (Apr 13, 2025)
+- Bugfix: Allow supported hoster playback using debrid providers
+
 Version 1.1.15 (Feb 7, 2025)
 - Allow disabling Adult resolvers in settings
 

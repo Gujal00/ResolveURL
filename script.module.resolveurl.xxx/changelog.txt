@@ -1,10 +1,10 @@
-Version 2.1.43 (January 13, 2025)
+Version 2.1.44 (April 13, 2025)
 
 - Resolvers Added:
-    - fapcat
+    - trendyporn
  
 - Resolvers Fixed/Updated:
     - None
 
 - Resolvers Removed
-    - vartuc
+    - None

@@ -1,18 +1,14 @@
-Version 5.1.166 (April 07, 2025)
+Version 5.1.167 (April 13, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - vidbasic
+    - None
 
 - Resolvers Fixed/Updated:
-    - cda
-    - dzen
-    - filelions
-    - filemoon
-    - kinoger
+    - lulustream
+    - streamtape
     - streamwish
-    - turboviplay
     - voe
 
 - Resolvers Removed
