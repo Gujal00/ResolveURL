@@ -37,7 +37,7 @@ class VeevResolver(ResolveUrl):
         if r.get_url() != web_url:
             media_id = r.get_url().split('/')[-1]
         # Still dancing
-        items = re.findall(r'''[\.\s']fc(?:'])?\s*[:=]\s*['"]([^'"]+)''', r.content)
+        items = re.findall(r'''[\.\s'](?:fc|_vvto\[[^\]]*)(?:['\]]*)?\s*[:=]\s*['"]([^'"]+)''', r.content)
         if items:
             for f in items[::-1]:
                 ch = veev_decode(f)
