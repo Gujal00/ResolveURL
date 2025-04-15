@@ -22,6 +22,9 @@ from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
+def fix_b64_padding(s):
+    return s + '=' * (-len(s) % 4)
+
 class VoeResolver(ResolveUrl):
     name = 'Voe'
     domains = [
@@ -49,7 +52,7 @@ class VoeResolver(ResolveUrl):
         'jasminetesttry.com', 'heatherdiscussionwhen.com', 'robertplacespace.com', 'alleneconomicmatter.com',
         'josephseveralconcern.com', 'donaldlineelse.com', 'lisatrialidea.com', 'toddpartneranimal.com',
         'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
-        'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com'
+        'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com','jennifercertaindevelopment.com',
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
@@ -77,21 +80,26 @@ class VoeResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
+
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
+        
         if 'const currentUrl' in html:
             r = re.search(r'''window\.location\.href\s*=\s*'([^']+)''', html)
             if r:
                 web_url = r.group(1)
                 html = self.net.http_GET(web_url, headers=headers).content
+                
 
         r = re.search(r'\w+="([^"]+)";function', html)
+        
         if r:
             s = self.voe_decode(r.group(1))
             stream_url = s.get('file', s.get('direct_access_url', s.get('source'))) + helpers.append_headers(headers)
             if subs:
                 subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
                 return stream_url, subtitles
+
             return stream_url
 
         sources = helpers.scrape_sources(
@@ -111,12 +119,14 @@ class VoeResolver(ResolveUrl):
         raise ResolverError('No video found')
 
     def get_url(self, host, media_id):
+
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
 
     @staticmethod
+
     def voe_decode(ct):
+        import base64
         import json
-        lut = [r"#X", r"%Q", r"\*ABC", r"~Z", r"\?\?", r"!@", r"\^&"]
         txt = ''
         for i in ct:
             x = ord(i)
@@ -125,12 +135,19 @@ class VoeResolver(ResolveUrl):
             elif 97 <= x <= 122:
                 x = (x - 84) % 26 + 97
             txt += chr(x)
-        for i in lut:
-            txt = re.sub(i, '_', txt)
+        lut = [r"#&", r"%?", r"\*~", r"~@", r"\^\^", r"!!", r"@$"]
+        for pattern in lut:
+            txt = re.sub(pattern, "_", txt)
         txt = "".join(txt.split("_"))
-        ct = helpers.b64decode(txt)
-        txt = ''
-        for i in ct:
-            txt += chr(ord(i) - 3)
-        txt = helpers.b64decode(txt[::-1])
-        return json.loads(txt)
+
+        def fix_b64_padding(s):
+            return s + '=' * (-len(s) % 4)
+
+        try:
+            step1 = base64.b64decode(fix_b64_padding(txt)).decode()
+            step2 = ''.join(chr(ord(c) - 3) for c in step1)
+            final = base64.b64decode(fix_b64_padding(step2[::-1])).decode()
+            return json.loads(final)
+        except Exception as e:
+            return {"error": str(e)}
+
