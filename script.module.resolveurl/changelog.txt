@@ -1,4 +1,4 @@
-Version 5.1.167 (April 13, 2025)
+Version 5.1.168 (April 15, 2025)
 - Code Base Changes:
     - None
 
@@ -6,13 +6,17 @@ Version 5.1.167 (April 13, 2025)
     - None
 
 - Resolvers Fixed/Updated:
-    - lulustream
-    - streamtape
-    - streamwish
-    - voe
+    - bigwarp
+    - filemoon
+    - veev
 
 - Resolvers Removed
-    - None
+    - clicknupload
+    - fastupload
+    - freedl
+    - megaup
+    - terabox
+    - vimeo
 
 - Languages Added/Updated
     - None
