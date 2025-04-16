@@ -820,6 +820,8 @@ def Tdecode(vidurl):
 
 
 def b64decode(t, binary=False):
+    if len(t) % 4 == 0:
+        t += '=' * (-len(t) % 4)
     r = base64.b64decode(t)
     return r if binary else six.ensure_str(r)
 

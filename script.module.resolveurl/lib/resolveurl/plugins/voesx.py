@@ -49,7 +49,8 @@ class VoeResolver(ResolveUrl):
         'jasminetesttry.com', 'heatherdiscussionwhen.com', 'robertplacespace.com', 'alleneconomicmatter.com',
         'josephseveralconcern.com', 'donaldlineelse.com', 'lisatrialidea.com', 'toddpartneranimal.com',
         'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
-        'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com'
+        'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com',
+        'richardsignfish.com', 'jennifercertaindevelopment.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
@@ -71,7 +72,7 @@ class VoeResolver(ResolveUrl):
               r'heatherdiscussionwhen|robertplacespace|alleneconomicmatter|josephseveralconcern|' \
               r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|' \
               r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|' \
-              r'adrianmissionminute|nathanfromsubject|' \
+              r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
@@ -87,12 +88,14 @@ class VoeResolver(ResolveUrl):
 
         r = re.search(r'\w+="([^"]+)";function', html)
         if r:
-            s = self.voe_decode(r.group(1))
-            stream_url = s.get('file', s.get('direct_access_url', s.get('source'))) + helpers.append_headers(headers)
-            if subs:
-                subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
-                return stream_url, subtitles
-            return stream_url
+            repl = re.findall(r"'([^\w']{2})'[,\]]", html)
+            if repl:
+                s = self.voe_decode(r.group(1), repl)
+                stream_url = s.get('file', s.get('direct_access_url', s.get('source'))) + helpers.append_headers(headers)
+                if subs:
+                    subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
+                    return stream_url, subtitles
+                return stream_url
 
         sources = helpers.scrape_sources(
             html,
@@ -114,9 +117,13 @@ class VoeResolver(ResolveUrl):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
 
     @staticmethod
-    def voe_decode(ct):
+    def voe_decode(ct, lut):
         import json
-        lut = [r"#X", r"%Q", r"\*ABC", r"~Z", r"\?\?", r"!@", r"\^&"]
+        for i in range(len(lut)):
+            a = ''
+            for x in lut[i]:
+                a += ('\\' + x) if x in '^$?*.[]()' else x
+            lut[i] = a
         txt = ''
         for i in ct:
             x = ord(i)
