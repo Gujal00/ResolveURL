@@ -1,4 +1,4 @@
-Version 5.1.168 (April 15, 2025)
+Version 5.1.169 (April 18, 2025)
 - Code Base Changes:
     - None
 
@@ -6,17 +6,11 @@ Version 5.1.168 (April 15, 2025)
     - None
 
 - Resolvers Fixed/Updated:
-    - bigwarp
-    - filemoon
-    - veev
+    - moflix
+    - voe
 
 - Resolvers Removed
-    - clicknupload
-    - fastupload
-    - freedl
-    - megaup
-    - terabox
-    - vimeo
+    - None
 
 - Languages Added/Updated
     - None
