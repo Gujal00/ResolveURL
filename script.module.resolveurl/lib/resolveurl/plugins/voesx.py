@@ -87,15 +87,14 @@ class VoeResolver(ResolveUrl):
                 html = self.net.http_GET(web_url, headers=headers).content
 
         r = re.search(r'\w+="([^"]+)";function', html)
-        if r:
-            repl = re.findall(r"'([^\w']{2})'[,\]]", html)
-            if repl:
-                s = self.voe_decode(r.group(1), repl)
-                stream_url = s.get('file', s.get('direct_access_url', s.get('source'))) + helpers.append_headers(headers)
-                if subs:
-                    subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
-                    return stream_url, subtitles
-                return stream_url
+        repl = re.search(r",_\w+\s*=\s*\['(.+?)'\],", html)
+        if r and repl:
+            s = self.voe_decode(r.group(1), repl.group(1))
+            stream_url = s.get('file', s.get('direct_access_url', s.get('source'))) + helpers.append_headers(headers)
+            if subs:
+                subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
+                return stream_url, subtitles
+            return stream_url
 
         sources = helpers.scrape_sources(
             html,
@@ -117,13 +116,9 @@ class VoeResolver(ResolveUrl):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
 
     @staticmethod
-    def voe_decode(ct, lut):
+    def voe_decode(ct, luts):
         import json
-        for i in range(len(lut)):
-            a = ''
-            for x in lut[i]:
-                a += ('\\' + x) if x in '^$?*.[]()' else x
-            lut[i] = a
+        lut = [''.join([('\\' + x) if x in '.*+?^${}()|[]\\' else x for x in i]) for i in luts.split("','")]
         txt = ''
         for i in ct:
             x = ord(i)
@@ -136,8 +131,6 @@ class VoeResolver(ResolveUrl):
             txt = re.sub(i, '_', txt)
         txt = "".join(txt.split("_"))
         ct = helpers.b64decode(txt)
-        txt = ''
-        for i in ct:
-            txt += chr(ord(i) - 3)
+        txt = ''.join([chr(ord(i) - 3) for i in ct])
         txt = helpers.b64decode(txt[::-1])
         return json.loads(txt)
