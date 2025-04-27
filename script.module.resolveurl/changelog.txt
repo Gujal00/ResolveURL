@@ -1,12 +1,14 @@
-Version 5.1.169 (April 18, 2025)
+Version 5.1.170 (April 27, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - uperbox
 
 - Resolvers Fixed/Updated:
-    - moflix
+    - mixdrop
+    - pkspeed
+    - speedostream
     - voe
 
 - Resolvers Removed
