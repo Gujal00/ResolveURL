@@ -24,14 +24,16 @@ from resolveurl.lib import helpers
 
 class MixDropResolver(ResolveUrl):
     name = 'MixDrop'
-    domains = ['mixdrop.co', 'mixdrop.to', 'mixdrop.sx', 'mixdrop.bz', 'mixdrop.ch',
-               'mixdrp.co', 'mixdrp.to', 'mixdrop.gl', 'mixdrop.club', 'mixdroop.bz',
-               'mixdroop.co', 'mixdrop.vc', 'mixdrop.ag', 'mdy48tn97.com',
-               'md3b0j6hj.com', 'mdbekjwqa.pw', 'mdfx9dc8n.net', 'mixdropjmk.pw',
-               'mixdrop21.net', 'mixdrop.is', 'mixdrop.si', 'mixdrop23.net', 'mixdrop.nu',
-               'mixdrop.ms', 'mdzsmutpcvykb.net', 'mixdrop.ps', 'mxdrop.to']
+    domains = [
+        'mixdrop.co', 'mixdrop.to', 'mixdrop.sx', 'mixdrop.bz', 'mixdrop.ch',
+        'mixdrp.co', 'mixdrp.to', 'mixdrop.gl', 'mixdrop.club', 'mixdroop.bz',
+        'mixdroop.co', 'mixdrop.vc', 'mixdrop.ag', 'mdy48tn97.com',
+        'md3b0j6hj.com', 'mdbekjwqa.pw', 'mdfx9dc8n.net', 'mixdropjmk.pw',
+        'mixdrop21.net', 'mixdrop.is', 'mixdrop.si', 'mixdrop23.net', 'mixdrop.nu',
+        'mixdrop.ms', 'mdzsmutpcvykb.net', 'mixdrop.ps', 'mxdrop.to', 'mixdrop.sb'
+    ]
     pattern = r'(?://|\.)((?:mi?xdro*p\d*(?:jmk)?|md(?:3b0j6hj|bekjwqa|fx9dc8n|y48tn97|zsmutpcvykb))\.' \
-              r'(?:c[ho]m?|to|sx|bz|gl|club|vc|ag|pw|net|is|si|nu|ms|ps))/(?:f|e)/(\w+)'
+              r'(?:c[ho]m?|to|sx|bz|gl|club|vc|ag|pw|net|is|s[ib]|nu|ms|ps))/(?:f|e)/(\w+)'
 
     def get_media_url(self, host, media_id):
         if host.endswith('.club'):
