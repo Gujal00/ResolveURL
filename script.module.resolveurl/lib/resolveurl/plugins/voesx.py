@@ -50,7 +50,7 @@ class VoeResolver(ResolveUrl):
         'josephseveralconcern.com', 'donaldlineelse.com', 'lisatrialidea.com', 'toddpartneranimal.com',
         'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
         'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com',
-        'richardsignfish.com', 'jennifercertaindevelopment.com'
+        'richardsignfish.com', 'jennifercertaindevelopment.com', 'diananatureforeign.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
@@ -64,7 +64,7 @@ class VoeResolver(ResolveUrl):
               r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|' \
               r'matriculant401merited|scatch176duplicities|availedsmallest|stevenimaginelittle|' \
               r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|' \
-              r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|' \
+              r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|diananatureforeign|' \
               r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|' \
               r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|' \
               r'jamiesamewalk|bradleyviewdoctor|graceaddresscommunity|shannonpersonalcost|cindyeyefinal|' \
@@ -87,10 +87,13 @@ class VoeResolver(ResolveUrl):
                 html = self.net.http_GET(web_url, headers=headers).content
 
         r = re.search(r'\w+="([^"]+)";function', html)
-        repl = re.search(r",_\w+\s*=\s*\['(.+?)'\],", html)
+        repl = re.search(r"{var\s*_\w+\s*=\s*\['(.+?)'\],", html)
         if r and repl:
             s = self.voe_decode(r.group(1), repl.group(1))
-            stream_url = s.get('file', s.get('direct_access_url', s.get('source'))) + helpers.append_headers(headers)
+            sources = [(s.get(x).split("?")[0].split(".")[-1], s.get(x)) for x in ['file', 'source', 'direct_access_url'] if x in s.keys()]
+            if len(sources) > 1:
+                sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
+            stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
             if subs:
                 subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
                 return stream_url, subtitles
