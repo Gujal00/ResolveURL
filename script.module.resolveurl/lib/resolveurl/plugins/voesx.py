@@ -17,6 +17,7 @@
 """
 
 import re
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -26,7 +27,7 @@ class VoeResolver(ResolveUrl):
     name = 'Voe'
     domains = [
         'voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com', 'un-block-voe.net',
-        'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com',
+        'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com', 'jonathansociallike.com'
         'voeun-block.net', 'v-o-e-unblock.com', 'edwardarriveoften.com', 'nathanfromsubject.com',
         'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com', 'kennethofficialitem.com',
         'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com', 'lukecomparetwo.com',
@@ -73,6 +74,7 @@ class VoeResolver(ResolveUrl):
               r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|' \
               r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|' \
               r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
+              r'jonathansociallike|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
@@ -86,18 +88,20 @@ class VoeResolver(ResolveUrl):
                 web_url = r.group(1)
                 html = self.net.http_GET(web_url, headers=headers).content
 
-        r = re.search(r'\w+="([^"]+)";function', html)
-        repl = re.search(r"{var\s*_\w+\s*=\s*\['(.+?)'\],", html)
-        if r and repl:
-            s = self.voe_decode(r.group(1), repl.group(1))
-            sources = [(s.get(x).split("?")[0].split(".")[-1], s.get(x)) for x in ['file', 'source', 'direct_access_url'] if x in s.keys()]
-            if len(sources) > 1:
-                sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
-            stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
-            if subs:
-                subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
-                return stream_url, subtitles
-            return stream_url
+        r = re.search(r'json">\["([^"]+)"]</script>\s*<script\s*src="([^"]+)', html)
+        if r:
+            html2 = self.net.http_GET(urllib_parse.urljoin(web_url, r.group(2)), headers=headers).content
+            repl = re.search(r"(\[(?:'\W{2}'[,\]]){1,9})", html2)
+            if repl:
+                s = self.voe_decode(r.group(1), repl.group(1))
+                sources = [(s.get(x).split("?")[0].split(".")[-1], s.get(x)) for x in ['file', 'source', 'direct_access_url'] if x in s.keys()]
+                if len(sources) > 1:
+                    sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
+                stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
+                if subs:
+                    subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
+                    return stream_url, subtitles
+                return stream_url
 
         sources = helpers.scrape_sources(
             html,
@@ -121,13 +125,13 @@ class VoeResolver(ResolveUrl):
     @staticmethod
     def voe_decode(ct, luts):
         import json
-        lut = [''.join([('\\' + x) if x in '.*+?^${}()|[]\\' else x for x in i]) for i in luts.split("','")]
+        lut = [''.join([('\\' + x) if x in '.*+?^${}()|[]\\' else x for x in i]) for i in luts[2:-2].split("','")]
         txt = ''
         for i in ct:
             x = ord(i)
-            if 65 <= x <= 90:
+            if 64 < x < 91:
                 x = (x - 52) % 26 + 65
-            elif 97 <= x <= 122:
+            elif 96 < x < 123:
                 x = (x - 84) % 26 + 97
             txt += chr(x)
         for i in lut:
