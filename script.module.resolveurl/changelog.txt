@@ -1,4 +1,4 @@
-Version 5.1.171 (May 2, 2025)
+Version 5.1.172 (May 10, 2025)
 - Code Base Changes:
     - None
 
@@ -6,6 +6,9 @@ Version 5.1.171 (May 2, 2025)
     - None
 
 - Resolvers Fixed/Updated:
+    - cda
+    - goodstream
+    - streamwish
     - voe
     - wecima
 
