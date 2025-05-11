@@ -17,6 +17,7 @@
 """
 
 import re
+import binascii
 from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
@@ -25,20 +26,25 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class PoopHDResolver(ResolveUrl):
     name = 'PoopHD'
-    domains = ['poophd.me', 'videy.ro']
-    pattern = r'(?://|\.)((?:poophd|videy)\.(?:me|ro))/(?:e/|d/)?([0-9a-zA-Z]+)'
+    domains = ['poophd.me', 'videy.ro', 'videy.to', 'videy.cx', 'pooo.st', 'dood.lu', 'dood.tips']
+    pattern = r'(?://|\.)((?:poophd|videy|pooo|dood)\.(?:me|[rt]o|cx|st|lu|tips))/(?:e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        embed_url = self.get_eurl(host, media_id)
+        eurl = self.get_eurl(host, media_id)
         headers = {
             'User-Agent': common.FF_USER_AGENT,
-            'Referer': urllib_parse.urljoin(web_url, '/')
+            'Referer': web_url,
+            'Sec-Fetch-Dest': 'iframe'
         }
-        html = self.net.http_GET(embed_url, headers=headers).content
-        r = re.search(r'initializePlayer\(\)\s*{.+?"l",\s*"([^"]+)', html)
-        if r:
-            return urllib_parse.quote(r.group(1), '/:?=') + helpers.append_headers(headers)
+        html = self.net.http_GET(eurl, headers=headers).content
+        e = re.search(r'''var\s*baseURL\s*=\s*["']([^"']+)["'];\s*var\s*playerPath\s*=\s*['"]([^"']+)''', html)
+        if e and 'vplayer' in e.group(2):
+            html = self.net.http_GET(e.group(1) + e.group(2), headers=headers).content
+            r = re.search(r'initializePlayer\(\)\s*{.+?"l",\s*"([^"]+)', html)
+            if r:
+                headers.pop('Sec-Fetch-Dest')
+                return urllib_parse.quote(r.group(1), '/:?=') + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
@@ -46,4 +52,5 @@ class PoopHDResolver(ResolveUrl):
         return self._default_get_url(host, media_id, 'https://poophd.me/e/{media_id}')
 
     def get_eurl(self, host, media_id):
-        return self._default_get_url(host, media_id, 'https://poophd.video-src.com/vplayer?id={media_id}')
+        media_id = binascii.hexlify(media_id[::-1].encode()).decode()
+        return self._default_get_url(host, media_id, 'https://poophd.me/xxxsdn?id={media_id}')
