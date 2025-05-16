@@ -51,7 +51,8 @@ class VoeResolver(ResolveUrl):
         'josephseveralconcern.com', 'donaldlineelse.com', 'lisatrialidea.com', 'toddpartneranimal.com',
         'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
         'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com',
-        'richardsignfish.com', 'jennifercertaindevelopment.com', 'diananatureforeign.com'
+        'richardsignfish.com', 'jennifercertaindevelopment.com', 'diananatureforeign.com',
+        'mariatheserepublican.com', 'johnalwayssame.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
@@ -74,7 +75,7 @@ class VoeResolver(ResolveUrl):
               r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|' \
               r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|' \
               r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
-              r'jonathansociallike|' \
+              r'jonathansociallike|mariatheserepublican|johnalwayssame|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
@@ -135,8 +136,7 @@ class VoeResolver(ResolveUrl):
                 x = (x - 84) % 26 + 97
             txt += chr(x)
         for i in lut:
-            txt = re.sub(i, '_', txt)
-        txt = "".join(txt.split("_"))
+            txt = re.sub(i, '', txt)
         ct = helpers.b64decode(txt)
         txt = ''.join([chr(ord(i) - 3) for i in ct])
         txt = helpers.b64decode(txt[::-1])
