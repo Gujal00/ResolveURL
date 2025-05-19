@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class AbStreamResolver(ResolveGeneric):
     name = 'AbStream'
     domains = ['abstream.to']
-    pattern = r'(?://|\.)(abstream\.to)/(?:d/|e/|embed-)?([0-9a-zA-Z=]+)'
+    pattern = r'(?://|\.)(abstream\.to)/(?:d/|e/|embed[-/])?([0-9a-zA-Z=]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         return helpers.get_media_url(
