@@ -24,7 +24,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class DzenResolver(ResolveUrl):
     name = 'dzen'
     domains = ['dzen.ru']
-    pattern = r'(?://|\.)(dzen\.ru)/((?:video/watch|embed)/[0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(dzen\.ru)/((?:video/watch|embed)/[0-9a-zA-Z_]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
