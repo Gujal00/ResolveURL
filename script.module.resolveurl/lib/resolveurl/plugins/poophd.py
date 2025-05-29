@@ -26,8 +26,11 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class PoopHDResolver(ResolveUrl):
     name = 'PoopHD'
-    domains = ['poophd.me', 'videy.ro', 'videy.to', 'videy.cx', 'pooo.st', 'dood.lu', 'dood.tips']
-    pattern = r'(?://|\.)((?:poophd|videy|pooo|dood)\.(?:me|[rt]o|cx|st|lu|tips))/(?:e/|d/)?([0-9a-zA-Z]+)'
+    domains = [
+        'poophd.me', 'videy.ro', 'videy.to', 'videy.cx', 'pooo.st', 'dood.lu',
+        'dood.tips', 'poopstream.net'
+    ]
+    pattern = r'(?://|\.)((?:poop(?:hd|stream)|videy|pooo|dood)\.(?:me|[rt]o|cx|st|lu|tips|net))/(?:e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -49,8 +52,8 @@ class PoopHDResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, 'https://poophd.me/e/{media_id}')
+        return self._default_get_url(host, media_id, 'https://poopstream.net/e/{media_id}')
 
     def get_eurl(self, host, media_id):
         media_id = binascii.hexlify(media_id[::-1].encode()).decode()
-        return self._default_get_url(host, media_id, 'https://poophd.me/xxxsdn?id={media_id}')
+        return self._default_get_url(host, media_id, 'https://poopstream.net/xxxsdn?id={media_id}')
