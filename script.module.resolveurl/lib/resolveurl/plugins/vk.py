@@ -36,6 +36,7 @@ class VKResolver(ResolveUrl):
                    'Origin': ref[:-1]}
 
         video_list = ''
+        media_id = media_id.replace('&amp;', '&')
         try:
             query = urllib_parse.parse_qs(media_id)
             oid, video_id = query['oid'][0], query['id'][0]
