@@ -1,16 +1,21 @@
-Version 5.1.173 (May 17, 2025)
+Version 5.1.174 (Jun 08, 2025)
 - Code Base Changes:
-    - Cloudflare Challenge notification
+    - update useragents
 
 - Resolvers Added:
-    - poophd
-    - slicedrive
-    - streamup
+    - up4stream
 
 - Resolvers Fixed/Updated:
-    - lulustream
-    - moflix
+    - abstream
+    - doodstream
+    - dzen
+    - filelions
+    - filemoon
+    - mixdrop
+    - poophd
+    - supervideo
     - voe
+    - wecima
 
 - Resolvers Removed
     - None

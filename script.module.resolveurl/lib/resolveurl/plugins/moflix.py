@@ -29,9 +29,9 @@ class MoflixStreamResolver(ResolveUrl):
         'moflix-stream.fans', 'boosteradx.online', 'mov18plus.cloud', 'newer.stream',
         'moviesapi.club', 'boosterx.stream', 'vidstreamnew.xyz', 'plyrxcdn.site',
         'boltx.stream', 'chillx.top', 'watchx.top', 'bestx.stream', 'playerx.stream',
-        'vidstreaming.xyz', 'raretoonsindia.co'
+        'vidstreaming.xyz', 'raretoonsindia.co', 'bestmovies4u.top'
     ]
-    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|newer|plyrxcdn|' \
+    pattern = r'(?://|\.)((?:moflix-stream|boostera?d?x|mov18plus|newer|plyrxcdn|bestmovies4u|' \
               r'w1\.moviesapi|vidstream(?:new|ing)|(?:chill|watch|best|bolt|player)x)\.' \
               r'(?:fans|online|cloud|club|stream|xyz|top|site|co))/' \
               r'(?:d|v)/([0-9a-zA-Z$:/.-_]+)'
@@ -87,8 +87,8 @@ class MoflixStreamResolver(ResolveUrl):
         """
         (c) 2025 yogesh-hacker
         """
-        # Func ID: a9JmEq #
-        key = binascii.unhexlify('37527a3b323b7a366d7a45282572544f5a4a68625f3b645a7e765a5e5234514e')
+        # Func ID: weM5sb #
+        key = binascii.unhexlify('70736e63314a4c745836495465456a536967504e4855577947596f7856417a51')
         data = base64.b64decode(data)
         # Decrypt using AES-CBC
         decryptor = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, data[:16]))
