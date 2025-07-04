@@ -28,9 +28,9 @@ class KinoGerResolver(ResolveUrl):
     name = 'KinoGer'
     domains = [
         'kinoger.re', 'shiid4u.upn.one', 'moflix.upns.xyz', 'player.upn.one',
-        'wasuytm.store', 'ultrastream.online'
+        'wasuytm.store', 'ultrastream.online', 'moflix.rpmplay.xyz'
     ]
-    pattern = r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|moflix\.upns)\.(?:re|one|xyz|store|online))/#([A-Za-z0-9]+)'
+    pattern = r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|moflix\.(?:upns|rpmplay))\.(?:re|one|xyz|store|online))/#([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
