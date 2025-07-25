@@ -19,7 +19,7 @@
 from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
-class DramaCoolResolver(ResolveGeneric):
+class DramaCoolMenResolver(ResolveGeneric):
     name = 'DramaCoolMen'
     domains = ['dramacool.men']
     pattern = r'(?://|\.)(dramacool\.men)/(?:embed/)?([0-9a-zA-Z]+)'
