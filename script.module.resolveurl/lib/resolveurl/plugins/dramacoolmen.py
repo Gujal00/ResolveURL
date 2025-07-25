@@ -17,12 +17,10 @@
 """
 
 from resolveurl.lib import helpers
-from resolveurl import common
-from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
-
-class DramaCoolResolver(ResolveUrl):
-    name = 'DramaCool'
+class DramaCoolResolver(ResolveGeneric):
+    name = 'DramaCoolMen'
     domains = ['dramacool.men']
     pattern = r'(?://|\.)(dramacool\.men)/(?:embed/)?([0-9a-zA-Z]+)'
 
