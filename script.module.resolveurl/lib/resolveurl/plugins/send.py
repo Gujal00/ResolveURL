@@ -34,7 +34,7 @@ class SendResolver(ResolveUrl):
         html = self.net.http_GET(web_url, headers=headers).content
         if "The file you were looking for doesn't exist." not in html:
             data = helpers.get_hidden(html)
-            burl = 'https://{}'.format(host)
+            burl = 'https://send.now'
             url = helpers.get_redirect_url(burl, headers=headers, form_data=data)
             if url != burl:
                 headers.update({'Referer': web_url})
