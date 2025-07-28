@@ -32,16 +32,16 @@ class DoodStreamResolver(ResolveUrl):
         'dood.sh', 'doodstream.co', 'dood.pm', 'dood.wf', 'dood.re', 'dood.yt', 'dooood.com',
         'dood.stream', 'ds2play.com', 'doods.pro', 'ds2video.com', 'd0o0d.com', 'do0od.com',
         'd0000d.com', 'd000d.com', 'dood.li', 'dood.work', 'dooodster.com', 'vidply.com',
-        'all3do.com', 'do7go.com', 'doodcdn.io', 'doply.net', 'vide0.net'
+        'all3do.com', 'do7go.com', 'doodcdn.io', 'doply.net', 'vide0.net', 'vvide0.com'
     ]
-    pattern = r'(?://|\.)((?:do*0*o*0*ds?(?:tream|ter|cdn)?|ds2(?:play|video)|vid(?:ply|e0)|all3do|do(?:7go|ply))\.' \
+    pattern = r'(?://|\.)((?:do*0*o*0*ds?(?:tream|ter|cdn)?|ds2(?:play|video)|v*id(?:ply|e0)|all3do|do(?:7go|ply))\.' \
               r'(?:[cit]om?|watch|s[ho]|cx|l[ai]|w[sf]|pm|re|yt|stream|pro|work|net))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         if any(host.endswith(x) for x in ['.cx', '.wf']):
             host = 'dood.so'
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.IPAD_USER_AGENT,
+        headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
 
         r = self.net.http_GET(web_url, headers=headers)
@@ -83,7 +83,7 @@ class DoodStreamResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        if host not in ['doodstream.com', 'vidply.com', 'all3do.com']:
+        if host not in ['doodstream.com', 'vidply.com', 'all3do.com', 'vvide0.com', 'vide0.net']:
             host = 'doodstream.com'
         return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
 
