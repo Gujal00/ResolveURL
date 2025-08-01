@@ -1,14 +1,20 @@
-Version 5.1.175 (Jun 29, 2025)
+Version 5.1.176 (Aug 01, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - dramacoolmen
 
 - Resolvers Fixed/Updated:
+    - bigwarp
     - doodstream
-    - savefiles
+    - filelions
+    - filemoon
+    - kinoger
+    - sendcm
+    - streamup
     - streamwish
+    - uqload
 
 - Resolvers Removed
     - None
