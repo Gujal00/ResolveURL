@@ -378,6 +378,9 @@ class Net:
                         except urllib_error.HTTPError:
                             from resolveurl.resolver import ResolverError
                             raise ResolverError('Cloudflare challenge')
+                        except urllib_error.URLError:
+                            from resolveurl.resolver import ResolverError
+                            raise ResolverError('Cloudflare challenge')
             else:
                 raise
 
