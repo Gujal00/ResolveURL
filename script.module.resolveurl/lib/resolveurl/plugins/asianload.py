@@ -33,7 +33,6 @@ class AsianLoadResolver(ResolveGeneric):
                 r'''file:\s*(?:window\.atob\()?"(?P<url>[^"]+)'''
             ],
             generic_patterns=False,
-            referer=False,
         )
 
     def get_url(self, host, media_id):
