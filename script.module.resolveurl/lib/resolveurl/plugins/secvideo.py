@@ -24,8 +24,8 @@ from resolveurl import common
 
 class SecVideoResolver(ResolveUrl):
     name = 'SecVideo'
-    domains = ['secvideo1.online', 'csst.online']
-    pattern = r'(?://|\.)((?:secvideo1|csst)\.online)/(?:videos|embed)/([A-Za-z0-9]+)'
+    domains = ['www.secvideo1.online', 'secvideo1.online', 'csst.online']
+    pattern = r'(?://|\.)((?:(?:www\.)?secvideo1|csst)\.online)/(?:videos|embed)/([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
