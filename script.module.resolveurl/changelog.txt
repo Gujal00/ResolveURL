@@ -1,23 +1,27 @@
-Version 5.1.176 (Aug 01, 2025)
+Version 5.1.177 (Aug 17, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - dramacoolmen
+    - upzur
+    - streamvidsu
 
 - Resolvers Fixed/Updated:
-    - bigwarp
     - doodstream
+    - dropload
     - filelions
-    - filemoon
     - kinoger
-    - sendcm
-    - streamup
+    - lulustream
+    - secvideo
     - streamwish
-    - uqload
+    - waaw
 
 - Resolvers Removed
-    - None
+    - vipss
+    - vlalanet
+    - youdbox
+    - zplayer
+    - ztreamhub
 
 - Languages Added/Updated
     - None
