@@ -36,7 +36,7 @@ class StreamWishResolver(ResolveGeneric):
                'gsfqzmqu.sbs', 'jodwish.com', 'swdyu.com', 'strwish.com', 'asnwish.com', 'kravaxxa.com',
                'wishonly.site', 'playerwish.com', 'katomen.store', 'hlswish.com', 'streamwish.fun',
                'swishsrv.com', 'iplayerhls.com', 'hlsflast.com', '4yftwvrdz7.sbs', 'ghbrisk.com', 'hgbazooka.com',
-               'eb8gfmjn71.sbs', 'cybervynx.com', 'edbrdl7pab.sbs', 'stbhg.click', 'dhcplay.com',
+               'eb8gfmjn71.sbs', 'cybervynx.com', 'edbrdl7pab.sbs', 'stbhg.click', 'dhcplay.com', 'strwish.xyz',
                'gradehgplus.com', 'tryzendm.com', 'hglink.to', 'dumbalag.com', 'haxloppd.com', 'davioad.com']
     pattern = r'(?://|\.)((?:(?:stream|flas|obey|sfast|str|embed|[mads]|cdn|asn|player|hls)?wish(?:embed|fast|only|srv)?|' \
               r'ajmidyad|atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|vidmoviesb|kharabnahs|hayaatieadhab|' \

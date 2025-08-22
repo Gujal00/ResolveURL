@@ -27,7 +27,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidGuardResolver(ResolveUrl):
     name = 'VidGuard'
-    domains = ['vidguard.to', 'vgfplay.com', 'vgembed.com', 'moflix-stream.day',
+    domains = ['vidguard.to', 'vgfplay.com', 'vgembed.com', 'moflix-stream.day', 'vgfplay.xyz',
                'v6embed.xyz', 'vid-guard.com', 'vembed.net', 'embedv.net', 'fslinks.org',
                'bembed.net', 'listeamed.net', 'gsfjzmqu.sbs', 'go-streamer.net', '6tnutl8knw.sbs',
                'dhmu4p2hkp.sbs']
@@ -71,7 +71,7 @@ class VidGuardResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        hosts = ['vidguard', 'vid-guard', 'vgfplay', 'vgembed', 'vembed.net', 'embedv.net', 'go-streamer.net']
+        hosts = ['vidguard', 'vid-guard', 'vgfplay.com', 'vgembed', 'vembed.net', 'embedv.net', 'go-streamer.net']
         if any(x in host for x in hosts):
             host = 'listeamed.net'
         return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}')
