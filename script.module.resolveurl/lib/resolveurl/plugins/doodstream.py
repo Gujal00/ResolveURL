@@ -83,8 +83,8 @@ class DoodStreamResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        if host not in ['doodstream.com', 'vidply.com', 'all3do.com', 'vvide0.com', 'vide0.net']:
-            host = 'doodstream.com'
+        if host not in ['doodstream.com', 'vidply.com', 'all3do.com', 'vide0.net', 'd-s.io']:
+            host = 'd-s.io'
         return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
 
     def dood_decode(self, data):
