@@ -50,7 +50,7 @@ class FileLionsResolver(ResolveGeneric):
             self.get_url(host, media_id),
             patterns=[
                 r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)''',
-                r'''["']hls[24]["']:\s*["'](?P<url>[^"']+)'''
+                r'''["']hls[234]["']:\s*["'](?P<url>[^"']+)'''
             ],
             generic_patterns=False,
             referer=referer
