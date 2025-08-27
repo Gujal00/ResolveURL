@@ -25,7 +25,7 @@ from six.moves import urllib_parse
 class VidTubeResolver(ResolveGeneric):
     name = 'VidTube'
     domains = ['vidtube.pro', 'vidtube.cam', 'vidtube.one']
-    pattern = r'(?://|\.)(.*?vidtube\.(?:pro|cam|one))/(?:embed-|d/)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(.*?vidtube\.(?:pro|cam|one))/(?:embed-|d/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
