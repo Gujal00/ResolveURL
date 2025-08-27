@@ -26,8 +26,8 @@ class WecimaResolver(ResolveUrl):
     name = 'Wecima'
     domains = ['wecima.show', 'wecima.movie', 'wecima.stream', 'wecima.watch',
                'vbn1.t4ce4ma.shop', 'vbn2.t4ce4ma.shop', 'vbn3.t4ce4ma.shop', 'wecima.film',
-               'wecima.tube', 'wecima.video']
-    pattern = r'(?://|\.)((?:wecima|vbn[123]\.t4ce4ma)\.(?:show|movie|stream|watch|shop|film|tube|video))/run/([^\n]+)'
+               'wecima.tube', 'wecima.video', 'wecima.tv']
+    pattern = r'(?://|\.)((?:wecima|vbn[123]\.t4ce4ma)\.(?:show|movie|stream|watch|shop|film|tube|video|tv))/run/([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
