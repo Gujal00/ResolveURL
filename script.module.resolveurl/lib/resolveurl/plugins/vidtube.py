@@ -19,19 +19,25 @@
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
+from six.moves import urllib_parse
 
 
 class VidTubeResolver(ResolveGeneric):
     name = 'VidTube'
     domains = ['vidtube.pro', 'vidtube.cam', 'vidtube.one']
-    pattern = r'(?://|\.)(.*?vidtube\.(?:pro|cam|one))/(?:embed-|d/)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(.*?vidtube\.(?:pro|cam|one))/(?:embed-|d/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[r'''file:\s*"(?P<url>[^"]+)",label:\s*"(?P<label>[^"]+)"}'''],
             generic_patterns=False,
-            referer=False
+            referer=referer
         )
 
     def get_url(self, host, media_id):
