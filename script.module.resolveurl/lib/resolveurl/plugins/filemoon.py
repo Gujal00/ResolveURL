@@ -32,7 +32,7 @@ class FileMoonResolver(ResolveUrl):
                'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', '96ar.com',
                'xcoic.com', 'f51rm.com', 'c1z39.com', 'boosteradx.online']
     pattern = r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|' \
-              r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boostera?d?x)' \
+              r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx)' \
               r'\.(?:sx|to|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))' \
               r'/(?:e|d|download)/([0-9a-zA-Z$:/._-]+)'
 
