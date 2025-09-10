@@ -29,11 +29,13 @@ class KinoGerResolver(ResolveUrl):
     domains = [
         'kinoger.re', 'shiid4u.upn.one', 'moflix.upns.xyz', 'player.upn.one', 'disneycdn.net',
         'wasuytm.store', 'ultrastream.online', 'moflix.rpmplay.xyz', 'tuktuk.rpmvid.com', 'w1tv.xyz'
-        'filedecrypt.link', 'asianembed.cam', 'videoshar.uns.bio', 'videoland.cfd', 'dzo.vidplayer.live'
+        'filedecrypt.link', 'asianembed.cam', 'videoshar.uns.bio', 'videoland.cfd', 'dzo.vidplayer.live',
+        'watch.ezplayer.me', 'watch.streamcasthub.store'
     ]
     pattern = r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|moflix\.(?:upns|rpmplay)|' \
-              r'tuktuk\.rpmvid|disneycdn|filedecrypt|asianembed|dzo\.vidplayer|video(?:shar\.uns|land)|w1tv)' \
-              r'\.(?:re|one|xyz|store|online|c[oa]m|net|li(?:nk|ve)|bio|cfd))/#([A-Za-z0-9]+)'
+              r'tuktuk\.rpmvid|disneycdn|filedecrypt|asianembed|dzo\.vidplayer|video(?:shar\.uns|land)|w1tv|' \
+              r'watch\.(?:ezplayer|streamcasthub))' \
+              r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|li(?:nk|ve)|bio|cfd))/#([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
