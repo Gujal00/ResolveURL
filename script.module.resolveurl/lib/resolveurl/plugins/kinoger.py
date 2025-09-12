@@ -33,8 +33,8 @@ class KinoGerResolver(ResolveUrl):
         'watch.ezplayer.me', 'watch.streamcasthub.store', 'ultra.rpmvid.site'
     ]
     pattern = r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|moflix\.(?:upns|rpmplay)|' \
-              r'tuktuk\.rpmvid|disneycdn|filedecrypt|asianembed|dzo\.vidplayer|video(?:shar\.uns|land)|w1tv|' \
-              r'watch\.(?:ezplayer|streamcasthub)|ultra\.rpmvid)' \
+              r'(?:tuktuk|ultra)\.rpmvid|disneycdn|filedecrypt|dzo\.vidplayer|video(?:shar\.uns|land)|w1tv|' \
+              r'watch\.(?:ezplayer|streamcasthub)|asianembed)' \
               r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|li(?:nk|ve)|bio|cfd|site))/#([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
