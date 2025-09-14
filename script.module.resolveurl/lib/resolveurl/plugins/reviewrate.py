@@ -23,7 +23,7 @@ from six.moves import urllib_parse
 
 class ReviewRateResolver(ResolveGeneric):
     name = 'ReviewRate'
-    domains = ['reviewrate.net', 'w5.gamezone.cam', 'w5.gameshop4u.com', 'w.gamehub.cam']
+    domains = ['reviewrate.net', 'w5.gamezone.cam', 'w5.gameshop4u.com', 'w.gamehub.cam', 'm.reviewrate.net']
     pattern = r'(?://)((?:.*\.)?(?:reviewrate|w5\.gamezone|w5\.gameshop4u|w\.gamehub)\.(?:net|cam|com))/(?:embed-){0,2}([0-9a-zA-Z-$:/.]+)'
 
     def get_media_url(self, host, media_id):
