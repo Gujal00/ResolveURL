@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class BigWarpResolver(ResolveUrl):
     name = 'BigWarp'
-    domains = ['bigwarp.io', 'bgwp.cc', 'bigwarp.art', 'bigwarp.cc']
-    pattern = r'(?://|\.)((?:bigwarp|bgwp)\.(?:io|cc|art))/(?:e/|embed-)?([0-9a-zA-Z=]+)'
+    domains = ['bigwarp.io', 'bgwp.cc', 'bigwarp.art', 'bigwarp.cc', 'bigwarp.pro']
+    pattern = r'(?://|\.)((?:bigwarp|bgwp)\.(?:io|cc|art|pro))/(?:e/|embed-)?([0-9a-zA-Z=]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)

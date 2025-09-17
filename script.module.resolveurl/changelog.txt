@@ -1,20 +1,14 @@
-Version 5.1.178 (Sep 01, 2025)
+Version 5.1.179 (Sep 17, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - vidora
 
 - Resolvers Fixed/Updated:
-    - doodstream
-    - filelions
+    - filemoon
     - kinoger
-    - streamwish
-    - updown
-    - uploadflix
-    - vidguard
-    - vidtube
-    - wecima
+    - reviewrate
 
 - Resolvers Removed
     - None
