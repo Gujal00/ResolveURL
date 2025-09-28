@@ -256,8 +256,11 @@ def play_link(link):
                 stream_url = resolveurl.resolve(stream_url)
         else:
             resp = hmf.resolve()
-            stream_url = resp.get('url')
-            subs = resp.get('subs')
+            if resp:
+                stream_url = resp.get('url')
+                subs = resp.get('subs')
+            else:
+                return False
         if not stream_url or not isinstance(stream_url, six.string_types):
             try:
                 msg = stream_url.msg

@@ -1,14 +1,13 @@
-Version 5.1.179 (Sep 17, 2025)
+Version 5.1.180 (Sep 29, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - vidora
+    - CocoLeech
 
 - Resolvers Fixed/Updated:
-    - filemoon
-    - kinoger
-    - reviewrate
+    - doodstream
+    - filelions
 
 - Resolvers Removed
     - None
