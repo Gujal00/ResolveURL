@@ -400,6 +400,22 @@ msgctxt "#33096"
 msgid "Getting Torrent from Real-Debrid Cloud"
 msgstr "Získávání torrentu z Real-Debrid Cloud"
 
+msgctxt "#33097"
+msgid "CocoLeech Resolver Authorised"
+msgstr "CocoLeech Resolver autorizován"
+
+msgctxt "#33098"
+msgid "CocoLeech Authorisation Reset"
+msgstr "Reset autorizace CocoLeech"
+
+msgctxt "#33099"
+msgid "Account not Premium"
+msgstr "Účet není prémiový"
+
+msgctxt "#33100"
+msgid "Saving Torrent to CocoLeech Cloud"
+msgstr "Ukládání torrentu do CocoLeech Cloudu"
+
 msgctxt "#33101"
 msgid "Clean Settings File"
 msgstr "Vyčistit soubor nastavení"
@@ -407,3 +423,7 @@ msgstr "Vyčistit soubor nastavení"
 msgctxt "#33102"
 msgid "Settings File cleaned"
 msgstr "Soubor nastavení vyčištěn"
+
+msgctxt "#33103"
+msgid "Pokračovat v přenosu do CocoLeech Cloudu na pozadí?"
+msgstr ""

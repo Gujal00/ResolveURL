@@ -114,6 +114,11 @@ STRINGS = {
     'rd_save': 33094,
     'rd_background': 33095,
     'rd_get': 33096,
+    'cl_authorized': 33097,
+    'cl_auth_reset': 33098,
+    'cl_save': 33100,
+    'cl_background': 33103,
+    'not_premium': 33099,
     'clean_settings': 33101,
     'settings_cleaned': 33102
 }

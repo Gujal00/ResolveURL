@@ -401,6 +401,22 @@ msgctxt "#33096"
 msgid "Getting Torrent from Real-Debrid Cloud"
 msgstr "Λήψη Torrent από το Real-Debrid Cloud"
 
+msgctxt "#33097"
+msgid "CocoLeech Resolver Authorised"
+msgstr "Εξουσιοδοτημένος Επίλυσης CocoLeech"
+
+msgctxt "#33098"
+msgid "CocoLeech Authorisation Reset"
+msgstr "Επαναφορά Εξουσιοδότησης CocoLeech"
+
+msgctxt "#33099"
+msgid "Account not Premium"
+msgstr "Ο Λογαριασμός δεν είναι Premium"
+
+msgctxt "#33100"
+msgid "Saving Torrent to CocoLeech Cloud"
+msgstr "Αποθήκευση Torrent στο CocoLeech Cloud"
+
 msgctxt "#33101"
 msgid "Clean Settings File"
 msgstr "Καθαρίστε το αρχείο ρυθμίσεων"
@@ -408,3 +424,7 @@ msgstr "Καθαρίστε το αρχείο ρυθμίσεων"
 msgctxt "#33102"
 msgid "Settings File cleaned"
 msgstr "Καθαρίστε το αρχείο ρυθμίσεων"
+
+msgctxt "#33103"
+msgid "Να συνεχιστεί η μεταφορά στο CocoLeech Cloud στο παρασκήνιο;"
+msgstr ""
