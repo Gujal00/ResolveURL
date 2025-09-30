@@ -31,62 +31,54 @@ from resolveurl.lib.pyaes import util as pyaes_util
 
 class StreamUpResolver(ResolveUrl):
     name = 'StreamUp'
-    domains = ['streamup.ws', 'strmup.to']
-    pattern = r'(?://|\.)(stre?a?mup\.(?:ws|to))/([0-9a-zA-Z]+)'
+    domains = ['streamup.ws', 'streamup.cc', 'strmup.to', 'strmup.cc']
+    pattern = r'(?://|\.)(stre?a?mup\.(?:ws|cc|to))/(?:v/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
+        user_agent = common.RAND_UA
+        ref = urllib_parse.urljoin(web_url, '/')
+        stream_url = ''
+        headers = {"User-Agent": user_agent, "Referer": ref}
+        content = self.net.http_GET(web_url, headers=headers).content
 
-        try:
-            user_agent = common.RAND_UA
-            headers = {"User-Agent": user_agent, "Referer": 'https://{0}/'.format(host)}
+        session_id_match = re.search(r"['\"]([a-f0-9]{32})['\"]", content)
+        encrypted_data_match = re.search(r"data-value=['\"]([A-Za-z0-9+/=]{200,})['\"]", content)
 
-            content = self.net.http_GET(web_url, headers=headers).content
-
-            session_id_match = re.search(r"['\"]([a-f0-9]{32})['\"]", content)
-            encrypted_data_match = re.search(r"data-value=['\"]([A-Za-z0-9+/=]{200,})['\"]", content)
-
-            if not encrypted_data_match or not session_id_match:
-                raise ResolverError("Could not find 'encrypted data' or 'session id' on the page.")
-
+        if encrypted_data_match and session_id_match:
             session_id = session_id_match.group(1)
             encrypted_data_b64 = encrypted_data_match.group(1)
+            key_url = "{0}/ajax/stream?session={1}".format(ref[:-1], session_id)
+            key_b64 = self.net.http_GET(key_url, headers=headers).content
 
-            parsed_url = urllib_parse.urlparse(web_url)
-            base_url_with_scheme = "{0}://{1}".format(parsed_url.scheme, parsed_url.netloc)
-            key_url = "{0}/ajax/stream?session={1}".format(base_url_with_scheme, session_id)
+            try:
+                key = helpers.b64decode(key_b64, binary=True)
+                encrypted_data = helpers.b64decode(encrypted_data_b64, binary=True)
+                iv = encrypted_data[:16]
+                ciphertext = encrypted_data[16:]
 
-            key_headers = {"User-Agent": user_agent, "Referer": web_url}
+                decrypter = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv))
+                decrypted_padded = decrypter.feed(ciphertext)
+                decrypted_padded += decrypter.feed()
 
-            key_b64 = self.net.http_GET(key_url, headers=key_headers).content
-            key = helpers.b64decode(key_b64, binary=True)
+                decrypted_data = pyaes_util.strip_PKCS7_padding(decrypted_padded)
+                stream_info = json.loads(six.ensure_str(decrypted_data))
+                stream_url = stream_info.get("streaming_url")
+            except Exception as e:
+                common.logger.log('StreamUp Error: %s' % e, common.log_utils.LOGWARNING)
+                raise ResolverError('An unexpected error occurred with the StreamUp resolver: %s' % e)
 
-            encrypted_data = helpers.b64decode(encrypted_data_b64, binary=True)
-            iv = encrypted_data[:16]
-            ciphertext = encrypted_data[16:]
-
-            decrypter = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv))
-            decrypted_padded = decrypter.feed(ciphertext)
-            decrypted_padded += decrypter.feed()
-
-            decrypted_data = pyaes_util.strip_PKCS7_padding(decrypted_padded)
-            decrypted_data_str = six.ensure_str(decrypted_data)
-
-            stream_info = json.loads(decrypted_data_str)
+        else:
+            surl = '{0}/ajax/stream?filecode={1}'.format(ref[:-1], media_id)
+            sdata = self.net.http_GET(surl, headers=headers).content
+            stream_info = json.loads(sdata)
             stream_url = stream_info.get("streaming_url")
 
-            playback_headers = {
-                "User-Agent": user_agent,
-                "Referer": base_url_with_scheme + "/",
-                "Origin": base_url_with_scheme
-            }
+        if stream_url:
+            headers.update({"Origin": ref[:-1]})
+            return stream_url + helpers.append_headers(headers)
 
-            return stream_url + helpers.append_headers(playback_headers)
-
-
-        except Exception as e:
-            common.logger.log('StreamUp Error: %s' % e, common.log_utils.LOGWARNING)
-            raise ResolverError('An unexpected error occurred with the StreamUp resolver: %s' % e)
+        raise ResolverError('Video cannot be located.')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
