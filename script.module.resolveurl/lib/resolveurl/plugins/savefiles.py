@@ -16,23 +16,64 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import re
+from six.moves import urllib_parse
+
+from resolveurl import common
 from resolveurl.lib import helpers
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class SaveFilesResolver(ResolveGeneric):
+class SaveFilesResolver(ResolveUrl):
     name = 'SaveFiles'
     domains = ['savefiles.com', 'streamhls.to']
     pattern = r'(?://|\.)((?:savefiles|streamhls)\.' \
               r'(?:com|to))/(?:e/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[{\s*file\s*:\s*['"](?P<url>[^'"]+)'''],
-            subs=subs,
-            referer=False
-        )
+        web_url = self.get_url(host, media_id)
+
+        base_url = "https://{0}".format(host)
+        dl_url = "{0}/dl".format(base_url)
+
+        user_agent = common.RAND_UA
+
+        try:
+            post_data = {
+                'op': 'embed',
+                'file_code': media_id,
+                'auto': '0'
+            }
+
+            headers_post = {
+                "User-Agent": user_agent,
+                "Referer": web_url,
+                "Origin": base_url,
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+
+            player_html_content = self.net.http_POST(dl_url, form_data=post_data, headers=headers_post).content
+
+            stream_url_match = re.search(r'sources:\s*\[{file:"([^"]+)"', player_html_content)
+
+            if not stream_url_match:
+                raise ResolverError("Could not find stream URL in the response from /dl endpoint.")
+
+            stream_url = stream_url_match.group(1)
+
+            playback_headers = {
+                "User-Agent": user_agent,
+                "Referer": base_url + "/",
+                "Origin": base_url
+            }
+
+            final_url = stream_url + helpers.append_headers(playback_headers)
+
+            return final_url
+
+        except Exception as e:
+            common.logger.log('SaveFiles Error: %s' % e, common.log_utils.LOGWARNING)
+            raise ResolverError('An unexpected error occurred with the SaveFiles resolver: %s' % e)
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
