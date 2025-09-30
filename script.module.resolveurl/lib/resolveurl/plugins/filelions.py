@@ -32,12 +32,12 @@ class FileLionsResolver(ResolveGeneric):
         'techradar.ink', 'anime7u.com', 'coolciima.online', 'gsfomqu.sbs', 'vidhidepre.com',
         'katomen.online', 'vidhide.fun', 'vidhidehub.com', 'dhtpre.com', '6sfkrspw4u.sbs', 'peytonepre.com',
         'ryderjet.com', 'e4xb5c2xnz.sbs', 'smoothpre.com', 'kinoger.be', 'movearnpre.com', 'videoland.sbs',
-        'mivalyo.com', 'vidhidefast.com', 'taylorplayer.com', 'bingezove.com'
+        'mivalyo.com', 'vidhidefast.com', 'taylorplayer.com', 'bingezove.com', 'dingtezuni.com'
     ]
     pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|motvy55|' \
               r'[mad]lions|lumiawatch|javplaya|javlion|fviplions|egsyxutd|fdewsdc|vidhide|peytone|' \
               r'anime7u|coolciima|gsfomqu|katomen|dht|6sfkrspw4u|ryderjet|e4xb5c2xnz|smooth|kinoger|' \
-              r'movearn|videoland|mivalyo|taylorplayer|bingezove)(?:pro|vip|pre|plus|hub|fast)?' \
+              r'movearn|videoland|mivalyo|taylorplayer|bingezove|dingtezuni)(?:pro|vip|pre|plus|hub|fast)?' \
               r'\.(?:com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site|fun|be))/(?:s|v|f|d|embed|file|download)/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
