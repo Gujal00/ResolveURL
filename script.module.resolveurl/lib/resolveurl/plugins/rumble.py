@@ -39,8 +39,16 @@ class RumbleResolver(ResolveUrl):
             ua = _json.get('ua')
 
             streams = []
-            for q, s in iteritems(ua.get('mp4')):
-                streams.append((q, s['url']))
+            if ua.get('mp4'):
+                for quality, details in iteritems(ua['mp4']):
+                    if details.get('url'):
+                        streams.append((quality, details['url']))
+            elif ua.get('hls'):
+                for quality, details in iteritems(ua['hls']):
+                    if details.get('url'):
+                        # Use a descriptive label for HLS streams
+                        label = '%sp (HLS)' % quality if quality.isdigit() else 'HLS'
+                        streams.append((label, details['url']))
 
             return helpers.pick_source(streams[::-1]) + helpers.append_headers({'User-Agent': common.RAND_UA})
 
