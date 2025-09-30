@@ -211,7 +211,7 @@ class CocoLeechResolver(ResolveUrl):
             for host in js_data:
                 hosts.extend(host.get('domains'))
             if self.get_setting('torrents') == 'true':
-                hosts.update('magnet')
+                hosts.extend(['torrent', 'magnet'])
             logger.log_debug('Coocoleech hosts : {0}'.format(hosts))
         except Exception as e:
             logger.log_error('Error getting CL Hosts: {0}'.format(e))
