@@ -26,7 +26,6 @@ from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 from resolveurl.lib import pyaes
-from resolveurl.lib.pyaes import util as pyaes_util
 
 
 class StreamUpResolver(ResolveUrl):
@@ -42,32 +41,25 @@ class StreamUpResolver(ResolveUrl):
         headers = {"User-Agent": user_agent, "Referer": ref}
         content = self.net.http_GET(web_url, headers=headers).content
 
-        session_id_match = re.search(r"['\"]([a-f0-9]{32})['\"]", content)
-        encrypted_data_match = re.search(r"data-value=['\"]([A-Za-z0-9+/=]{200,})['\"]", content)
+        session_id_match = re.search(r"'([a-f0-9]{32})'", content)
+        encrypted_data_match = re.search(r"'([A-Za-z0-9+/=]{200,})'", content)
 
         if encrypted_data_match and session_id_match:
             session_id = session_id_match.group(1)
             encrypted_data_b64 = encrypted_data_match.group(1)
             key_url = "{0}/ajax/stream?session={1}".format(ref[:-1], session_id)
             key_b64 = self.net.http_GET(key_url, headers=headers).content
+            key = helpers.b64decode(key_b64, binary=True)
+            encrypted_data = helpers.b64decode(encrypted_data_b64, binary=True)
+            iv = encrypted_data[:16]
+            ciphertext = encrypted_data[16:]
 
-            try:
-                key = helpers.b64decode(key_b64, binary=True)
-                encrypted_data = helpers.b64decode(encrypted_data_b64, binary=True)
-                iv = encrypted_data[:16]
-                ciphertext = encrypted_data[16:]
+            decrypter = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv))
+            decrypted_data = decrypter.feed(ciphertext)
+            decrypted_data += decrypter.feed()
 
-                decrypter = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(key, iv))
-                decrypted_padded = decrypter.feed(ciphertext)
-                decrypted_padded += decrypter.feed()
-
-                decrypted_data = pyaes_util.strip_PKCS7_padding(decrypted_padded)
-                stream_info = json.loads(six.ensure_str(decrypted_data))
-                stream_url = stream_info.get("streaming_url")
-            except Exception as e:
-                common.logger.log('StreamUp Error: %s' % e, common.log_utils.LOGWARNING)
-                raise ResolverError('An unexpected error occurred with the StreamUp resolver: %s' % e)
-
+            stream_info = json.loads(six.ensure_str(decrypted_data))
+            stream_url = stream_info.get("streaming_url")
         else:
             surl = '{0}/ajax/stream?filecode={1}'.format(ref[:-1], media_id)
             sdata = self.net.http_GET(surl, headers=headers).content
