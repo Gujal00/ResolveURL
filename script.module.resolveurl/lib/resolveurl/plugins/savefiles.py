@@ -32,48 +32,26 @@ class SaveFilesResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
+        ref = urllib_parse.urljoin(web_url + '/')
+        dl_url = urllib_parse.urljoin(web_url + '/dl')
+        post_data = {
+            'op': 'embed',
+            'file_code': media_id,
+            'auto': '0'
+        }
+        headers = {
+            "User-Agent": common.RAND_UA,
+            "Referer": ref,
+            "Origin": ref[:-1]
+        }
 
-        base_url = "https://{0}".format(host)
-        dl_url = "{0}/dl".format(base_url)
+        player_html = self.net.http_POST(dl_url, form_data=post_data, headers=headers_post).content
+        s = re.search(r'sources:\s*\[{file:"([^"]+)"', player_html)
+        if s:
+            return s.group(1) + helpers.append_headers(headers)
 
-        user_agent = common.RAND_UA
+        raise ResolverError("Unable to locate stream URL.")
 
-        try:
-            post_data = {
-                'op': 'embed',
-                'file_code': media_id,
-                'auto': '0'
-            }
-
-            headers_post = {
-                "User-Agent": user_agent,
-                "Referer": web_url,
-                "Origin": base_url,
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-
-            player_html_content = self.net.http_POST(dl_url, form_data=post_data, headers=headers_post).content
-
-            stream_url_match = re.search(r'sources:\s*\[{file:"([^"]+)"', player_html_content)
-
-            if not stream_url_match:
-                raise ResolverError("Could not find stream URL in the response from /dl endpoint.")
-
-            stream_url = stream_url_match.group(1)
-
-            playback_headers = {
-                "User-Agent": user_agent,
-                "Referer": base_url + "/",
-                "Origin": base_url
-            }
-
-            final_url = stream_url + helpers.append_headers(playback_headers)
-
-            return final_url
-
-        except Exception as e:
-            common.logger.log('SaveFiles Error: %s' % e, common.log_utils.LOGWARNING)
-            raise ResolverError('An unexpected error occurred with the SaveFiles resolver: %s' % e)
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
