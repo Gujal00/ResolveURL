@@ -46,7 +46,7 @@ class SaveFilesResolver(ResolveUrl):
         }
 
         player_html = self.net.http_POST(dl_url, form_data=post_data, headers=headers_post).content
-        s = re.search(r'sources:\s*\[{file:"([^"]+)"', player_html)
+        s = re.search(r'''sources:\s*\[{\s*file\s*:\s*['"]([^'"]+)''', player_html)
         if s:
             return s.group(1) + helpers.append_headers(headers)
 
