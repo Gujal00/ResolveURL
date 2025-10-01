@@ -32,9 +32,14 @@ class SibnetResolver(ResolveUrl):
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://video.sibnet.ru/'}
         html = self.net.http_GET(web_url, headers=headers).content
-        source = re.search(r'src:\s*"([^"]+)', html)
+        source = re.search(r'src:\s*"([^"]+)"', html)
         if source:
-            return 'https://video.sibnet.ru' + source.group(1) + helpers.append_headers(headers)
+            relative_path = source.group(1)
+            if not relative_path.startswith('/'):
+                relative_path = '/' + relative_path
+
+            stream_url = 'https://video.sibnet.ru' + relative_path
+            return stream_url + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
