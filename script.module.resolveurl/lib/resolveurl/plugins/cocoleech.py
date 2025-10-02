@@ -134,46 +134,43 @@ class CocoLeechResolver(ResolveUrl):
             raise ResolverError(result.get('message'))
 
     def __initiate_transfer(self, magnet_hash, interval=5):
-        try:
-            transfer_info = self.__list_transfer(magnet_hash)
-            if transfer_info:
-                line1 = transfer_info.get('name')
-                line2 = i18n('cl_save')
-                line3 = transfer_info.get('status')
-                with common.kodi.ProgressDialog('ResolveURL CocoLeech {0}'.format(i18n('transfer')), line1, line2, line3) as pd:
-                    while not transfer_info.get('isComplete'):
-                        common.kodi.sleep(1000 * interval)
-                        transfer_info = self.__list_transfer(magnet_hash)
-                        file_size = transfer_info.get('size')
-                        file_size2 = round(float(file_size) / (1000 ** 3), 2)
-                        line1 = transfer_info.get('name')
+        transfer_info = self.__list_transfer(magnet_hash)
+        if transfer_info:
+            line1 = transfer_info.get('name')
+            line2 = i18n('cl_save')
+            line3 = transfer_info.get('status')
+            with common.kodi.ProgressDialog('ResolveURL CocoLeech {0}'.format(i18n('transfer')), line1, line2, line3) as pd:
+                while not transfer_info.get('isComplete'):
+                    common.kodi.sleep(1000 * interval)
+                    transfer_info = self.__list_transfer(magnet_hash)
+                    file_size = transfer_info.get('size')
+                    file_size2 = round(float(file_size) / (1000 ** 3), 2)
+                    line1 = transfer_info.get('name')
 
-                        download_speed = round(float(transfer_info.get('rateDownload')) / (1000**2), 2)
-                        progress = int(transfer_info.get('progress'))
-                        line3 = "{0} {1}MB/s, {2}% {3} {4}GB {5}".format(
-                            i18n('downloading'), download_speed, progress,
-                            i18n('of'), file_size2, i18n('completed')
+                    download_speed = round(float(transfer_info.get('rateDownload')) / (1000**2), 2)
+                    progress = int(transfer_info.get('progress'))
+                    line3 = "{0} {1}MB/s, {2}% {3} {4}GB {5}".format(
+                        i18n('downloading'), download_speed, progress,
+                        i18n('of'), file_size2, i18n('completed')
+                    )
+
+                    logger.log_debug(line3)
+                    pd.update(progress, line1=line1, line3=line3)
+                    if pd.is_canceled():
+                        keep_transfer = common.kodi.yesnoDialog(
+                            heading='ResolveURL CocoLeech {0}'.format(i18n('transfer')),
+                            line1=i18n('cl_background')
                         )
-
-                        logger.log_debug(line3)
-                        pd.update(progress, line1=line1, line3=line3)
-                        if pd.is_canceled():
-                            keep_transfer = common.kodi.yesnoDialog(
-                                heading='ResolveURL CocoLeech {0}'.format(i18n('transfer')),
-                                line1=i18n('cl_background')
-                            )
-                            if not keep_transfer:
-                                self.__delete_magnet(magnet_hash)
-                            logger.log_debug('ResolveURL CocoLeech {0} ID {1} :: {2}'.format(i18n('transfer'), magnet_hash, i18n('user_cancelled')))
-                            return False
-
-                common.kodi.sleep(1000 * interval)  # allow api time to generate the links
-
+                        if not keep_transfer:
+                            self.__delete_magnet(magnet_hash)
+                        logger.log_debug('ResolveURL CocoLeech {0} ID {1} :: {2}'.format(i18n('transfer'), magnet_hash, i18n('user_cancelled')))
+                        return False
+            common.kodi.sleep(1000 * interval)  # allow api time to generate the links
             return True
 
-        except Exception as e:
+        else:
             self.__delete_magnet(magnet_hash)
-            raise ResolverError('CocoLeech Magnet {0} :: {1}'.format(magnet_hash, e))
+            raise ResolverError('CocoLeech Magnet {0} :: {1}'.format(magnet_hash, transfer_info))
 
     def __list_transfer(self, magnet_hash):
         params = {'hash': magnet_hash, 'key': self.api_key}
@@ -181,7 +178,7 @@ class CocoLeechResolver(ResolveUrl):
         result = self.net.http_GET(url, headers=self.headers).content
         magnets = json.loads(result)
         for magnet in magnets:
-            if magnet.get('hash') == magnet_hash:
+            if magnet.get('hash').lower() == magnet_hash.lower():
                 return magnet
 
     def __delete_magnet(self, magnet_hash):
