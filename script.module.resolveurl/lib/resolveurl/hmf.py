@@ -262,10 +262,10 @@ class HostedMediaFile:
         Intended to catch stream urls returned by resolvers that would fail to playback
         """
         # parse_qsl doesn't work because it splits elements by ';' which can be in a non-quoted UA
-        try:
+        if '|' in stream_url:
             headers = dict([item.split('=') for item in (stream_url.split('|')[1]).split('&')])
-        except:
-            headers = {}
+        else:
+            headers = {'User-Agent': common.FF_USER_AGENT}
         for header in headers:
             headers[header] = urllib_parse.unquote_plus(headers[header])
         common.logger.log_debug('Setting Headers on UrlOpen: %s' % headers)
@@ -284,12 +284,17 @@ class HostedMediaFile:
             msg = ''
             if 'verifypeer' in headers.keys():
                 headers.pop('verifypeer')
-            request = urllib_request.Request(stream_url.split('|')[0], headers=headers)
-            # only do a HEAD request for non m3u8 streams
+
+            # limit requested data for non m3u8 streams
             if '.m3u8' not in stream_url and '/hls/' not in stream_url:
-                request.get_method = lambda: 'HEAD'
+                # request.get_method = lambda: 'HEAD'
+                headers.update({'Range': 'bytes=0-1023'})
+
+            request = urllib_request.Request(stream_url.split('|')[0], headers=headers)
             #  set urlopen timeout to 15 seconds
-            http_code = urllib_request.urlopen(request, timeout=15).getcode()
+            with urllib_request.urlopen(request, timeout=15) as resp:
+                http_code = resp.code
+                resp.close()
         except urllib_error.HTTPError as e:
             if isinstance(e, urllib_error.HTTPError):
                 http_code = e.code
