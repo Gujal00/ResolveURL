@@ -1,13 +1,16 @@
-Version 5.1.180 (Sep 29, 2025)
+Version 5.1.181 (Oct 03, 2025)
 - Code Base Changes:
-    - None
+    - Change test stream method
 
 - Resolvers Added:
-    - CocoLeech
+    - None
 
 - Resolvers Fixed/Updated:
-    - doodstream
+    - cocleech
     - filelions
+    - savefiles
+    - streamup
+    - rumble
 
 - Resolvers Removed
     - None
