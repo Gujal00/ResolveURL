@@ -278,7 +278,7 @@ def play_link(link):
     logger.log('Link Resolved: |%s|%s|%s|' % (link, stream_url, subs), log_utils.LOGDEBUG)
 
     listitem = xbmcgui.ListItem(path=stream_url)
-    # listitem.setContentLookup(False)
+    listitem.setProperty('script.trakt.exclude', '1')
     if subs:
         listitem.setSubtitles(list(subs.values()))
     kodiver = kodi.get_kodi_version().major
@@ -307,9 +307,6 @@ def play_link(link):
             elif kodiver > 19:
                 listitem.setProperty('inputstream.adaptive.manifest_headers', strhdr)
             listitem.setPath(stream_url)
-
-    # xbmcgui.Window(10000).clearProperty('script.trakt.ids')
-    # xbmcgui.Window(10000).setProperty('script.trakt.ids', "{'id': 0}")
 
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
 
