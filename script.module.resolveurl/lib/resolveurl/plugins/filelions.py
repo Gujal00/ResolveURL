@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2023 shellc0de
+    Copyright (C) 2023 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,12 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.lib import helpers
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import ast
+import re
 from six.moves import urllib_parse
+from resolveurl import common
+from resolveurl.lib import helpers
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class FileLionsResolver(ResolveGeneric):
+class FileLionsResolver(ResolveUrl):
     name = 'FileLions'
     domains = [
         'filelions.com', 'filelions.to', 'ajmidyadfihayh.sbs', 'alhayabambi.sbs', 'vidhideplus.com',
@@ -30,31 +33,53 @@ class FileLionsResolver(ResolveGeneric):
         'javplaya.com', 'fviplions.com', 'egsyxutd.sbs', 'filelions.site', 'filelions.co',
         'vidhide.com', 'vidhidepro.com', 'vidhidevip.com', 'javlion.xyz', 'fdewsdc.sbs',
         'techradar.ink', 'anime7u.com', 'coolciima.online', 'gsfomqu.sbs', 'vidhidepre.com',
-        'katomen.online', 'vidhide.fun', 'vidhidehub.com', 'dhtpre.com', '6sfkrspw4u.sbs', 'peytonepre.com',
-        'ryderjet.com', 'e4xb5c2xnz.sbs', 'smoothpre.com', 'kinoger.be', 'movearnpre.com', 'videoland.sbs',
-        'mivalyo.com', 'vidhidefast.com', 'taylorplayer.com', 'bingezove.com', 'dingtezuni.com'
+        'katomen.online', 'vidhide.fun', 'vidhidehub.com', 'dhtpre.com', '6sfkrspw4u.sbs',
+        'streamvid.su', 'movearnpre.com', 'bingezove.com', 'dingtezuni.com', 'dinisglows.com',
+        'ryderjet.com', 'e4xb5c2xnz.sbs', 'smoothpre.com', 'videoland.sbs', 'taylorplayer.com',
+        'mivalyo.com', 'vidhidefast.com', 'peytonepre.com'
     ]
-    pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|motvy55|' \
+    pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|' \
               r'[mad]lions|lumiawatch|javplaya|javlion|fviplions|egsyxutd|fdewsdc|vidhide|peytone|' \
-              r'anime7u|coolciima|gsfomqu|katomen|dht|6sfkrspw4u|ryderjet|e4xb5c2xnz|smooth|kinoger|' \
-              r'movearn|videoland|mivalyo|taylorplayer|bingezove|dingtezuni)(?:pro|vip|pre|plus|hub|fast)?' \
-              r'\.(?:com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site|fun|be))/(?:s|v|f|d|embed|file|download)/([0-9a-zA-Z$:/.]+)'
+              r'anime7u|coolciima|gsfomqu|katomen|dht|6sfkrspw4u|ryderjet|e4xb5c2xnz|smooth|' \
+              r'streamvid|movearnpre|bingezove|dingtezuni|dinisglows|motvy55|videoland|mivalyo|' \
+              r'taylorplayer)(?:pro|vip|pre|plus|hub|fast)?' \
+              r'\.(?:su|com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site|fun))' \
+              r'/(?:s|v|f|d|embed|file|download)/([0-9a-zA-Z$:/.]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
             referer = urllib_parse.urljoin(referer, '/')
         else:
             referer = False
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[
-                r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)''',
-                r'''["']hls[24]["']:\s*["'](?P<url>[^"']+)'''
-            ],
-            generic_patterns=False,
-            referer=referer
-        )
+        web_url = self.get_url(host, media_id)
+        headers = {'User-Agent': common.RAND_UA}
+        if referer:
+            headers.update({'Referer': referer})
+        html = self.net.http_GET(web_url, headers=headers).content
+        html += helpers.get_packed_data(html)
+        headers.update({'Referer': 'https://{}/'.format(host), 'verifypeer': 'false'})
+        links = re.search(r'var\s*links\s*=\s*([^;]+)', html)
+        if links:
+            links = ast.literal_eval(links.group(1))
+            source = links.get('hls4') or links.get('hls3') or links.get('hls2')
+            if source.startswith('/'):
+                source = urllib_parse.urljoin(web_url, source)
+            source = source + helpers.append_headers(headers)
+            if subs:
+                subtitles = helpers.scrape_subtitles(html, web_url)
+                return source, subtitles
+            return source
+
+        source = re.search(r'''sources:\s*\[{file:\s*["']([^"']+)''', html)
+        if source:
+            source = source.group(1) + helpers.append_headers(headers)
+            if subs:
+                subtitles = helpers.scrape_subtitles(html, web_url)
+                return source, subtitles
+            return source
+
+        raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}')
