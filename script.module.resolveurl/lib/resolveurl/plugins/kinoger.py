@@ -30,10 +30,11 @@ class KinoGerResolver(ResolveUrl):
         'kinoger.re', 'shiid4u.upn.one', 'moflix.upns.xyz', 'player.upn.one', 'disneycdn.net',
         'wasuytm.store', 'ultrastream.online', 'moflix.rpmplay.xyz', 'tuktuk.rpmvid.com', 'w1tv.xyz'
         'filedecrypt.link', 'asianembed.cam', 'videoshar.uns.bio', 'videoland.cfd', 'dzo.vidplayer.live',
-        'watch.ezplayer.me', 'watch.streamcasthub.store', 'ultra.rpmvid.site', 'securecdn.shop'
+        'watch.ezplayer.me', 'watch.streamcasthub.store', 'ultra.rpmvid.site', 'securecdn.shop',
+        'srbe84.vidplayer.live'
     ]
     pattern = r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|moflix\.(?:upns|rpmplay)|' \
-              r'(?:tuktuk|ultra)\.rpmvid|disneycdn|filedecrypt|dzo\.vidplayer|video(?:shar\.uns|land)|w1tv|' \
+              r'(?:tuktuk|ultra)\.rpmvid|disneycdn|filedecrypt|(?:dzo|srbe84)\.vidplayer|video(?:shar\.uns|land)|w1tv|' \
               r'watch\.(?:ezplayer|streamcasthub)|asianembed|securecdn)' \
               r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|li(?:nk|ve)|bio|cfd|site|shop))/#([A-Za-z0-9]+)'
 
@@ -55,7 +56,7 @@ class KinoGerResolver(ResolveUrl):
             # r = ddata.get('cf')  # Plays with xbmc Player
             r = ddata.get('source')  # Plays with Inputstream Adaptive
             if r:
-                headers.update({'Origin': referer[:-1]})
+                headers.update({'Origin': referer[:-1], 'verifypeer': 'false'})
                 return r + helpers.append_headers(headers)
 
         raise ResolverError('No playable video found.')
