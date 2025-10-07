@@ -21,6 +21,7 @@ import re
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
+from six.moves import urllib_parse
 
 
 class StreamEmbedResolver(ResolveUrl):
@@ -43,7 +44,10 @@ class StreamEmbedResolver(ResolveUrl):
             if 'type=audio' not in html.lower():
                 sources = re.findall(r'\d+x(?P<label>[\d]+).*\n(?P<url>[^\n]+)', html)
                 if sources:
-                    return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+                    source = helpers.pick_source(helpers.sort_sources_list(sources))
+                    if source.startswith('/'):
+                        source = urllib_parse.urljoin(url, source)
+                    return  source + helpers.append_headers(headers)
             else:
                 return url + helpers.append_headers(headers)
 
