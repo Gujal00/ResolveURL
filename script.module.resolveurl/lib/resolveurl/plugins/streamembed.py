@@ -23,6 +23,7 @@ from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 from six.moves import urllib_parse
 
+
 class StreamEmbedResolver(ResolveUrl):
     name = 'StreamEmbed'
     domains = ['bullstream.xyz', 'mp4player.site', 'watch.gxplayer.xyz']
