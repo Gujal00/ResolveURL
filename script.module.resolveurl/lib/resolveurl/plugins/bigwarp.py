@@ -44,16 +44,16 @@ class BigWarpResolver(ResolveUrl):
             "Origin": ref[:-1]
         }
 
-        player_html = self.net.http_POST(dl_url, form_data=post_data, headers=headers).content
-        s = re.search(r'''sources:\s*\[{\s*file\s*:\s*['"]([^'"]+)''', player_html)
+        html = self.net.http_POST(dl_url, form_data=post_data, headers=headers).content
+        s = re.search(r'''sources:\s*\[{\s*file\s*:\s*['"]([^'"]+)''', html)
         if s:
-            stream_url = s.group(1) + helpers.append_headers(headers)
+            url = s.group(1) + helpers.append_headers(headers)
             if subs:
-                subtitles = helpers.scrape_subtitles(player_html, web_url)
-                return stream_url, subtitles
-            return stream_url
+                subtitles = helpers.scrape_subtitles(html, web_url)
+                return url, subtitles
+            return url
 
         raise ResolverError("Unable to locate stream URL.")
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
+        return self._default_get_url(host, media_id, template='https://bigwarp.io/e/{media_id}')
