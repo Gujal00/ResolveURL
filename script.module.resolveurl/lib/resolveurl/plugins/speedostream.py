@@ -25,9 +25,10 @@ class SpeedoStreamResolver(ResolveGeneric):
     name = 'SpeedoStream'
     domains = [
         'speedostream.com', 'speedostream.nl', 'speedostream.pm', 'speedostream.mom',
-        'speedostream.bond', 'minoplres.xyz', 'embdproxy.xyz' 'spedostream.com'
+        'speedostream.bond', 'minoplres.xyz', 'embdproxy.xyz' 'spedostream.com',
+        'speedostream1.com'
     ]
-    pattern = r'(?://|\.)((?:spe*dostream|minoplres|embdproxy)\.(?:[cm]om|nl|pm|bond|xyz))/(?:embed-)?([^\n]+)'
+    pattern = r'(?://|\.)((?:spe*dostream\d*|minoplres|embdproxy)\.(?:[cm]om|nl|pm|bond|xyz))/(?:embed-)?([^\n]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
