@@ -27,7 +27,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VimeoResolver(ResolveUrl):
     name = 'Vimeo'
     domains = ['vimeo.com', 'player.vimeo.com']
-    pattern = r'(?://|\.)(vimeo\.com)/(?:video/)?([0-9a-zA-Z.:/$?=]+)'
+    pattern = r'(?://|\.)(vimeo\.com)/(?:video/)?([0-9a-zA-Z.:/$&?=]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         headers = {'User-Agent': common.FF_USER_AGENT}
