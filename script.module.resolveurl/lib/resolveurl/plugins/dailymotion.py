@@ -27,7 +27,7 @@ class DailymotionResolver(ResolveUrl):
     name = 'Dailymotion'
     domains = ['dailymotion.com', 'dai.ly']
     pattern = r'(?://|\.)(dailymotion\.com|dai\.ly)(?:/(?:video|embed|sequence|swf|player)' \
-              r'(?:/video|/full)?)?/(?:[a-z0-9]+\.html\?video=)?([0-9a-zA-Z]+)'
+              r'(?:/video|/full)?)?/(?:[a-z0-9]+\.html\?video=)?(?!playlist)([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
