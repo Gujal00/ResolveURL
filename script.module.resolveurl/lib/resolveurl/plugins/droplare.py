@@ -24,8 +24,8 @@ from six.moves import urllib_parse
 
 class DroplareResolver(ResolveUrl):
     name = 'Droplare'
-    domains = ['droplare.cc']
-    pattern = r'(?://|\.)(droplare\.cc)/([0-9a-zA-Z$:/.-_]+)'
+    domains = ['droplare.cc', 'droplare.ws', 'droplaress.cc']
+    pattern = r'(?://|\.)(droplares*\.(?:cc|ws))/([0-9a-zA-Z$:/.-_]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
