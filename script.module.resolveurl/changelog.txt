@@ -1,19 +1,21 @@
-Version 5.1.181 (Oct 03, 2025)
+Version 5.1.182 (Oct 14, 2025)
 - Code Base Changes:
-    - Change test stream method
+    - None
 
 - Resolvers Added:
-    - None
+    - vimeo
+    - vimeos
 
 - Resolvers Fixed/Updated:
-    - cocleech
+    - bigwarp
     - filelions
-    - savefiles
-    - streamup
-    - rumble
+    - kinoger
+    - speedostream
+    - streamembed
+    - streamruby
 
 - Resolvers Removed
-    - None
+    - streamvidsu
 
 - Languages Added/Updated
     - None
