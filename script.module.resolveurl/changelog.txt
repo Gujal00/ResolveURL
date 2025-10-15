@@ -1,21 +1,17 @@
-Version 5.1.182 (Oct 14, 2025)
+Version 5.1.183 (Oct 15, 2025)
 - Code Base Changes:
-    - None
+    - fix test stream method for Python 2.7
 
 - Resolvers Added:
-    - vimeo
-    - vimeos
+    - None
 
 - Resolvers Fixed/Updated:
-    - bigwarp
-    - filelions
-    - kinoger
-    - speedostream
-    - streamembed
-    - streamruby
+    - dailymotion
+    - droplare
+    - vimeo
 
 - Resolvers Removed
-    - streamvidsu
+    - None
 
 - Languages Added/Updated
     - None
