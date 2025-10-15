@@ -291,9 +291,14 @@ class HostedMediaFile:
                 headers.update({'Range': 'bytes=0-1023'})
 
             request = urllib_request.Request(stream_url.split('|')[0], headers=headers)
-            #  set urlopen timeout to 15 seconds
-            with urllib_request.urlopen(request, timeout=15) as resp:
-                http_code = resp.code
+            if six.PY3:
+                #  set urlopen timeout to 15 seconds
+                with urllib_request.urlopen(request, timeout=15) as resp:
+                    http_code = resp.code
+                    resp.close()
+            else:
+                resp = urllib_request.urlopen(request, timeout=15)
+                http_code = resp.getcode()
                 resp.close()
         except urllib_error.HTTPError as e:
             if isinstance(e, urllib_error.HTTPError):
