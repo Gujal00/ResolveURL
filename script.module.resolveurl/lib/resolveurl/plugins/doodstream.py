@@ -20,6 +20,7 @@ import re
 import random
 import string
 import time
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -39,8 +40,8 @@ class DoodStreamResolver(ResolveUrl):
               r'(?:[cit]om?|watch|s[ho]|cx|l[ai]|w[sf]|pm|re|yt|stream|pro|work|net))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
-        if any(host.endswith(x) for x in ['.cx', '.wf']):
-            host = 'dood.so'
+        if host not in ['doodstream.com', 'vidply.com', 'all3do.com', 'vide0.net', 'dsvplay.com']:
+            host = 'dsvplay.com'
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
@@ -54,7 +55,7 @@ class DoodStreamResolver(ResolveUrl):
 
         match = re.search(r'<iframe\s*src="([^"]+)', html)
         if match:
-            url = 'https://{0}{1}'.format(host, match.group(1))
+            url = urllib_parse.urljoin(web_url, match.group(1))
             html = self.net.http_GET(url, headers=headers).content
         else:
             url = web_url.replace('/d/', '/e/')
@@ -71,7 +72,7 @@ class DoodStreamResolver(ResolveUrl):
         match = re.search(r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''', html, re.DOTALL)
         if match:
             token = match.group(2)
-            url = 'https://{0}{1}'.format(host, match.group(1))
+            url = urllib_parse.urljoin(web_url, match.group(1))
             html = self.net.http_GET(url, headers=headers).content
             if 'cloudflarestorage.' in html:
                 vid_src = html.strip() + helpers.append_headers(headers)
@@ -84,8 +85,6 @@ class DoodStreamResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        if host not in ['doodstream.com', 'vidply.com', 'all3do.com', 'vide0.net', 'dsvplay.com']:
-            host = 'dsvplay.com'
         return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
 
     def dood_decode(self, data):
