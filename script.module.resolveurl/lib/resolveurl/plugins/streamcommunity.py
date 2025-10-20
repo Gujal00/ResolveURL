@@ -17,6 +17,7 @@
 """
 
 import re
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -35,13 +36,14 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.agency', 'streamingcommunity.blog', 'streamingcommunity.tech',
                'streamingcommunity.golf', 'streamingcommunity.city', 'streamingcommunity.help',
                'streamingcommunity.blue', 'streamingcommunity.codes', 'streamingcommunity.bet',
-               'streamingcommunity.photos']
-    pattern = r'(?://|\.)(streamingcommunity\.' \
+               'streamingcommunity.photos', 'streamingcommunityz.li', 'streamingcommunityz.bz']
+    pattern = r'(?://|\.)(streamingcommunityz?\.' \
         r'(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar|top|' \
-        r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes|bet|photos))' \
-        r'/watch/(\d+(?:\?e=)?\d+)'
+        r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes|bet|li|bz|photos))' \
+        r'/(?:[a-z]{2}/)?watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
+        host = 'streamingcommunityz.bz'
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
@@ -57,7 +59,8 @@ class StreamCommunityResolver(ResolveUrl):
                 tok = re.search(r"token':\s*'([^']+)", params)
                 exp = re.search(r"expires':\s*'([^']+)", params)
                 if surl and tok and exp:
-                    url = '{0}&token={1}&expires={2}&h=1'.format(surl.group(1), tok.group(1), exp.group(1))
+                    headers.update({'Referer': urllib_parse.urljoin(vix, '/')})
+                    url = '{0}?token={1}&expires={2}&h=1'.format(surl.group(1), tok.group(1), exp.group(1))
                     return url + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
@@ -65,4 +68,4 @@ class StreamCommunityResolver(ResolveUrl):
     def get_url(self, host, media_id):
         if '?e=' in media_id:
             media_id = media_id.replace('?e=', '?episode_id=')
-        return self._default_get_url(host, media_id, template='https://streamingcommunity.photos/iframe/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/it/iframe/{media_id}')

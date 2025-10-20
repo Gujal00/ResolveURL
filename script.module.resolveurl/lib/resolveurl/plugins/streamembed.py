@@ -47,7 +47,7 @@ class StreamEmbedResolver(ResolveUrl):
                     source = helpers.pick_source(helpers.sort_sources_list(sources))
                     if source.startswith('/'):
                         source = urllib_parse.urljoin(url, source)
-                    return  source + helpers.append_headers(headers)
+                    return source + helpers.append_headers(headers)
             else:
                 return url + helpers.append_headers(headers)
 

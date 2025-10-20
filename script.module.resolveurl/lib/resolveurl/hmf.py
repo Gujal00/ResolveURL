@@ -285,9 +285,8 @@ class HostedMediaFile:
             if 'verifypeer' in headers.keys():
                 headers.pop('verifypeer')
 
-            # limit requested data for non m3u8 streams
-            if '.m3u8' not in stream_url and '/hls/' not in stream_url:
-                # request.get_method = lambda: 'HEAD'
+            headers.update({'Accept-Encoding': 'gzip'})
+            if not any(x in stream_url for x in ['.m3u8', '/hls/', '/playlist/']):
                 headers.update({'Range': 'bytes=0-1023'})
 
             request = urllib_request.Request(stream_url.split('|')[0], headers=headers)
