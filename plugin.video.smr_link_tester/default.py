@@ -235,7 +235,7 @@ def play_link(link):
     if link.endswith('$$all'):
         hmf = resolveurl.HostedMediaFile(url=link[:-5], include_universal=debrid, return_all=True)
     else:
-        hmf = resolveurl.HostedMediaFile(url=link, include_universal=True, subs=True)
+        hmf = resolveurl.HostedMediaFile(url=link, include_universal=True, subs=True, content_type=True)
     if not hmf:
         logger.log('Indirect hoster_url not supported by smr: %s' % (link), log_utils.LOGDEBUG)
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
@@ -259,6 +259,7 @@ def play_link(link):
             if resp:
                 stream_url = resp.get('url')
                 subs = resp.get('subs')
+                mimetype = resp.get('content-type')
             else:
                 return False
         if not stream_url or not isinstance(stream_url, six.string_types):
@@ -275,7 +276,7 @@ def play_link(link):
         kodi.notify('Resolve Failed: %s' % (msg), duration=7500)
         return False
 
-    logger.log('Link Resolved: |%s|%s|%s|' % (link, stream_url, subs), log_utils.LOGDEBUG)
+    logger.log('Link Resolved: |%s|%s|%s|%s|' % (link, stream_url, mimetype, subs), log_utils.LOGDEBUG)
 
     listitem = xbmcgui.ListItem(path=stream_url)
     listitem.setProperty('script.trakt.exclude', '1')
