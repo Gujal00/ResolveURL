@@ -36,14 +36,15 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.agency', 'streamingcommunity.blog', 'streamingcommunity.tech',
                'streamingcommunity.golf', 'streamingcommunity.city', 'streamingcommunity.help',
                'streamingcommunity.blue', 'streamingcommunity.codes', 'streamingcommunity.bet',
-               'streamingcommunity.photos', 'streamingcommunityz.li', 'streamingcommunityz.bz']
+               'streamingcommunity.photos', 'streamingcommunityz.li', 'streamingcommunityz.bz',
+               'streamingcommunityz.tv']
     pattern = r'(?://|\.)(streamingcommunityz?\.' \
         r'(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar|top|' \
         r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes|bet|li|bz|photos))' \
         r'/(?:[a-z]{2}/)?watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
-        host = 'streamingcommunityz.bz'
+        host = 'streamingcommunityz.tv'
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
