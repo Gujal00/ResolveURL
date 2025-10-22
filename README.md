@@ -48,6 +48,17 @@ if hmf:
     subs = resp.get('subs')
 ```
 
+You can ask Resolveurl to return the mimetype of the resolved stream
+
+```python
+import resolveurl
+hmf = resolveurl.HostedMediaFile(url, content_type=True)
+if hmf:
+    resp = hmf.resolve()
+    resolved = resp.get('url')
+    mimetype = resp.get('content-type')
+```
+
 You can ask ResolveURL to return all files in Debrid Magnet links this way
 
 ```python

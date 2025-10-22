@@ -62,7 +62,7 @@ class HostedMediaFile:
         must pass either ``url`` or ``host`` AND ``media_id``.
     """
 
-    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None, include_popups=None, return_all=False, subs=False):
+    def __init__(self, url='', host='', media_id='', title='', include_disabled=False, include_universal=None, include_popups=None, return_all=False, subs=False, content_type=False):
         """
         Args:
             url (str): a URL to a web page that represents a piece of media.
@@ -79,6 +79,7 @@ class HostedMediaFile:
         self._valid_url = None
         self._return_all = return_all
         self._subs = subs
+        self._content_type = content_type
         self.title = title if title else self._host
 
         if self._url:
@@ -208,12 +209,19 @@ class HostedMediaFile:
 
                         if stream_url and stream_url.startswith("//"):
                             stream_url = 'http:%s' % stream_url
-                        if stream_url and self.__test_stream(stream_url):
-                            self.__resolvers = [resolver]  # Found a working resolver, throw out the others
-                            self._valid_url = True
-                            if self._subs:
-                                return {'url': stream_url, 'subs': subtitles}
-                            return stream_url
+                        if stream_url:
+                            status, mimetype = self.__test_stream(stream_url)
+                            if status:
+                                self.__resolvers = [resolver]  # Found a working resolver, throw out the others
+                                self._valid_url = True
+                                surl = {'url': stream_url}
+                                if self._subs:
+                                    surl.update({'subs': subtitles})
+                                if self._content_type:
+                                    surl.update({'content-type': mimetype})
+                                if self._subs or self._content_type:
+                                    return surl
+                                return stream_url
             except Exception as e:
                 url = self._url.encode('utf-8') if isinstance(self._url, six.text_type) and six.PY2 else self._url
                 common.logger.log_error('%s Error - From: %s Link: %s: %s' % (type(e).__name__, resolver.name, url, e))
@@ -282,6 +290,7 @@ class HostedMediaFile:
 
         try:
             msg = ''
+            mimetype = ''
             if 'verifypeer' in headers.keys():
                 headers.pop('verifypeer')
 
@@ -294,10 +303,12 @@ class HostedMediaFile:
                 #  set urlopen timeout to 15 seconds
                 with urllib_request.urlopen(request, timeout=15) as resp:
                     http_code = resp.code
+                    mimetype = resp.headers.get('Content-Type')
                     resp.close()
             else:
                 resp = urllib_request.urlopen(request, timeout=15)
                 http_code = resp.getcode()
+                mimetype = resp.info().get('Content-Type')
                 resp.close()
         except urllib_error.HTTPError as e:
             if isinstance(e, urllib_error.HTTPError):
@@ -328,7 +339,7 @@ class HostedMediaFile:
         if int(http_code) >= 400 and int(http_code) != 504:
             common.logger.log_warning('Stream UrlOpen Failed: Url: %s HTTP Code: %s Msg: %s' % (stream_url, http_code, msg))
 
-        return int(http_code) < 400 or int(http_code) == 504
+        return (int(http_code) < 400 or int(http_code) == 504, mimetype)
 
     def __bool__(self):
         return self.__nonzero__()
