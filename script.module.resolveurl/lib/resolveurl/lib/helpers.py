@@ -160,7 +160,7 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
         patterns = []
 
     def __parse_to_list(_html, regex):
-        _blacklist = ['.jpg', '.jpeg', '.gif', '.png', '.js', '.css', '.htm', '.html', '.php', '.srt', '.sub', '.xml', '.swf', '.vtt', '.mpd']
+        _blacklist = ['.jpg', '.jpeg', '.gif', '.png', '.js', '.css', '.htm', '.html', '.php', '.srt', '.sub', '.xml', '.swf', '.vtt']
         _blacklist = set(_blacklist + result_blacklist)
         streams = []
         labels = []
