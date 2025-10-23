@@ -52,7 +52,8 @@ class VoeResolver(ResolveUrl):
         'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
         'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com',
         'richardsignfish.com', 'jennifercertaindevelopment.com', 'diananatureforeign.com', 'goofy-banana.com',
-        'mariatheserepublican.com', 'johnalwayssame.com', 'kellywhatcould.com', 'jilliandescribecompany.com'
+        'mariatheserepublican.com', 'johnalwayssame.com', 'kellywhatcould.com', 'jilliandescribecompany.com',
+        'lukesitturn.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
@@ -76,6 +77,7 @@ class VoeResolver(ResolveUrl):
               r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|' \
               r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
               r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|' \
+              r'lukesitturn|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
@@ -98,6 +100,7 @@ class VoeResolver(ResolveUrl):
                 sources = [(s.get(x).split("?")[0].split(".")[-1], s.get(x)) for x in ['file', 'source', 'direct_access_url'] if x in s.keys()]
                 if len(sources) > 1:
                     sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
+                    headers.update({'verifypeer': 'false'})
                 stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
                 if subs:
                     subtitles = {x.get('label'): 'https://{0}{1}'.format(host, x.get('file')) for x in s.get('captions') if x.get('kind') == 'captions'}
@@ -112,6 +115,7 @@ class VoeResolver(ResolveUrl):
             generic_patterns=False
         )
         if sources:
+            headers.update({'verifypeer': 'false'})
             stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
             if subs:
                 subtitles = helpers.scrape_subtitles(html, web_url)
