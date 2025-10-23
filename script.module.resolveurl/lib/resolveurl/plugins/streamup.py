@@ -30,8 +30,8 @@ from resolveurl.lib import pyaes
 
 class StreamUpResolver(ResolveUrl):
     name = 'StreamUp'
-    domains = ['streamup.ws', 'streamup.cc', 'strmup.to', 'strmup.cc']
-    pattern = r'(?://|\.)(stre?a?mup\.(?:ws|cc|to))/(?:v/)?([0-9a-zA-Z]+)'
+    domains = ['streamup.ws', 'streamup.cc', 'strmup.to', 'strmup.cc', 'vfaststream.com']
+    pattern = r'(?://|\.)((?:vfast)?stre?a?m(?:up)?\.(?:ws|cc|to|com))/(?:v/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

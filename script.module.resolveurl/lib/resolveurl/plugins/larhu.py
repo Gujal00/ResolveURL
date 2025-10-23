@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2023 bassemhelal18
+    Copyright (C) 2025 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,18 +21,15 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
 
 
-class AnafastResolver(ResolveGeneric):
-    name = 'Anafast'
-    domains = ['anafast.online', 'anafasts.com']
-    pattern = r'(?://|\.)(anafasts?\.(?:online|com))/(?:embed-)?([0-9a-zA-Z]+)'
+class LarhuResolver(ResolveGeneric):
+    name = 'Larhu'
+    domains = ['larhu.com']
+    pattern = r'(?://|\.)(larhu\.com)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[(?:{\s*file:)?\s*"(?P<url>[^"]+)'''],
+            patterns=[r'''sources\s*:\s*\[{file:"(?P<url>[^"]+)'''],
             generic_patterns=False,
             referer=False
         )
-
-    def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
