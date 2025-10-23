@@ -51,7 +51,7 @@ class VoeResolver(ResolveUrl):
         'josephseveralconcern.com', 'donaldlineelse.com', 'lisatrialidea.com', 'toddpartneranimal.com',
         'jamessoundcost.com', 'brittneystandardwestern.com', 'sandratableother.com', 'robertordercharacter.com',
         'maxfinishseveral.com', 'chuckle-tube.com', 'kristiesoundsimply.com', 'adrianmissionminute.com',
-        'richardsignfish.com', 'jennifercertaindevelopment.com', 'diananatureforeign.com',
+        'richardsignfish.com', 'jennifercertaindevelopment.com', 'diananatureforeign.com', 'goofy-banana.com',
         'mariatheserepublican.com', 'johnalwayssame.com', 'kellywhatcould.com', 'jilliandescribecompany.com',
         'lukesitturn.com'
     ]
@@ -66,17 +66,17 @@ class VoeResolver(ResolveUrl):
               r'321naturelikefurfuroid|449unceremoniousnasoseptal|guidon40hyporadius9|brucevotewithin|' \
               r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|' \
               r'matriculant401merited|scatch176duplicities|availedsmallest|stevenimaginelittle|' \
-              r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|' \
+              r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|kellywhatcould|' \
               r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|diananatureforeign|' \
               r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|' \
-              r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|' \
+              r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|goofy-banana|' \
               r'jamiesamewalk|bradleyviewdoctor|graceaddresscommunity|shannonpersonalcost|cindyeyefinal|' \
               r'rebeccaneverbase|loriwithinfamily|roberteachfinal|erikcoldperson|jasminetesttry|' \
               r'heatherdiscussionwhen|robertplacespace|alleneconomicmatter|josephseveralconcern|' \
               r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|' \
               r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|' \
               r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
-              r'jonathansociallike|mariatheserepublican|johnalwayssame|kellywhatcould|jilliandescribecompany|' \
+              r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|' \
               r'lukesitturn|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
