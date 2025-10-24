@@ -1,3 +1,6 @@
+Version 1.1.18 (Oct 24, 2025)
+- Report content-type of the resolved url
+
 Version 1.1.17 (Sep 29, 2025)
 - Bugfix: Fail gracefully when empty response from smr
 
