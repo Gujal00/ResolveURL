@@ -25,11 +25,11 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class SuperVideoResolver(ResolveUrl):
     name = 'SuperVideo'
     domains = ['supervideo.tv', 'supervideo.cc']
-    pattern = r'(?://|\.)(supervideo\.(?:tv|cc))/(?:embed-|e/)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(supervideo\.(?:tv|cc))/(?:embed-|e/|k/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.IOS_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers=headers).content
 
@@ -54,4 +54,4 @@ class SuperVideoResolver(ResolveUrl):
         raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
