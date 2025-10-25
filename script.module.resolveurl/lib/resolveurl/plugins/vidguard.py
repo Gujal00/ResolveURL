@@ -30,10 +30,10 @@ class VidGuardResolver(ResolveUrl):
     domains = ['vidguard.to', 'vgfplay.com', 'vgembed.com', 'moflix-stream.day', 'vgfplay.xyz',
                'v6embed.xyz', 'vid-guard.com', 'vembed.net', 'embedv.net', 'fslinks.org',
                'bembed.net', 'listeamed.net', 'gsfjzmqu.sbs', 'go-streamer.net', '6tnutl8knw.sbs',
-               'dhmu4p2hkp.sbs']
+               'dhmu4p2hkp.sbs', 'kinoger.pw']
     pattern = r'(?://|\.)((?:vid-?guard|vgfplay|fslinks|moflix-stream|listeamed|go-streamer|gsfjzmqu|' \
-              r'dhmu4p2hkp|6tnutl8knw|v?[g6b]?embedv?)'\
-              r'\.(?:to|com|day|xyz|org|net|sbs))/(?:e|v|d)/([0-9a-zA-Z:$/.]+)'
+              r'dhmu4p2hkp|6tnutl8knw|kinoger|v?[g6b]?embedv?)'\
+              r'\.(?:to|com|day|xyz|org|net|sbs|pw))/(?:e|v|d)/([0-9a-zA-Z:$/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:
