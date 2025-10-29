@@ -27,15 +27,20 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class BigWarpResolver(ResolveUrl):
     name = 'BigWarp'
     domains = ['bigwarp.io', 'bgwp.cc', 'bigwarp.art', 'bigwarp.cc', 'bigwarp.pro']
-    pattern = r'(?://|\.)((?:bigwarp|bgwp)\.(?:io|cc|art|pro))/(?:e/|embed-)?([0-9a-zA-Z=]+)'
+    pattern = r'(?://|\.)((?:bigwarp|bgwp)\.(?:io|cc|art|pro))/(?:e/|embed-)?([0-9a-zA-Z=$:/.]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
-        ref = urllib_parse.urljoin(web_url, '/')
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            ref = urllib_parse.urljoin(referer, '/')
+        else:
+            ref = urllib_parse.urljoin(web_url, '/')
+
         dl_url = urllib_parse.urljoin(web_url, '/dl')
         post_data = {
             'op': 'embed',
-            'file_code': media_id,
+            'file_code': media_id.replace('.html', ''),
             'auto': '0'
         }
         headers = {
