@@ -30,22 +30,21 @@ class StreamCommunityResolver(ResolveUrl):
                'streamingcommunity.live', 'streamingcommunity.tv', 'streamingcommunity.space',
                'streamingcommunity.art', 'streamingcommunity.fun', 'streamingcommunity.website',
                'streamingcommunity.host', 'streamingcommunity.site', 'streamingcommunity.bond',
-               'streamingCommunity.icu', 'streamingcommunity.bar', 'streamingcommunity.top',
+               'streamingcommunity.icu', 'streamingcommunity.bar', 'streamingcommunity.top',
                'streamingcommunity.cc', 'streamingcommunity.monster', 'streamingcommunity.press',
                'streamingcommunity.business', 'streamingcommunity.org', 'streamingcommunity.best',
                'streamingcommunity.agency', 'streamingcommunity.blog', 'streamingcommunity.tech',
                'streamingcommunity.golf', 'streamingcommunity.city', 'streamingcommunity.help',
                'streamingcommunity.blue', 'streamingcommunity.codes', 'streamingcommunity.bet',
                'streamingcommunity.photos', 'streamingcommunityz.li', 'streamingcommunityz.bz',
-               'streamingcommunityz.tv', 'streamingcommunityz.lu']
+               'streamingcommunityz.tv', 'streamingcommunityz.lu', 'streamingcommunityz.ch']
     pattern = r'(?://|\.)(streamingcommunityz?\.' \
         r'(?:one|xyz|video|vip|work|name|live|tv|space|art|fun|website|host|site|bond|icu|bar|top|' \
         r'cc|monster|press|business|org|best|agency|blog|tech|golf|city|help|blue|codes|bet|li|bz|' \
-        r'photos|lu))' \
+        r'photos|lu|ch))' \
         r'/(?:[a-z]{2}/)?watch/(\d+(?:\?e=)?\d+)'
 
     def get_media_url(self, host, media_id):
-        host = 'streamingcommunityz.lu'
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
