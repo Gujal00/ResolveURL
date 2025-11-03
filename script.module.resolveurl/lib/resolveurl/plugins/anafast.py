@@ -24,7 +24,7 @@ from resolveurl.lib import helpers
 class AnafastResolver(ResolveGeneric):
     name = 'Anafast'
     domains = ['anafast.online', 'anafasts.com']
-    pattern = r'(?://|\.)(anafasts?\.(?:online|com))/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(anafasts?\.(?:online|com))/(?:embed-|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
