@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2020 gujal
+    Copyright (C) 2024 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,13 +16,44 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import re
+from six.moves import urllib_parse
+from resolveurl import common
+from resolveurl.lib import helpers
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class BunnyResolver(ResolveGeneric):
+class BunnyResolver(ResolveUrl):
     name = 'Bunny'
     domains = ['mediadelivery.net']
-    pattern = r'(?://|\.)(mediadelivery\.net)/([^\n\r]+)'
+    pattern = r'(?://|\.)(mediadelivery\.net)/embed/([0-9a-z-=$:/.?&]+)'
+
+    def get_media_url(self, host, media_id, subs=False):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
+        web_url = self.get_url(host, media_id)
+        web_ref = urllib_parse.urljoin(web_url, '/')
+        if not referer:
+            referer = web_ref
+        headers = {'User-Agent': common.FF_USER_AGENT,
+                   'Referer': referer}
+        html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r'<source.+?src="([^"]+)', html)
+        if r:
+            headers.update({'Referer': web_ref, 'Origin': web_ref[:-1]})
+            url = r.group(1) + helpers.append_headers(headers)
+            if subs:
+                subtitles = {}
+                s = re.findall(r'''<track\s*kind\s*=\s*'captions'\s*label\s*=\s*'([^']+)'\s*src\s*=\s*'([^']+)''', html)
+                if s:
+                    subtitles = {lang: sub for lang, sub in s}
+                return url, subtitles
+            return url
+
+        raise ResolverError("Unable to locate stream URL.")
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://iframe.{host}/{media_id}')
+        return self._default_get_url(host, media_id, template='https://iframe.{host}/embed/{media_id}')
