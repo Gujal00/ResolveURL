@@ -457,6 +457,19 @@ class HttpResponse:
         else:
             return self._response.info()._headers if six.PY3 else [(x.split(':')[0].strip(), x.split(':')[1].strip()) for x in self._response.info().headers]
 
+    def get_cookies(self, as_dict=False):
+        """Returns cookies returned by the server.
+        If as_dict is True, cookies are returned as a dictionary otherwise a string"""
+        cookies = {}
+        cookie_list = []
+        for item in self.get_headers():
+            if item[0] == 'Set-Cookie':
+                x = item[1].split(';')[0]
+                k, v = x.split('=')
+                cookies.update({k: v})
+                cookie_list.append(x)
+        return cookies if as_dict else '; '.join(cookie_list)
+
     def get_url(self):
         """
         Return the URL of the resource retrieved, commonly used to determine if
