@@ -288,8 +288,7 @@ def get_media_url(
     elif referer:
         headers.update({'Referer': rurl})
     response = net.http_GET(url, headers=headers, redirect=redirect)
-    response_headers = response.get_headers(as_dict=True)
-    cookie = response_headers.get('Set-Cookie', None)
+    cookie = response.get_cookies()
     if cookie:
         headers.update({'Cookie': cookie})
     html = response.content
