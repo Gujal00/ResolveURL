@@ -1,20 +1,20 @@
-Version 5.1.184 (Oct 24, 2025)
+Version 5.1.185 (Nov 06, 2025)
 - Code Base Changes:
-    - Add kwarg to return content-type of the resolved url
+    - add get_cookies function
 
 - Resolvers Added:
-    - casthq
-    - fastream
-    - larhu
+    - tokyvideo
 
 - Resolvers Fixed/Updated:
     - anafast
-    - doodstream
+    - bigwarp
+    - casthq
+    - dropload
     - kinoger
     - streamcommunity
-    - streamup
-    - turboviplay
-    - voe
+    - streamwish
+    - supervideo
+    - waaw
 
 - Resolvers Removed
     - None
