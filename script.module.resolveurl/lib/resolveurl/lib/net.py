@@ -465,7 +465,7 @@ class HttpResponse:
         for item in self.get_headers():
             if item[0] == 'Set-Cookie':
                 x = item[1].split(';')[0]
-                k, v = x.split('=')
+                k, v = x.split('=', 1)
                 cookies.update({k: v})
                 cookie_list.append(x)
         return cookies if as_dict else '; '.join(cookie_list)
