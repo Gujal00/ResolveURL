@@ -1,20 +1,13 @@
-Version 5.1.185 (Nov 06, 2025)
+Version 5.1.186 (Nov 15, 2025)
 - Code Base Changes:
-    - add get_cookies function
+    - update get_cookies()
+    - generic resolver to use get_cookies()
 
 - Resolvers Added:
-    - tokyvideo
+    - f16px
 
 - Resolvers Fixed/Updated:
-    - anafast
-    - bigwarp
-    - casthq
-    - dropload
-    - kinoger
-    - streamcommunity
-    - streamwish
-    - supervideo
-    - waaw
+    - bunnycdn
 
 - Resolvers Removed
     - None
