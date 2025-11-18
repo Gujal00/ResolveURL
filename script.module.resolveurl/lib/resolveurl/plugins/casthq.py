@@ -26,8 +26,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class CastHQResolver(ResolveUrl):
     name = 'CastHQ'
-    domains = ['casthq.to', 'vidspeeds.com']
-    pattern = r'(?://|\.)((?:casthq|vidspeeds)\.(?:to|com))//?(?:e/|d/|embed-)?([0-9a-zA-Z=]+)'
+    domains = ['casthq.to', 'vidspeeds.com', 'vidoba.org']
+    pattern = r'(?://|\.)((?:casthq|vidspeeds|vidoba)\.(?:to|com|org))//?(?:e/|d/|embed-)?([0-9a-zA-Z=]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
