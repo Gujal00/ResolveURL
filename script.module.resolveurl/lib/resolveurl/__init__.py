@@ -38,7 +38,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.plugins import *  # NOQA
 
 common.logger.log_debug('Initializing ResolveURL version: %s' % common.addon_version)
-MAX_SETTINGS = 60
+MAX_SETTINGS = 70
 
 PLUGIN_DIRS = []
 host_cache = {}
