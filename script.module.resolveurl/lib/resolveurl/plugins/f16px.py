@@ -19,6 +19,7 @@
 import json
 from six.moves import urllib_parse
 from resolveurl.lib import helpers
+from resolveurl.lib.aesgcm import python_aesgcm
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -35,7 +36,8 @@ class F16PxResolver(ResolveUrl):
             'Referer': urllib_parse.urljoin(web_url, '/')
         }
         html = self.net.http_GET(web_url, headers=headers).content
-        sources = json.loads(html).get('sources')
+        html = json.loads(html)
+        sources = html.get('sources')
         if sources:
             sources = [(x.get('label'), x.get('url')) for x in sources]
             uri = helpers.pick_source(helpers.sort_sources_list(sources))
@@ -43,7 +45,32 @@ class F16PxResolver(ResolveUrl):
                 uri = urllib_parse.urljoin(web_url, uri)
             url = helpers.get_redirect_url(uri, headers=headers)
             return url + helpers.append_headers(headers)
+        pd = html.get('playback')
+        if pd:
+            iv = self.ft(pd.get('iv'))
+            key = self.xn(pd.get('key_parts'))
+            pl = self.ft(pd.get('payload'))
+            cipher = python_aesgcm.new(key)
+            ct = cipher.open(iv, pl)
+            ct = json.loads(ct.decode('latin-1'))
+            sources = ct.get('sources')
+            if sources:
+                sources = [(x.get('label'), x.get('url')) for x in sources]
+                uri = helpers.pick_source(helpers.sort_sources_list(sources))
+                return uri + helpers.append_headers(headers)
+
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/embed/playback')
+
+    @staticmethod
+    def ft(e):
+        t = e.replace("-", "+").replace("_", "/")
+        r = 0 if len(t) % 4 == 0 else 4 - len(t) % 4
+        n = t + "=" * r
+        return helpers.b64decode(n, binary=True)
+
+    def xn(self, e):
+        t = list(map(self.ft, e))
+        return b''.join(t)
