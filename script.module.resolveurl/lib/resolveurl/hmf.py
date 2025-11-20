@@ -210,7 +210,10 @@ class HostedMediaFile:
                         if stream_url and stream_url.startswith("//"):
                             stream_url = 'http:%s' % stream_url
                         if stream_url:
-                            status, mimetype = self.__test_stream(stream_url)
+                            if stream_url.startswith("plugin://"):
+                                status, mimetype = True, 'plugin'
+                            else:
+                                status, mimetype = self.__test_stream(stream_url)
                             if status:
                                 self.__resolvers = [resolver]  # Found a working resolver, throw out the others
                                 self._valid_url = True
