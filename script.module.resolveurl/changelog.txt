@@ -1,13 +1,15 @@
-Version 5.1.186 (Nov 15, 2025)
+Version 5.1.187 (Nov 24, 2025)
 - Code Base Changes:
-    - update get_cookies()
-    - generic resolver to use get_cookies()
+    - fix settings.xml
+    - do not test resolved stream if using other plugin for playback
 
 - Resolvers Added:
-    - f16px
+    - sharevideo
 
 - Resolvers Fixed/Updated:
-    - bunnycdn
+    - casthq
+    - f16px
+    - filelions
 
 - Resolvers Removed
     - None
