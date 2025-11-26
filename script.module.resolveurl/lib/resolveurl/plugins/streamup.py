@@ -68,6 +68,7 @@ class StreamUpResolver(ResolveUrl):
 
         if stream_url:
             headers.update({"Origin": ref[:-1]})
+            stream_url = stream_url.replace('\r', '').replace('\n', '')
             return stream_url + helpers.append_headers(headers)
 
         raise ResolverError('Video cannot be located.')
