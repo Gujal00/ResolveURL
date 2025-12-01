@@ -34,14 +34,14 @@ class DoodStreamResolver(ResolveUrl):
         'dood.stream', 'ds2play.com', 'doods.pro', 'ds2video.com', 'd0o0d.com', 'do0od.com',
         'd0000d.com', 'd000d.com', 'dood.li', 'dood.work', 'dooodster.com', 'vidply.com',
         'all3do.com', 'do7go.com', 'doodcdn.io', 'doply.net', 'vide0.net', 'vvide0.com',
-        'd-s.io', 'dsvplay.com'
+        'd-s.io', 'dsvplay.com', 'myvidplay.com'
     ]
-    pattern = r'(?://|\.)((?:do*0*o*0*ds?(?:tream|ter|cdn)?|ds[2v](?:play|video)|v*id(?:ply|e0)|all3do|d-s|do(?:7go|ply))\.' \
+    pattern = r'(?://|\.)((?:do*0*o*0*ds?(?:tream|ter|cdn)?|ds[2v](?:play|video)|v*id(?:ply|e0)|all3do|d-s|do(?:7go|ply)|myvidplay)\.' \
               r'(?:[cit]om?|watch|s[ho]|cx|l[ai]|w[sf]|pm|re|yt|stream|pro|work|net))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         if host not in ['doodstream.com', 'vidply.com', 'all3do.com', 'vide0.net', 'dsvplay.com']:
-            host = 'dsvplay.com'
+            host = 'myvidplay.com'
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
