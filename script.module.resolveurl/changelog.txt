@@ -1,15 +1,15 @@
-Version 5.1.187 (Nov 24, 2025)
+Version 5.1.188 (Dec 07, 2025)
 - Code Base Changes:
-    - fix settings.xml
-    - do not test resolved stream if using other plugin for playback
+    - None
 
 - Resolvers Added:
-    - sharevideo
+    - bigshare
 
 - Resolvers Fixed/Updated:
-    - casthq
-    - f16px
-    - filelions
+    - doodstream
+    - savefiles
+    - streamup
+    - voe
 
 - Resolvers Removed
     - None
