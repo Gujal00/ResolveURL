@@ -36,13 +36,13 @@ class FileLionsResolver(ResolveUrl):
         'katomen.online', 'vidhide.fun', 'vidhidehub.com', 'dhtpre.com', '6sfkrspw4u.sbs',
         'streamvid.su', 'movearnpre.com', 'bingezove.com', 'dingtezuni.com', 'dinisglows.com',
         'ryderjet.com', 'e4xb5c2xnz.sbs', 'smoothpre.com', 'videoland.sbs', 'taylorplayer.com',
-        'mivalyo.com', 'vidhidefast.com', 'peytonepre.com', 'dintezuvio.com'
+        'mivalyo.com', 'vidhidefast.com', 'peytonepre.com', 'dintezuvio.com', 'callistanise.com'
     ]
     pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|' \
               r'[mad]lions|lumiawatch|javplaya|javlion|fviplions|egsyxutd|fdewsdc|vidhide|peytone|' \
               r'anime7u|coolciima|gsfomqu|katomen|dht|6sfkrspw4u|ryderjet|e4xb5c2xnz|smooth|' \
               r'streamvid|movearnpre|bingezove|dingtezuni|dinisglows|motvy55|videoland|mivalyo|' \
-              r'taylorplayer|dintezuvio)(?:pro|vip|pre|plus|hub|fast)?' \
+              r'taylorplayer|dintezuvio|callistanise)(?:pro|vip|pre|plus|hub|fast)?' \
               r'\.(?:su|com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site|fun))' \
               r'/(?:s|v|f|d|embed|file|download)/([0-9a-zA-Z$:/.]+)'
 
@@ -58,7 +58,8 @@ class FileLionsResolver(ResolveUrl):
             headers.update({'Referer': referer})
         html = self.net.http_GET(web_url, headers=headers).content
         html += helpers.get_packed_data(html)
-        headers.update({'Referer': 'https://{}/'.format(host), 'verifypeer': 'false'})
+        ref = urllib_parse.urljoin(web_url, '/')
+        headers.update({'Referer': ref, 'Origin': ref[:-1], 'verifypeer': 'false'})
         links = re.search(r'var\s*links\s*=\s*([^;]+)', html)
         if links:
             links = ast.literal_eval(links.group(1))
@@ -82,4 +83,16 @@ class FileLionsResolver(ResolveUrl):
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
+        dead_domains = [
+            'filelions.com', 'filelions.to', 'ajmidyadfihayh.sbs', 'alhayabambi.sbs', 'vidhideplus.com',
+            'azipcdn.com', 'mlions.pro', 'alions.pro', 'dlions.pro', 'mivalyo.com', 'vidhidefast.com',
+            'filelions.live', 'motvy55.store', 'filelions.xyz', 'lumiawatch.top', 'filelions.online',
+            'fviplions.com', 'egsyxutd.sbs', 'filelions.site', 'filelions.co', 'vidhidepre.com',
+            'vidhidepro.com', 'vidhidevip.com', 'e4xb5c2xnz.sbs', 'taylorplayer.com', 'ryderjet.com',
+            'techradar.ink', 'anime7u.com', 'coolciima.online', 'gsfomqu.sbs', 'bingezove.com',
+            'katomen.online', 'vidhide.fun', '6sfkrspw4u.sbs', 'dingtezuni.com', 'dinisglows.com',
+            'dintezuvio.com'
+        ]
+        if host in dead_domains:
+            host = 'callistanise.com'
         return self._default_get_url(host, media_id, template='https://{host}/v/{media_id}')
