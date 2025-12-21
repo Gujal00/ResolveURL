@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#33000"
 msgid "Move Red square over play icon and submit"
-msgstr "Przesuń czerwony kwadrat nad ikonę odtwarzania i prześlij"
+msgstr "Przesuń czerwony kwadrat na ikonę odtwarzania i zatwierdź"
 
 msgctxt "#33001"
 msgid "To play this video, authorization is required"
@@ -34,7 +34,7 @@ msgstr "[B][COLOR blue]%s[/COLOR][/B] a następnie kliknij 'Pair'"
 
 msgctxt "#33004"
 msgid "Submit"
-msgstr "Składać"
+msgstr "Zatwierdź"
 
 msgctxt "#33005"
 msgid "Automatically update resolver"
@@ -431,3 +431,4 @@ msgstr "Plik ustawień wyczyszczony"
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "Czy kontynuować przesyłanie do chmury CocoLeech w tle?"
+
