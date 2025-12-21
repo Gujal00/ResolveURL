@@ -33,10 +33,15 @@ class VideaResolver(ResolveUrl):
     key = ''
 
     def get_media_url(self, host, media_id, subs=False):
-        web_url = self.get_url(host, media_id)
-        result = self.net.http_GET(web_url)
+        while True:
+            web_url = self.get_url(host, media_id)
+            result = self.net.http_GET(web_url)
 
-        videaXml = result.content
+            videaXml = result.content
+            try:
+                self.url = re.search(r"<error.*noembed.*>(.*)</error>", videaXml).group(1)
+            except:
+                break
         if not videaXml.startswith('<?xml'):
             self.key += result.get_headers(as_dict=True)['X-Videa-Xs']
             videaXml = rc4.decrypt(videaXml, self.key)
@@ -87,6 +92,7 @@ class VideaResolver(ResolveUrl):
         if 'f' in query or 'v' in query:
             _param = 'f=%s' % query['f'][0] if 'f' in query else 'v=%s' % query['v'][0]
             return self._default_get_url(host, media_id, 'https://{host}/player/xml?platform=desktop&%s&_s=%s&_t=%s' % (_param, _s, _t))
+
         else:
             return None
 
