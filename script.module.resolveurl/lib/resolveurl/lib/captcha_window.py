@@ -27,7 +27,7 @@ class CaptchaWindow(xbmcgui.WindowDialog):
             common.addon_path, 'resources', 'images', 'DialogBack1.png'
         )
         self.box_image = os.path.join(
-            common.addon_path, 'resources', 'images', 'border90.png'
+            common.addon_path, 'resources', 'images', 'dot.png'
         )
         self.orig_image = image
         self.width = width
@@ -72,11 +72,11 @@ class CaptchaWindow(xbmcgui.WindowDialog):
 
     @property
     def solution_x(self):
-        return self.frame_x - self.orig_x + 45
+        return self.frame_x - self.orig_x + 10
 
     @property
     def solution_y(self):
-        return self.frame_y - self.orig_y + 45
+        return self.frame_y - self.orig_y + 10
 
     def add_controls(self):
         # Define arrow directions, corresponding labels, and sizes
@@ -145,7 +145,7 @@ class CaptchaWindow(xbmcgui.WindowDialog):
         self.submit_button = submit_button
 
         self.border_img = xbmcgui.ControlImage(
-            self.frame_x, self.frame_y, 90, 90, self.box_image
+            self.frame_x, self.frame_y, 20, 20, self.box_image
         )
         self.addControl(self.border_img)
 
@@ -166,12 +166,12 @@ class CaptchaWindow(xbmcgui.WindowDialog):
             if self.frame_x - 10 >= self.orig_x:
                 self.frame_x -= 10
             else:
-                self.frame_x = self.orig_x + self.width - 90
+                self.frame_x = self.orig_x + self.width - 20
             self.update_border_img()
 
         # if right arrow/control is pressed, move right and jump to the left side if at the right edge
         elif action_or_control in [self.right_arrow.getId(), xbmcgui.ACTION_MOVE_RIGHT]:
-            if self.frame_x + 10 <= self.orig_x + self.width - 90:
+            if self.frame_x + 10 <= self.orig_x + self.width - 20:
                 self.frame_x += 10
             else:
                 self.frame_x = self.orig_x
@@ -182,12 +182,12 @@ class CaptchaWindow(xbmcgui.WindowDialog):
             if self.frame_y - 10 >= self.orig_y:
                 self.frame_y -= 10
             else:
-                self.frame_y = self.orig_y + self.height - 90
+                self.frame_y = self.orig_y + self.height - 20
             self.update_border_img()
 
         # if down arrow/control is pressed, move down and jump to the top if at the bottom edge
         elif action_or_control in [self.bottom_arrow.getId(), xbmcgui.ACTION_MOVE_DOWN]:
-            if self.frame_y + 10 <= self.orig_y + self.height - 90:
+            if self.frame_y + 10 <= self.orig_y + self.height - 20:
                 self.frame_y += 10
             else:
                 self.frame_y = self.orig_y
