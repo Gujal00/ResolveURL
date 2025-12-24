@@ -31,9 +31,9 @@ class MixDropResolver(ResolveUrl):
         'md3b0j6hj.com', 'mdbekjwqa.pw', 'mdfx9dc8n.net', 'mixdropjmk.pw',
         'mixdrop21.net', 'mixdrop.is', 'mixdrop.si', 'mixdrop23.net', 'mixdrop.nu',
         'mixdrop.ms', 'mdzsmutpcvykb.net', 'mixdrop.ps', 'mxdrop.to', 'mixdrop.sb',
-        'mixdrop.my'
+        'mixdrop.my', 'm1xdrop.net'
     ]
-    pattern = r'(?://|\.)((?:mi?xdro*p\d*(?:jmk)?|md(?:3b0j6hj|bekjwqa|fx9dc8n|y48tn97|zsmutpcvykb))\.' \
+    pattern = r'(?://|\.)((?:mi*1*xdro*p\d*(?:jmk)?|md(?:3b0j6hj|bekjwqa|fx9dc8n|y48tn97|zsmutpcvykb))\.' \
               r'(?:c[ho]m?|to|sx|bz|gl|club|vc|ag|pw|net|is|s[ib]|nu|m[sy]|ps))/(?:f|e)/(\w+)'
 
     def get_media_url(self, host, media_id):
