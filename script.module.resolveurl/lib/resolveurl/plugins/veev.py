@@ -54,6 +54,7 @@ class VeevResolver(ResolveUrl):
                     jresp = json.loads(jresp).get('file')
                     if jresp and jresp.get('file_status') == 'OK':
                         str_url = decode_url(veev_decode(jresp.get('dv')[0].get('s')), build_array(ch)[0])
+                        headers.update({'verifypeer': 'false'}) # add/edit by watchone
                         return str_url + helpers.append_headers(headers)
                     raise ResolverError('Video removed')
 
