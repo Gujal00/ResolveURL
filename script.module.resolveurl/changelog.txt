@@ -1,18 +1,21 @@
-Version 5.1.188 (Dec 07, 2025)
+Version 5.1.189 (Dec 28, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - bigshare
+    - frame
+    - vidnest
 
 - Resolvers Fixed/Updated:
-    - doodstream
-    - savefiles
-    - streamup
-    - voe
+    - f16px
+    - filelions
+    - mixdrop
+    - uqload
+    - veev
+    - videa
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - None
+    - Polish
