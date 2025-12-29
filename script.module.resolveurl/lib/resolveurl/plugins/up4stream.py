@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class Up4StreamResolver(ResolveGeneric):
     name = 'Up4Stream'
-    domains = ['up4stream.com', 'ups2up.fun']
-    pattern = r'(?://|\.)(up(?:4stream|s2up)\.(?:com|fun))/(?:embed-)?([0-9a-z]+)'
+    domains = ['up4stream.com', 'ups2up.fun', 'up4fun.top']
+    pattern = r'(?://|\.)(up(?:4stream|s2up|4fun)\.(?:com|fun|top))/(?:embed-)?([0-9a-z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         return helpers.get_media_url(
