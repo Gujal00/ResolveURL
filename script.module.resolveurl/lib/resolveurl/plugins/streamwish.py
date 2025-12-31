@@ -66,8 +66,9 @@ class StreamWishResolver(ResolveGeneric):
 
     def get_url(self, host, media_id):
         dmca = ["hgplaycdn.com", "habetar.com", "yuguaab.com", "guxhag.com", "auvexiug.com", "xenolyzb.com"]
-        rules = ["dhcplay.com", "hglink.to", "test.hglink.to", "wish-redirect.aiavh.com"]
-        main = ["kravaxxa.com", "davioad.com", "haxloppd.com", "tryzendm.com", "dumbalag.com"]
+        main = ["haxloppd.com", "cavanhabg.com", "dumbalag.com", "uasopt.com"]
+        rules = ["dhcplay.com", "hglink.to"]
+
         if host in rules:
             host = choice(main)
         else:
