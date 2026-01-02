@@ -38,7 +38,7 @@ class KinoGerResolver(ResolveUrl):
               r'(?:tuktuk|ultra)\.rpmvid|filedecrypt|(?:dzo|srbe84)\.vidplayer|video(?:shar\.uns|land)|' \
               r'w1tv|(?:flixfilmesonline\.|filma365\.)?strp2p|flimmer\.rpmvip|t1\.p2pplay|asianembed|securecdn|' \
               r'watch\.(?:ezplayer|streamcasthub)|disneycdn|vidmoly|animeshqip\.uns)' \
-              r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|li(?:nk|ve)|bio|cfd|site|shop|pro|cc|online))/#([A-Za-z0-9]+)'
+              r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|li(?:nk|ve)|bio|cfd|site|shop|pro|cc))/#([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
