@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class F16PxResolver(ResolveUrl):
     name = 'F16Px'
-    domains = ['f16px.com', 'bysesayeveum.com', 'bysetayico.com']
+    domains = ['f16px.com', 'bysesayeveum.com', 'bysetayico.com', 'bysevepoin.com']
     pattern = r'(?://|\.)((?:f16px|byse(?:sayeveum|tayico))\.com)/(?:e|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
