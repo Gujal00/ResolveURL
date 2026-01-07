@@ -1,6 +1,6 @@
-Version 5.1.189 (Dec 28, 2025)
+Version 5.1.190 (Jan 07, 2026)
 - Code Base Changes:
-    - None
+    - User-Agents updated
 
 - Resolvers Added:
     - frame
@@ -8,14 +8,13 @@ Version 5.1.189 (Dec 28, 2025)
 
 - Resolvers Fixed/Updated:
     - f16px
-    - filelions
-    - mixdrop
-    - uqload
-    - veev
-    - videa
+    - kinoger
+    - streamwish
+    - up4stream
+    - voe
 
 - Resolvers Removed
-    - None
+    - vidguard
 
 - Languages Added/Updated
-    - Polish
+    - None
