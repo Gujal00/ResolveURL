@@ -25,19 +25,25 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UperBoxResolver(ResolveUrl):
     name = 'UperBox'
-    domains = ['www.uperbox.net']
-    pattern = r'(?://|\.)(www\.uperbox\.net)/([0-9a-zA-Z]+)'
+    domains = ['www.uperbox.net', 'www.uperbox.io', 'www.uperbox.com']
+    pattern = r'(?://|\.)(www\.uperbox\.(?:net|io|com))/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = 'https://{0}/'.format(host)
         web_url = self.get_url(host, media_id)
         headers = {
             'User-Agent': common.RAND_UA,
-            'Referer': 'https://{0}/'.format(host)
+            'Referer': referer
         }
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'href="([^"]+)"\s*class="btn', html)
         if r:
             durl = urllib_parse.urljoin(web_url, r.group(1))
+            headers.update({'Referer': 'https://{0}/'.format(host)})
             res = self.net.http_GET(durl, headers=headers).content
             s = re.search(r'href="([^"]+)"\s*class="btn', res)
             if s:
