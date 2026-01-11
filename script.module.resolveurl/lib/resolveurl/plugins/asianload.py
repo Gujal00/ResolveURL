@@ -22,14 +22,13 @@ from resolveurl.lib import helpers
 
 class AsianLoadResolver(ResolveGeneric):
     name = 'AsianLoad'
-    domains = ['asianload.cfd']
-    pattern = r'(?://|\.)(asianload\.cfd)/watch\?v=([0-9a-zA-Z]+)'
+    domains = ['asianload.cfd', 'embedload.cfd']
+    pattern = r'(?://|\.)((?:asian|embed)load\.cfd)/watch\?v=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
             patterns=[
-                # r'''window\.open\((?:window\.atob\()?"(?P<url>[^"]+)''',
                 r'''file:\s*(?:window\.atob\()?"(?P<url>[^"]+)'''
             ],
             generic_patterns=False,
