@@ -24,11 +24,22 @@ from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class F16PxResolver(ResolveUrl):
-    name = 'F16Px'
-    domains = ['f16px.com', 'bysesayeveum.com', 'bysetayico.com', 'bysevepoin.com', 'bysezejataos.com',
-               'bysekoze.com', 'bysesukior.com']
-    pattern = r'(?://|\.)((?:f16px|byse(?:sayeveum|tayico|vepoin|zejataos|koze|sukior))\.com)/(?:e|d)/([0-9a-zA-Z]+)'
+class ByseResolver(ResolveUrl):
+    name = 'Byse'
+    domains = [
+        'f16px.com', 'bysesayeveum.com', 'bysetayico.com', 'bysevepoin.com', 'bysezejataos.com',
+        'bysekoze.com', 'bysesukior.com', 'bysejikuar.com', 'bysefujedu.com', 'bysedikamoum.com',
+        'bysebuho.com', 'filemoon.sx', 'filemoon.to', 'filemoon.in', 'filemoon.link', 'filemoon.nl',
+        'filemoon.wf', 'cinegrab.com', 'filemoon.eu', 'filemoon.art', 'moonmov.pro', '96ar.com',
+        'kerapoxy.cc', 'furher.in', '1azayf9w.xyz', '81u6xl9d.xyz', 'smdfs40r.skin', 'c1z39.com',
+        'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', 'f51rm.com',
+        'xcoic.com', 'boosteradx.online'
+    ]
+    pattern = r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|' \
+              r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx|' \
+              r'byse(?:sayeveum|tayico|vepoin|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho))' \
+              r'\.(?:sx|to|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))' \
+              r'/(?:e|d|download)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
