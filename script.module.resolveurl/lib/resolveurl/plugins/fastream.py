@@ -23,6 +23,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 class FastreamResolver(ResolveGeneric):
     name = 'Fastream'
     domains = ['fastream.to']
+    pattern = r'(?://|\.)(fastream\.to)/(?:embed-|d/|e/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
@@ -30,3 +31,6 @@ class FastreamResolver(ResolveGeneric):
             patterns=[r'sources:\s*\[{\s*file:\s*"(?P<url>[^"]+)'],
             generic_patterns=False
         )
+
+    def get_url(self, host, media_id):
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
