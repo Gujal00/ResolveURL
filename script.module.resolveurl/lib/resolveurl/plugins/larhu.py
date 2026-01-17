@@ -23,8 +23,8 @@ from resolveurl.lib import helpers
 
 class LarhuResolver(ResolveGeneric):
     name = 'Larhu'
-    domains = ['larhu.com']
-    pattern = r'(?://|\.)(larhu\.com)/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ['larhu.com', 'larhu.website']
+    pattern = r'(?://|\.)(larhu\.(?:com|website))/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
