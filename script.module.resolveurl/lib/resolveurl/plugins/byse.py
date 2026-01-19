@@ -33,7 +33,7 @@ class ByseResolver(ResolveUrl):
         'filemoon.wf', 'cinegrab.com', 'filemoon.eu', 'filemoon.art', 'moonmov.pro', '96ar.com',
         'kerapoxy.cc', 'furher.in', '1azayf9w.xyz', '81u6xl9d.xyz', 'smdfs40r.skin', 'c1z39.com',
         'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', 'f51rm.com',
-        'xcoic.com', 'boosteradx.online'
+        'xcoic.com', 'boosteradx.online', 'streamlyplayer.online'
     ]
     pattern = r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|' \
               r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx|' \
@@ -74,6 +74,9 @@ class ByseResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
+        redirect_domains = ['boosteradx.online']
+        if host in redirect_domains:
+            host = 'streamlyplayer.online'
         return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/embed/playback')
 
     @staticmethod
