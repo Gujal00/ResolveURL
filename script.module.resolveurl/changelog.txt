@@ -1,20 +1,23 @@
-Version 5.1.190 (Jan 07, 2026)
+Version 5.1.191 (Jan 19, 2026)
 - Code Base Changes:
-    - User-Agents updated
+    - None
 
 - Resolvers Added:
-    - frame
-    - vidnest
+    - vevocloud
+    - byse
 
 - Resolvers Fixed/Updated:
-    - f16px
-    - kinoger
-    - streamwish
-    - up4stream
+    - asianload
+    - fastream
+    - larhu
+    - updown
+    - uperbox
+    - vidspeed
     - voe
 
 - Resolvers Removed
-    - vidguard
+    - f16px
+    - filemoon
 
 - Languages Added/Updated
     - None
