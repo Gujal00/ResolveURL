@@ -23,8 +23,8 @@ from resolveurl.lib import helpers
 
 class VidMolyResolver(ResolveUrl):
     name = 'VidMoly'
-    domains = ['vidmoly.me', 'vidmoly.to', 'vidmoly.net']
-    pattern = r'(?://|\.)(vidmoly\.(?:me|to|net))/(?:embed-|w/)?([0-9a-zA-Z]+)'
+    domains = ['vidmoly.me', 'vidmoly.to', 'vidmoly.net', 'vidmoly.biz']
+    pattern = r'(?://|\.)(vidmoly\.(?:me|to|net|biz))/(?:embed-|w/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
