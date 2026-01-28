@@ -33,7 +33,7 @@ class VidMolyResolver(ResolveUrl):
         sources = helpers.scrape_sources(
             html,
             result_blacklist=['.mpd'],
-            patterns=[r'''sources:\s*\[{file:"(?P<url>[^"]+)'''],
+            patterns=[r'''sources\s*:\s*\[\s*\{\s*file\s*:\s*['"](?P<url>[^'"]+)'''],
             generic_patterns=False
         )
 
