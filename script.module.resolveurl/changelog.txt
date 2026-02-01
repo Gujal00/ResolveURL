@@ -1,23 +1,20 @@
-Version 5.1.191 (Jan 19, 2026)
+Version 5.1.192 (Feb 02, 2026)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - vevocloud
-    - byse
+    - buzz
+    - rootz
+    - streamix
 
 - Resolvers Fixed/Updated:
-    - asianload
-    - fastream
-    - larhu
-    - updown
-    - uperbox
-    - vidspeed
+    - anafasr
+    - byse
+    - vidmoly
     - voe
 
 - Resolvers Removed
-    - f16px
-    - filemoon
+    - None
 
 - Languages Added/Updated
     - None
