@@ -31,13 +31,13 @@ class VideaResolver(ResolveUrl):
     url = ''
     videa_secret = 'xHb0ZvME5q8CBcoQi6AngerDu3FGO9fkUlwPmLVY_RTzj2hJIS4NasXWKy1td7p'
     key = ''
+    cookie = ''
 
     def get_media_url(self, host, media_id, subs=False):
         found = False
         while not found:
             web_url = self.get_url(host, media_id)
             result = self.net.http_GET(web_url)
-
             videaXml = result.content
             r = re.search(r'<error.*?"noembed".*>(.*)</error>', videaXml)
             if r:
@@ -63,6 +63,9 @@ class VideaResolver(ResolveUrl):
             url = 'https:' + source[2] if source[2].startswith('//') else source[2]
             hash = re.search(r'<hash_value_%s>([^<]+)<' % source[0], videaXml).group(1)
             direct_url = "%s?md5=%s&expires=%s" % (url, hash, source[1])
+            if self.cookie:
+                headers = {"Cookie": self.cookie}
+                direct_url = direct_url + helpers.append_headers(headers)
             if subs:
                 return direct_url.replace('&amp;', '&'), subtitles
             return direct_url.replace('&amp;', '&')
@@ -70,14 +73,21 @@ class VideaResolver(ResolveUrl):
         raise ResolverError('Stream not found')
 
     def get_url(self, host, media_id):
-        html = self.net.http_GET(self.url).content
+        response = self.net.http_GET(self.url)
+        cookie = response.get_headers(as_dict=True).get('Set-Cookie', '')
+        html = response.content
         if '%s/player' % host in self.url:
             player_url = self.url
             player_page = html
         else:
             player_url = re.search(r'<iframe.*?src="(/player\?[^"]+)"', html).group(1)
             player_url = urllib_parse.urljoin(self.url, player_url)
-            player_page = self.net.http_GET(player_url).content
+            response = self.net.http_GET(player_url)
+            player_page = response.content
+            cookie = response.get_headers(as_dict=True).get('Set-Cookie', '')
+        match = re.search(r'\bsl=([^;]+)', cookie)
+        if match:
+            self.cookie = match.group(0)
         nonce = re.search(r'_xt\s*=\s*"([^"]+)"', player_page).group(1)
         lo = nonce[:32]
         s = nonce[32:]
