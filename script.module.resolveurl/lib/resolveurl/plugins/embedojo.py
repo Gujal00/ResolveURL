@@ -26,31 +26,35 @@ from six.moves import urllib_parse
 
 class EmbedojoResolver(ResolveUrl):
     name = 'Embedojo'
-    domains = ['embedojo.net']
-    pattern = r'(?://|\.)(embedojo\.net)/([0-9a-zA-Z$:/.-_]+)'
+    domains = ['embedojo.net', 'embedplayer1.xyz', 'llanfairpwllgwyngyll.com', 'llanfairpwllgwyngy.com']
+    pattern = r'(?://|\.)((?:embed(?:ojo|player1)|llanfairpwllgwyngyl*)\.(?:net|xyz|com))/([0-9a-zA-Z$:/.-_]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
-            referer = urllib_parse.urljoin(referer, '/')
+            ref = urllib_parse.urljoin(referer, '/')
         else:
-            referer = False
+            ref = False
         subtitles = {}
         web_url = self.get_url(host, media_id)
-        if not referer:
-            referer = urllib_parse.urljoin(web_url, '/')
+        if not ref:
+            ref = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.FF_USER_AGENT,
-                   'Referer': referer}
-        response = self.net.http_GET(web_url, headers=headers).content
-        response = helpers.get_packed_data(response)
-        r = re.search(r'FirePlayer\("([^"]+)",\s*(.*?),\s*true', response)
+                   'Referer': ref}
+        resp = self.net.http_GET(web_url, headers=headers)
+        if web_url != resp.get_url():
+            web_url = resp.get_url()
+            ref = urllib_parse.urljoin(web_url, '/')
+            headers.update({'Referer': ref})
+        response = helpers.get_packed_data(resp.content)
+        r = re.search(r'FirePlayer\("([^"]+)",\s*(.*?),\s*(?:true|false)', response, re.DOTALL)
         if r:
             headers.update({
                 'X-Requested-With': 'XMLHttpRequest',
-                'Origin': 'https://{0}'.format(host)
+                'Origin': ref[:-1]
             })
-            eurl = 'https://{0}/player/index.php?data={1}&do=getVideo'.format(host, r.group(1))
-            data = {'hash': r.group(1), 'r': referer}
+            eurl = urllib_parse.urljoin(web_url, '/player/index.php?data={0}&do=getVideo'.format(r.group(1)))
+            data = {'hash': r.group(1), 'r': ref}
             resp = self.net.http_POST(eurl, data, headers).content
             if resp:
                 # src = json.loads(resp).get('securedLink')
