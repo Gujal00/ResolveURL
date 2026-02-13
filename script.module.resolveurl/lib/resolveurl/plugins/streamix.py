@@ -49,4 +49,6 @@ class StreamixResolver(ResolveUrl):
         raise ResolverError("Unable to locate stream URL.")
 
     def get_url(self, host, media_id):
+        if 'vidara' in host:
+            return self._default_get_url(host, media_id, template='https://{host}/api/stream?filecode={media_id}')
         return self._default_get_url(host, media_id, template='https://{host}/ajax/stream?filecode={media_id}')
