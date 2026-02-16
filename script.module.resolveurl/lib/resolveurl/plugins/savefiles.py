@@ -37,7 +37,8 @@ class SaveFilesResolver(ResolveUrl):
         post_data = {
             'op': 'embed',
             'file_code': media_id,
-            'auto': '0'
+            'auto': '0',
+            'referer': ''
         }
         headers = {
             "User-Agent": common.RAND_UA,
@@ -46,7 +47,7 @@ class SaveFilesResolver(ResolveUrl):
         }
 
         player_html = self.net.http_POST(dl_url, form_data=post_data, headers=headers).content
-        s = re.search(r'''sources:\s*\[{\s*file\s*:\s*['"]([^'"]+)''', player_html)
+        s = re.search(r'''sources:\s*\[(?:{\s*file\s*:)?\s*['"]([^'"]+)''', player_html)
         if s:
             stream_url = s.group(1) + helpers.append_headers(headers)
             if subs:
