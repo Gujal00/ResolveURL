@@ -23,7 +23,7 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 class VidNestResolver(ResolveGeneric):
     name = 'VidNest'
     domains = ['vidnest.io', 'vidnest.live']
-    pattern = r'(?://|\.)(?:' + '|'.join([d.replace('.', r'\.') for d in domains]) + r')/(?:e/|d/|embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(vidnest\.(?:io|live))/(?:e/|d/|embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
