@@ -79,7 +79,7 @@ class VoeResolver(ResolveUrl):
               r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
               r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|' \
               r'lukesitturn|mikaylaarealike|christopheruntilpoint|walterprettytheir|crystaltreatmenteast|' \
-              r'lauradaydo|smoki|lancewhosedifficult' \
+              r'lauradaydo|smoki|lancewhosedifficult|' \
               r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc))/' \
               r'(?:e/)?([0-9A-Za-z]+)'
 
