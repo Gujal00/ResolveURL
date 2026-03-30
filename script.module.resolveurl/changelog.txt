@@ -1,19 +1,14 @@
-Version 5.1.194 (Mar 16, 2026)
+Version 5.1.195 (Mar 30, 2026)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - virstream
+    - goodstreamcc
 
 - Resolvers Fixed/Updated:
-    - byse
-    - cocoleech
-    - hdvid
-    - kinoger
-    - playhd
-    - torbox
+    - filelions
+    - gofile
     - videa
-    - waaw
 
 - Resolvers Removed
     - None
