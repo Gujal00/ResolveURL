@@ -16,8 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import json
+from resolveurl import common
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.lib import helpers
+
+api_url = 'https://api.bitchute.com/api/beta/video/media'
 
 
 class BitchuteResolver(ResolveGeneric):
@@ -27,11 +30,19 @@ class BitchuteResolver(ResolveGeneric):
     pattern = r'(?://|\.)(bitchute\.com)/(?:video|embed)/([\w-]+)/'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''source src=['"](?P<url>https.+?\.mp4)['"]\s*type=['"]video/mp4['"]'''],
-            generic_patterns=False
-        )
+
+        payload = {"video_id": media_id}
+
+        headers = {
+            'User-Agent': common.RAND_UA, 'Content-Type': 'application/json',
+            'Origin': 'https://www.bitchute.com', 'Referer': 'https://www.bitchute.com/'
+        }
+
+        res = self.net.http_POST(api_url, form_data=payload, headers=headers, jdata=True).content
+
+        video = json.loads(res)
+
+        return video.get('media_url')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'https://www.{host}/video/{media_id}')
