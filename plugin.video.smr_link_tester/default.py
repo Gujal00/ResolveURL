@@ -29,8 +29,11 @@ from resources.lib import kodi
 logger = log_utils.Logger.get_logger()
 xxx_enabled = kodi.get_setting('xxx_plugins') == 'true'
 xxx_plugins_path = 'special://home/addons/script.module.resolveurl.xxx/resources/plugins/'
+external_plugins_path = kodi.get_setting('external_plugins')
 if xxx_enabled and xbmcvfs.exists(xxx_plugins_path):
     resolveurl.add_plugin_dirs(kodi.translatePath(xxx_plugins_path))
+if external_plugins_path:
+    resolveurl.add_plugin_dirs(kodi.translatePath(external_plugins_path))
 
 
 def __enum(**enums):
