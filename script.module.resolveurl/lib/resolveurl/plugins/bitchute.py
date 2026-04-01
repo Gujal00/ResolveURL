@@ -16,22 +16,34 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import json
+from six.moves import urllib_parse
+from resolveurl import common
 from resolveurl.lib import helpers
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class BitchuteResolver(ResolveGeneric):
+class BitchuteResolver(ResolveUrl):
 
     name = 'Bitchute'
     domains = ['bitchute.com']
     pattern = r'(?://|\.)(bitchute\.com)/(?:video|embed)/([\w-]+)/'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''source src=['"](?P<url>https.+?\.mp4)['"]\s*type=['"]video/mp4['"]'''],
-            generic_patterns=False
-        )
+        api_url = 'https://api.bitchute.com/api/beta/video/media'
+        payload = {"video_id": media_id}
+        ref = urllib_parse.urljoin(self.get_url(host, media_id), '/')
+        headers = {
+            'User-Agent': common.RAND_UA,
+            'Origin': ref[:-1],
+            'Referer': ref
+        }
+        res = self.net.http_POST(api_url, form_data=payload, headers=headers, jdata=True).content
+        if res:
+            video = json.loads(res).get('media_url')
+            return video + helpers.append_headers(headers)
+
+        raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'https://www.{host}/video/{media_id}')
