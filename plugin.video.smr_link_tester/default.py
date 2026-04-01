@@ -32,7 +32,7 @@ xxx_plugins_path = 'special://home/addons/script.module.resolveurl.xxx/resources
 external_plugins_path = kodi.get_setting('external_plugins')
 if xxx_enabled and xbmcvfs.exists(xxx_plugins_path):
     resolveurl.add_plugin_dirs(kodi.translatePath(xxx_plugins_path))
-if external_plugins_path:
+if external_plugins_path and xbmcvfs.exists(external_plugins_path):
     resolveurl.add_plugin_dirs(kodi.translatePath(external_plugins_path))
 
 
