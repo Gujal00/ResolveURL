@@ -295,7 +295,7 @@ msgstr "Ο επιλυτής Uptobox έχει εγκριθεί"
 
 msgctxt "#33070"
 msgid "email"
-msgstr "ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΕΥΘΥΝΣΗ"
+msgstr "ηλ. διεύθυνση"
 
 msgctxt "#33071"
 msgid "Only cached torrents are allowed to be initiated"
@@ -307,7 +307,7 @@ msgstr "Δεν επέστρεψε καμία ροή"
 
 msgctxt "#33073"
 msgid "Transfer"
-msgstr "ΜΕΤΑΦΟΡΑ"
+msgstr "Μεταφορά"
 
 msgctxt "#33074"
 msgid "Cancelled by user"
@@ -426,5 +426,5 @@ msgid "Settings File cleaned"
 msgstr "Καθαρίστε το αρχείο ρυθμίσεων"
 
 msgctxt "#33103"
-msgid "Να συνεχιστεί η μεταφορά στο CocoLeech Cloud στο παρασκήνιο;"
-msgstr ""
+msgid "Keep transferring to CocoLeech Cloud in the background?"
+msgstr "Να συνεχιστεί η μεταφορά στο CocoLeech Cloud στο παρασκήνιο;"
