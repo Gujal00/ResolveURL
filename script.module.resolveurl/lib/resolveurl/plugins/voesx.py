@@ -55,34 +55,36 @@ class VoeResolver(ResolveUrl):
         'mariatheserepublican.com', 'johnalwayssame.com', 'kellywhatcould.com', 'jilliandescribecompany.com',
         'lukesitturn.com', 'mikaylaarealike.com', 'christopheruntilpoint.com', 'walterprettytheir.com',
         'crystaltreatmenteast.com', 'lauradaydo.com', 'smoki.cc', 'lancewhosedifficult.com',
-        'ogladaj.me', 'dianaavoidthey.com', 'jefferycontrolmodel.com'
+        'ogladaj.me', 'dianaavoidthey.com', 'jefferycontrolmodel.com', 'marissasharecareer.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
-    pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
-              r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|' \
-              r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|sethniceletter|' \
-              r'bigclatterhomesguideservice|uptodatefinishconferenceroom|edwardarriveoften|' \
-              r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|michaelapplysome|' \
-              r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|jayservicestuff|' \
-              r'745mingiestblissfully|19turanosephantasia|30sensualizeexpression|sandrataxeight|' \
-              r'321naturelikefurfuroid|449unceremoniousnasoseptal|guidon40hyporadius9|brucevotewithin|' \
-              r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|' \
-              r'matriculant401merited|scatch176duplicities|availedsmallest|stevenimaginelittle|' \
-              r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|kellywhatcould|' \
-              r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|diananatureforeign|' \
-              r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|' \
-              r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|goofy-banana|' \
-              r'jamiesamewalk|bradleyviewdoctor|graceaddresscommunity|shannonpersonalcost|cindyeyefinal|' \
-              r'rebeccaneverbase|loriwithinfamily|roberteachfinal|erikcoldperson|jasminetesttry|' \
-              r'heatherdiscussionwhen|robertplacespace|alleneconomicmatter|josephseveralconcern|' \
-              r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|' \
-              r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|' \
-              r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
-              r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|' \
-              r'lukesitturn|mikaylaarealike|christopheruntilpoint|walterprettytheir|crystaltreatmenteast|' \
-              r'lauradaydo|smoki|lancewhosedifficult|ogladaj|dianaavoidthey|jefferycontrolmodel|' \
-              r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc|me))/' \
-              r'(?:e/)?([0-9A-Za-z]+)'
+    pattern = (
+        r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|'
+        r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|'
+        r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|sethniceletter|'
+        r'bigclatterhomesguideservice|uptodatefinishconferenceroom|edwardarriveoften|'
+        r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|michaelapplysome|'
+        r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|jayservicestuff|'
+        r'745mingiestblissfully|19turanosephantasia|30sensualizeexpression|sandrataxeight|'
+        r'321naturelikefurfuroid|449unceremoniousnasoseptal|guidon40hyporadius9|brucevotewithin|'
+        r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|'
+        r'matriculant401merited|scatch176duplicities|availedsmallest|stevenimaginelittle|'
+        r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|kellywhatcould|'
+        r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|diananatureforeign|'
+        r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|'
+        r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|goofy-banana|'
+        r'jamiesamewalk|bradleyviewdoctor|graceaddresscommunity|shannonpersonalcost|cindyeyefinal|'
+        r'rebeccaneverbase|loriwithinfamily|roberteachfinal|erikcoldperson|jasminetesttry|'
+        r'heatherdiscussionwhen|robertplacespace|alleneconomicmatter|josephseveralconcern|'
+        r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|'
+        r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|'
+        r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|'
+        r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|'
+        r'lukesitturn|mikaylaarealike|christopheruntilpoint|walterprettytheir|crystaltreatmenteast|'
+        r'lauradaydo|smoki|lancewhosedifficult|ogladaj|dianaavoidthey|jefferycontrolmodel|marissasharecareer|'
+        r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc|me))/'
+        r'(?:e/)?([0-9A-Za-z]+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
