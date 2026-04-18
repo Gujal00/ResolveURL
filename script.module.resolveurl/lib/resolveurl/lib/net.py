@@ -266,6 +266,26 @@ class Net:
         """
         return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata, redirect=redirect, timeout=timeout)
 
+    def http_PATCH(self, url, form_data, headers={}, compression=True, jdata=True, redirect=True, timeout=20):
+        """
+        Perform an HTTP PATCH request.
+
+        Args:
+            url (str): The URL to PATCH.
+            form_data (dict): A dictionary of form data to PATCH.
+
+        Kwargs:
+            headers (dict): A dictionary describing any headers you would like
+            to add to the request. (eg. ``{'X-Test': 'testing'}``)
+            compression (bool): If ``True`` (default), try to use gzip
+            compression.
+
+        Returns:
+            An :class:`HttpResponse` object containing headers and other
+            meta-information about the page and the page content.
+        """
+        return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata, redirect=redirect, timeout=timeout, method='PATCH')
+
     def http_HEAD(self, url, headers={}):
         """
         Perform an HTTP HEAD request.
@@ -312,9 +332,9 @@ class Net:
         response = urllib_request.urlopen(request)
         return HttpResponse(response)
 
-    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False, redirect=True, timeout=20):
+    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False, redirect=True, timeout=20, method=None):
         """
-        Perform an HTTP GET or POST request.
+        Perform an HTTP, GET, POST or PATCH request.
 
         Args:
             url (str): The URL to GET or POST.
@@ -333,8 +353,8 @@ class Net:
             An :class:`HttpResponse` object containing headers and other
             meta-information about the page and the page content.
         """
-        req = urllib_request.Request(url)
-        if form_data:
+
+        if form_data is not None:
             if jdata:
                 form_data = json.dumps(form_data)
             elif isinstance(form_data, six.string_types):
@@ -343,6 +363,12 @@ class Net:
                 form_data = urllib_parse.urlencode(form_data, True)
             form_data = form_data.encode('utf-8') if six.PY3 else form_data
             req = urllib_request.Request(url, form_data)
+        else:
+            req = urllib_request.Request(url)
+
+        if method:
+            req.get_method = lambda: method
+
         req.add_header('User-Agent', self._user_agent)
         for key in headers:
             req.add_header(key, headers[key])
@@ -415,9 +441,9 @@ class HttpResponse:
         html = self._response.read()
         encoding = None
         try:
-            if self._response.headers['content-encoding'].lower() == 'gzip':
+            if self._response.headers.get('content-encoding', '').lower() == 'gzip':
                 html = gzip.GzipFile(fileobj=six.BytesIO(html)).read()
-        except:
+        except (IOError, EOFError):
             pass
 
         if self._nodecode:
