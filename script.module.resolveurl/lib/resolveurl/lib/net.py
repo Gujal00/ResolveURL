@@ -385,28 +385,47 @@ class Net:
             else:
                 response = urllib_request.urlopen(req, timeout=timeout)
         except urllib_error.HTTPError as e:
-            if e.code == 403 and 'cloudflare' in e.hdrs.get('server', ''):
-                import ssl
-                ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-                ctx.set_alpn_protocols(['http/1.1'])
-                handlers = [urllib_request.HTTPSHandler(context=ctx)]
-                opener = urllib_request.build_opener(*handlers)
-                try:
-                    response = opener.open(req, timeout=timeout)
-                except urllib_error.HTTPError as e:
-                    if e.code == 403:
-                        ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
-                        ctx.set_alpn_protocols(['http/1.1'])
-                        handlers = [urllib_request.HTTPSHandler(context=ctx)]
-                        opener = urllib_request.build_opener(*handlers)
-                        try:
-                            response = opener.open(req, timeout=timeout)
-                        except urllib_error.HTTPError:
+            if 'cloudflare' in e.hdrs.get('server', '').lower():
+                if e.code == 403 and not e.info().get('cf-mitigated', False):
+                    import ssl
+                    ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+                    ctx.set_alpn_protocols(['http/1.1'])
+                    handlers = [urllib_request.HTTPSHandler(context=ctx)]
+                    opener = urllib_request.build_opener(*handlers)
+                    try:
+                        response = opener.open(req, timeout=timeout)
+                    except urllib_error.HTTPError as e:
+                        if e.code == 403:
+                            ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
+                            ctx.set_alpn_protocols(['http/1.1'])
+                            handlers = [urllib_request.HTTPSHandler(context=ctx)]
+                            opener = urllib_request.build_opener(*handlers)
+                            try:
+                                response = opener.open(req, timeout=timeout)
+                            except urllib_error.HTTPError:
+                                from resolveurl.resolver import ResolverError
+                                raise ResolverError('Cloudflare challenge')
+                            except urllib_error.URLError:
+                                from resolveurl.resolver import ResolverError
+                                raise ResolverError('Cloudflare challenge')
+                elif any(x == e.code for x in [403, 429, 502, 503]):
+                    if kodi.get_setting('bp_enable') == 'true':
+                        cf_cookie, cf_ua = cfcookie().get(url)
+                        if cf_cookie is None:
                             from resolveurl.resolver import ResolverError
-                            raise ResolverError('Cloudflare challenge')
-                        except urllib_error.URLError:
-                            from resolveurl.resolver import ResolverError
-                            raise ResolverError('Cloudflare challenge')
+                            raise ResolverError('Unsolvable Cloudflare challenge')
+                        if form_data is not None:
+                            req = urllib_request.Request(url, form_data)
+                        else:
+                            req = urllib_request.Request(url)
+                        for key in headers:
+                            req.add_header(key, headers[key])
+                        req.add_header('User-Agent', cf_ua)
+                        req.add_header('Cookie', cf_cookie)
+                        response = urllib_request.urlopen(req, timeout=timeout)
+                    else:
+                        from resolveurl.resolver import ResolverError
+                        raise ResolverError('Cloudflare challenge')
             else:
                 raise
 
@@ -517,3 +536,58 @@ class HttpResponse:
         """
         self._nodecode = bool(nodecode)
         return self
+
+
+class cfcookie:
+    def __init__(self):
+        self.cookie = None
+        self.ua = None
+        self.netloc = None
+        self.timeout = 0
+
+    def get(self, netloc):
+        try:
+            self.netloc = netloc
+            self.__get_cookie(netloc)
+            # if self.cookie is not None:
+            #     cfdata = json.dumps({'Cookie': self.cookie, 'User-Agent': self.ua})
+            #     store(cfdata, urllib_parse.urlparse(netloc).netloc + '.json')
+        except Exception as e:
+            from resolveurl.resolver import ResolverError
+            raise ResolverError(
+                '%s returned an error. Could not collect tokens - Error: %s.' %
+                (netloc, str(e))
+            )
+        return (self.cookie, self.ua)
+
+    def __bp_request(self, netloc, jdata):
+        post = json.dumps(jdata)
+        post = post.encode('utf8') if six.PY3 else post
+        request = urllib_request.Request(netloc, post)
+        request.add_header('Content-Type', 'application/json')
+        response = urllib_request.urlopen(request, timeout=120)
+        result = response.read(5242880)
+        return result.decode('utf-8') if six.PY3 else result
+
+    def __get_cookie(self, url):
+        byparr_url = urllib_parse.urljoin(kodi.get_setting('bp_url'), '/v1')
+        bp_timeout = int(kodi.get_setting('bp_timeout'))
+        if not byparr_url.startswith('http'):
+            from resolveurl.resolver import ResolverError
+            raise ResolverError('Sorry, malformed ByParr url')
+            return
+        post = {'cmd': 'request.get',
+                'url': url,
+                'maxTimeout': bp_timeout * 1000}
+        resp = self.__bp_request(byparr_url, jdata=post)
+        if resp:
+            resp = json.loads(resp)
+            soln = resp.get('solution')
+            if soln.get('status') < 300:
+                cookie = '; '.join(['%s=%s' % (i.get('name'), i.get('value')) for i in soln.get('cookies') if 'cf_' in i.get('name')])
+                if 'cf_clearance' in cookie:
+                    self.cookie = cookie
+                    self.ua = soln.get('userAgent')
+                else:
+                    from resolveurl.resolver import ResolverError
+                    raise ResolverError('%s returned an error. Could not collect tokens.' % url)
