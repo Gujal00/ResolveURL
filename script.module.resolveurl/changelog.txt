@@ -1,19 +1,15 @@
-Version 5.1.196 (Apr 19, 2026)
+Version 5.1.197 (Apr 19, 2026)
 - Code Base Changes:
-    - Add http_PATCH method
+    - Fix net fetch method
 
 - Resolvers Added:
     - None
 
 - Resolvers Fixed/Updated:
-    - bitchute
-    - kinoger
-    - streamruby
-    - vido
-    - voesx
+    - None
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - Greek
+    - None
