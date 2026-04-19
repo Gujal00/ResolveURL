@@ -1,17 +1,19 @@
-Version 5.1.195 (Mar 30, 2026)
+Version 5.1.196 (Apr 19, 2026)
 - Code Base Changes:
-    - None
+    - Add http_PATCH method
 
 - Resolvers Added:
-    - goodstreamcc
+    - None
 
 - Resolvers Fixed/Updated:
-    - filelions
-    - gofile
-    - videa
+    - bitchute
+    - kinoger
+    - streamruby
+    - vido
+    - voesx
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - None
+    - Greek

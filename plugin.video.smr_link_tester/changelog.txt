@@ -1,3 +1,6 @@
+Version 1.1.20 (Aor 19, 2026)
+- Allow additional external plugins
+
 Version 1.1.19 (Nov 15, 2025)
 - Fix return_all playback bug introduced in the previous release
 
