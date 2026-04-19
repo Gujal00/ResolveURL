@@ -332,7 +332,7 @@ class Net:
         response = urllib_request.urlopen(request)
         return HttpResponse(response)
 
-    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False, redirect=True, timeout=20, method=None):
+    def _fetch(self, url, form_data=None, headers={}, compression=True, jdata=False, redirect=True, timeout=20, method=None):
         """
         Perform an HTTP, GET, POST or PATCH request.
 
