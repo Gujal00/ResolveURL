@@ -77,7 +77,7 @@ class ByseResolver(ResolveUrl):
         redirect_domains = ['boosteradx.online', "byse.sx"]
         if host in redirect_domains:
             host = 'streamlyplayer.online'
-        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/embed/playback')
+        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/playback')
 
     @staticmethod
     def ft(e):
