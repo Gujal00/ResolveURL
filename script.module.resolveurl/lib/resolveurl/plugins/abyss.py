@@ -1,3 +1,4 @@
+
 """
     Plugin for ResolveURL
     Copyright (C) 2025
@@ -213,10 +214,13 @@ class AbyssResolver(ResolveUrl):
             return None
 
         mp4     = media_payload.get('mp4') if isinstance(media_payload.get('mp4'), dict) else {}
-        sources = mp4.get('sources') if isinstance(mp4.get('sources'), list) else []
+        raw_sources = mp4.get('sources') if isinstance(mp4.get('sources'), list) else []
+        sources = sorted(
+            [s for s in raw_sources if isinstance(s, dict)],
+            key=lambda s: int(s.get('size', 0) or 0),
+            reverse=True
+        )
         for src in sources:
-            if not isinstance(src, dict):
-                continue
             direct = src.get('file')
             if isinstance(direct, str) and direct:
                 return direct.replace('\\/', '/')
@@ -239,8 +243,6 @@ class AbyssResolver(ResolveUrl):
 
         domains = mp4.get('domains') if isinstance(mp4.get('domains'), list) else []
         for src in sources:
-            if not isinstance(src, dict):
-                continue
             size   = src.get('size')
             res_id = src.get('res_id')
             sub    = src.get('sub')
