@@ -1,4 +1,3 @@
-
 """
     Plugin for ResolveURL
     Copyright (C) 2025
