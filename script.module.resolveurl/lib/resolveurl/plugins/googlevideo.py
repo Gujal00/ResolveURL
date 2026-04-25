@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2014 smokdpi
+    Copyright (C) 2026 icarok99
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,13 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl import common, hmf
+from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.lib import helpers
 import re
 import json
-from six.moves import urllib_error, urllib_parse, urllib_request
-import six
+from urllib import error as urllib_error, parse as urllib_parse, request as urllib_request
 
 
 class GoogleResolver(ResolveUrl):
@@ -72,15 +71,12 @@ class GoogleResolver(ResolveUrl):
                 video = self._parse_redirect(web_url, hdrs=self.headers)
             elif 'googlevideo.' in web_url:
                 video = web_url + helpers.append_headers(self.headers)
-        elif 'plugin://' not in video:
+        else:
             if any(url_match in video for url_match in self.url_matches):
                 video = self._parse_redirect(video, hdrs=self.headers)
 
         if video:
-            if 'plugin://' in video:
-                return video
-            else:
-                return video + helpers.append_headers(self.headers)
+            return video + helpers.append_headers(self.headers)
 
         raise ResolverError('File not found')
 
@@ -240,7 +236,7 @@ class GoogleResolver(ResolveUrl):
                     if not isinstance(stream, list) or not stream:
                         continue
                     url = stream[0]
-                    if not isinstance(url, six.string_types):
+                    if not isinstance(url, str):
                         continue
                     if 'mime=video%2Fmp4' in url or 'mime=video/mp4' in url:
                         mp4_urls.append(url)
@@ -261,7 +257,7 @@ class GoogleResolver(ResolveUrl):
 
                 if not video_url and streams and isinstance(streams[0], list) and streams[0]:
                     candidate = streams[0][0]
-                    if isinstance(candidate, six.string_types):
+                    if isinstance(candidate, str):
                         video_url = candidate
 
             if video_url:
@@ -279,9 +275,7 @@ class GoogleResolver(ResolveUrl):
         match = re.search(r'<c-wiz.+?track:impression,click".*?jsdata\s*=\s*".*?(http[^"]+)"', html, re.DOTALL)
         if match:
             source = match.group(1).replace('&amp;', '&').split(';')[0]
-            resolved = hmf.HostedMediaFile(url=source).resolve()
-            if resolved:
-                sources.append(('Unknown Quality', resolved))
+            sources.append(('Unknown Quality', source))
         return sources
 
     def __parse_gget(self, vid_id, html):
@@ -315,10 +309,8 @@ class GoogleResolver(ResolveUrl):
                             for item3 in item2:
                                 if isinstance(item3, list):
                                     for item4 in item3:
-                                        if isinstance(item4, six.text_type) and six.PY2:
-                                            item4 = item4.encode('utf-8')
-                                        if isinstance(item4, six.string_types) and six.PY2:
-                                            item4 = urllib_parse.unquote(item4).decode('unicode_escape') if six.PY2 else urllib_parse.unquote(item4)
+                                        if isinstance(item4, str):
+                                            item4 = urllib_parse.unquote(item4)
                                             for match in re.finditer('url=(?P<link>[^&]+).*?&itag=(?P<itag>[^&]+)', item4):
                                                 link = match.group('link')
                                                 itag = match.group('itag')
@@ -337,8 +329,6 @@ class GoogleResolver(ResolveUrl):
         items = value.split(',')
         for item in items:
             _source_itag, source_url = item.split('|')
-            if isinstance(source_url, six.text_type) and six.PY2:
-                source_url = source_url.decode('unicode_escape').encode('utf-8')
             quality = self.itag_map.get(_source_itag, 'Unknown Quality [%s]' % _source_itag)
             source_url = urllib_parse.unquote(source_url)
             urls.append((quality, source_url))
@@ -348,11 +338,6 @@ class GoogleResolver(ResolveUrl):
     def parse_json(html):
         if html:
             try:
-                if not isinstance(html, six.text_type):
-                    if html.startswith('\xef\xbb\xbf'):
-                        html = html[3:]
-                    elif html.startswith('\xfe\xff'):
-                        html = html[2:]
                 js_data = json.loads(html)
                 if js_data is None:
                     return {}
