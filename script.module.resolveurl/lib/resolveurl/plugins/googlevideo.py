@@ -34,7 +34,6 @@ class GoogleResolver(ResolveUrl):
 
     def __init__(self):
         self.headers = {'User-Agent': common.FF_USER_AGENT}
-        self.url_matches = ['redirector.', 'googleusercontent', '.bp.blogspot.com']
         self.itag_map = {'5': '240', '6': '270', '17': '144', '18': '360', '22': '720', '34': '360', '35': '480',
                          '36': '240', '37': '1080', '38': '3072', '43': '360', '44': '480', '45': '720', '46': '1080',
                          '82': '360 [3D]', '83': '480 [3D]', '84': '720 [3D]', '85': '1080p [3D]', '100': '360 [3D]',
@@ -67,13 +66,8 @@ class GoogleResolver(ResolveUrl):
                 self.headers['Cookie'] = res_headers['Set-Cookie']
 
         if not video:
-            if any(url_match in web_url for url_match in self.url_matches):
-                video = self._parse_redirect(web_url, hdrs=self.headers)
-            elif 'googlevideo.' in web_url:
+            if 'googlevideo.' in web_url:
                 video = web_url + helpers.append_headers(self.headers)
-        else:
-            if any(url_match in video for url_match in self.url_matches):
-                video = self._parse_redirect(video, hdrs=self.headers)
 
         if video:
             return video + helpers.append_headers(self.headers)
@@ -82,27 +76,6 @@ class GoogleResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return 'https://%s/%s' % (host, media_id)
-
-    def _parse_redirect(self, url, hdrs={}):
-        class NoRedirection(urllib_request.HTTPErrorProcessor):
-            def http_response(self, request, response):
-                return response
-
-        opener = urllib_request.build_opener(NoRedirection)
-        urllib_request.install_opener(opener)
-        request = urllib_request.Request(url, headers=hdrs)
-        try:
-            response = urllib_request.urlopen(request)
-        except urllib_error.HTTPError as e:
-            if e.code == 429 or e.code == 403:
-                msg = 'Daily view limit reached'
-                common.kodi.notify(header=None, msg=msg, duration=3000)
-                raise ResolverError(msg)
-        response_headers = dict([(item[0].title(), item[1]) for item in list(response.info().items())])
-        cookie = response_headers.get('Set-Cookie', None)
-        if cookie:
-            self.headers.update({'Cookie': cookie})
-        return response.geturl()
 
     def _parse_google(self, link):
         sources = []
