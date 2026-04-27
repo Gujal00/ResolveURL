@@ -386,6 +386,9 @@ class Net:
                 response = urllib_request.urlopen(req, timeout=timeout)
         except urllib_error.HTTPError as e:
             if e.code == 403 and 'cloudflare' in e.hdrs.get('server', ''):
+                if 'challenge' in e.hdrs.get('cf-mitigated', ''):
+                    from resolveurl.resolver import ResolverError
+                    raise ResolverError('Cloudflare challenge')
                 import ssl
                 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
                 ctx.set_alpn_protocols(['http/1.1'])
@@ -402,11 +405,9 @@ class Net:
                         try:
                             response = opener.open(req, timeout=timeout)
                         except urllib_error.HTTPError:
-                            from resolveurl.resolver import ResolverError
-                            raise ResolverError('Cloudflare challenge')
+                            raise
                         except urllib_error.URLError:
-                            from resolveurl.resolver import ResolverError
-                            raise ResolverError('Cloudflare challenge')
+                            raise
             else:
                 raise
 
@@ -493,7 +494,8 @@ class HttpResponse:
                 x = item[1].split(';')[0]
                 k, v = x.split('=', 1)
                 cookies.update({k: v})
-                cookie_list.append(x)
+                if x not in cookie_list:
+                    cookie_list.append(x)
         return cookies if as_dict else '; '.join(cookie_list)
 
     def get_url(self):
