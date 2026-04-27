@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2025
+    Copyright (C) 2026 icarok99
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,15 +26,10 @@ from resolveurl.lib.pyaes.aes import AESModeOfOperationCTR, Counter
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
-import cloudscraper
 
 class AbyssResolver(ResolveUrl):
     name = 'Abyss'
-    domains = [
-        'abysscdn.com',
-        'hydraxcdn.biz',
-        'short.icu',
-    ]
+    domains = ['abysscdn.com', 'hydraxcdn.biz', 'short.icu']
     pattern = (
         r'(?://|\.)((?:abysscdn|hydraxcdn|short)\.(?:com|biz|icu))'
         r'(?:/\?v=|/)([0-9a-zA-Z_-]+)'
@@ -42,14 +37,12 @@ class AbyssResolver(ResolveUrl):
 
     _CHARSET = 'RB0fpH8ZEyVLkv7c2i6MAJ5u3IKFDxlS1NTsnGaqmXYdUrtzjwObCgQP94hoeW+/='
 
-    def __init__(self):
-        super(AbyssResolver, self).__init__()
-        self.scraper = cloudscraper.create_scraper(
+    def get_media_url(self, host, media_id):
+        import cloudscraper
+        scraper = cloudscraper.create_scraper(
             browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False},
             delay=4
         )
-
-    def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {
             'User-Agent': common.FF_USER_AGENT,
@@ -57,7 +50,7 @@ class AbyssResolver(ResolveUrl):
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         }
 
-        r = self.scraper.get(web_url, headers=headers, timeout=15)
+        r = scraper.get(web_url, headers=headers, timeout=15)
 
         if r.url != web_url:
             web_url = r.url
@@ -66,9 +59,9 @@ class AbyssResolver(ResolveUrl):
 
         datas = self._extract_datas_payload(html)
         if datas:
-            slug       = datas.get('slug')
-            md5_id     = datas.get('md5_id')
-            user_id    = datas.get('user_id')
+            slug = datas.get('slug')
+            md5_id = datas.get('md5_id')
+            user_id = datas.get('user_id')
             media_blob = datas.get('media')
 
             if isinstance(media_blob, dict):
@@ -111,21 +104,21 @@ class AbyssResolver(ResolveUrl):
         payload = {}
 
         for key, pat in [
-            ('slug',    r'"slug"\s*:\s*"([^"]+)"'),
-            ('md5_id',  r'"md5_id"\s*:\s*(\d+)'),
+            ('slug', r'"slug"\s*:\s*"([^"]+)"'),
+            ('md5_id', r'"md5_id"\s*:\s*(\d+)'),
             ('user_id', r'"user_id"\s*:\s*(\d+)'),
         ]:
             m = re.search(pat, decoded)
             if m:
                 payload[key] = int(m.group(1)) if key != 'slug' else m.group(1)
 
-        media_marker  = b'"media":"'
+        media_marker = b'"media":"'
         config_marker = b'","config"'
         m_idx = raw.find(media_marker)
         c_idx = raw.find(config_marker)
         if m_idx >= 0 and c_idx > m_idx:
             try:
-                media_escaped    = raw[m_idx + len(media_marker):c_idx].decode('latin-1', 'ignore')
+                media_escaped = raw[m_idx + len(media_marker):c_idx].decode('latin-1', 'ignore')
                 payload['media'] = self._decode_escaped_binary(media_escaped)
             except Exception:
                 pass
@@ -175,33 +168,33 @@ class AbyssResolver(ResolveUrl):
 
     def _aes_ctr_transform(self, data_bytes, key_seed):
         key = self._derive_key(key_seed)
-        iv  = key[:16]
+        iv = key[:16]
         try:
             counter = Counter(initial_value=int.from_bytes(bytes(iv), 'big'))
-            cipher  = AESModeOfOperationCTR(bytes(key), counter=counter)
+            cipher = AESModeOfOperationCTR(bytes(key), counter=counter)
             return bytes(cipher.encrypt(bytes(data_bytes)))
-        except Exception as e:
+        except Exception:
             return None
 
     def _decrypt_media(self, encrypted_text, user_id, slug, md5_id):
         if not encrypted_text or not user_id or not slug or not md5_id:
             return {}
-        key_seed  = '{0}:{1}:{2}'.format(user_id, slug, md5_id)
+        key_seed = '{0}:{1}:{2}'.format(user_id, slug, md5_id)
         raw_bytes = bytes(ord(ch) & 0xFF for ch in encrypted_text)
-        result    = self._aes_ctr_transform(raw_bytes, key_seed)
+        result = self._aes_ctr_transform(raw_bytes, key_seed)
         if not result:
             return {}
         try:
             decoded = json.loads(result.decode('utf-8', 'ignore'))
             return decoded if isinstance(decoded, dict) else {}
-        except Exception as e:
+        except Exception:
             return {}
 
     def _build_sora_token(self, path_value, size_value):
         transformed = self._aes_ctr_transform(path_value.encode('utf-8'), str(size_value))
         if not transformed:
             return None
-        first  = base64.b64encode(transformed).decode('utf-8').replace('=', '')
+        first = base64.b64encode(transformed).decode('utf-8').replace('=', '')
         second = base64.b64encode(first.encode('utf-8')).decode('utf-8').replace('=', '')
         return second
 
@@ -209,7 +202,7 @@ class AbyssResolver(ResolveUrl):
         if not isinstance(media_payload, dict):
             return None
 
-        mp4     = media_payload.get('mp4') if isinstance(media_payload.get('mp4'), dict) else {}
+        mp4 = media_payload.get('mp4') if isinstance(media_payload.get('mp4'), dict) else {}
         raw_sources = mp4.get('sources') if isinstance(mp4.get('sources'), list) else []
         sources = sorted(
             [s for s in raw_sources if isinstance(s, dict)],
@@ -220,7 +213,7 @@ class AbyssResolver(ResolveUrl):
             direct = src.get('file')
             if isinstance(direct, str) and direct:
                 return direct.replace('\\/', '/')
-            url_  = src.get('url')
+            url_ = src.get('url')
             path_ = src.get('path')
             if isinstance(url_, str) and isinstance(path_, str) and url_ and path_:
                 return '{0}/{1}'.format(url_.rstrip('/'), path_.lstrip('/')).replace('\\/', '/')
@@ -239,9 +232,9 @@ class AbyssResolver(ResolveUrl):
 
         domains = mp4.get('domains') if isinstance(mp4.get('domains'), list) else []
         for src in sources:
-            size   = src.get('size')
+            size = src.get('size')
             res_id = src.get('res_id')
-            sub    = src.get('sub')
+            sub = src.get('sub')
             if not (size and res_id and sub and md5_id and slug):
                 continue
             domain = next((d for d in domains if isinstance(d, str) and sub in d), None)
@@ -251,7 +244,7 @@ class AbyssResolver(ResolveUrl):
             token = self._build_sora_token(path_value, str(size))
             if token:
                 norm = domain if domain.startswith('http') else 'https://' + domain
-                url  = '{0}/sora/{1}/{2}'.format(norm.rstrip('/'), size, token)
+                url = '{0}/sora/{1}/{2}'.format(norm.rstrip('/'), size, token)
                 return url
 
         hls_id = hls.get('id')
@@ -280,7 +273,7 @@ class AbyssResolver(ResolveUrl):
         )
         if m:
             try:
-                meta   = json.loads(self._custom_decode(m.group(1)))
+                meta = json.loads(self._custom_decode(m.group(1)))
                 domain = meta.get('domain', '')
                 vid_id = meta.get('id', '')
                 if domain and vid_id:
