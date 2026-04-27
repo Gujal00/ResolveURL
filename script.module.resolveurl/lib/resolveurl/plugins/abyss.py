@@ -36,7 +36,7 @@ class AbyssResolver(ResolveUrl):
         'short.icu',
     ]
     pattern = (
-        r'(?://|\.)((?:abysscdn|hydraxcdn)\.(?:com|biz)|short\.icu)'
+        r'(?://|\.)((?:abysscdn|hydraxcdn|short)\.(?:com|biz|icu))'
         r'(?:/\?v=|/)([0-9a-zA-Z_-]+)'
     )
 
@@ -50,11 +50,7 @@ class AbyssResolver(ResolveUrl):
         )
 
     def get_media_url(self, host, media_id):
-        if host == 'short.icu':
-            web_url = 'https://abysscdn.com/?v={0}'.format(media_id)
-        else:
-            web_url = self.get_url(host, media_id)
-
+        web_url = self.get_url(host, media_id)
         headers = {
             'User-Agent': common.FF_USER_AGENT,
             'Referer': urllib_parse.urljoin(web_url, '/'),
@@ -81,16 +77,17 @@ class AbyssResolver(ResolveUrl):
                 media_payload = self._decrypt_media(media_blob, user_id, slug, md5_id)
 
             source = self._extract_from_media_payload(media_payload, slug, md5_id)
-            if source:
-                return source + helpers.append_headers(headers)
+        else:
+            source = self._legacy_extract(html)
 
-        source = self._legacy_extract(html)
         if source:
             return source + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
+        if host == 'short.icu':
+            host = 'abysscdn.com'
         return self._default_get_url(host, media_id, 'https://{host}/?v={media_id}')
 
     def _extract_datas_payload(self, html):
