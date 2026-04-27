@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2014 smokdpi
+    Copyright (C) 2026 icarok99
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,15 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl import common, hmf
+from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.lib import helpers
 import re
-from kodi_six import xbmc, xbmcaddon, xbmcvfs
 import json
-from six.moves import urllib_error, urllib_parse, urllib_request
-import six
-import sqlite3
+from urllib import error as urllib_error, parse as urllib_parse, request as urllib_request
 
 
 class GoogleResolver(ResolveUrl):
@@ -37,7 +34,6 @@ class GoogleResolver(ResolveUrl):
 
     def __init__(self):
         self.headers = {'User-Agent': common.FF_USER_AGENT}
-        self.url_matches = ['redirector.', 'googleusercontent', '.bp.blogspot.com']
         self.itag_map = {'5': '240', '6': '270', '17': '144', '18': '360', '22': '720', '34': '360', '35': '480',
                          '36': '240', '37': '1080', '38': '3072', '43': '360', '44': '480', '45': '720', '46': '1080',
                          '82': '360 [3D]', '83': '480 [3D]', '84': '720 [3D]', '85': '1080p [3D]', '100': '360 [3D]',
@@ -59,74 +55,27 @@ class GoogleResolver(ResolveUrl):
         video = None
         web_url = self.get_url(host, media_id)
 
-        if xbmc.getCondVisibility('System.HasAddon(plugin.googledrive)') and self.get_setting('use_gdrive') == "true":
-            addon = xbmcaddon.Addon('plugin.googledrive')
-            if six.PY3:
-                db = xbmcvfs.translatePath(addon.getAddonInfo('profile')) + 'accounts.db'
-            else:
-                db = xbmc.translatePath(addon.getAddonInfo('profile')) + 'accounts.db'
-            conn = sqlite3.connect(db)
-            c = conn.cursor()
-            c.execute("SELECT key FROM store;")
-            driveid = c.fetchone()[0]
-            conn.close()
+        response, video_urls = self._parse_google(web_url)
+        if video_urls:
+            video_urls.sort(key=self.__key, reverse=True)
+            video = helpers.pick_source(video_urls)
 
-            doc_id = re.search(r'[-\w]{25,}', web_url)
-            if doc_id:
-                common.kodi.notify(header=None, msg='Resolving with Google Drive', duration=3000)
-                video = 'plugin://plugin.googledrive/?action=play&content_type=video&driveid={0}&item_id={1}'.format(driveid, doc_id.group(0))
+        if response is not None:
+            res_headers = response.get_headers(as_dict=True)
+            if 'Set-Cookie' in res_headers:
+                self.headers['Cookie'] = res_headers['Set-Cookie']
 
         if not video:
-            response, video_urls = self._parse_google(web_url)
-            if video_urls:
-                video_urls.sort(key=self.__key, reverse=True)
-                video = helpers.pick_source(video_urls)
-
-            if response is not None:
-                res_headers = response.get_headers(as_dict=True)
-                if 'Set-Cookie' in res_headers:
-                    self.headers['Cookie'] = res_headers['Set-Cookie']
-
-        if not video:
-            if any(url_match in web_url for url_match in self.url_matches):
-                video = self._parse_redirect(web_url, hdrs=self.headers)
-            elif 'googlevideo.' in web_url:
+            if 'googlevideo.' in web_url:
                 video = web_url + helpers.append_headers(self.headers)
-        elif 'plugin://' not in video:
-            if any(url_match in video for url_match in self.url_matches):
-                video = self._parse_redirect(video, hdrs=self.headers)
 
         if video:
-            if 'plugin://' in video:  # google plus embedded videos may result in this
-                return video
-            else:
-                return video + helpers.append_headers(self.headers)
+            return video + helpers.append_headers(self.headers)
 
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
         return 'https://%s/%s' % (host, media_id)
-
-    def _parse_redirect(self, url, hdrs={}):
-        class NoRedirection(urllib_request.HTTPErrorProcessor):
-            def http_response(self, request, response):
-                return response
-
-        opener = urllib_request.build_opener(NoRedirection)
-        urllib_request.install_opener(opener)  # @ big change
-        request = urllib_request.Request(url, headers=hdrs)
-        try:
-            response = urllib_request.urlopen(request)
-        except urllib_error.HTTPError as e:
-            if e.code == 429 or e.code == 403:
-                msg = 'Daily view limit reached'
-                common.kodi.notify(header=None, msg=msg, duration=3000)
-                raise ResolverError(msg)
-        response_headers = dict([(item[0].title(), item[1]) for item in list(response.info().items())])
-        cookie = response_headers.get('Set-Cookie', None)
-        if cookie:
-            self.headers.update({'Cookie': cookie})
-        return response.geturl()
 
     def _parse_google(self, link):
         sources = []
@@ -154,21 +103,152 @@ class GoogleResolver(ResolveUrl):
             response = self.net.http_GET(link)
             sources = self._parse_gdocs(response.content)
         elif 'blogger.com/video.g?token=' in link:
-            # Quick hack till I figure the direction to take this plugin
-            response = self.net.http_GET(link)
-            source = re.search(r'''['"]play_url["']\s*:\s*["']([^"']+)''', response.content)
-            if source:
-                sources = [("Unknown Quality", source.group(1).decode('unicode-escape') if six.PY2 else source.group(1))]
+            sources = self._parse_blogger_batchexecute(link)
         return response, sources
+
+    def _parse_blogger_batchexecute(self, blogger_url):
+        token_match = re.search(r'token=([A-Za-z0-9_-]+)', blogger_url)
+        if not token_match:
+            raise ResolverError('Could not extract token from Blogger URL: %s' % blogger_url)
+        token = token_match.group(1)
+
+        try:
+            req = urllib_request.Request(blogger_url, headers=self.headers)
+            resp = urllib_request.urlopen(req)
+            page_text = resp.read().decode('utf-8', errors='ignore')
+        except urllib_error.HTTPError as e:
+            raise ResolverError('Failed to load Blogger page (HTTP %s): %s' % (e.code, blogger_url))
+        except Exception as e:
+            raise ResolverError('Failed to load Blogger page: %s' % str(e))
+
+        sid_match = re.search(r'"FdrFJe"\s*:\s*"([^"]+)"', page_text)
+        bh_match = re.search(r'"cfb2h"\s*:\s*"([^"]+)"', page_text)
+        at_match = re.search(r'"SNlM0e"\s*:\s*"([^"]+)"', page_text)
+
+        if not sid_match or not bh_match:
+            raise ResolverError('Failed to extract session params (FdrFJe/cfb2h) from Blogger page')
+
+        sid = sid_match.group(1)
+        bh = bh_match.group(1)
+        at = at_match.group(1) if at_match else ''
+
+        inner = json.dumps([token, '', 0], separators=(',', ':'))
+        freq = json.dumps([[['WcwnYd', inner, None, 'generic']]], separators=(',', ':'))
+        post_body = 'f.req=' + urllib_parse.quote(freq)
+        if at:
+            post_body += '&at=' + urllib_parse.quote(at)
+
+        batch_url = (
+            'https://www.blogger.com/_/BloggerVideoPlayerUi/data/batchexecute'
+            '?rpcids=WcwnYd&source-path=%2Fvideo.g'
+            '&f.sid={sid}&bl={bh}&hl=en-US&_reqid=100001&rt=c'
+        ).format(sid=urllib_parse.quote(sid), bh=urllib_parse.quote(bh))
+
+        batch_headers = dict(self.headers)
+        batch_headers.update({
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            'X-Same-Domain': '1',
+            'Origin': 'https://www.blogger.com',
+            'Referer': blogger_url,
+        })
+
+        try:
+            req2 = urllib_request.Request(batch_url, data=post_body.encode('utf-8'), headers=batch_headers)
+            batch_resp = urllib_request.urlopen(req2)
+            batch_body = batch_resp.read().decode('utf-8', errors='ignore')
+        except urllib_error.HTTPError as e:
+            raise ResolverError('batchexecute request failed (HTTP %s)' % e.code)
+        except Exception as e:
+            raise ResolverError('batchexecute request failed: %s' % str(e))
+
+        video_url = self._parse_batchexecute_response(batch_body)
+        if not video_url:
+            raise ResolverError('No video URL found in Blogger batchexecute response')
+
+        if 'itag=22' in video_url:
+            quality = '720p'
+        elif 'itag=18' in video_url:
+            quality = '360p'
+        else:
+            quality = 'Unknown Quality'
+
+        return [(quality, video_url)]
+
+    def _parse_batchexecute_response(self, body):
+        video_url = None
+
+        for line in body.splitlines():
+            if 'wrb.fr' not in line:
+                continue
+            try:
+                outer = json.loads(line)
+            except ValueError:
+                continue
+
+            for entry in outer:
+                if not isinstance(entry, list) or len(entry) < 3:
+                    continue
+                if entry[0] != 'wrb.fr' or entry[1] != 'WcwnYd':
+                    continue
+                try:
+                    data = json.loads(entry[2])
+                except (ValueError, TypeError):
+                    continue
+
+                streams = None
+                for elem in data:
+                    if isinstance(elem, list) and elem and isinstance(elem[0], list):
+                        streams = elem
+                        break
+
+                if not streams:
+                    continue
+
+                mp4_urls = []
+                for stream in streams:
+                    if not isinstance(stream, list) or not stream:
+                        continue
+                    url = stream[0]
+                    if not isinstance(url, str):
+                        continue
+                    if 'mime=video%2Fmp4' in url or 'mime=video/mp4' in url:
+                        mp4_urls.append(url)
+
+                for u in mp4_urls:
+                    if 'itag=22' in u:
+                        video_url = u
+                        break
+
+                if not video_url:
+                    for u in mp4_urls:
+                        if 'itag=18' in u:
+                            video_url = u
+                            break
+
+                if not video_url and mp4_urls:
+                    video_url = mp4_urls[0]
+
+                if not video_url and streams and isinstance(streams[0], list) and streams[0]:
+                    candidate = streams[0][0]
+                    if isinstance(candidate, str):
+                        video_url = candidate
+
+            if video_url:
+                break
+
+        if not video_url:
+            gv_match = re.search(r'https://[^"\\]+\.googlevideo\.com/[^"\\]+', body)
+            if gv_match:
+                video_url = gv_match.group(0)
+
+        return video_url
 
     def __parse_gplus(self, html):
         sources = []
         match = re.search(r'<c-wiz.+?track:impression,click".*?jsdata\s*=\s*".*?(http[^"]+)"', html, re.DOTALL)
         if match:
             source = match.group(1).replace('&amp;', '&').split(';')[0]
-            resolved = hmf.HostedMediaFile(url=source).resolve()
-            if resolved:
-                sources.append(('Unknown Quality', resolved))
+            sources.append(('Unknown Quality', source))
         return sources
 
     def __parse_gget(self, vid_id, html):
@@ -202,10 +282,8 @@ class GoogleResolver(ResolveUrl):
                             for item3 in item2:
                                 if isinstance(item3, list):
                                     for item4 in item3:
-                                        if isinstance(item4, six.text_type) and six.PY2:  # @big change
-                                            item4 = item4.encode('utf-8')
-                                        if isinstance(item4, six.string_types) and six.PY2:  # @big change
-                                            item4 = urllib_parse.unquote(item4).decode('unicode_escape') if six.PY2 else urllib_parse.unquote(item4)
+                                        if isinstance(item4, str):
+                                            item4 = urllib_parse.unquote(item4)
                                             for match in re.finditer('url=(?P<link>[^&]+).*?&itag=(?P<itag>[^&]+)', item4):
                                                 link = match.group('link')
                                                 itag = match.group('itag')
@@ -224,8 +302,6 @@ class GoogleResolver(ResolveUrl):
         items = value.split(',')
         for item in items:
             _source_itag, source_url = item.split('|')
-            if isinstance(source_url, six.text_type) and six.PY2:  # @big change
-                source_url = source_url.decode('unicode_escape').encode('utf-8')
             quality = self.itag_map.get(_source_itag, 'Unknown Quality [%s]' % _source_itag)
             source_url = urllib_parse.unquote(source_url)
             urls.append((quality, source_url))
@@ -235,11 +311,6 @@ class GoogleResolver(ResolveUrl):
     def parse_json(html):
         if html:
             try:
-                if not isinstance(html, six.text_type):
-                    if html.startswith('\xef\xbb\xbf'):
-                        html = html[3:]
-                    elif html.startswith('\xfe\xff'):
-                        html = html[2:]
                 js_data = json.loads(html)
                 if js_data is None:
                     return {}
@@ -249,9 +320,3 @@ class GoogleResolver(ResolveUrl):
                 return {}
         else:
             return {}
-
-    @classmethod
-    def get_settings_xml(cls):
-        xml = super(cls, cls).get_settings_xml()
-        xml.append('<setting id="%s_use_gdrive" type="bool" label="Use external Googledrive addon if installed" default="false"/>' % (cls.__name__))
-        return xml
