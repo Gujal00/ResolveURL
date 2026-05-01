@@ -43,11 +43,13 @@ class ByseResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
+        ref = urllib_parse.urljoin(web_url, '/')
         headers = {
             'User-Agent': common.FF_USER_AGENT,
-            'Referer': urllib_parse.urljoin(web_url, '/')
+            'Referer': ref,
+            'Origin': ref[:-1]
         }
-        html = self.net.http_GET(web_url, headers=headers).content
+        html = self.net.http_POST(web_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).content
         html = json.loads(html)
         sources = html.get('sources')
         if sources:
@@ -74,18 +76,41 @@ class ByseResolver(ResolveUrl):
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        redirect_domains = ['boosteradx.online', "byse.sx"]
+        redirect_domains = ['boosteradx.online', 'byse.sx']
         if host in redirect_domains:
             host = 'streamlyplayer.online'
         return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/playback')
 
     @staticmethod
     def ft(e):
-        t = e.replace("-", "+").replace("_", "/")
-        r = 0 if len(t) % 4 == 0 else 4 - len(t) % 4
-        n = t + "=" * r
-        return helpers.b64decode(n, binary=True)
+        t = e.replace('-', '+').replace('_', '/')
+        return helpers.b64decode(t, binary=True)
 
     def xn(self, e):
         t = list(map(self.ft, e))
         return b''.join(t)
+
+    @staticmethod
+    def fp(x, y, z):
+        from binascii import hexlify
+        from hashlib import sha256
+        from os import urandom
+        from time import time
+        from random import uniform
+        v_id = hexlify(urandom(x)).decode()
+        d_id = hexlify(urandom(x)).decode()
+        ctime = int(time())
+        t_data = {
+            'viewer_id': v_id,
+            'device_id': d_id,
+            'confidence': round(uniform(y, z), 2),
+            'iat': ctime,
+            'exp': ctime + 600
+        }
+        t_bdata = helpers.b64urlencode(json.dumps(t_data), strip=True)
+        t_sig = helpers.b64urlencode(sha256(t_bdata.encode()).digest(), strip=True)
+        token = '{0}.{1}'.format(t_bdata, t_sig)
+        t_data.update({'token': token})
+        t_data.pop('iat')
+        t_data.pop('exp')
+        return {'fingerprint': t_data}
