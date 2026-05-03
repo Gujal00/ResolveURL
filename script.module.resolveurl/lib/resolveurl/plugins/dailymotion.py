@@ -33,21 +33,24 @@ class DailymotionResolver(ResolveUrl):
     def get_media_url(self, host, media_id, subs=False):
 
         main_page_url = 'https://www.dailymotion.com/video/{}'.format(media_id)
-        cookies = self.net.http_GET(main_page_url).get_cookies()
+        response = self.net.http_GET(main_page_url)
+        cookies = response.get_cookies()
 
         web_url = self.get_url(host, media_id)
         headers = {
             'User-Agent': common.RAND_UA,
             'Origin': 'https://www.dailymotion.com',
             'Referer': main_page_url,
-            'Cookies': cookies
+            'Cookie': cookies
         }
+
         js_result = json.loads(self.net.http_GET(web_url, headers=headers).content)
 
         if js_result.get('error'):
             raise ResolverError(js_result.get('error').get('title'))
 
         quals = js_result.get('qualities')
+
         if subs:
             subtitles = {}
             matches = js_result.get('subtitles', {}).get('data')
@@ -57,9 +60,10 @@ class DailymotionResolver(ResolveUrl):
 
         if quals:
 
-            del headers['Origin']
+            headers.pop('Origin', None)
 
             vid_src = quals.get('auto')[0].get('url') + helpers.append_headers(headers)
+
             if subs:
                 return vid_src, subtitles
             return vid_src
