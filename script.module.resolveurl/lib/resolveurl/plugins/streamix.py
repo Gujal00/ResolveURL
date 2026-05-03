@@ -33,7 +33,9 @@ class StreamixResolver(ResolveUrl):
         ref = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.FF_USER_AGENT,
                    'Referer': ref}
-        html = self.net.http_GET(web_url, headers=headers).content
+        pdata = {'filecode': media_id,
+                 'device': 'web'}
+        html = self.net.http_POST(web_url, form_data=pdata, headers=headers, jdata=True).content
         r = json.loads(html)
         if 'streaming_url' in r.keys():
             headers.update({'Referer': ref, 'Origin': ref[:-1]})
@@ -49,7 +51,6 @@ class StreamixResolver(ResolveUrl):
         raise ResolverError("Unable to locate stream URL.")
 
     def get_url(self, host, media_id):
-        template = 'https://{host}/ajax/stream?filecode={media_id}'
-        if 'vidara' in host:
-            template = template.replace('/ajax/', '/api/')
-        return self._default_get_url(host, media_id, template=template)
+        if 'vidara' not in host:
+            host = 'vidara.to'
+        return self._default_get_url(host, media_id, template='https://{host}/api/stream')
