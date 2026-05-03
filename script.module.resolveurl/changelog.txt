@@ -1,12 +1,19 @@
-Version 5.1.197 (Apr 19, 2026)
+Version 5.1.198 (May 03, 2026)
 - Code Base Changes:
-    - Fix net fetch method
+    - update net.py to report cloudflare challenge correctly
+    - support using external cloudrequest module
 
 - Resolvers Added:
-    - None
+    - abyss
+    - anonmp4
 
 - Resolvers Fixed/Updated:
-    - None
+    - byse
+    - dropload
+    - hdvid
+    - mixdrop
+    - streamix
+    - voe
 
 - Resolvers Removed
     - None
