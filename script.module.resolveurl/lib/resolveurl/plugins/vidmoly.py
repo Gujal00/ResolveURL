@@ -20,20 +20,31 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl import common
 from resolveurl.lib import helpers
 
-
 class VidMolyResolver(ResolveUrl):
     name = 'VidMoly'
-    domains = ['vidmoly.me', 'vidmoly.to', 'vidmoly.net']
-    pattern = r'(?://|\.)(vidmoly\.(?:me|to|net))/(?:embed-|w/)?([0-9a-zA-Z]+)'
+    domains = ['vidmoly.me', 'vidmoly.to', 'vidmoly.net', 'vidmoly.biz']
+    pattern = r'(?://|\.)(vidmoly\.(?:me|to|net|biz))/(?:embed-|w/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
-        headers = {"User-Agent": common.FF_USER_AGENT, "Referer": web_url, "Sec-Fetch-Dest": "iframe"}
+        headers = {
+            "User-Agent": common.FF_USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Connection": "keep-alive",
+            "Cookie": f"cf_turnstile_demo_pass_{media_id}=1",
+            "Referer": web_url,
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "same-origin",
+        }
+
         html = self.net.http_GET(web_url, headers=headers).content
+
         sources = helpers.scrape_sources(
             html,
             result_blacklist=['.mpd'],
-            patterns=[r'''sources:\s*\[{file:"(?P<url>[^"]+)'''],
+            patterns=[r'''sources\s*:\s*\[\s*\{\s*file\s*:\s*['"](?P<url>[^'"]+)'''],
             generic_patterns=False
         )
 
