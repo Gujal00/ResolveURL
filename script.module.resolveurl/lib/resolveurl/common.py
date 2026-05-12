@@ -45,7 +45,7 @@ VIDEO_FORMATS = kodi.supported_video_extensions()
 # Byparr Support
 BP_ENABLED = kodi.get_setting('bp_enable') == 'true'
 BP_URL = kodi.get_setting('bp_url')
-BP_TIMEOUT = int(kodi.get_setting('bp_timeout'))
+BP_TIMEOUT = int(kodi.get_setting('bp_timeout') or '60')
 
 # RAND_UA = get_ua()
 IE_USER_AGENT = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'
