@@ -828,7 +828,7 @@ def b64encode(b, strip=False):
     r = six.ensure_str(base64.b64encode(b if isinstance(b, bytes) else six.b(b)))
     if strip:
         r = r.rstrip('=')
-    return
+    return r
 
 
 def b64urlencode(b, strip=False):
