@@ -18,6 +18,7 @@
 
 import re
 import json
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.lib import helpers
@@ -29,54 +30,26 @@ class VrraTopResolver(ResolveUrl):
     pattern = r'(?://|\.)(vrra\.top)/(?:e|embed)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        import cloudscraper
-        scraper = cloudscraper.create_scraper(
-            browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
-        )
-
         web_url = self.get_url(host, media_id)
-        
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Referer': web_url,
-            'Origin': f'https://{host}',
-            'Accept': 'application/json, text/plain, */*',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-
-        try:
-            r = scraper.get(web_url, headers=headers, timeout=20)
-            html = r.text
-
-            handshake = re.search(r'HANDSHAKE\s*=\s*["\']([^"\']{60,})["\']', html)
-            if not handshake:
-                handshake = re.search(r'var HANDSHAKE\s*=\s*["\']([^"\']{60,})["\']', html)
-            if not handshake:
-                handshake = re.search(r'"h"\s*:\s*["\']([^"\']{60,})["\']', html)
-
-            if not handshake:
-                raise ResolverError('No playable video found.')
-
-            handshake = handshake.group(1)
-
-            api_url = f'https://{host}/api/manifest'
-            payload = {'h': handshake}
-
-            resp = scraper.post(api_url, json=payload, headers=headers, timeout=15).text
+        ref = urllib_parse.urljoin(web_url, '/')
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        html = self.net.http_GET(web_url, headers=headers, timeout=60).content
+        r = re.search(r'var\s*HANDSHAKE\s*=\s*"([^"]+)', html)
+        if r:
+            headers.update({
+                'Referer': ref,
+                'Origin': ref[:-1],
+                'X-Requested-With': 'XMLHttpRequest'
+            })
+            api_url = urllib_parse.urljoin(ref, '/api/manifest')
+            payload = {'h': r.group(1)}
+            resp = self.net.http_POST(api_url, form_data=payload, headers=headers, jdata=True, timeout=60).content
             data = json.loads(resp)
-
             if data and data.get('url'):
-                stream_url = data['url']
-                return stream_url + helpers.append_headers({
-                    'User-Agent': headers['User-Agent'],
-                    'Referer': web_url,
-                    'Origin': f'https://{host}'
-                })
+                headers.pop('X-Requested-With')
+                return data['url'] + helpers.append_headers(headers)
 
-            raise ResolverError('No playable video found.')
-
-        except Exception:
-            raise ResolverError('No playable video found.')
+        raise ResolverError('No playable video found.')
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
