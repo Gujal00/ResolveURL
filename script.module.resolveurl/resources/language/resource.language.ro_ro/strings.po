@@ -429,3 +429,15 @@ msgstr "Fișierul de setări a fost curățat"
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "Continuați transferul în CocoLeech Cloud în fundal?"
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "Activează accesul ByParr"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "URL ByParr"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "Expirare ByParr"

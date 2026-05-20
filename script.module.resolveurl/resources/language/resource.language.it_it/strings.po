@@ -430,3 +430,15 @@ msgstr "File delle impostazioni pulito"
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "Continuare il trasferimento su CocoLeech Cloud in background?"
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "Abilita accesso ByParr"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "URL ByParr"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "Timeout ByParr"

@@ -430,3 +430,15 @@ msgstr "הגדרות קובץ ניקה"
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "האם ממשיך להעביר לענן CocoLeech ברקע?"
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "אפשר גישת ByParr"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "כתובת URL של ByParr"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "פסק זמן של ByParr"

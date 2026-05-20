@@ -428,3 +428,15 @@ msgstr "Καθαρίστε το αρχείο ρυθμίσεων"
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "Να συνεχιστεί η μεταφορά στο CocoLeech Cloud στο παρασκήνιο;"
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "Ενεργοποίηση πρόσβασης ByParr"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "URL ByParr"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "Χρονικό όριο ByParr"

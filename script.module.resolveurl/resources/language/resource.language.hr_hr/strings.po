@@ -433,3 +433,15 @@ msgstr "Datoteka postavki je očišćena"
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "Nastaviti prijenos u CocoLeech Cloud u pozadini?"
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "Omogući ByParr pristup"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "ByParr URL"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "ByParr vrijeme isteka"

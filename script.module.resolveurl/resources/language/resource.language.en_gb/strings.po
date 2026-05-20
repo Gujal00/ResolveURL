@@ -428,3 +428,15 @@ msgstr ""
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr ""
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr ""
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr ""
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr ""

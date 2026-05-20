@@ -432,3 +432,14 @@ msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "Czy kontynuować przesyłanie do chmury CocoLeech w tle?"
 
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "Włącz dostęp ByParr"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "Adres URL ByParr"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "Limit czasu ByParr"

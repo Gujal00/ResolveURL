@@ -427,3 +427,15 @@ msgstr "Soubor nastavení vyčištěn"
 msgctxt "#33103"
 msgid "Pokračovat v přenosu do CocoLeech Cloudu na pozadí?"
 msgstr ""
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "Povolit přístup ByParr"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "URL ByParr"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "Časový limit ByParr"

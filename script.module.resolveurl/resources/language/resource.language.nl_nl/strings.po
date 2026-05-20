@@ -432,3 +432,15 @@ msgstr "Instellingen Bestand opgeschoond"
 msgctxt "#33103"
 msgid "Keep transferring to CocoLeech Cloud in the background?"
 msgstr "Blijven overzetten naar CocoLeech Cloud op de achtergrond?"
+
+msgctxt "#33104"
+msgid "Enable ByParr access"
+msgstr "ByParr-toegang inschakelen"
+
+msgctxt "#33105"
+msgid "ByParr URL"
+msgstr "ByParr-URL"
+
+msgctxt "#33106"
+msgid "ByParr timeout"
+msgstr "ByParr-time-out"
