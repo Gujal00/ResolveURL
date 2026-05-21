@@ -39,6 +39,12 @@ class AnonMP4Resolver(ResolveUrl):
             headers.update({'Referer': ref, 'Origin': ref[:-1]})
             html = self.net.http_GET(a.group(1), headers=headers).content
             r = json.loads(html)
+            if 'tracks' in r.keys():
+                tracks = [(x.get('track_name'), x.get('track_url')) for x in r.get('tracks')]
+                surl = helpers.pick_source(tracks, auto_pick=False)
+                html = self.net.http_GET(surl, headers=headers).content
+                r = json.loads(html)
+
             if 'hls' in r.keys():
                 url = r.get('hls') + helpers.append_headers(headers)
                 if subs:
