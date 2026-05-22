@@ -17,7 +17,7 @@
 """
 
 import json
-from six.moves import urllib_parse
+from six.moves import urllib_error, urllib_parse
 from resolveurl.lib import helpers
 from resolveurl.lib.aesgcm import python_aesgcm
 from resolveurl import common
@@ -45,44 +45,51 @@ class ByseResolver(ResolveUrl):
     )
 
     def get_media_url(self, host, media_id):
-        web_url = self.get_url(host, media_id)
-        ref = urllib_parse.urljoin(web_url, '/')
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Referer': ref,
-            'Origin': ref[:-1]
-        }
-        html = self.net.http_POST(web_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).content
-        html = json.loads(html)
-        sources = html.get('sources')
-        if sources:
-            sources = [(x.get('label'), x.get('url')) for x in sources]
-            uri = helpers.pick_source(helpers.sort_sources_list(sources))
-            if uri.startswith('/'):
-                uri = urllib_parse.urljoin(web_url, uri)
-            url = helpers.get_redirect_url(uri, headers=headers)
-            return url + helpers.append_headers(headers)
-        pd = html.get('playback')
-        if pd:
-            iv = self.ft(pd.get('iv'))
-            key = self.xn(pd.get('key_parts'))
-            pl = self.ft(pd.get('payload'))
-            cipher = python_aesgcm.new(key)
-            ct = cipher.open(iv, pl)
-            ct = json.loads(ct.decode('latin-1'))
-            sources = ct.get('sources')
+        # /e/ embed links resolve via the 'embed/playback' API endpoint; the
+        # plain 'playback' endpoint only accepts watch-page ids. Try the embed
+        # endpoint first, then fall back to the watch endpoint.
+        for endpoint in ('embed/playback', 'playback'):
+            web_url = self.get_url(host, media_id, endpoint)
+            ref = urllib_parse.urljoin(web_url, '/')
+            headers = {
+                'User-Agent': common.FF_USER_AGENT,
+                'Referer': ref,
+                'Origin': ref[:-1]
+            }
+            try:
+                html = self.net.http_POST(web_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).content
+            except urllib_error.HTTPError:
+                continue
+            html = json.loads(html)
+            sources = html.get('sources')
             if sources:
                 sources = [(x.get('label'), x.get('url')) for x in sources]
                 uri = helpers.pick_source(helpers.sort_sources_list(sources))
-                return uri + helpers.append_headers(headers)
+                if uri.startswith('/'):
+                    uri = urllib_parse.urljoin(web_url, uri)
+                url = helpers.get_redirect_url(uri, headers=headers)
+                return url + helpers.append_headers(headers)
+            pd = html.get('playback')
+            if pd:
+                iv = self.ft(pd.get('iv'))
+                key = self.xn(pd.get('key_parts'))
+                pl = self.ft(pd.get('payload'))
+                cipher = python_aesgcm.new(key)
+                ct = cipher.open(iv, pl)
+                ct = json.loads(ct.decode('latin-1'))
+                sources = ct.get('sources')
+                if sources:
+                    sources = [(x.get('label'), x.get('url')) for x in sources]
+                    uri = helpers.pick_source(helpers.sort_sources_list(sources))
+                    return uri + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
 
-    def get_url(self, host, media_id):
+    def get_url(self, host, media_id, endpoint='playback'):
         redirect_domains = ['boosteradx.online', 'byse.sx']
         if host in redirect_domains:
             host = 'streamlyplayer.online'
-        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/playback')
+        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/' + endpoint)
 
     @staticmethod
     def ft(e):
