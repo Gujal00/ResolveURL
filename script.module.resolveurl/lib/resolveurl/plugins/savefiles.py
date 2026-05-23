@@ -27,8 +27,10 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class SaveFilesResolver(ResolveUrl):
     name = 'SaveFiles'
     domains = ['savefiles.com', 'streamhls.to']
-    pattern = r'(?://|\.)((?:savefiles|streamhls)\.' \
-              r'(?:com|to))/(?:e/|v/)?([0-9a-zA-Z]+)'
+    pattern = (
+        r'(?://|\.)((?:savefiles|streamhls)\.'
+        r'(?:com|to))/(?:e/|v/)?([0-9a-zA-Z]+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         import cloudscraper
@@ -51,7 +53,7 @@ class SaveFilesResolver(ResolveUrl):
         headers = {
             "User-Agent": common.FF_USER_AGENT,
             "Referer": ref,
-            "Origin": ref[:-1] if ref.endswith('/') else ref,
+            "Origin": ref[:-1],
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         }
 
