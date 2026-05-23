@@ -47,71 +47,80 @@ class DoodStreamResolver(ResolveUrl):
         if host not in ['doodstream.com', 'myvidplay.com', 'playmogo.com']:
             host = 'playmogo.com'
         web_url = self.get_url(host, media_id)
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Referer': web_url
-        }
-        html = ''
-        if common.BP_ENABLED:
-            bp_url = urllib_parse.urljoin(common.BP_URL, '/v1')
-            data = {
-                "cmd": "request.get",
-                "url": web_url,
-                "maxTimeout": common.BP_TIMEOUT * 1000
-            }
-            r = self.net.http_POST(bp_url, form_data=data, jdata=True, timeout=common.BP_TIMEOUT + 20).content
-            r = json.loads(r)
-            if r.get('message') == 'Success':
-                r = r.get('solution')
-                html = r.get('response')
-                if r.get('url') != web_url:
-                    web_url = r.get('url')
-        else:
-            import cloudscraper
-            scraper = cloudscraper.create_scraper(
-                browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False},
-                delay=4
-            )
-            r = scraper.get(web_url, headers=headers, timeout=20)
-            if r.url != web_url:
-                web_url = r.url
-                headers['Referer'] = web_url
-            html = r.text
 
-        if html and subs:
-            subtitles = {}
-            matches = re.findall(r"""dsplayer\.addRemoteTextTrack\({src:'([^']+)',\s*label:'([^']*)',kind:'captions'""", html)
-            if matches:
-                matches = [(src, label) for src, label in matches if len(label) > 1]
-                for src, label in matches:
+        html, web_url = self._fetch_direct(web_url, web_url)
+        if html is None and common.BP_ENABLED:
+            html, web_url = self._fetch_byparr(web_url, web_url)
+        if not html:
+            raise ResolverError('Video Link Not Found')
+
+        headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
+
+        subtitles = {}
+        if subs:
+            for src, label in re.findall(
+                r"""dsplayer\.addRemoteTextTrack\({src:'([^']+)',\s*label:'([^']*)',kind:'captions'""",
+                html,
+            ):
+                if len(label) > 1:
                     subtitles[label] = 'https:' + src if src.startswith('//') else src
 
-        match = re.search(r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''', html, re.DOTALL)
-        if match:
-            token = match.group(2).strip()
-            url = urllib_parse.urljoin(web_url, match.group(1))
-            str_url = ''
-            if common.BP_ENABLED:
-                data.update({'url': url})
-                resp = self.net.http_POST(bp_url, form_data=data, jdata=True, timeout=common.BP_TIMEOUT + 20).content
-                resp = json.loads(resp)
-                if resp.get('message') == 'Success':
-                    resp = resp.get('solution')
-                    str_url = re.findall(r'<body>([^<]+)', resp.get('response'))[0]
-            else:
-                resp = scraper.get(url, headers=headers, timeout=20)
-                str_url = resp.text.strip()
+        match = re.search(
+            r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''',
+            html, re.DOTALL,
+        )
+        if not match:
+            raise ResolverError('Video Link Not Found')
 
-            if str_url:
-                if 'cloudflarestorage.' in str_url:
-                    vid_src = str_url + helpers.append_headers(headers)
-                else:
-                    vid_src = self.dood_decode(str_url) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
-                if subs:
-                    return vid_src, subtitles
-                return vid_src
+        token = match.group(2).strip()
+        pass_url = urllib_parse.urljoin(web_url, match.group(1))
+        pass_headers = {**headers, 'X-Requested-With': 'XMLHttpRequest'}
 
-        raise ResolverError('Video Link Not Found')
+        raw, _ = self._fetch_direct(pass_url, web_url, headers=pass_headers)
+        str_url = self._extract_base(raw)
+        if not str_url and common.BP_ENABLED:
+            raw, _ = self._fetch_byparr(pass_url, web_url)
+            str_url = self._extract_base(raw)
+        if not str_url:
+            raise ResolverError('Video Link Not Found')
+
+        if 'cloudflarestorage.' in str_url:
+            vid_src = str_url + helpers.append_headers(headers)
+        else:
+            vid_src = self.dood_decode(str_url) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
+        if subs:
+            return vid_src, subtitles
+        return vid_src
+
+    def _fetch_direct(self, url, ref_url, headers=None):
+        try:
+            hdrs = headers or {'User-Agent': common.FF_USER_AGENT, 'Referer': ref_url}
+            resp = self.net.http_GET(url, headers=hdrs, timeout=20)
+            return resp.content, resp.get_url()
+        except Exception:
+            return None, ref_url
+
+    def _fetch_byparr(self, url, ref_url):
+        try:
+            bp_url = urllib_parse.urljoin(common.BP_URL, '/v1')
+            data = {"cmd": "request.get", "url": url, "maxTimeout": common.BP_TIMEOUT * 1000}
+            r = json.loads(self.net.http_POST(
+                bp_url, form_data=data, jdata=True,
+                timeout=common.BP_TIMEOUT + 20,
+            ).content)
+            if r.get('message') == 'Success':
+                sol = r.get('solution') or {}
+                return sol.get('response'), (sol.get('url') or ref_url)
+        except Exception:
+            pass
+        return None, ref_url
+
+    @staticmethod
+    def _extract_base(raw):
+        if not raw:
+            return None
+        m = re.search(r'<body[^>]*>([^<]+)', raw)
+        return ((m.group(1) if m else raw).strip()) or None
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
