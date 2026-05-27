@@ -17,11 +17,20 @@
 """
 
 import json
+import uuid
 from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl.lib.aesgcm import python_aesgcm
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
+try:
+    from Crypto.Hash import SHA256
+    from Crypto.PublicKey import ECC
+    from Crypto.Signature import DSS
+    HAS_CRYPTO = True
+except ImportError:
+    HAS_CRYPTO = False
 
 
 class ByseResolver(ResolveUrl):
@@ -46,14 +55,30 @@ class ByseResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        ref = urllib_parse.urljoin(web_url, '/')
+        embed_url = 'https://{0}/e/{1}'.format(host, media_id)
+        origin = 'https://{0}'.format(host)
+
         headers = {
             'User-Agent': common.FF_USER_AGENT,
-            'Referer': ref,
-            'Origin': ref[:-1]
+            'Referer': embed_url,
+            'Origin': origin,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+            'X-Embed-Origin': host,
+            'X-Embed-Referer': embed_url,
+            'X-Embed-Parent': embed_url,
         }
-        html = self.net.http_POST(web_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).content
+
+        # Try attested fingerprint first, fall back to simple
+        try:
+            fp = self.fp_attested(host, embed_url, headers)
+        except Exception:
+            fp = self.fp_simple(16, 0.6, 0.9)
+
+        html = self.net.http_POST(web_url, headers=headers, form_data=fp, jdata=True).content
         html = json.loads(html)
+
+        # Case 1: plain sources
         sources = html.get('sources')
         if sources:
             sources = [(x.get('label'), x.get('url')) for x in sources]
@@ -62,10 +87,12 @@ class ByseResolver(ResolveUrl):
                 uri = urllib_parse.urljoin(web_url, uri)
             url = helpers.get_redirect_url(uri, headers=headers)
             return url + helpers.append_headers(headers)
+
+        # Case 2: encrypted playback
         pd = html.get('playback')
         if pd:
             iv = self.ft(pd.get('iv'))
-            key = self.xn(pd.get('key_parts'))
+            key = self.xn(pd.get('key_parts'), pd.get('version'))
             pl = self.ft(pd.get('payload'))
             cipher = python_aesgcm.new(key)
             ct = cipher.open(iv, pl)
@@ -82,19 +109,86 @@ class ByseResolver(ResolveUrl):
         redirect_domains = ['boosteradx.online', 'byse.sx']
         if host in redirect_domains:
             host = 'streamlyplayer.online'
-        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/playback')
+        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/embed/playback')
 
     @staticmethod
     def ft(e):
         t = e.replace('-', '+').replace('_', '/')
         return helpers.b64decode(t, binary=True)
 
-    def xn(self, e):
-        t = list(map(self.ft, e))
-        return b''.join(t)
+    @staticmethod
+    def xn(parts, version):
+        """Derive 32-byte AES key: parts[v-1] + parts[n-v]"""
+        v = int(version)
+        n = len(parts)  # always 30
+        def dec(s):
+            s = s.replace('-', '+').replace('_', '/')
+            return helpers.b64decode(s, binary=True)
+        return dec(parts[v - 1]) + dec(parts[n - v])
+
+    def fp_attested(self, host, embed_url, headers):
+        """EC P-256 attested fingerprint (full challenge/attest flow)."""
+        if not HAS_CRYPTO:
+            raise ImportError('pycryptodome not available')
+
+        origin = 'https://{0}'.format(host)
+        challenge_url = '{0}/api/videos/access/challenge'.format(origin)
+        challenge = json.loads(
+            self.net.http_POST(challenge_url, headers=headers, form_data={}, jdata=True).content
+        )
+
+        key = ECC.generate(curve='P-256')
+        digest = SHA256.new(challenge['nonce'].encode())
+        signature = DSS.new(key, 'fips-186-3', encoding='binary').sign(digest)
+
+        def i2b64(v):
+            raw = int(v).to_bytes(32, 'big')
+            return helpers.b64urlencode(raw, strip=True)
+
+        def b2b64(b):
+            return helpers.b64urlencode(b, strip=True)
+
+        attest_payload = {
+            'viewer_id': uuid.uuid4().hex,
+            'device_id': uuid.uuid4().hex,
+            'challenge_id': challenge['challenge_id'],
+            'nonce': challenge['nonce'],
+            'signature': b2b64(signature),
+            'public_key': {
+                'kty': 'EC', 'crv': 'P-256',
+                'x': i2b64(key.pointQ.x),
+                'y': i2b64(key.pointQ.y),
+                'ext': True, 'key_ops': ['verify'],
+            },
+            'client': {
+                'user_agent': common.FF_USER_AGENT,
+                'platform': 'Windows',
+                'languages': ['en-US', 'en'],
+                'timezone': 'Europe/Rome',
+                'hardware_concurrency': 8,
+                'touch_points': 0,
+            },
+            'storage': {},
+            'attributes': {'entropy': 'low'},
+        }
+
+        attest_url = '{0}/api/videos/access/attest'.format(origin)
+        attest = json.loads(
+            self.net.http_POST(attest_url, headers=headers, form_data=attest_payload, jdata=True).content
+        )
+
+        return {
+            'fingerprint': {
+                'token': attest['token'],
+                'viewer_id': attest['viewer_id'],
+                'device_id': attest['device_id'],
+                'confidence': attest['confidence'],
+            }
+        }
 
     @staticmethod
-    def fp(x, y, z):
+    def fp_simple(x, y, z):
+        """Simple SHA256-signed fingerprint fallback."""
         from binascii import hexlify
         from hashlib import sha256
         from os import urandom
@@ -108,7 +202,7 @@ class ByseResolver(ResolveUrl):
             'device_id': d_id,
             'confidence': round(uniform(y, z), 2),
             'iat': ctime,
-            'exp': ctime + 600
+            'exp': ctime + 600,
         }
         t_bdata = helpers.b64urlencode(json.dumps(t_data), strip=True)
         t_sig = helpers.b64urlencode(sha256(t_bdata.encode()).digest(), strip=True)
