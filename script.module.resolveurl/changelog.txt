@@ -1,17 +1,16 @@
-Version 5.1.199 (May 20, 2026)
+Version 5.1.200 (May 29, 2026)
 - Code Base Changes:
-    - Add ByParr support
-    - Fix regression bug in helpers.py
+    - None
 
 - Resolvers Added:
-    - brainzaps
-    - vidsonic
-    - vrra
+    - gupload
 
 - Resolvers Fixed/Updated:
+    - anonmp4
     - byse
-    - doodstream (requires ByParr)
-    - vidmoly
+    - doodstream (can use ByParr or cloudscraper)
+    - savefiles
+    - waaw
 
 - Resolvers Removed
     - None
