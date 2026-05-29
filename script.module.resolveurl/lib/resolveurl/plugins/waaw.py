@@ -19,8 +19,6 @@
 import codecs
 import json
 import re
-
-from base64 import b64decode
 from random import choice
 from six.moves import urllib_parse
 from resolveurl.lib import helpers, captcha_window
@@ -41,11 +39,18 @@ class WaawResolver(ResolveUrl):
     pattern = r'(?://|\.)((?:you|stb)?(?:waaw|netu|hqq|doplay|brightmindwave|ncdn22|oyohd|' \
               r'player\.sorozatok|vidmoly|0gomovies)' \
               r'\.(?:ac|tv|to|store|c[ao]m|xyz|one|me|beer))/' \
-              r'(?:(?:watch_video|embed_player)\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9]+)'
+              r'(?:(?:watch_video|embed_player)\.php\?v=|.+?\?vid=|e/|f/)([a-zA-Z0-9$:/]+)'
 
     def get_media_url(self, host, media_id, subs=False):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.FF_USER_AGENT}
+        if referer:
+            headers.update({'Referer': referer})
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r"'videoid':\s*'([^']+)", html)
         if r:
@@ -75,8 +80,8 @@ class WaawResolver(ResolveUrl):
                 raise ResolverError('Too many attempts. Please try again later.')
 
             hash_img = json_data['hash_image']
-            image = json_data['image'].replace('data:image/jpeg;base64,', '')
-            image = b64decode(image + "==")
+            image = re.sub(r'data:image/(?:png|jpeg);base64,', '', json_data['image'])
+            image = helpers.b64decode(image, binary=True)
             window = captcha_window.CaptchaWindow(image, 400, 400)
             window.doModal()
 
