@@ -16,21 +16,44 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+import re
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
+from resolveurl import common
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class BigShareResolver(ResolveGeneric):
+class BigShareResolver(ResolveUrl):
     name = 'BigShare'
     domains = ['bigshare.io']
-    pattern = r'(?://|\.)(bigshare\.io)/watch/([a-zA-Z0-9]+)'
+    pattern = r'(?://|\.)(bigshare\.io)/watch/(?:e/)?([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''url:\s*'(?P<url>[^']+)'''],
-            generic_patterns=False
+        import cloudscraper
+        scraper = cloudscraper.create_scraper(
+            browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False},
+            delay=4
         )
+        web_url = self.get_url(host, media_id)
+        headers = {
+            'User-Agent': common.FF_USER_AGENT,
+            'Referer': urllib_parse.urljoin(web_url, '/'),
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        }
+
+        r = scraper.get(web_url, headers=headers, timeout=15, allow_redirects=True)
+
+        if r.url != web_url:
+            web_url = r.url
+            headers['Referer'] = urllib_parse.urljoin(web_url, '/')
+
+        html = r.text
+
+        match = re.search(r'''url:\s*'(?P<url>https://cdn\.bigshare\.io/[^']+)''', html)
+        if match:
+            return match.group('url') + helpers.append_headers(headers)
+
+        raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/watch/{media_id}/e')
+        return self._default_get_url(host, media_id, template='https://{host}/watch/e/{media_id}')
