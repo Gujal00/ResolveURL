@@ -33,12 +33,6 @@ class SaveFilesResolver(ResolveUrl):
     )
 
     def get_media_url(self, host, media_id, subs=False):
-        import cloudscraper
-        scraper = cloudscraper.create_scraper(
-            browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False},
-            delay=4
-        )
-
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
         dl_url = urllib_parse.urljoin(web_url, '/dl')
@@ -48,14 +42,13 @@ class SaveFilesResolver(ResolveUrl):
             'auto': '0',
             'referer': ''
         }
-
         headers = {
-            "User-Agent": common.FF_USER_AGENT,
+            "User-Agent": common.RAND_UA,
             "Referer": ref,
             "Origin": ref[:-1]
         }
 
-        player_html = scraper.post(dl_url, data=post_data, headers=headers, timeout=15).text
+        player_html = self.net.http_POST(dl_url, form_data=post_data, headers=headers).content
         s = re.search(r'''sources:\s*\[(?:{\s*file\s*:)?\s*['"]([^'"]+)''', player_html)
         if s:
             stream_url = s.group(1) + helpers.append_headers(headers)
