@@ -28,7 +28,7 @@ class FlyFileResolver(ResolveUrl):
     domains = ['flyfile.app']
     pattern = r'(?://|\.)(flyfile\.app)/embed/([A-Za-z0-9]+)'
 
-    def get_media_url(self, host, media_id, subs=False):
+    def get_media_url(self, host, media_id):
         headers = {
             'User-Agent': common.FF_USER_AGENT,
             'Accept': 'application/json, text/plain, */*',
@@ -37,18 +37,6 @@ class FlyFileResolver(ResolveUrl):
             'X-Adblock-Detected': '1',
             'X-Embed-Referrer': '',
         }
-
-        file_numeric_id = None
-        if subs:
-            try:
-                signal_url = 'https://api.flyfile.app/api/stats/adblock-signal'
-                signal_resp = self.net.http_GET(signal_url, headers=headers).content
-                signal_data = json.loads(signal_resp)
-                file_numeric_id = (signal_data.get('fileid')
-                                   or signal_data.get('fileId')
-                                   or signal_data.get('id'))
-            except Exception:
-                pass
 
         api_url = 'https://api.flyfile.app/api/streaming/assign/{0}'.format(media_id)
         resp = self.net.http_GET(api_url, headers=headers).content
@@ -67,30 +55,8 @@ class FlyFileResolver(ResolveUrl):
             'Referer': 'https://flyfile.app/',
             'Origin': 'https://flyfile.app',
         }
-        final_url = stream_url + helpers.append_headers(stream_headers)
 
-        if subs:
-            subtitles = self._get_subtitles(file_numeric_id, headers) if file_numeric_id else {}
-            return final_url, subtitles
-
-        return final_url
-
-    def _get_subtitles(self, file_numeric_id, headers):
-        subtitles = {}
-        try:
-            subs_url = 'https://api.flyfile.app/api/public/subtitles/{0}'.format(file_numeric_id)
-            resp = self.net.http_GET(subs_url, headers=headers).content
-            data = json.loads(resp)
-            sub_list = data if isinstance(data, list) else data.get('subtitles', [])
-            for item in sub_list:
-                lang = item.get('lang') or item.get('language', '')
-                label = item.get('label') or item.get('name') or lang
-                url = item.get('url') or item.get('src', '')
-                if label and url:
-                    subtitles[label] = url
-        except Exception:
-            pass
-        return subtitles
+        return stream_url + helpers.append_headers(stream_headers)
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
