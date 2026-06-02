@@ -19,7 +19,6 @@
 import json
 import hashlib
 import re
-import base64
 from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl.lib.pyaes.aes import AESModeOfOperationCTR, Counter
@@ -32,54 +31,28 @@ class AbyssResolver(ResolveUrl):
     domains = ['abysscdn.com', 'hydraxcdn.biz', 'short.icu', 'embedplayabyss.top']
     pattern = (
         r'(?://|\.)((?:abysscdn|hydraxcdn|short|embedplayabyss)'
-        r'\.(?:com|biz|icu|top)'
+        r'\.(?:com|biz|icu|top))'
         r'(?:/\?v=|/player\.html\?v=|/)([0-9a-zA-Z_-]+)'
     )
 
     _CHARSET = 'RB0fpH8ZEyVLkv7c2i6MAJ5u3IKFDxlS1NTsnGaqmXYdUrtzjwObCgQP94hoeW+/='
 
     def get_media_url(self, host, media_id):
-        import cloudscraper
-        scraper = cloudscraper.create_scraper(
-            browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False},
-            delay=4
-        )
         web_url = self.get_url(host, media_id)
         headers = {
             'User-Agent': common.FF_USER_AGENT,
             'Referer': urllib_parse.urljoin(web_url, '/'),
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         }
-
-        r = scraper.get(web_url, headers=headers, timeout=15, allow_redirects=True)
-
-        if r.url != web_url:
-            web_url = r.url
-            headers['Referer'] = urllib_parse.urljoin(web_url, '/')
-
-        location = r.headers.get('Location') or r.headers.get('location')
-        if location and location != web_url:
-            web_url = location if location.startswith('http') else urllib_parse.urljoin(web_url, location)
-            headers['Referer'] = urllib_parse.urljoin(web_url, '/')
-            r = scraper.get(web_url, headers=headers, timeout=15, allow_redirects=True)
-            if r.url != web_url:
-                web_url = r.url
-                headers['Referer'] = urllib_parse.urljoin(web_url, '/')
-
-        html = r.text
-
+        html = self.net.http_GET(web_url, headers=headers).content
         datas = self._extract_datas_payload(html)
+
         if datas:
             slug = datas.get('slug')
             md5_id = datas.get('md5_id')
             user_id = datas.get('user_id')
-            media_blob = datas.get('media')
-
-            if isinstance(media_blob, dict):
-                media_payload = media_blob
-            else:
-                media_payload = self._decrypt_media(media_blob, user_id, slug, md5_id)
-
+            media_payload = datas.get('media')
+            if not isinstance(media_payload, dict):
+                media_payload = self._decrypt_media(media_payload, user_id, slug, md5_id)
             is_download = datas.get("isDownload", False)
             source = self._extract_from_media_payload(media_payload, slug, md5_id, is_download)
         else:
@@ -101,7 +74,7 @@ class AbyssResolver(ResolveUrl):
             return {}
 
         try:
-            raw = base64.b64decode(match.group(1).strip())
+            raw = helpers.b64decode(match.group(1).strip(), binary=True)
         except Exception:
             return {}
 
@@ -210,8 +183,8 @@ class AbyssResolver(ResolveUrl):
         transformed = self._aes_ctr_transform(path_value.encode('utf-8'), str(size_value))
         if not transformed:
             return None
-        first = base64.b64encode(transformed).decode('utf-8').replace('=', '')
-        second = base64.b64encode(first.encode('utf-8')).decode('utf-8').replace('=', '')
+        first = helpers.b64encode(transformed, strip=True)
+        second = helpers.b64encode(first, strip=True)
         return second
 
     def _extract_from_media_payload(self, media_payload, slug, md5_id, is_download=False):
