@@ -22,7 +22,6 @@ from resolveurl.lib.net import Net, get_ua  # @UnusedImport  # NOQA
 from resolveurl.lib import cache  # @UnusedImport  # NOQA
 from resolveurl.lib import kodi
 from resolveurl.lib import pyaes
-from random import choice
 
 logger = log_utils.Logger.get_logger()
 addon_path = kodi.get_path()
@@ -47,23 +46,15 @@ BP_ENABLED = kodi.get_setting('bp_enable') == 'true'
 BP_URL = kodi.get_setting('bp_url')
 BP_TIMEOUT = int(kodi.get_setting('bp_timeout') or '60')
 
-# RAND_UA = get_ua()
-IE_USER_AGENT = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'
-FF_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0'
-LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36'
-OPERA_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 OPR/123.0.0.0'
-OPERA_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Apple M2 Max; macOS 14_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 OPR/135.0.0.0'
-IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Mobile/15E148 Safari/604.1'
-IPAD_USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 18_7_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
-ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 15; 23053RN02Y Build/AP3A.240905.015.A2; ) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/141.0.7390.122 Mobile Safari/537.36 BingSapphire/32.5.431023006'
-EDGE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0'
-CHROME_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36'
-SAFARI_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.2 Safari/605.1.15'
+# Common User Agents
+FF_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0'
+OPERA_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
+IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
+EDGE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
+CHROME_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
 SMR_USER_AGENT = 'ResolveURL for Kodi/%s' % (addon_version)
 
-# Quick hack till I decide how to handle this
-_USER_AGENTS = [FF_USER_AGENT, OPERA_USER_AGENT, OPERA_MAC_USER_AGENT, EDGE_USER_AGENT, CHROME_USER_AGENT, SAFARI_USER_AGENT]
-RAND_UA = choice(_USER_AGENTS)
+RAND_UA = get_ua()
 
 
 def log_file_hash(path):

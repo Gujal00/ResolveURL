@@ -23,7 +23,7 @@ from resolveurl.lib import helpers
 class BigShareResolver(ResolveGeneric):
     name = 'BigShare'
     domains = ['bigshare.io']
-    pattern = r'(?://|\.)(bigshare\.io)/watch/([a-zA-Z0-9]+)'
+    pattern = r'(?://|\.)(bigshare\.io)/watch/(?:e/)?([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(

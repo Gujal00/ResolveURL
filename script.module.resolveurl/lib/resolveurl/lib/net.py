@@ -20,6 +20,7 @@ import gzip
 import json
 import random
 import re
+import os
 import six
 from six.moves import urllib_request, urllib_parse, urllib_error, urllib_response, http_cookiejar
 import socket
@@ -43,10 +44,32 @@ RAND_UAS = ['Mozilla/5.0 ({win_ver}{feature}; rv:{br_ver}) Gecko/20100101 Firefo
             'Mozilla/5.0 ({win_ver}{feature}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{br_ver} Safari/537.36',
             'Mozilla/5.0 ({win_ver}{feature}; Trident/7.0; rv:{br_ver}) like Gecko',
             'Mozilla/5.0 (compatible; MSIE {br_ver}; {win_ver}{feature}; Trident/6.0)']
+
+FF_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0'
+FF_LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0'
+FF_ANDROID_USER_AGENT = 'Mozilla/5.0 (Android 16; Mobile; rv:151.0) Gecko/151.0 Firefox/151.0'
+FF_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 15.7; rv:150.0) Gecko/20100101 Firefox/150.0'
+FF_IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/140.2 Mobile/15E148 Safari/605.1.15'
+FF_IPAD_USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 15_7_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/151.0 Mobile/15E148 Safari/605.1.15'
+OPERA_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
+OPERA_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
+OPERA_LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
+IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
+IPAD_USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
+ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 15; SN512C Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36'
+EDGE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
+EDGE_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
+CHROME_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
+CHROME_LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
+CHROME_ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.216 Mobile Safari/537.36'
+CHROME_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
+CHROME_IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/149.0.7827.45 Mobile/15E148 Safari/604.1'
+SAFARI_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15'
+
 CERT_FILE = kodi.translate_path('special://xbmc/system/certs/cacert.pem')
 
 
-def get_ua():
+def get_ua_old():
     try:
         last_gen = int(kodi.get_setting('last_ua_create'))
     except:
@@ -60,6 +83,24 @@ def get_ua():
         kodi.set_setting('last_ua_create', str(int(time.time())))
     else:
         user_agent = kodi.get_setting('current_ua')
+    return user_agent
+
+
+def get_ua():
+    if sys.platform == "win32":
+        _USER_AGENTS = [FF_USER_AGENT, OPERA_USER_AGENT, EDGE_USER_AGENT, CHROME_USER_AGENT]
+    elif sys.platform == "darwin":
+        _USER_AGENTS = [FF_MAC_USER_AGENT, OPERA_MAC_USER_AGENT, EDGE_MAC_USER_AGENT, CHROME_MAC_USER_AGENT, SAFARI_USER_AGENT]
+    elif sys.platform == "linux":
+        _USER_AGENTS = [FF_LINUX_USER_AGENT, OPERA_LINUX_USER_AGENT, CHROME_LINUX_USER_AGENT]
+        if sys.version_info.major == '3':
+            if hasattr(sys, 'getandroidapilevel'):
+                _USER_AGENTS = [FF_ANDROID_USER_AGENT, ANDROID_USER_AGENT, CHROME_ANDROID_USER_AGENT]
+        else:
+            android_keys = ['ANDROID_DATA', 'ANDROID_ROOT', 'ANDROID_STORAGE', 'ANDROID_ARGUMENT']
+            if any(key in os.environ for key in android_keys):
+                _USER_AGENTS = [FF_ANDROID_USER_AGENT, ANDROID_USER_AGENT, CHROME_ANDROID_USER_AGENT]
+    user_agent = random.choice(_USER_AGENTS)
     return user_agent
 
 
@@ -92,7 +133,7 @@ class Net:
 
     _cj = http_cookiejar.LWPCookieJar()
     _proxy = None
-    _user_agent = 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0'
+    _user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0'
     _http_debug = False
 
     def __init__(self, cookie_file='', proxy='', user_agent='', ssl_verify=True, http_debug=False):
@@ -213,6 +254,7 @@ class Net:
             try:
                 import ssl
                 ctx = ssl.create_default_context(cafile=CERT_FILE)
+                ctx.maximum_version = ssl.PROTOCOL_TLSv1_3
                 ctx.set_alpn_protocols(['http/1.1'])
                 if self._http_debug:
                     handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
