@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
 import re
 import random
 import string
@@ -47,38 +46,25 @@ class DoodStreamResolver(ResolveUrl):
         if host not in ['doodstream.com', 'myvidplay.com', 'playmogo.com']:
             host = 'playmogo.com'
         web_url = self.get_url(host, media_id)
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Referer': web_url
-        }
-        html = ''
-        if common.BP_ENABLED:
-            bp_url = urllib_parse.urljoin(common.BP_URL, '/v1')
-            data = {
-                "cmd": "request.get",
-                "url": web_url,
-                "maxTimeout": common.BP_TIMEOUT * 1000
-            }
-            r = self.net.http_POST(bp_url, form_data=data, jdata=True, timeout=common.BP_TIMEOUT + 20).content
-            r = json.loads(r)
-            if r.get('message') == 'Success':
-                r = r.get('solution')
-                html = r.get('response')
-                if r.get('url') != web_url:
-                    web_url = r.get('url')
-        else:
-            import cloudscraper
-            scraper = cloudscraper.create_scraper(
-                browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False},
-                delay=4
-            )
-            r = scraper.get(web_url, headers=headers, timeout=20)
-            if r.url != web_url:
-                web_url = r.url
-                headers['Referer'] = web_url
-            html = r.text
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': 'https://{0}/'.format(host)}
 
-        if html and subs:
+        r = self.net.http_GET(web_url, headers=headers)
+        if r.get_url() != web_url:
+            host = re.findall(r'(?://|\.)([^/]+)', r.get_url())[0]
+            web_url = self.get_url(host, media_id)
+        headers.update({'Referer': web_url})
+        html = r.content
+
+        match = re.search(r'<iframe\s*src="([^"]+)', html)
+        if match:
+            url = urllib_parse.urljoin(web_url, match.group(1))
+            html = self.net.http_GET(url, headers=headers).content
+        else:
+            url = web_url.replace('/d/', '/e/')
+            html = self.net.http_GET(url, headers=headers).content
+
+        if subs:
             subtitles = {}
             matches = re.findall(r"""dsplayer\.addRemoteTextTrack\({src:'([^']+)',\s*label:'([^']*)',kind:'captions'""", html)
             if matches:
@@ -88,33 +74,21 @@ class DoodStreamResolver(ResolveUrl):
 
         match = re.search(r'''dsplayer\.hotkeys[^']+'([^']+).+?function\s*makePlay.+?return[^?]+([^"]+)''', html, re.DOTALL)
         if match:
-            token = match.group(2).strip()
+            token = match.group(2)
             url = urllib_parse.urljoin(web_url, match.group(1))
-            str_url = ''
-            if common.BP_ENABLED:
-                data.update({'url': url})
-                resp = self.net.http_POST(bp_url, form_data=data, jdata=True, timeout=common.BP_TIMEOUT + 20).content
-                resp = json.loads(resp)
-                if resp.get('message') == 'Success':
-                    resp = resp.get('solution')
-                    str_url = re.findall(r'<body>([^<]+)', resp.get('response'))[0]
+            html = self.net.http_GET(url, headers=headers).content
+            if 'cloudflarestorage.' in html:
+                vid_src = html.strip() + helpers.append_headers(headers)
             else:
-                resp = scraper.get(url, headers=headers, timeout=20)
-                str_url = resp.text.strip()
-
-            if str_url:
-                if 'cloudflarestorage.' in str_url:
-                    vid_src = str_url + helpers.append_headers(headers)
-                else:
-                    vid_src = self.dood_decode(str_url) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
-                if subs:
-                    return vid_src, subtitles
-                return vid_src
+                vid_src = self.dood_decode(html) + token + str(int(time.time() * 1000)) + helpers.append_headers(headers)
+            if subs:
+                return vid_src, subtitles
+            return vid_src
 
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/d/{media_id}')
 
     def dood_decode(self, data):
         t = string.ascii_letters + string.digits
