@@ -29,34 +29,24 @@ class FlyFileResolver(ResolveUrl):
     pattern = r'(?://|\.)(flyfile\.app)/embed/([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
+        web_url = self.get_url(host, media_id)
+        ref = 'https://{0}/'.format(host)
         headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Accept': 'application/json, text/plain, */*',
-            'Origin': 'https://flyfile.app',
-            'Referer': 'https://flyfile.app/',
-            'X-Adblock-Detected': '1',
-            'X-Embed-Referrer': '',
+            'User-Agent': common.RAND_UA,
+            'Origin': ref[:-1],
+            'Referer': ref,
         }
-
-        api_url = 'https://api.flyfile.app/api/streaming/assign/{0}'.format(media_id)
-        resp = self.net.http_GET(api_url, headers=headers).content
+        resp = self.net.http_GET(web_url, headers=headers).content
         data = json.loads(resp)
 
-        if not data.get('url') or not data.get('token'):
-            raise ResolverError('FlyFile: missing url or token in response')
+        if data.get('url') and data.get('token'):
+            stream_url = '{0}/hls/{1}/master.m3u8'.format(
+                data['url'].rstrip('/'),
+                data['token']
+            )
+            return stream_url + helpers.append_headers(headers)
 
-        stream_url = '{0}/hls/{1}/master.m3u8'.format(
-            data['url'].rstrip('/'),
-            data['token']
-        )
-
-        stream_headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Referer': 'https://flyfile.app/',
-            'Origin': 'https://flyfile.app',
-        }
-
-        return stream_url + helpers.append_headers(stream_headers)
+        raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
+        return self._default_get_url(host, media_id, template='https://api.{host}/api/streaming/assign/{media_id}')
