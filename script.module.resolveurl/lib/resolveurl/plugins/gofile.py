@@ -29,7 +29,7 @@ class GoFileResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         headers = {
-            'User-Agent': common.FF_USER_AGENT,
+            'User-Agent': common.RAND_UA,
             'Origin': 'https://{0}'.format(host),
             'Referer': 'https://{0}/'.format(host)
         }
@@ -49,7 +49,7 @@ class GoFileResolver(ResolveUrl):
         data = json.loads(r).get('data').get('children')
         if data:
             headers = {
-                'User-Agent': common.FF_USER_AGENT,
+                'User-Agent': common.RAND_UA,
                 'Referer': 'https://{0}/'.format(host),
                 'Cookie': 'accountToken={}'.format(token)
             }
@@ -64,5 +64,5 @@ class GoFileResolver(ResolveUrl):
         import time
         import hashlib
         rtime = math.floor(time.time() / 14400)
-        wtok = '{0}::en-US::{1}::{2}::5d4f7g8sd45fsd'.format(common.FF_USER_AGENT, tok, rtime)
+        wtok = '{0}::en-US::{1}::{2}::5d4f7g8sd45fsd'.format(common.RAND_UA, tok, rtime)
         return hashlib.sha256(wtok.encode('latin-1')).hexdigest()

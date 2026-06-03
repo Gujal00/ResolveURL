@@ -30,7 +30,7 @@ class VeohResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.CHROME_USER_AGENT, 'Referer': web_url}
+        headers = {'User-Agent': common.RAND_UA, 'Referer': web_url}
         html = self.net.http_GET(web_url, headers=headers).content
         _data = json.loads(html)
         if 'video' in _data and 'src' in _data.get('video', ''):
@@ -51,7 +51,7 @@ class VeohResolver(ResolveUrl):
 
     def _redirect_test(self, url):
         opener = urllib_request.build_opener()
-        opener.addheaders = [('User-agent', common.CHROME_USER_AGENT),
+        opener.addheaders = [('User-agent', common.RAND_UA),
                              ('Referer', 'https://www.veoh.com/')]
         try:
             resp = opener.open(url)

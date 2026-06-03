@@ -48,7 +48,7 @@ class WaawResolver(ResolveUrl):
         else:
             referer = False
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         if referer:
             headers.update({'Referer': referer})
         html = self.net.http_GET(web_url, headers=headers).content

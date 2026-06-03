@@ -29,7 +29,7 @@ class LatestViewResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'X-Requested-With': 'XMLHttpRequest'}
         pdata = {'hash': media_id,
                  'r': 'https://{0}/'.format(host)}

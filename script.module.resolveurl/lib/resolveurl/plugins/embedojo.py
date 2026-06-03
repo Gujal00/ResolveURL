@@ -39,7 +39,7 @@ class EmbedojoResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         if not ref:
             ref = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': ref}
         resp = self.net.http_GET(web_url, headers=headers)
         if web_url != resp.get_url():

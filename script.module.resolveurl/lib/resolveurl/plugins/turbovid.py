@@ -32,7 +32,7 @@ class TurboVidResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': ref}
         resp = self.net.http_GET(web_url, headers).content
         r = re.search(r'''const\s*apkey\s*=\s*"([^"]+).+?const\s*xxid\s*=\s*"([^"]+)''', resp, re.DOTALL)

@@ -33,7 +33,7 @@ class VidStoreResolver(ResolveUrl):
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
 
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
 
         sources = helpers.scrape_sources(

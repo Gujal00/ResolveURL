@@ -36,7 +36,7 @@ class VideoZooResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {
-            'User-Agent': common.IOS_USER_AGENT,
+            'User-Agent': common.RAND_UA,
             'Referer': web_url
         }
         stream_url = ''
@@ -76,7 +76,7 @@ class VideoZooResolver(ResolveUrl):
 
     def _redirect_test(self, url):
         opener = urllib_request.build_opener()
-        opener.addheaders = [('User-agent', common.IOS_USER_AGENT)]
+        opener.addheaders = [('User-agent', common.RAND_UA)]
         opener.addheaders = [('Referer', urllib_parse.urlparse(url).netloc)]
         try:
             resp = opener.open(url)

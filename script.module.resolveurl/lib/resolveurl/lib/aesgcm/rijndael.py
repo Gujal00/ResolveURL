@@ -974,17 +974,17 @@ class Rijndael(object):
             rconpointer += 1
             if KC != 8:
                 for i in range(1, KC):
-                    tk[i] ^= tk[i-1]
+                    tk[i] ^= tk[i - 1]
             else:
                 for i in range(1, KC // 2):
-                    tk[i] ^= tk[i-1]
+                    tk[i] ^= tk[i - 1]
                 tt = tk[KC // 2 - 1]
                 tk[KC // 2] ^= (S[ tt        & 0xFF] & 0xFF)       ^ \
-                              (S[(tt >>  8) & 0xFF] & 0xFF) <<  8 ^ \
-                              (S[(tt >> 16) & 0xFF] & 0xFF) << 16 ^ \
-                              (S[(tt >> 24) & 0xFF] & 0xFF) << 24
+                               (S[(tt >>  8) & 0xFF] & 0xFF) <<  8 ^ \
+                               (S[(tt >> 16) & 0xFF] & 0xFF) << 16 ^ \
+                               (S[(tt >> 24) & 0xFF] & 0xFF) << 24
                 for i in range(KC // 2 + 1, KC):
-                    tk[i] ^= tk[i-1]
+                    tk[i] ^= tk[i - 1]
             # copy values into round key arrays
             j = 0
             while j < KC and t < ROUND_KEY_COUNT:
@@ -1042,10 +1042,10 @@ class Rijndael(object):
         result = []
         for i in range(BC):
             tt = Ke[ROUNDS][i]
-            result.append((S[(t[ i         ] >> 24) & 0xFF] ^ (tt>>24)) & 0xFF)
-            result.append((S[(t[(i+s1) % BC] >> 16) & 0xFF] ^ (tt>>16)) & 0xFF)
-            result.append((S[(t[(i+s2) % BC] >>  8) & 0xFF] ^ (tt>> 8)) & 0xFF)
-            result.append((S[ t[(i+s3) % BC]        & 0xFF] ^  tt     ) & 0xFF)
+            result.append((S[(t[ i           ] >> 24) & 0xFF] ^ (tt >> 24)) & 0xFF)
+            result.append((S[(t[(i + s1) % BC] >> 16) & 0xFF] ^ (tt >> 16)) & 0xFF)
+            result.append((S[(t[(i + s2) % BC] >>  8) & 0xFF] ^ (tt >>  8)) & 0xFF)
+            result.append((S[ t[(i + s3) % BC]        & 0xFF] ^  tt       ) & 0xFF)
         return bytearray(result)
 
     def decrypt(self, ciphertext):
@@ -1087,10 +1087,10 @@ class Rijndael(object):
         result = []
         for i in range(BC):
             tt = Kd[ROUNDS][i]
-            result.append((Si[(t[ i         ] >> 24) & 0xFF] ^ (tt>>24)) &0xFF)
-            result.append((Si[(t[(i+s1) % BC] >> 16) & 0xFF] ^ (tt>>16)) &0xFF)
-            result.append((Si[(t[(i+s2) % BC] >>  8) & 0xFF] ^ (tt>> 8)) &0xFF)
-            result.append((Si[ t[(i+s3) % BC]        & 0xFF] ^  tt     ) &0xFF)
+            result.append((Si[(t[ i           ] >> 24) & 0xFF] ^ (tt >> 24)) & 0xFF)
+            result.append((Si[(t[(i + s1) % BC] >> 16) & 0xFF] ^ (tt >> 16)) & 0xFF)
+            result.append((Si[(t[(i + s2) % BC] >>  8) & 0xFF] ^ (tt >>  8)) & 0xFF)
+            result.append((Si[ t[(i + s3) % BC]        & 0xFF] ^  tt       ) & 0xFF)
         return bytearray(result)
 
 

@@ -29,7 +29,7 @@ class VidMolyResolver(ResolveUrl):
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {
-            "User-Agent": common.FF_USER_AGENT,
+            "User-Agent": common.RAND_UA,
             "Referer": web_url,
             "Cookie": "cf_turnstile_demo_pass_{0}=1".format(media_id)
         }

@@ -32,7 +32,7 @@ class GooglePhotosResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.CHROME_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         r = self.net.http_GET(web_url, headers=headers, redirect=False)
         if r.get_redirect_url():
             web_url = r.get_redirect_url()

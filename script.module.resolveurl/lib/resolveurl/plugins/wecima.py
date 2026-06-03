@@ -38,7 +38,7 @@ class WecimaResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         if not referer:
             referer = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': referer,
                    'X-Requested-With': 'XMLHttpRequest'}
         html = self.net.http_GET(web_url, headers=headers).content

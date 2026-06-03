@@ -38,7 +38,7 @@ class DembedResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {
-            'User-Agent': common.FF_USER_AGENT,
+            'User-Agent': common.RAND_UA,
             'X-Requested-With': 'XMLHttpRequest'
         }
         response = self.net.http_GET(web_url, headers=headers).content

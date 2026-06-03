@@ -37,7 +37,7 @@ class DroplareResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         if not referer:
             referer = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': referer}
         done = False
         cookies = []

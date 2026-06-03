@@ -39,7 +39,7 @@ class ViralWeb8Resolver(ResolveUrl):
         if referer is None:
             referer = urllib_parse.urljoin(web_url, '/')
 
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': referer}
         response = self.net.http_GET(web_url, headers=headers).content
         response = helpers.get_packed_data(response)
@@ -58,7 +58,7 @@ class ViralWeb8Resolver(ResolveUrl):
 
         src = resp.get('securedLink')
         if src:
-            headers = {'User-Agent': common.FF_USER_AGENT}
+            headers = {'User-Agent': common.RAND_UA}
             stream_url = src + helpers.append_headers(headers)
             if subs:
                 return stream_url, subtitles

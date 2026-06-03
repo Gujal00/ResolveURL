@@ -36,7 +36,7 @@ class PoopHDResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         eurl = self.get_eurl(host, media_id)
         headers = {
-            'User-Agent': common.FF_USER_AGENT,
+            'User-Agent': common.RAND_UA,
             'Referer': web_url,
             'Sec-Fetch-Dest': 'iframe'
         }

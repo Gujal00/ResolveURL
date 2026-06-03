@@ -11,9 +11,10 @@ import traceback
 import time
 
 
-if sys.version_info >= (3,0):
+if sys.version_info >= (3, 0):
 
-    def compat26Str(x): return x
+    def compat26Str(x):
+        return x
 
     # Python 3.3 requires bytes instead of bytearrays for HMAC
     # So, python 2.6 requires strings, python 3 requires 'bytes',
@@ -42,7 +43,7 @@ if sys.version_info >= (3,0):
 
     def raw_input(s):
         return input(s)
-    
+
     # So, the python3 binascii module deals with bytearrays, and python2
     # deals with strings...  I would rather deal with the "a" part as
     # strings, and the "b" part as bytearrays, regardless of python version,
@@ -51,8 +52,8 @@ if sys.version_info >= (3,0):
         try:
             b = bytearray(binascii.a2b_hex(bytearray(s, "ascii")))
         except Exception as e:
-            raise SyntaxError("base16 error: %s" % e) 
-        return b  
+            raise SyntaxError("base16 error: %s" % e)
+        return b
 
     def a2b_base64(s):
         try:
@@ -64,13 +65,13 @@ if sys.version_info >= (3,0):
         return b
 
     def b2a_hex(b):
-        return binascii.b2a_hex(b).decode("ascii")    
-            
+        return binascii.b2a_hex(b).decode("ascii")
+
     def b2a_base64(b):
-        return binascii.b2a_base64(b).decode("ascii") 
+        return binascii.b2a_base64(b).decode("ascii")
 
     def readStdinBinary():
-        return sys.stdin.buffer.read()        
+        return sys.stdin.buffer.read()
 
     def compatLong(num):
         return int(num)
@@ -109,7 +110,7 @@ if sys.version_info >= (3,0):
             else:
                 length = 1
         # for gmpy we need to convert back to native int
-        if type(val) != int:
+        if not isinstance(val, int):
             val = int(val)
         return bytearray(val.to_bytes(length=length, byteorder=byteorder))
 
@@ -120,7 +121,8 @@ else:
     # or on Jython
     if sys.version_info < (2, 7) or sys.version_info < (2, 7, 4) \
             or platform.system() == 'Java':
-        def compat26Str(x): return str(x)
+        def compat26Str(x):
+            return str(x)
 
         def remove_whitespace(text):
             """Removes all whitespace from passed in string"""
@@ -130,9 +132,10 @@ else:
             """Return number of bits necessary to represent an integer."""
             if val == 0:
                 return 0
-            return len(bin(val))-2
+            return len(bin(val)) - 2
     else:
-        def compat26Str(x): return x
+        def compat26Str(x):
+            return x
 
         def remove_whitespace(text):
             """Removes all whitespace from passed in string"""
@@ -151,8 +154,9 @@ else:
         return str(val)
 
     # So, python 2.6 requires strings, python 3 requires 'bytes',
-    # and python 2.7 can handle bytearrays...     
-    def compatHMAC(x): return compat26Str(x)
+    # and python 2.7 can handle bytearrays...
+    def compatHMAC(x):
+        return compat26Str(x)
 
     def a2b_hex(s):
         try:
@@ -167,10 +171,10 @@ else:
         except Exception as e:
             raise SyntaxError("base64 error: %s" % e)
         return b
-        
+
     def b2a_hex(b):
         return binascii.b2a_hex(compat26Str(b))
-        
+
     def b2a_base64(b):
         return binascii.b2a_base64(compat26Str(b))
 
@@ -181,14 +185,14 @@ else:
 
     # pylint on Python3 goes nuts for the sys dereferences...
 
-    #pylint: disable=no-member
+    # pylint: disable=no-member
     def formatExceptionTrace(e):
         """Return exception information formatted as string"""
         newStr = "".join(traceback.format_exception(sys.exc_type,
                                                     sys.exc_value,
                                                     sys.exc_traceback))
         return newStr
-    #pylint: enable=no-member
+    # pylint: enable=no-member
 
     def time_stamp():
         """Returns system time as a float"""
@@ -213,10 +217,10 @@ else:
                 length = 1
         if byteorder == "big":
             return bytearray((val >> i) & 0xff
-                             for i in reversed(range(0, length*8, 8)))
+                             for i in reversed(range(0, length * 8, 8)))
         if byteorder == "little":
             return bytearray((val >> i) & 0xff
-                             for i in range(0, length*8, 8))
+                             for i in range(0, length * 8, 8))
         raise ValueError("Only 'big' or 'little' endian supported")
 
 

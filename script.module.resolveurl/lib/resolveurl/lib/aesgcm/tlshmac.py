@@ -82,7 +82,6 @@ except Exception:
             new._context = self._context.copy()
             return new
 
-
     def new(*args, **kwargs):
         """General constructor that works in FIPS mode."""
         return HMAC(*args, **kwargs)

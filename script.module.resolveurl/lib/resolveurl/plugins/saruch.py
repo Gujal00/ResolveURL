@@ -29,7 +29,7 @@ class SaruchResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://{0}/videos/{1}'.format(host, media_id),
                    'X-Requested-With': 'XMLHttpRequest'}
         js_data = json.loads(self.net.http_GET(web_url, headers=headers).content)

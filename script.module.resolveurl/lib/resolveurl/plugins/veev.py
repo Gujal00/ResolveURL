@@ -32,7 +32,7 @@ class VeevResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.CHROME_USER_AGENT, 'Referer': web_url}
+        headers = {'User-Agent': common.RAND_UA, 'Referer': web_url}
         r = self.net.http_GET(web_url, headers=headers)
         if r.get_url() != web_url:
             media_id = r.get_url().split('/')[-1]
@@ -54,7 +54,7 @@ class VeevResolver(ResolveUrl):
                     jresp = json.loads(jresp).get('file')
                     if jresp and jresp.get('file_status') == 'OK':
                         str_url = decode_url(veev_decode(jresp.get('dv')[0].get('s')), build_array(ch)[0])
-                        headers.update({'verifypeer': 'false'}) # add/edit by watchone
+                        headers.update({'verifypeer': 'false'})  # add/edit by watchone
                         return str_url + helpers.append_headers(headers)
                     raise ResolverError('Video removed')
 

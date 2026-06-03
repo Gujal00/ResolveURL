@@ -29,7 +29,7 @@ class CloudMailRuResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://mail.ru/'}
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'"weblink_get".+?url":\s*"([^"]+)', html, re.DOTALL)

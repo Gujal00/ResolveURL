@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 import json
 from resolveurl import common
 from resolveurl.lib import helpers
@@ -33,8 +32,8 @@ class FlyFileResolver(ResolveUrl):
         ref = 'https://{0}/'.format(host)
         headers = {
             'User-Agent': common.RAND_UA,
-            'Origin': ref[:-1],
             'Referer': ref,
+            'Origin': ref[:-1]
         }
         resp = self.net.http_GET(web_url, headers=headers).content
         data = json.loads(resp)

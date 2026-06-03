@@ -31,7 +31,7 @@ class VKResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         ref = 'https://{0}/'.format(host)
-        headers = {'User-Agent': common.EDGE_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': ref,
                    'Origin': ref[:-1]}
 

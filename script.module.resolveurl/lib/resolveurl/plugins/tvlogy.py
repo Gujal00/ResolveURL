@@ -32,7 +32,7 @@ class TVLogyResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         embeds = ['http://bestarticles.me/', 'http://tellygossips.net/', 'http://tvarticles.org/']
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
 
         if 'hls.' in web_url:
             headers.update({'X-Requested-With': 'XMLHttpRequest'})

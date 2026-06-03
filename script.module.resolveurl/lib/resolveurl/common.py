@@ -46,14 +46,7 @@ BP_ENABLED = kodi.get_setting('bp_enable') == 'true'
 BP_URL = kodi.get_setting('bp_url')
 BP_TIMEOUT = int(kodi.get_setting('bp_timeout') or '60')
 
-# Common User Agents
-FF_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0'
-OPERA_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
-IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
-EDGE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
-CHROME_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
 SMR_USER_AGENT = 'ResolveURL for Kodi/%s' % (addon_version)
-
 RAND_UA = get_ua()
 
 
