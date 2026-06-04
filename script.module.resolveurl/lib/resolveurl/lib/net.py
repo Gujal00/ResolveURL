@@ -215,6 +215,7 @@ class Net:
             try:
                 import ssl
                 ctx = ssl.create_default_context()
+                ctx.maximum_version = ssl.PROTOCOL_TLSv1_3
                 ctx.set_alpn_protocols(['http/1.1'])
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
