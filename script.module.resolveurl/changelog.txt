@@ -1,18 +1,12 @@
-Version 5.1.201 (Jun 05, 2026)
+Version 5.1.202 (Jun 06, 2026)
 - Code Base Changes:
-    - Update get_ua function to detect platforms
-    - allow usage of TLS1.3
-    - Use platform specific UA in all plugins
+    - regression error from removal of FF_USER_AGENT
 
 - Resolvers Added:
-    - flyfile
-    - vidxgo
-    - wrzucaj
+    - None
 
 - Resolvers Fixed/Updated:
-    - bigshare
-    - doodstream
-    - savefiles
+    - None
 
 - Resolvers Removed
     - None

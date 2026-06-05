@@ -276,7 +276,7 @@ class HostedMediaFile:
         if '|' in stream_url:
             headers = dict([item.split('=') for item in (stream_url.split('|')[1]).split('&')])
         else:
-            headers = {'User-Agent': common.FF_USER_AGENT}
+            headers = {'User-Agent': common.RAND_UA}
         for header in headers:
             headers[header] = urllib_parse.unquote_plus(headers[header])
         common.logger.log_debug('Setting Headers on UrlOpen: %s' % headers)
