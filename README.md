@@ -16,7 +16,7 @@ Include smrzips dir with your repo to always have the **latest** updates
 
 ## Byparr Support
 
-The script can utilise [ByParr container](https://github.com/ThePhaseless/Byparr) if installed on the local machine or another machine on the same network to bypass sites with antibot protection. Currently doodstream plugin requires this to function. Setup the byparr url in resolveurl settings if you have it running.
+The script can utilise [ByParr container](https://github.com/ThePhaseless/Byparr) if installed on the local machine or another machine on the same network to bypass sites with antibot protection. ~~Currently doodstream plugin requires this to function~~. Setup the byparr url in resolveurl settings if you have it running.
 
 ## script.module.resolveurl
 
