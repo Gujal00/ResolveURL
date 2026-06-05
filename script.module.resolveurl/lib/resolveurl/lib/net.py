@@ -51,6 +51,7 @@ CHROME_ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.
 CHROME_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
 CHROME_IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/149.0.7827.45 Mobile/15E148 Safari/604.1'
 SAFARI_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15'
+ANDROID_KEYS = ['ANDROID_DATA', 'ANDROID_ROOT', 'ANDROID_STORAGE', 'ANDROID_ARGUMENT']
 
 CERT_FILE = kodi.translate_path('special://xbmc/system/certs/cacert.pem')
 
@@ -65,11 +66,12 @@ def get_ua():
             _USER_AGENTS = [FF_USER_AGENT, OPERA_USER_AGENT, EDGE_USER_AGENT, CHROME_USER_AGENT]
         elif sys.platform == "darwin":
             _USER_AGENTS = [FF_MAC_USER_AGENT, OPERA_MAC_USER_AGENT, EDGE_MAC_USER_AGENT, CHROME_MAC_USER_AGENT, SAFARI_USER_AGENT]
+        elif sys.platform == "ios":
+            _USER_AGENTS = [FF_IOS_USER_AGENT, CHROME_IOS_USER_AGENT, IOS_USER_AGENT, IPAD_USER_AGENT]
+        elif sys.platform == 'android' or hasattr(sys, 'getandroidapilevel') or any(key in os.environ for key in ANDROID_KEYS):
+            _USER_AGENTS = [FF_ANDROID_USER_AGENT, ANDROID_USER_AGENT, CHROME_ANDROID_USER_AGENT]
         else:
             _USER_AGENTS = [FF_LINUX_USER_AGENT, OPERA_LINUX_USER_AGENT, CHROME_LINUX_USER_AGENT]
-            android_keys = ['ANDROID_DATA', 'ANDROID_ROOT', 'ANDROID_STORAGE', 'ANDROID_ARGUMENT']
-            if hasattr(sys, 'getandroidapilevel') or any(key in os.environ for key in android_keys):
-                _USER_AGENTS = [FF_ANDROID_USER_AGENT, ANDROID_USER_AGENT, CHROME_ANDROID_USER_AGENT]
         user_agent = random.choice(_USER_AGENTS)
         kodi.set_setting('current_ua', user_agent)
         kodi.set_setting('last_ua_create', str(int(time.time())))
