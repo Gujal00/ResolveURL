@@ -1,16 +1,18 @@
-Version 5.1.200 (May 29, 2026)
+Version 5.1.201 (Jun 05, 2026)
 - Code Base Changes:
-    - None
+    - Update get_ua function to detect platforms
+    - allow usage of TLS1.3
+    - Use platform specific UA in all plugins
 
 - Resolvers Added:
-    - gupload
+    - flyfile
+    - vidxgo
+    - wrzucaj
 
 - Resolvers Fixed/Updated:
-    - anonmp4
-    - byse
-    - doodstream (can use ByParr or cloudscraper)
+    - bigshare
+    - doodstream
     - savefiles
-    - waaw
 
 - Resolvers Removed
     - None
