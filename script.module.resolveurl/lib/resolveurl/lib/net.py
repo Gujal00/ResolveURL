@@ -42,7 +42,7 @@ OPERA_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_7) AppleWebK
 OPERA_LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
 IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
 IPAD_USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
-ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 15; SN512C Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36'
+ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 11; KFRAPWI) AppleWebKit/537.36 (KHTML, like Gecko) Silk/134.4.19 like Chrome/134.0.6998.207 Safari/537.36'
 EDGE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
 EDGE_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
 CHROME_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
@@ -64,10 +64,10 @@ def get_ua():
     if not kodi.get_setting('current_ua') or last_gen < (time.time() - (7 * 24 * 60 * 60)):
         if sys.platform == "win32":
             _USER_AGENTS = [FF_USER_AGENT, OPERA_USER_AGENT, EDGE_USER_AGENT, CHROME_USER_AGENT]
-        elif sys.platform == "darwin":
-            _USER_AGENTS = [FF_MAC_USER_AGENT, OPERA_MAC_USER_AGENT, EDGE_MAC_USER_AGENT, CHROME_MAC_USER_AGENT, SAFARI_USER_AGENT]
         elif sys.platform == "ios":
             _USER_AGENTS = [FF_IOS_USER_AGENT, CHROME_IOS_USER_AGENT, IOS_USER_AGENT, IPAD_USER_AGENT]
+        elif sys.platform == "darwin":
+            _USER_AGENTS = [FF_MAC_USER_AGENT, OPERA_MAC_USER_AGENT, EDGE_MAC_USER_AGENT, CHROME_MAC_USER_AGENT, SAFARI_USER_AGENT]
         elif sys.platform == 'android' or hasattr(sys, 'getandroidapilevel') or any(key in os.environ for key in ANDROID_KEYS):
             _USER_AGENTS = [FF_ANDROID_USER_AGENT, ANDROID_USER_AGENT, CHROME_ANDROID_USER_AGENT]
         else:
