@@ -17,11 +17,106 @@
 """
 
 import json
+import time
+import uuid
 from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl.lib.aesgcm import python_aesgcm
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
+
+
+# ──────────────────────────────────────────────────────────────────────
+# Proof-of-Work hash (reverse-engineered from pow--*.js).
+# Labelled "sha256-leading-zero-bits" but is a custom 512-word mixing hash.
+# Input = nonce + ":" + counter ; find counter with >= difficulty leading
+# zero bits over the 8x uint32 output. Token TTL is 1800s so a multi-second
+# blocking solve is fine for a Kodi resolver.
+# ──────────────────────────────────────────────────────────────────────
+_MASK = 0xFFFFFFFF
+_BE, _LT, _DR, _LR, _HR = 512, 511, 2, 2654435761, 2246822519
+
+
+def _pow_hash(data):
+    e0, e1, e2, e3 = 1779033703, 3144134277, 1013904242, 2773480762
+    M = _MASK
+    for b in data:
+        e0 = (e0 + b) & M
+        e0 = ((e0 << 7) | (e0 >> 25)) & M
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 16) | (x >> 16)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 12) | (x >> 20)) & M
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 8) | (x >> 24)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 7) | (x >> 25)) & M
+    for _ in range(8):
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 16) | (x >> 16)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 12) | (x >> 20)) & M
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 8) | (x >> 24)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 7) | (x >> 25)) & M
+    r = [0] * _BE
+    for i in range(_BE):
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 16) | (x >> 16)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 12) | (x >> 20)) & M
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 8) | (x >> 24)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 7) | (x >> 25)) & M
+        r[i] = (e0 ^ e2) & M
+    for _ in range(_DR):
+        for s in range(_BE):
+            a = r[s] & _LT
+            c = (r[s] + r[a]) & M
+            c = ((c << 13) | (c >> 19)) & M
+            c = (c ^ ((r[(s + 1) & _LT] * _LR) & M)) & M
+            r[s] = c
+            e0 = (e0 ^ c) & M
+            e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 16) | (x >> 16)) & M
+            e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 12) | (x >> 20)) & M
+            e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 8) | (x >> 24)) & M
+            e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 7) | (x >> 25)) & M
+    n = [0] * 8
+    o = _BE // 8
+    for i in range(8):
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 16) | (x >> 16)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 12) | (x >> 20)) & M
+        e0 = (e0 + e1) & M; x = e3 ^ e0; e3 = ((x << 8) | (x >> 24)) & M
+        e2 = (e2 + e3) & M; x = e1 ^ e2; e1 = ((x << 7) | (x >> 25)) & M
+        s = e0
+        a = i * o
+        for cc in range(o):
+            d = r[a + cc]
+            s = (s + d) & M
+            s = ((s << 5) | (s >> 27)) & M
+            s = (s ^ ((d * _HR) & M)) & M
+        n[i] = (s ^ e2) & M
+    return n
+
+
+def _lz_bits(words):
+    bits = 0
+    for n in words:
+        if n == 0:
+            bits += 32
+            continue
+        c = 0
+        m = 0x80000000
+        while m and not (n & m):
+            c += 1
+            m >>= 1
+        return bits + c
+    return bits
+
+
+def _solve_pow(nonce, difficulty, timeout=30.0):
+    if difficulty <= 0:
+        return '0'
+    prefix = nonce + ':'
+    start = time.time()
+    s = 0
+    while True:
+        for _ in range(2048):
+            if _lz_bits(_pow_hash((prefix + str(s)).encode('latin-1'))) >= difficulty:
+                return str(s)
+            s += 1
+        if time.time() - start > timeout:
+            return None
 
 
 class ByseResolver(ResolveUrl):
@@ -45,23 +140,114 @@ class ByseResolver(ResolveUrl):
     )
 
     def get_media_url(self, host, media_id):
-        web_url = self.get_url(host, media_id)
+        web_url = self.get_url(host, media_id)              # embed page url
         ref = urllib_parse.urljoin(web_url, '/')
+        embed_origin = ref[:-1]
+        embed_host = urllib_parse.urlparse(web_url).netloc
+
         headers = {
             'User-Agent': common.RAND_UA,
-            'Referer': ref,
-            'Origin': ref[:-1]
+            'Referer': web_url,
+            'Origin': embed_origin,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
         }
-        html = self.net.http_POST(web_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).content
-        html = json.loads(html)
+
+        # 1) details → embed_frame_url gives the real API host + referer
+        try:
+            details = json.loads(self.net.http_GET(
+                '{0}/api/videos/{1}/embed/details'.format(embed_origin, media_id),
+                headers=headers).content)
+            frame = details.get('embed_frame_url') or web_url
+        except Exception:
+            frame = web_url
+        api_origin = urllib_parse.urljoin(frame, '/')[:-1]
+        referer = frame
+
+        api_headers = dict(headers)
+        api_headers.update({
+            'Origin': api_origin,
+            'Referer': referer,
+            'X-Embed-Origin': embed_host,
+            'X-Embed-Referer': web_url,
+            'X-Embed-Parent': web_url,
+        })
+
+        # 2) settings → captcha required?
+        try:
+            settings = json.loads(self.net.http_GET(
+                '{0}/api/videos/{1}/embed/settings'.format(api_origin, media_id),
+                headers=api_headers).content)
+            captcha_required = bool(settings.get('captcha_required'))
+        except Exception:
+            captcha_required = True
+
+        # 3) challenge
+        challenge = json.loads(self.net.http_POST(
+            '{0}/api/videos/access/challenge'.format(api_origin),
+            headers=api_headers, form_data={}, jdata=True).content)
+
+        # 4) attest → real server-issued token + viewer/device ids
+        attest = json.loads(self.net.http_POST(
+            '{0}/api/videos/access/attest'.format(api_origin),
+            headers=api_headers, form_data=self._attest_payload(challenge), jdata=True).content)
+        fingerprint = {
+            'token': attest['token'],
+            'viewer_id': attest['viewer_id'],
+            'device_id': attest['device_id'],
+            'confidence': attest['confidence'],
+        }
+
+        cookie = 'byse_viewer_id={0}; byse_device_id={1}'.format(
+            fingerprint['viewer_id'], fingerprint['device_id'])
+        cookie_headers = dict(api_headers)
+        cookie_headers['Cookie'] = cookie
+
+        # 5+6) captcha PoW
+        captcha_token = None
+        if captcha_required:
+            cap = json.loads(self.net.http_POST(
+                '{0}/api/videos/{1}/embed/captcha'.format(api_origin, media_id),
+                headers=cookie_headers, form_data={'fingerprint': fingerprint}, jdata=True).content)
+            solution = _solve_pow(cap['pow_nonce'], cap['pow_difficulty'])
+            if solution is None:
+                raise ResolverError('Byse: PoW solve timed out')
+            verify = json.loads(self.net.http_POST(
+                '{0}/api/videos/{1}/embed/captcha/verify'.format(api_origin, media_id),
+                headers=cookie_headers,
+                form_data={'pow_token': cap['pow_token'], 'solution': solution, 'fingerprint': fingerprint},
+                jdata=True).content)
+            if verify.get('status') != 'ok' or not verify.get('token'):
+                raise ResolverError('Byse: captcha verify failed')
+            captcha_token = verify['token']
+
+        # 7) playback → verify token rides in X-Captcha-Token header (not the body)
+        playback_headers = dict(cookie_headers)
+        if captcha_token:
+            playback_headers['X-Captcha-Token'] = captcha_token
+
+        html = json.loads(self.net.http_POST(
+            '{0}/api/videos/{1}/embed/playback'.format(api_origin, media_id),
+            headers=playback_headers, form_data={'fingerprint': fingerprint}, jdata=True).content)
+
+        # output headers for the stream
+        out_headers = {
+            'User-Agent': headers['User-Agent'],
+            'Referer': referer,
+            'Origin': api_origin,
+        }
+
+        # Case 1: plain sources
         sources = html.get('sources')
         if sources:
             sources = [(x.get('label'), x.get('url')) for x in sources]
             uri = helpers.pick_source(helpers.sort_sources_list(sources))
             if uri.startswith('/'):
                 uri = urllib_parse.urljoin(web_url, uri)
-            url = helpers.get_redirect_url(uri, headers=headers)
-            return url + helpers.append_headers(headers)
+            url = helpers.get_redirect_url(uri, headers=out_headers)
+            return url + helpers.append_headers(out_headers)
+
+        # Case 2: encrypted playback
         pd = html.get('playback')
         if pd:
             iv = self.ft(pd.get('iv'))
@@ -74,7 +260,7 @@ class ByseResolver(ResolveUrl):
             if sources:
                 sources = [(x.get('label'), x.get('url')) for x in sources]
                 uri = helpers.pick_source(helpers.sort_sources_list(sources))
-                return uri + helpers.append_headers(headers)
+                return uri + helpers.append_headers(out_headers)
 
         raise ResolverError('Video Link Not Found')
 
@@ -82,7 +268,8 @@ class ByseResolver(ResolveUrl):
         redirect_domains = ['boosteradx.online', 'byse.sx']
         if host in redirect_domains:
             host = 'streamlyplayer.online'
-        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/playback')
+        # embed page URL (NOT /playback anymore — the new flow needs /embed/* APIs)
+        return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}')
 
     @staticmethod
     def ft(e):
@@ -96,27 +283,46 @@ class ByseResolver(ResolveUrl):
         t = list(map(self.ft, e))
         return b''.join(t)
 
-    @staticmethod
-    def fp(x, y, z):
-        from binascii import hexlify
-        from hashlib import sha256
-        from os import urandom
-        from time import time
-        from random import uniform
-        v_id = hexlify(urandom(x)).decode()
-        d_id = hexlify(urandom(x)).decode()
-        ctime = int(time())
-        t_data = {
-            'viewer_id': v_id,
-            'device_id': d_id,
-            'confidence': round(uniform(y, z), 2),
-            'iat': ctime,
-            'exp': ctime + 600
+    def _attest_payload(self, challenge):
+        # ECDSA P-256 attestation with raw r||s signature (WebCrypto-compatible)
+        try:
+            from Crypto.Hash import SHA256
+            from Crypto.PublicKey import ECC
+            from Crypto.Signature import DSS
+            key = ECC.generate(curve='P-256')
+            digest = SHA256.new(challenge['nonce'].encode())
+            signature = DSS.new(key, 'fips-186-3', encoding='binary').sign(digest)
+            pub = {
+                'alg': 'ES256', 'crv': 'P-256', 'ext': True, 'key_ops': ['verify'], 'kty': 'EC',
+                'x': helpers.b64urlencode(int(key.pointQ.x).to_bytes(32, 'big'), strip=True),
+                'y': helpers.b64urlencode(int(key.pointQ.y).to_bytes(32, 'big'), strip=True),
+            }
+            sig = helpers.b64urlencode(signature, strip=True)
+        except Exception:
+            # fallback: empty signature (server may still accept low-confidence)
+            pub = {'alg': 'ES256', 'crv': 'P-256', 'ext': True, 'key_ops': ['verify'], 'kty': 'EC', 'x': '', 'y': ''}
+            sig = ''
+
+        return {
+            'viewer_id': '',
+            'device_id': '',
+            'challenge_id': challenge['challenge_id'],
+            'nonce': challenge['nonce'],
+            'signature': sig,
+            'public_key': pub,
+            'client': {
+                'user_agent': common.RAND_UA,
+                'pixel_ratio': 2,
+                'screen_width': 1536,
+                'screen_height': 960,
+                'color_depth': 24,
+                'languages': ['en-US', 'en'],
+                'timezone': 'Europe/Rome',
+                'hardware_concurrency': 8,
+                'touch_points': 0,
+                'pointer_type': 'fine,hover',
+                'extra': {'vendor': '', 'appVersion': '5.0 (Windows)'},
+            },
+            'storage': {},
+            'attributes': {'entropy': 'low'},
         }
-        t_bdata = helpers.b64urlencode(json.dumps(t_data), strip=True)
-        t_sig = helpers.b64urlencode(sha256(t_bdata.encode()).digest(), strip=True)
-        token = '{0}.{1}'.format(t_bdata, t_sig)
-        t_data.update({'token': token})
-        t_data.pop('iat')
-        t_data.pop('exp')
-        return {'fingerprint': t_data}
