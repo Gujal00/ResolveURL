@@ -139,6 +139,19 @@ class ByseResolver(ResolveUrl):
         r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+)'
     )
 
+    def _post_json(self, url, payload, headers):
+        # Serialize JSON ourselves (compact, no spaces) and send as raw body so
+        # the request is byte-identical across platforms. Relying on jdata=True
+        # serializes nested dicts inconsistently on Kodi-Android -> 400.
+        body = json.dumps(payload, separators=(',', ':'))
+        h = dict(headers)
+        h['Content-Type'] = 'application/json'
+        try:
+            return self.net.http_POST(url, headers=h, form_data=body).content
+        except TypeError:
+            # some ResolveURL builds want the raw body via `data=`
+            return self.net.http_POST(url, headers=h, data=body).content
+
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)              # embed page url
         ref = urllib_parse.urljoin(web_url, '/')
@@ -183,14 +196,13 @@ class ByseResolver(ResolveUrl):
             captcha_required = True
 
         # 3) challenge
-        challenge = json.loads(self.net.http_POST(
-            '{0}/api/videos/access/challenge'.format(api_origin),
-            headers=api_headers, form_data={}, jdata=True).content)
+        challenge = json.loads(self._post_json(
+            '{0}/api/videos/access/challenge'.format(api_origin), {}, api_headers))
 
         # 4) attest → real server-issued token + viewer/device ids
-        attest = json.loads(self.net.http_POST(
+        attest = json.loads(self._post_json(
             '{0}/api/videos/access/attest'.format(api_origin),
-            headers=api_headers, form_data=self._attest_payload(challenge), jdata=True).content)
+            self._attest_payload(challenge), api_headers))
         fingerprint = {
             'token': attest['token'],
             'viewer_id': attest['viewer_id'],
@@ -206,17 +218,16 @@ class ByseResolver(ResolveUrl):
         # 5+6) captcha PoW
         captcha_token = None
         if captcha_required:
-            cap = json.loads(self.net.http_POST(
+            cap = json.loads(self._post_json(
                 '{0}/api/videos/{1}/embed/captcha'.format(api_origin, media_id),
-                headers=cookie_headers, form_data={'fingerprint': fingerprint}, jdata=True).content)
+                {'fingerprint': fingerprint}, cookie_headers))
             solution = _solve_pow(cap['pow_nonce'], cap['pow_difficulty'])
             if solution is None:
                 raise ResolverError('Byse: PoW solve timed out')
-            verify = json.loads(self.net.http_POST(
+            verify = json.loads(self._post_json(
                 '{0}/api/videos/{1}/embed/captcha/verify'.format(api_origin, media_id),
-                headers=cookie_headers,
-                form_data={'pow_token': cap['pow_token'], 'solution': solution, 'fingerprint': fingerprint},
-                jdata=True).content)
+                {'pow_token': cap['pow_token'], 'solution': solution, 'fingerprint': fingerprint},
+                cookie_headers))
             if verify.get('status') != 'ok' or not verify.get('token'):
                 raise ResolverError('Byse: captcha verify failed')
             captcha_token = verify['token']
@@ -226,9 +237,9 @@ class ByseResolver(ResolveUrl):
         if captcha_token:
             playback_headers['X-Captcha-Token'] = captcha_token
 
-        html = json.loads(self.net.http_POST(
+        html = json.loads(self._post_json(
             '{0}/api/videos/{1}/embed/playback'.format(api_origin, media_id),
-            headers=playback_headers, form_data={'fingerprint': fingerprint}, jdata=True).content)
+            {'fingerprint': fingerprint}, playback_headers))
 
         # output headers for the stream
         out_headers = {
