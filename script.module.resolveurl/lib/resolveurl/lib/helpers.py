@@ -836,3 +836,10 @@ def b64urlencode(b, strip=False):
     if strip:
         r = r.rstrip('=')
     return r
+
+
+def b64urldecode(t, binary=False):
+    if len(t) % 4 != 0:
+        t += '=' * (-len(t) % 4)
+    r = base64.urlsafe_b64decode(t)
+    return r if binary else six.ensure_str(r)
