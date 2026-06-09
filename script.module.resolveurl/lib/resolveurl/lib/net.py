@@ -59,7 +59,7 @@ CERT_FILE = kodi.translate_path('special://xbmc/system/certs/cacert.pem')
 def get_ua():
     try:
         last_gen = int(kodi.get_setting('last_ua_create'))
-    except:
+    except ValueError:
         last_gen = 0
     if not kodi.get_setting('current_ua') or last_gen < (time.time() - (7 * 24 * 60 * 60)):
         if sys.platform == "win32":
@@ -488,6 +488,10 @@ class HttpResponse:
         else:
             html = html.decode('ascii', errors='ignore') if six.PY3 else html
         return html
+
+    @property
+    def json(self):
+        return json.loads(self.content)
 
     def get_headers(self, as_dict=False):
         """Returns headers returned by the server.
