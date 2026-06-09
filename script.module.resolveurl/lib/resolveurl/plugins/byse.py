@@ -52,17 +52,58 @@ class ByseResolver(ResolveUrl):
             'Referer': ref,
             'Origin': ref[:-1]
         }
-        html = self.net.http_POST(web_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).content
-        html = json.loads(html)
-        sources = html.get('sources')
+        details_url = '{0}api/videos/{1}/embed/details'.format(ref, media_id)
+        details = self.net.http_GET(details_url, headers=headers).json
+        embed_url = details.get('embed_frame_url')
+        ref2 = urllib_parse.urljoin(embed_url, '/')
+        headers.update({
+            'Referer': ref2,
+            'Origin': ref2[:-1],
+            'X-Embed-Parent': web_url
+        })
+
+        settings_url = '{0}api/videos/{1}/embed/settings'.format(ref2, media_id)
+        settings = self.net.http_GET(settings_url, headers=headers).json
+
+        if settings.get('captcha_required'):
+            challenge_url = '{0}api/videos/access/challenge'.format(ref2)
+            challenge = self.net.http_POST(challenge_url, headers=headers, form_data={}).json
+
+            attest_url = '{0}api/videos/access/attest'.format(ref2)
+            attest = self.net.http_POST(attest_url, headers=headers, form_data=self.wn(challenge), jdata=True).json
+            fingerprint = {
+                'token': attest['token'],
+                'viewer_id': attest['viewer_id'],
+                'device_id': attest['device_id'],
+                'confidence': attest['confidence'],
+            }
+
+            captcha_url = '{0}api/videos/{1}/embed/captcha'.format(ref2, media_id)
+            captcha = self.net.http_POST(captcha_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
+            solution = self.er(captcha['pow_nonce'], captcha['pow_difficulty'])
+            if solution is None:
+                raise ResolverError('Unable to solve captcha')
+
+            verify_url = '{0}api/videos/{1}/embed/captcha/verify'.format(ref2, media_id)
+            post_data = {'pow_token': captcha['pow_token'], 'solution': solution, 'fingerprint': fingerprint}
+            verify = self.net.http_POST(verify_url, headers=headers, form_data=post_data, jdata=True).json
+            headers.update({'X-Captcha-Token': verify.get('token')})
+
+            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref2, media_id)
+            data = self.net.http_POST(playback_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
+        else:
+            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref2, media_id)
+            data = self.net.http_POST(playback_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).json
+
+        sources = data.get('sources')
         if sources:
             sources = [(x.get('label'), x.get('url')) for x in sources]
             uri = helpers.pick_source(helpers.sort_sources_list(sources))
             if uri.startswith('/'):
-                uri = urllib_parse.urljoin(web_url, uri)
+                uri = urllib_parse.urljoin(ref2, uri)
             url = helpers.get_redirect_url(uri, headers=headers)
             return url + helpers.append_headers(headers)
-        pd = html.get('playback')
+        pd = data.get('playback')
         if pd:
             iv = self.ft(pd.get('iv'))
             key = self.xn(pd.get('key_parts'), pd.get('version'))
@@ -74,6 +115,9 @@ class ByseResolver(ResolveUrl):
             if sources:
                 sources = [(x.get('label'), x.get('url')) for x in sources]
                 uri = helpers.pick_source(helpers.sort_sources_list(sources))
+                headers.pop('X-Embed-Parent')
+                if 'X-Captcha-Token' in headers.keys():
+                    headers.pop('X-Captcha-Token')
                 return uri + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
@@ -82,12 +126,11 @@ class ByseResolver(ResolveUrl):
         redirect_domains = ['boosteradx.online', 'byse.sx']
         if host in redirect_domains:
             host = 'streamlyplayer.online'
-        return self._default_get_url(host, media_id, 'https://{host}/api/videos/{media_id}/playback')
+        return self._default_get_url(host, media_id, 'https://{host}/e/{media_id}')
 
     @staticmethod
     def ft(e):
-        t = e.replace('-', '+').replace('_', '/')
-        return helpers.b64decode(t, binary=True)
+        return helpers.b64urldecode(e, binary=True)
 
     def xn(self, e, v):
         if v:
@@ -120,3 +163,112 @@ class ByseResolver(ResolveUrl):
         t_data.pop('iat')
         t_data.pop('exp')
         return {'fingerprint': t_data}
+
+    @staticmethod
+    def wn(ch):
+        from resolveurl.lib.ecdsa import SigningKey, NIST256p
+        from hashlib import sha256
+        sk = SigningKey.generate(curve=NIST256p, hashfunc=sha256)
+        vk = sk.verifying_key.pubkey.point
+        signature = sk.sign(ch.get('nonce').encode(), hashfunc=sha256)
+        pub = {
+            'crv': 'P-256', 'ext': True, 'key_ops': ['verify'], 'kty': 'EC',
+            'x': helpers.b64urlencode(vk.x().to_bytes(32, 'big'), strip=True),
+            'y': helpers.b64urlencode(vk.y().to_bytes(32, 'big'), strip=True),
+        }
+        sig = helpers.b64urlencode(signature, strip=True)
+        return {
+            'viewer_id': '',
+            'device_id': '',
+            'challenge_id': ch['challenge_id'],
+            'nonce': ch['nonce'],
+            'signature': sig,
+            'public_key': pub,
+        }
+
+    @staticmethod
+    def re(t, e):
+        m = 0xFFFFFFFF
+        return (t << e | t >> (32 - e)) & m
+
+    def ye(self, t):
+        m = 0xFFFFFFFF
+        t[0] = (t[0] + t[1]) & m
+        t[3] = self.re(t[3] ^ t[0], 16)
+        t[2] = (t[2] + t[3]) & m
+        t[1] = self.re(t[1] ^ t[2], 12)
+        t[0] = (t[0] + t[1]) & m
+        t[3] = self.re(t[3] ^ t[0], 8)
+        t[2] = (t[2] + t[3]) & m
+        t[1] = self.re(t[1] ^ t[2], 7)
+
+    def gr(self, t):
+        m = 0xFFFFFFFF
+        e = [1779033703, 3144134277, 1013904242, 2773480762]
+        be, lt, dr, lr, hr = 512, 511, 2, 2654435761, 2246822519
+        for i in t:
+            e[0] = (e[0] + i) & m
+            e[0] = self.re(e[0], 7)
+            self.ye(e)
+        for _ in range(8):
+            self.ye(e)
+        r = [0] * be
+        for i in range(be):
+            self.ye(e)
+            r[i] = (e[0] ^ e[2]) & m
+        for i in range(dr):
+            for s in range(be):
+                a = r[s] & lt
+                c = (r[s] + r[a]) & m
+                c = self.re(c, 13)
+                c = (c ^ ((r[(s + 1) & lt] * lr) & m)) & m
+                r[s] = c
+                e[0] = (e[0] ^ c) & m
+                self.ye(e)
+        n = [0] * 8
+        o = int(be / 8)
+        for i in range(8):
+            self.ye(e)
+            s = e[0]
+            a = i * o
+            for c in range(o):
+                d = r[a + c]
+                s = (s + d) & m
+                s = self.re(s, 5)
+                s = (s ^ ((d * hr) & m)) & m
+            n[i] = (s ^ e[2]) & m
+        return n
+
+    @staticmethod
+    def wr(t):
+        e = 0
+        for r in range(len(t)):
+            n = int(t[r])
+            if n == 0:
+                e += 32
+                continue
+            return e + (32 - n.bit_length())
+        return e
+
+    @staticmethod
+    def yr(t):
+        e = [0] * len(t)
+        for r in range(len(t)):
+            e[r] = ord(t[r]) & 255
+        return e
+
+    def er(self, t, e, r=20.0):
+        import time
+        if e <= 0:
+            return '0'
+        prefix = t + ':'
+        start = time.time()
+        s = 0
+        while True:
+            for _ in range(1024):
+                d = self.gr(self.yr(prefix + str(s)))
+                if self.wr(d) >= e:
+                    return str(s)
+                s += 1
+            if time.time() - start > r:
+                return None
