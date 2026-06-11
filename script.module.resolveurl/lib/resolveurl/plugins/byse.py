@@ -184,6 +184,18 @@ class ByseResolver(ResolveUrl):
             'nonce': ch['nonce'],
             'signature': sig,
             'public_key': pub,
+            'client': {
+                'user_agent': common.RAND_UA,
+                'pixel_ratio': 1,
+                'screen_width': 1366,
+                'screen_height': 768,
+                'color_depth': 24,
+                'hardware_concurrency': 1,
+                'touch_points': 0,
+                'pointer_type': 'fine,hover'
+            },
+            'storage': {},
+            'attributes': {'entropy': 'high'}
         }
 
     @staticmethod
@@ -250,23 +262,15 @@ class ByseResolver(ResolveUrl):
             return e + (32 - n.bit_length())
         return e
 
-    @staticmethod
-    def yr(t):
-        e = [0] * len(t)
-        for r in range(len(t)):
-            e[r] = ord(t[r]) & 255
-        return e
-
     def er(self, t, e, r=20.0):
         import time
         if e <= 0:
             return '0'
-        prefix = t + ':'
         start = time.time()
         s = 0
         while True:
             for _ in range(1024):
-                d = self.gr(self.yr(prefix + str(s)))
+                d = self.gr((t + ':' + str(s)).encode('ascii'))
                 if self.wr(d) >= e:
                     return str(s)
                 s += 1
