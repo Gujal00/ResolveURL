@@ -238,6 +238,13 @@ def scrape_supported(html, regex=None, host_only=False):
     return links
 
 
+def debrid_enabled():
+    """
+    helper function to determine if universal resolvers are enabled
+    """
+    return common.get_setting('allow_universal') == 'true'
+
+
 def display_settings():
     """
     Opens the settings dialog for :mod:`resolveurl` and its plugins.
