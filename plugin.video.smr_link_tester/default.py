@@ -255,6 +255,7 @@ def play_link(link):
 
     try:
         subs = {}
+        mimetype = ''
         if link.endswith('$$all'):
             allfiles = hmf.resolve()
             names = [x.get('name') for x in allfiles]
@@ -264,7 +265,6 @@ def play_link(link):
             stream_url = allfiles[item].get('link')
             if resolveurl.HostedMediaFile(stream_url):
                 stream_url = resolveurl.resolve(stream_url)
-                mimetype = ''
         else:
             resp = hmf.resolve()
             if resp:
