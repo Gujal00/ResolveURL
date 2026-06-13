@@ -19,7 +19,6 @@
 import json
 from six.moves import urllib_parse
 from resolveurl.lib import helpers
-from resolveurl.lib.aesgcm import python_aesgcm
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -34,12 +33,12 @@ class ByseResolver(ResolveUrl):
         'kerapoxy.cc', 'furher.in', '1azayf9w.xyz', '81u6xl9d.xyz', 'smdfs40r.skin', 'c1z39.com',
         'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', 'f51rm.com',
         'xcoic.com', 'filemoon.nl', 'boosteradx.online', 'streamlyplayer.online', 'bysewihe.com',
-        'byselapuix.com', 'embedplaybyse.top'
+        'byselapuix.com', 'embedplaybyse.top', 'sb1254w9megshle.org'
     ]
     pattern = (
-        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|embedplaybyse|'
+        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|'
         r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx|vepoin|'
-        r'byse(?:sayeveum|tayico|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho|wihe|lapuix)?)'
+        r'(?:embedplay)?byse(?:sayeveum|tayico|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho|wihe|lapuix)?)'
         r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))'
         r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+)'
     )
@@ -55,21 +54,22 @@ class ByseResolver(ResolveUrl):
         details_url = '{0}api/videos/{1}/embed/details'.format(ref, media_id)
         details = self.net.http_GET(details_url, headers=headers).json
         embed_url = details.get('embed_frame_url')
-        ref2 = urllib_parse.urljoin(embed_url, '/')
-        headers.update({
-            'Referer': ref2,
-            'Origin': ref2[:-1],
-            'X-Embed-Parent': web_url
-        })
+        if embed_url:
+            ref = urllib_parse.urljoin(embed_url, '/')
+            headers.update({
+                'Referer': ref,
+                'Origin': ref[:-1],
+                'X-Embed-Parent': web_url
+            })
 
-        settings_url = '{0}api/videos/{1}/embed/settings'.format(ref2, media_id)
+        settings_url = '{0}api/videos/{1}/embed/settings'.format(ref, media_id)
         settings = self.net.http_GET(settings_url, headers=headers).json
 
         if settings.get('captcha_required'):
-            challenge_url = '{0}api/videos/access/challenge'.format(ref2)
+            challenge_url = '{0}api/videos/access/challenge'.format(ref)
             challenge = self.net.http_POST(challenge_url, headers=headers, form_data={}).json
 
-            attest_url = '{0}api/videos/access/attest'.format(ref2)
+            attest_url = '{0}api/videos/access/attest'.format(ref)
             attest = self.net.http_POST(attest_url, headers=headers, form_data=self.wn(challenge), jdata=True).json
             fingerprint = {
                 'token': attest['token'],
@@ -78,21 +78,21 @@ class ByseResolver(ResolveUrl):
                 'confidence': attest['confidence'],
             }
 
-            captcha_url = '{0}api/videos/{1}/embed/captcha'.format(ref2, media_id)
+            captcha_url = '{0}api/videos/{1}/embed/captcha'.format(ref, media_id)
             captcha = self.net.http_POST(captcha_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
             solution = self.er(captcha['pow_nonce'], captcha['pow_difficulty'])
             if solution is None:
                 raise ResolverError('Unable to solve captcha')
 
-            verify_url = '{0}api/videos/{1}/embed/captcha/verify'.format(ref2, media_id)
+            verify_url = '{0}api/videos/{1}/embed/captcha/verify'.format(ref, media_id)
             post_data = {'pow_token': captcha['pow_token'], 'solution': solution, 'fingerprint': fingerprint}
             verify = self.net.http_POST(verify_url, headers=headers, form_data=post_data, jdata=True).json
             headers.update({'X-Captcha-Token': verify.get('token')})
 
-            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref2, media_id)
+            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref, media_id)
             data = self.net.http_POST(playback_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
         else:
-            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref2, media_id)
+            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref, media_id)
             data = self.net.http_POST(playback_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).json
 
         sources = data.get('sources')
@@ -100,11 +100,12 @@ class ByseResolver(ResolveUrl):
             sources = [(x.get('label'), x.get('url')) for x in sources]
             uri = helpers.pick_source(helpers.sort_sources_list(sources))
             if uri.startswith('/'):
-                uri = urllib_parse.urljoin(ref2, uri)
+                uri = urllib_parse.urljoin(ref, uri)
             url = helpers.get_redirect_url(uri, headers=headers)
             return url + helpers.append_headers(headers)
         pd = data.get('playback')
         if pd:
+            from resolveurl.lib.aesgcm import python_aesgcm
             iv = self.ft(pd.get('iv'))
             key = self.xn(pd.get('key_parts'), pd.get('version'))
             pl = self.ft(pd.get('payload'))
@@ -115,7 +116,8 @@ class ByseResolver(ResolveUrl):
             if sources:
                 sources = [(x.get('label'), x.get('url')) for x in sources]
                 uri = helpers.pick_source(helpers.sort_sources_list(sources))
-                headers.pop('X-Embed-Parent')
+                if 'X-Embed-Parent' in headers.keys():
+                    headers.pop('X-Embed-Parent')
                 if 'X-Captcha-Token' in headers.keys():
                     headers.pop('X-Captcha-Token')
                 return uri + helpers.append_headers(headers)
