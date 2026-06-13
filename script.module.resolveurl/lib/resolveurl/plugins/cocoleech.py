@@ -112,8 +112,7 @@ class CocoLeechResolver(ResolveUrl):
         try:
             params = {'hash': magnet_hash, 'key': self.api_key}
             url = '{0}/checkInstant?{1}'.format(torr_api, urllib_parse.urlencode(params))
-            result = self.net.http_GET(url, headers=self.headers).content
-            result = json.loads(result)
+            result = self.net.http_GET(url, headers=self.headers).json
             if 'status' in result:
                 if result.get('status') == '200':
                     if result.get('message') == 'Torrent cached':
@@ -126,16 +125,14 @@ class CocoLeechResolver(ResolveUrl):
     def __browse_magnet(self, magnet_hash):
         params = {'hash': magnet_hash, 'key': self.api_key}
         url = '{0}/browse?{1}'.format(torr_api, urllib_parse.urlencode(params))
-        result = self.net.http_GET(url, headers=self.headers).content
-        result = json.loads(result)
+        result = self.net.http_GET(url, headers=self.headers).json
         items = result.get('arguments').get('torrents')
         return items[0]
 
     def __create_transfer(self, magnet_hash, cached_only=False):
         params = {'hash': magnet_hash, 'key': self.api_key}
         url = '{0}/add?{1}'.format(torr_api, urllib_parse.urlencode(params))
-        result = self.net.http_GET(url, headers=self.headers).content
-        result = json.loads(result)
+        result = self.net.http_GET(url, headers=self.headers).json
         if result.get('status') == "200":
             logger.log_debug('Transfer successfully started to the CocoLeech cloud')
             return self.__initiate_transfer(magnet_hash)
@@ -184,8 +181,7 @@ class CocoLeechResolver(ResolveUrl):
     def __list_transfer(self, magnet_hash):
         params = {'hash': magnet_hash, 'key': self.api_key}
         url = '{0}/list?{1}'.format(torr_api, urllib_parse.urlencode(params))
-        result = self.net.http_GET(url, headers=self.headers).content
-        magnets = json.loads(result)
+        magnets = self.net.http_GET(url, headers=self.headers).json
         for magnet in magnets:
             if magnet.get('hash').lower() == magnet_hash.lower():
                 return magnet
@@ -193,8 +189,7 @@ class CocoLeechResolver(ResolveUrl):
     def __delete_magnet(self, magnet_hash):
         params = {'hash': magnet_hash, 'key': self.api_key}
         url = '{0}/delete?{1}'.format(torr_api, urllib_parse.urlencode(params))
-        result = self.net.http_GET(url, headers=self.headers).content
-        result = json.loads(result)
+        result = self.net.http_GET(url, headers=self.headers).json
         if result.get('status') == "200":
             logger.log_debug('Magnet hash "{0}" deleted from CocoLeech'.format(magnet_hash))
             return True
@@ -212,8 +207,7 @@ class CocoLeechResolver(ResolveUrl):
         hosts = []
         url = auth_api + '/domains'
         try:
-            js_result = self.net.http_GET(url, headers=self.headers).content
-            js_data = json.loads(js_result)
+            js_data = self.net.http_GET(url, headers=self.headers).json
             for host in js_data:
                 hosts.extend(host.get('domains'))
             if self.get_setting('torrents') == 'true':
@@ -248,20 +242,49 @@ class CocoLeechResolver(ResolveUrl):
         self.set_setting('user', '')
 
     def authorize_resolver(self):
-        api_key = common.kodi.get_keyboard(i18n('api_key'))
-        if api_key:
-            url = '{0}/info?key={1}'.format(auth_api, api_key)
-            js_result = self.net.http_GET(url, headers=self.headers).content
-            js_data = json.loads(js_result)
-            if js_data.get('status') == '200':
-                if js_data.get('type') == 'Premium':
-                    self.set_setting('apikey', api_key)
-                    self.set_setting('user', js_data.get('username'))
-                    return True
-                else:
-                    raise ResolverError(i18n('not_premium'))
-            else:
-                raise ResolverError(js_data.get('message'))
+        url = torr_api + '/device/code?device_name=Kodi'
+        js_data = self.net.http_GET(url, headers=self.headers).json
+        js_data = js_data.get('data')
+        line1 = '{0}: {1}'.format(i18n('goto_url'), js_data.get('base_url'))
+        line2 = '{0}: {1}'.format(i18n('enter_prompt'), js_data.get('pin'))
+        qr_file = common.make_qr_file(js_data.get('user_url'))
+        with common.kodi.AuthProgressDialog(
+            'ResolveUrl Cocoleech {0}'.format(i18n('authorisation')), line1, line2,
+            image=qr_file, countdown=js_data.get('expires_in', 300)
+        ) as cd:
+            result = cd.start(self.__check_auth, [js_data.get('check'), js_data.get('pin')])
+
+        # cancelled
+        if result is None:
+            return
+        return self.__get_token(js_data.get('check'), js_data.get('pin'))
+
+    def __get_token(self, token, pin):
+        url = torr_api + '/device/check?pin={0}&check={1}'.format(pin, token)
+        try:
+            js_data = self.net.http_GET(url, headers=self.headers).json
+            if js_data.get("status") == "200":
+                js_data = js_data.get('data')
+                api_key = js_data.get('api_key', '')
+                logger.log_debug('Authorizing CocoLeech Result: |{0}|'.format(api_key))
+                self.set_setting('apikey', api_key)
+                self.set_setting('user', js_data.get('username'))
+                return True
+        except Exception as e:
+            logger.log_debug('CocoLeech Authorization Failed: {0}'.format(e))
+            return False
+
+    def __check_auth(self, token, pin):
+        activated = False
+        url = torr_api + '/device/check?pin={0}&check={1}'.format(pin, token)
+        try:
+            js_data = self.net.http_GET(url, headers=self.headers).json
+            if js_data.get("status") == "200":
+                js_data = js_data.get('data')
+                activated = js_data.get('activated', False)
+        except Exception as e:
+            logger.log_debug('Exception during CL auth: {0}'.format(e))
+        return activated
 
     @classmethod
     def get_settings_xml(cls):
