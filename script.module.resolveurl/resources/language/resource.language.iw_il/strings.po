@@ -256,8 +256,8 @@ msgid "JetLoad Stream Authorization"
 msgstr "הרשאה להזרמה מ-JetLoad"
 
 msgctxt "#33060"
-msgid "Uptobox Stream Authorization"
-msgstr "הרשאה להזרמה מ-Uptobox"
+msgid "TorBox Stream Authorization"
+msgstr "הרשאה להזרמה מ-TorBox"
 
 msgctxt "#33061"
 msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
@@ -288,12 +288,12 @@ msgid "hours"
 msgstr "שעה (ות"
 
 msgctxt "#33068"
-msgid "Uptobox Authorisation Reset"
-msgstr "איפוס הרשאה ל-Uptobox"
+msgid "TorBox Authorisation Reset"
+msgstr "איפוס הרשאה ל-TorBox"
 
 msgctxt "#33069"
-msgid "Uptobox Resolver Authorised"
-msgstr "Uptobox מורשה פותר"
+msgid "TorBox Resolver Authorised"
+msgstr "TorBox מורשה פותר"
 
 msgctxt "#33070"
 msgid "email"

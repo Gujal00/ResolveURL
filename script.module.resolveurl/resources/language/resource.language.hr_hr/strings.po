@@ -259,8 +259,8 @@ msgid "JetLoad Stream Authorization"
 msgstr "JetLoad ovjera strujanja"
 
 msgctxt "#33060"
-msgid "Uptobox Stream Authorization"
-msgstr "Uptobox ovjera strujanja"
+msgid "TorBox Stream Authorization"
+msgstr "TorBox ovjera strujanja"
 
 msgctxt "#33061"
 msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
@@ -291,12 +291,12 @@ msgid "hours"
 msgstr "sati"
 
 msgctxt "#33068"
-msgid "Uptobox Authorisation Reset"
-msgstr "Uptobox razrješitelj vraćen na izvorno"
+msgid "TorBox Authorisation Reset"
+msgstr "TorBox razrješitelj vraćen na izvorno"
 
 msgctxt "#33069"
-msgid "Uptobox Resolver Authorised"
-msgstr "Uptobox razrješitelj ovjeren"
+msgid "TorBox Resolver Authorised"
+msgstr "TorBox razrješitelj ovjeren"
 
 msgctxt "#33070"
 msgid "email"

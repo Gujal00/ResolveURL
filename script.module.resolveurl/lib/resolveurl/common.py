@@ -37,9 +37,13 @@ set_setting = kodi.set_setting
 open_settings = kodi.open_settings
 has_addon = kodi.has_addon
 i18n = kodi.i18n
+translate_path = kodi.translate_path
 
 # Supported video formats
 VIDEO_FORMATS = kodi.supported_video_extensions()
+
+# QR-Code file
+QR_FILE = kodi.translate_path('special://temp/qr_img.png')
 
 # Byparr Support
 BP_ENABLED = kodi.get_setting('bp_enable') == 'true'
@@ -58,6 +62,13 @@ def log_file_hash(path):
         py_data = ''
 
     logger.log('%s hash: %s' % (os.path.basename(path), hashlib.md5(py_data).hexdigest()))
+
+
+def make_qr_file(url):
+    import pyqrcode
+    image_url = pyqrcode.create(url)
+    image_url.png(QR_FILE, scale=4.4)
+    return QR_FILE
 
 
 def file_length(py_path, key=''):

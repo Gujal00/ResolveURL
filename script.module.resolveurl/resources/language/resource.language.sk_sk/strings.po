@@ -251,11 +251,11 @@ msgstr "Hostitelia súborov vo vyrovnávacej pamäti iba"
 
 msgctxt "#33059"
 msgid "JetLoad Stream Authorization"
-msgstr "Flashx autorizácia streamu"
+msgstr "JetLoad autorizácia streamu"
 
 msgctxt "#33060"
-msgid "Uptobox Stream Authorization"
-msgstr "Flashx autorizácia streamu"
+msgid "TorBox Stream Authorization"
+msgstr "TorBox autorizácia streamu"
 
 msgctxt "#33061"
 msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
@@ -286,12 +286,12 @@ msgid "hours"
 msgstr "hodín"
 
 msgctxt "#33068"
-msgid "Uptobox Authorisation Reset"
-msgstr "Uptobox resolver resetovaný"
+msgid "TorBox Authorisation Reset"
+msgstr "TorBox resolver resetovaný"
 
 msgctxt "#33069"
-msgid "Uptobox Resolver Authorised"
-msgstr "Uptobox resolver autorizovaný"
+msgid "TorBox Resolver Authorised"
+msgstr "TorBox resolver autorizovaný"
 
 msgctxt "#33070"
 msgid "email"

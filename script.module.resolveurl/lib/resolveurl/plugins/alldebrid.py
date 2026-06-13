@@ -316,9 +316,10 @@ class AllDebridResolver(ResolveUrl):
         js_data = json.loads(js_result).get('data')
         line1 = '{0}: {1}'.format(i18n('goto_url'), js_data.get('base_url'))
         line2 = '{0}: {1}'.format(i18n('enter_prompt'), js_data.get('pin'))
-        with common.kodi.CountdownDialog(
+        qr_file = common.make_qr_file(js_data.get('user_url'))
+        with common.kodi.AuthProgressDialog(
             'ResolveUrl AllDebrid {0}'.format(i18n('authorisation')), line1, line2,
-            countdown=js_data.get('expires_in', 120)
+            image=qr_file, countdown=js_data.get('expires_in', 120)
         ) as cd:
             result = cd.start(self.__check_auth, [js_data.get('check'), js_data.get('pin')])
 

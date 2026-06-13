@@ -254,8 +254,8 @@ msgid "JetLoad Stream Authorization"
 msgstr "Μη έγκριση από το JetLoad"
 
 msgctxt "#33060"
-msgid "Uptobox Stream Authorization"
-msgstr "Μη έγκριση από το Uptobox"
+msgid "TorBox Stream Authorization"
+msgstr "Μη έγκριση από το TorBox"
 
 msgctxt "#33061"
 msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
@@ -286,12 +286,12 @@ msgid "hours"
 msgstr "ώρες"
 
 msgctxt "#33068"
-msgid "Uptobox Authorisation Reset"
-msgstr "Επαναφορά έγκρισης Uptobox"
+msgid "TorBox Authorisation Reset"
+msgstr "Επαναφορά έγκρισης TorBox"
 
 msgctxt "#33069"
-msgid "Uptobox Resolver Authorised"
-msgstr "Ο επιλυτής Uptobox έχει εγκριθεί"
+msgid "TorBox Resolver Authorised"
+msgstr "Ο επιλυτής TorBox έχει εγκριθεί"
 
 msgctxt "#33070"
 msgid "email"

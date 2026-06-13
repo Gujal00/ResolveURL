@@ -253,8 +253,8 @@ msgid "JetLoad Stream Authorization"
 msgstr "JetLoad Stream Autorisierung"
 
 msgctxt "#33060"
-msgid "Uptobox Stream Authorization"
-msgstr "Uptobox Stream Autorisierung"
+msgid "TorBox Stream Authorization"
+msgstr "TorBox Stream Autorisierung"
 
 msgctxt "#33061"
 msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
@@ -285,12 +285,12 @@ msgid "hours"
 msgstr "Std"
 
 msgctxt "#33068"
-msgid "Uptobox Authorisation Reset"
-msgstr "Uptobox Autorisierung zurücksetzen"
+msgid "TorBox Authorisation Reset"
+msgstr "TorBox Autorisierung zurücksetzen"
 
 msgctxt "#33069"
-msgid "Uptobox Resolver Authorised"
-msgstr "Uptobox Resolver autorisiert"
+msgid "TorBox Resolver Authorised"
+msgstr "TorBox Resolver autorisiert"
 
 msgctxt "#33070"
 msgid "email"

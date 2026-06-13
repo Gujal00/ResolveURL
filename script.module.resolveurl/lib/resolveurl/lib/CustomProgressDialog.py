@@ -22,6 +22,7 @@ from resolveurl.lib import log_utils
 logger = log_utils.Logger.get_logger(__name__)
 addon = xbmcaddon.Addon('script.module.resolveurl')
 DIALOG_XML = 'ProgressDialog.xml' if six.PY2 else 'ProgressDialog2.xml'
+AUTH_XML = 'AuthProgress.xml' if six.PY2 else 'AuthProgress2.xml'
 
 
 class ProgressDialog(object):
@@ -31,10 +32,7 @@ class ProgressDialog(object):
         return addon.getAddonInfo('path')
 
     def create(self, heading, line1='', line2='', line3=''):
-        try:
-            self.dialog = ProgressDialog.Window(DIALOG_XML, addon.getSetting('xml_folder'))
-        except:
-            self.dialog = ProgressDialog.Window(DIALOG_XML, self.get_path())
+        self.dialog = ProgressDialog.Window(DIALOG_XML, self.get_path())
         self.dialog.show()
         self.dialog.setHeading(heading)
         self.dialog.setLine1(line1)
@@ -113,3 +111,98 @@ class ProgressDialog(object):
 
         def setLabel(self, ctrl, line):
             self.getControl(ctrl).setLabel(line)
+
+
+class QRCodeProgressDialog(object):
+    dialog = None
+
+    def get_path(self):
+        return addon.getAddonInfo('path')
+
+    def create(self, heading, line1='', line2='', line3='', image=''):
+        self.dialog = QRCodeProgressDialog.Window(AUTH_XML, self.get_path())
+        self.dialog.show()
+        self.dialog.setHeading(heading)
+        self.dialog.setLine1(line1)
+        self.dialog.setLine2(line2)
+        self.dialog.setLine3(line3)
+        self.dialog.setImage(image)
+
+    def update(self, percent, line1='', line2='', line3='', image=''):
+        if self.dialog is not None:
+            self.dialog.setProgress(percent)
+            if line1:
+                self.dialog.setLine1(line1)
+            if line2:
+                self.dialog.setLine2(line2)
+            if line3:
+                self.dialog.setLine3(line3)
+            if image:
+                self.dialog.setImage(image)
+
+    def iscanceled(self):
+        if self.dialog is not None:
+            return self.dialog.cancel
+        else:
+            return False
+
+    def close(self):
+        if self.dialog is not None:
+            self.dialog.close()
+            del self.dialog
+
+    class Window(xbmcgui.WindowXMLDialog):
+        HEADING_CTRL = 100
+        LINE1_CTRL = 10
+        LINE2_CTRL = 11
+        LINE3_CTRL = 12
+        QRIMAGE_CTRL = 13
+        PROGRESS_CTRL = 20
+        ACTION_PREVIOUS_MENU = 10
+        ACTION_BACK = 92
+        CANCEL_BUTTON = 200
+        cancel = False
+
+        def onInit(self):
+            pass
+
+        def onAction(self, action):
+            # logger.log('Action: %s' % (action.getId()), log_utils.LOGDEBUG, COMPONENT)
+            if action == self.ACTION_PREVIOUS_MENU or action == self.ACTION_BACK:
+                self.cancel = True
+                self.close()
+
+        def onControl(self, control):
+            # logger.log('onControl: %s' % (control), log_utils.LOGDEBUG, COMPONENT)
+            pass
+
+        def onFocus(self, control):
+            # logger.log('onFocus: %s' % (control), log_utils.LOGDEBUG, COMPONENT)
+            pass
+
+        def onClick(self, control):
+            # logger.log('onClick: %s' % (control), log_utils.LOGDEBUG, COMPONENT)
+            if control == self.CANCEL_BUTTON:
+                self.cancel = True
+                self.close()
+
+        def setHeading(self, heading):
+            self.setLabel(self.HEADING_CTRL, heading)
+
+        def setProgress(self, progress):
+            self.getControl(self.PROGRESS_CTRL).setPercent(progress)
+
+        def setLine1(self, line):
+            self.setLabel(self.LINE1_CTRL, line)
+
+        def setLine2(self, line):
+            self.setLabel(self.LINE2_CTRL, line)
+
+        def setLine3(self, line):
+            self.setLabel(self.LINE3_CTRL, line)
+
+        def setLabel(self, ctrl, line):
+            self.getControl(ctrl).setLabel(line)
+
+        def setImage(self, image):
+            self.getControl(self.QRIMAGE_CTRL).setImage(image)

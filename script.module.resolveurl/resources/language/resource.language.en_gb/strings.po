@@ -286,11 +286,11 @@ msgid "hours"
 msgstr ""
 
 msgctxt "#33068"
-msgid "Uptobox Authorisation Reset"
+msgid "TorBox Authorisation Reset"
 msgstr ""
 
 msgctxt "#33069"
-msgid "Uptobox Resolver Authorised"
+msgid "TorBox Resolver Authorised"
 msgstr ""
 
 msgctxt "#33070"

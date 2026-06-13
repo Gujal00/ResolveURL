@@ -282,9 +282,10 @@ class RealDebridResolver(ResolveUrl):
         js_result = json.loads(self.net.http_GET(url, headers=self.headers).content)
         line1 = '{0}: {1}'.format(i18n('goto_url'), js_result['verification_url'])
         line2 = '{0}: {1}'.format(i18n('enter_prompt'), js_result['user_code'])
-        with common.kodi.CountdownDialog(
+        qr_file = common.make_qr_file(js_result['verification_url'])
+        with common.kodi.AuthProgressDialog(
             'ResolveURL Real-Debrid {0}'.format(i18n('authorisation')), line1, line2,
-            countdown=js_result['expires_in'], interval=js_result['interval']
+            image=qr_file, countdown=js_result['expires_in'], interval=js_result['interval']
         ) as cd:
             result = cd.start(self.__check_auth, [js_result['device_code']])
 

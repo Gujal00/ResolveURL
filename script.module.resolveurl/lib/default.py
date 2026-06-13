@@ -34,7 +34,7 @@ def __enum(**enums):
 MODES = __enum(
     AUTH_PM='auth_pm', RESET_PM='reset_pm', AUTH_RD='auth_rd', RESET_RD='reset_rd',
     AUTH_AD='auth_ad', RESET_AD='reset_ad', AUTH_LS='auth_ls', RESET_LS='reset_ls',
-    AUTH_DL='auth_dl', RESET_DL='reset_dl', AUTH_UB='auth_ub', RESET_UB='reset_ub',
+    AUTH_DL='auth_dl', RESET_DL='reset_dl', AUTH_TB='auth_tb', RESET_TB='reset_tb',
     AUTH_CL='auth_cl', RESET_CL='reset_cl',
     RESET_CACHE='reset_cache',
     CLEAN_SETTINGS='clean_settings'
@@ -98,23 +98,23 @@ def reset_ad():
     kodi.notify(msg=kodi.i18n('ad_auth_reset'), duration=5000)
 
 
-@url_dispatcher.register(MODES.AUTH_UB)
-def auth_ub():
+@url_dispatcher.register(MODES.AUTH_TB)
+def auth_tb():
     kodi.close_all()
     kodi.sleep(500)  # sleep or authorize won't work for some reason
-    from resolveurl.plugins import uptobox
-    if uptobox.UpToBoxResolver().authorize_resolver():
-        kodi.notify(msg=kodi.i18n('ub_authorized'), duration=5000)
+    from resolveurl.plugins import torbox
+    if torbox.TorBoxResolver().authorize_resolver():
+        kodi.notify(msg=kodi.i18n('tb_authorized'), duration=5000)
 
 
-@url_dispatcher.register(MODES.RESET_UB)
+@url_dispatcher.register(MODES.RESET_TB)
 def reset_ub():
     kodi.close_all()
     kodi.sleep(500)  # sleep or reset won't work for some reason
-    from resolveurl.plugins import uptobox
-    ub = uptobox.UpToBoxResolver()
-    ub.reset_authorization()
-    kodi.notify(msg=kodi.i18n('ub_auth_reset'), duration=5000)
+    from resolveurl.plugins import torbox
+    tb = torbox.TorBoxResolver()
+    tb.reset_authorization()
+    kodi.notify(msg=kodi.i18n('tb_auth_reset'), duration=5000)
 
 
 @url_dispatcher.register(MODES.AUTH_CL)

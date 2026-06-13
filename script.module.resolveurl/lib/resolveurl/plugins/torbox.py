@@ -1,6 +1,7 @@
 """
     Plugin for ResolveURL
     Copyright (c) 2024 pikdum
+                  2026 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,24 +29,23 @@ from six.moves import urllib_error, urllib_parse
 logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
-AGENT = "ResolveURL for Kodi"
+AGENT = 'ResolveURL for Kodi'
 VERSION = common.addon_version
-USER_AGENT = "{0}/{1}".format(AGENT, VERSION)
+USER_AGENT = '{0}/{1}'.format(AGENT, VERSION)
 FORMATS = common.VIDEO_FORMATS
 
 
 class TorBoxResolver(ResolveUrl):
-    name = "TorBox"
-    domains = ["*"]
-    api_url = "https://api.torbox.app/v1/api"
+    name = 'TorBox'
+    domains = ['*']
+    api_url = 'https://api.torbox.app/v1/api'
 
     def __init__(self):
         self.hosters = None
         self.hosts = None
-        self.headers = {
-            "User-Agent": USER_AGENT,
-            "Authorization": "Bearer %s" % self.__get_token(),
-        }
+        self.headers = {'User-Agent': USER_AGENT}
+        if self.get_setting('apikey'):
+            self.headers.update({'Authorization': 'Bearer {0}'.format(self.get_setting('apikey'))})
 
     def __api(self, endpoint, query=None, data=None, empty=None, json_data=False):
         try:
@@ -108,7 +108,7 @@ class TorBoxResolver(ResolveUrl):
     def __request_torrent_download(self, torrent_id, file_id):
         return self.__get(
             "torrents/requestdl",
-            {"torrent_id": torrent_id, "file_id": file_id, "token": self.__get_token()},
+            {"torrent_id": torrent_id, "file_id": file_id, "token": self.get_setting('apikey')},
         )
 
     def __delete_torrent(self, torrent_id):
@@ -129,7 +129,7 @@ class TorBoxResolver(ResolveUrl):
     def __request_webdl_download(self, webdl_id, file_id):
         return self.__get(
             "webdl/requestdl",
-            {"web_id": webdl_id, "file_id": file_id, "token": self.__get_token()},
+            {"web_id": webdl_id, "file_id": file_id, "token": self.get_setting('apikey')},
         )
 
     def __delete_webdl(self, webdl_id):
@@ -138,9 +138,6 @@ class TorBoxResolver(ResolveUrl):
             {"webdl_id": webdl_id, "operation": "delete"},
             json_data=True,
         )
-
-    def __get_token(self):
-        return self.get_setting("apikey")
 
     def __get_hash(self, media_id):
         r = re.search("""magnet:.+?urn:([a-zA-Z0-9]+):([a-zA-Z0-9]+)""", media_id, re.I)
@@ -311,58 +308,133 @@ class TorBoxResolver(ResolveUrl):
         return media_id
 
     def get_host_and_id(self, url):
-        return "torbox.app", url
+        return 'torbox.app', url
+
+    @common.cache.cache_method(cache_limit=8)
+    def get_all_hosters(self):
+        hosters = []
+        url = self.api_url + '/webdl/hosters'
+        try:
+            js_data = self.net.http_GET(url, headers=self.headers).json
+            if js_data.get('success'):
+                js_data = js_data.get('data')
+                regexes = [item.get('regex') for item in js_data if item.get('status')]
+                hosters = [re.compile(regex) for regex in regexes]
+                logger.log_debug('TorBox hosters : {0}'.format(len(hosters)))
+            else:
+                logger.log_error('Error getting AD Hosters')
+        except Exception as e:
+            logger.log_error('Error getting AD Hosters: {0}'.format(e))
+        return hosters
+
+    @common.cache.cache_method(cache_limit=8)
+    def get_hosts(self):
+        hosts = []
+        url = self.api_url + '/webdl/hosters'
+        try:
+            js_data = self.net.http_GET(url, headers=self.headers).json
+            if js_data.get('success'):
+                hosts_data = js_data.get('data')
+                for host in hosts_data:
+                    hosts.extend(host.get('domains'))
+                if self.get_setting('torrents') == 'true':
+                    hosts.extend(['torrent', 'magnet'])
+                logger.log_debug('TorBox hosts : {0}'.format(hosts))
+            else:
+                logger.log_error('Error getting TB Hosts')
+        except Exception as e:
+            logger.log_error('Error getting TB Hosts: {0}'.format(e))
+        return hosts
 
     def valid_url(self, url, host):
-        if not self.hosts:
-            self.hosts = self.get_all_hosters()
-
         if url:
             # handle multi-file hack
             if url.startswith("tb:"):
                 return True
 
             # magnet link
-            if url.startswith("magnet:"):
-                btih = self.__get_hash(url)
-                return bool(btih) and self.get_setting("torrents") == "true"
+            if url.lower().startswith('magnet:') and self.get_setting('torrents') == 'true':
+                return True
 
             # webdl
             if not self.get_setting("web_downloads") == "true":
                 return False
 
-            try:
-                host = urllib_parse.urlparse(url).hostname
-            except:
-                host = "unknown"
+            if self.hosters is None:
+                self.hosters = self.get_all_hosters()
 
-            host = host.replace("www.", "")
-            if any(host in item for item in self.hosts):
-                return True
-
+            for regexp in self.hosters:
+                if re.search(regexp, url):
+                    logger.log_debug('Torbox Match found')
+                    return True
         elif host:
-            host = host.replace("www.", "")
+            if self.hosts is None:
+                self.hosts = self.get_hosts()
+
             if any(host in item for item in self.hosts):
                 return True
 
         return False
 
-    @common.cache.cache_method(cache_limit=8)
-    def get_all_hosters(self):
-        hosts = []
+    # SiteAuth methods
+    def login(self):
+        if not self.get_setting('apikey'):
+            self.authorize_resolver()
+
+    def reset_authorization(self):
+        if 'Authorization' in self.headers.keys():
+            self.headers.pop('Authorization')
+        self.set_setting('apikey', '')
+
+    def authorize_resolver(self):
+        url = self.api_url + '/user/auth/device/start?app=ResolveUrl'
+        js_data = self.net.http_GET(url, headers=self.headers).json
+        js_data = js_data.get('data')
+        line1 = '{0}: {1}'.format(i18n('goto_url'), js_data.get('friendly_verification_url'))
+        line2 = '{0}: {1}'.format(i18n('enter_prompt'), js_data.get('code'))
+        qr_file = common.make_qr_file(js_data.get('verification_url'))
+        with common.kodi.AuthProgressDialog(
+            'ResolveUrl TorBox {0}'.format(i18n('authorisation')), line1, line2,
+            image=qr_file, countdown=300
+        ) as cd:
+            result = cd.start(self.__check_auth, [js_data.get('device_code')])
+
+        # cancelled
+        if result is None:
+            return
+        return self.__get_token(js_data.get('device_code'))
+
+    def __get_token(self, device_code):
+        url = self.api_url + '/user/auth/device/token'
+        data = {'device_code': device_code}
         try:
-            result = self.__get("webdl/hosters", None, [])
-            hosts = [h.get("domains") for h in result if h.get("status", False)]
-            hosts = [host for sublist in hosts for host in sublist]
-            if self.get_setting("torrents") == "true":
-                hosts.extend(["torrent", "magnet"])
+            js_data = self.net.http_POST(url, form_data=data, headers=self.headers, jdata=True).json
+            if js_data.get("success"):
+                js_data = js_data.get('data')
+                token = js_data.get('access_token', '')
+                logger.log_debug('Authorizing TorBox Result: |{0}|'.format(token))
+                self.set_setting('apikey', token)
+                self.headers.update({'Authorization': 'Bearer {0}'.format(token)})
+                return True
         except Exception as e:
-            logger.log_error("Error getting TorBox hosts: %s" % (e))
-        return hosts
+            logger.log_debug('TorBox Authorization Failed: {0}'.format(e))
+            return False
+
+    def __check_auth(self, device_code):
+        activated = False
+        url = self.api_url + '/user/auth/device/token'
+        data = {'device_code': device_code}
+        try:
+            js_data = self.net.http_POST(url, form_data=data, headers=self.headers, jdata=True).json
+            if js_data.get("success"):
+                activated = True
+        except Exception as e:
+            logger.log_debug('Exception during TB auth: {0}'.format(e))
+        return activated
 
     @classmethod
     def get_settings_xml(cls):
-        xml = super(cls, cls).get_settings_xml(include_login=False)
+        xml = super(cls, cls).get_settings_xml()
         xml.append(
             '<setting id="%s_torrents" type="bool" label="%s" default="true"/>'
             % (cls.__name__, i18n("torrents"))
@@ -380,15 +452,22 @@ class TorBoxResolver(ResolveUrl):
             % (cls.__name__, "Clear Finished downloads from account")
         )
         xml.append(
-            '<setting id="%s_apikey" enable="eq(-5,true)" type="text" label="%s" default=""/>'
-            % (cls.__name__, "API Key")
+            '<setting id="{0}_auth" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=auth_tb)"/>'.format(
+                cls.__name__, i18n('auth_my_account'))
+        )
+        xml.append(
+            '<setting id="{0}_reset" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_tb)"/>'.format(
+                cls.__name__, i18n('reset_my_auth'))
+        )
+        xml.append(
+            '<setting id="{0}_apikey" visible="false" type="text" default=""/>'.format(cls.__name__)
         )
         return xml
 
     @classmethod
-    def isUniversal(cls):
-        return True
+    def _is_enabled(cls):
+        return cls.get_setting('enabled') == 'true' and cls.get_setting('apikey')
 
     @classmethod
-    def _is_enabled(cls):
-        return cls.get_setting("enabled") == "true" and cls.get_setting("apikey")
+    def isUniversal(cls):
+        return True
