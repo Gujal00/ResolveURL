@@ -45,6 +45,9 @@ VIDEO_FORMATS = kodi.supported_video_extensions()
 # QR-Code file
 QR_FILE = kodi.translate_path('special://temp/qr_img.png')
 
+# temporary subtitles file
+VTT_FILE = kodi.translate_path('special://temp/temp_subs.en.vtt')
+
 # Byparr Support
 BP_ENABLED = kodi.get_setting('bp_enable') == 'true'
 BP_URL = kodi.get_setting('bp_url')
@@ -118,3 +121,13 @@ def encrypt_py(plain_text, key):
         cipher_text = ''
 
     return cipher_text
+
+
+def write_subs(subs_file):
+    if kodi_version >= 19.0:
+        with open(VTT_FILE, 'w', encoding='utf-8') as f:
+            f.write(subs_file)
+    else:
+        with open(VTT_FILE, 'w') as f:
+            f.write(subs_file.encode('utf8'))
+    return VTT_FILE

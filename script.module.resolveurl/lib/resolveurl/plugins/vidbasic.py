@@ -28,7 +28,7 @@ class VidBasicResolver(ResolveUrl):
     domains = ['vidbasic.top']
     pattern = r'(?://|\.)(vidbasic\.top)/(?:embed)/([0-9a-zA-Z]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         headers = {'User-Agent': common.RAND_UA}
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
@@ -39,12 +39,20 @@ class VidBasicResolver(ResolveUrl):
                 'Origin': 'https://{0}'.format(host)
             })
             url2 = urllib_parse.urljoin(web_url, r.group(1))
+            sub = urllib_parse.parse_qs(url2).get('sub')
             html2 = self.net.http_GET(url2, headers=headers).content
             r = re.search(r'data-name="crypto"\s*data-value="([^"]+)"', html2)
             if r:
                 murl = self.vb_decrypt(r.group(1))
                 if murl.startswith('http'):
-                    return murl + helpers.append_headers(headers)
+                    murl = murl + helpers.append_headers(headers)
+                    if subs:
+                        subtitles = {}
+                        if sub:
+                            vtt = self.net.http_GET(self.vb_decrypt(sub[0]), headers=headers).content
+                            subtitles.update({'English': self.vb_subs(vtt)})
+                        return murl, subtitles
+                    return murl
 
         raise ResolverError('File not found')
 
@@ -62,3 +70,18 @@ class VidBasicResolver(ResolveUrl):
         ddata = decryptor.feed(data)
         ddata += decryptor.feed()
         return ddata.decode('utf-8')
+
+    def vb_subs(self, lines):
+        vtt_dec = []
+        patterns = [
+            re.compile(r'^WEBVTT'),
+            re.compile(r'^\d+$'),
+            re.compile(r'^\d{2}:\d{2}:\d{2}')
+        ]
+        for line in lines.split('\n'):
+            if line == '' or any([re.search(pat, line) for pat in patterns]):
+                vtt_dec.append(line)
+            else:
+                vtt_dec.append(self.vb_decrypt(line))
+        vtt_dec = '\n'.join(vtt_dec)
+        return common.write_subs(vtt_dec)
