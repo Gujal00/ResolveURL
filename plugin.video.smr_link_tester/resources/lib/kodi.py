@@ -301,7 +301,7 @@ def sortX(string):
     try:
         string = re.sub(r'<.+?>', '', string)
         string = string.replace('\\x', 'REPL').replace('\\', '')
-        string = re.sub("""REPL[0-f][0-f]""", '', string)
+        string = re.sub("""REPL[0-9a-f][0-9a-f]""", '', string)
         return string
     except:
         return string
