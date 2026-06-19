@@ -250,19 +250,19 @@ msgid "Cached filehosts only"
 msgstr ""
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorisation"
+msgid "OffCloud Authorisation Reset"
 msgstr ""
 
 msgctxt "#33060"
-msgid "Uptobox Stream Authorisation"
+msgid "Offcloud Resolver Authorised"
 msgstr ""
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
 msgstr ""
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
+msgid "Keep transferring to OffCloud in the background?"
 msgstr ""
 
 msgctxt "#33063"
@@ -322,7 +322,7 @@ msgid "This account is banned"
 msgstr ""
 
 msgctxt "#33077"
-msgid "Saving torrent to UptoBox via AllDebrid"
+msgid "Saving torrent to AllDebrid Cloud"
 msgstr ""
 
 msgctxt "#33078"

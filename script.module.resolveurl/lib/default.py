@@ -35,7 +35,7 @@ MODES = __enum(
     AUTH_PM='auth_pm', RESET_PM='reset_pm', AUTH_RD='auth_rd', RESET_RD='reset_rd',
     AUTH_AD='auth_ad', RESET_AD='reset_ad', AUTH_LS='auth_ls', RESET_LS='reset_ls',
     AUTH_DL='auth_dl', RESET_DL='reset_dl', AUTH_TB='auth_tb', RESET_TB='reset_tb',
-    AUTH_CL='auth_cl', RESET_CL='reset_cl',
+    AUTH_CL='auth_cl', RESET_CL='reset_cl', AUTH_OC='auth_oc', RESET_OC='reset_oc',
     RESET_CACHE='reset_cache',
     CLEAN_SETTINGS='clean_settings'
 )
@@ -108,7 +108,7 @@ def auth_tb():
 
 
 @url_dispatcher.register(MODES.RESET_TB)
-def reset_ub():
+def reset_tb():
     kodi.close_all()
     kodi.sleep(500)  # sleep or reset won't work for some reason
     from resolveurl.plugins import torbox
@@ -135,6 +135,26 @@ def reset_cl():
     cl = cocoleech.CocoLeechResolver()
     cl.reset_authorization()
     kodi.notify(msg=kodi.i18n('cl_auth_reset'), duration=5000)
+
+
+@url_dispatcher.register(MODES.AUTH_OC)
+def auth_oc():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or authorize won't work for some reason
+    from resolveurl.plugins import offcloud
+    oc = offcloud.OffCloudResolver()
+    if oc.authorize_resolver():
+        kodi.notify(msg=kodi.i18n('oc_authorized'), duration=5000)
+
+
+@url_dispatcher.register(MODES.RESET_OC)
+def reset_oc():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or reset won't work for some reason
+    from resolveurl.plugins import offcloud
+    oc = offcloud.OffCloudResolver()
+    oc.reset_authorization()
+    kodi.notify(msg=kodi.i18n('oc_auth_reset'), duration=5000)
 
 
 @url_dispatcher.register(MODES.RESET_CACHE)

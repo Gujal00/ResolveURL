@@ -21,11 +21,11 @@ msgid "Move Red square over play icon and submit"
 msgstr ""
 
 msgctxt "#33001"
-msgid "To play this video, authorization is required"
+msgid "To play this video, authorisation is required"
 msgstr "To play this video, authorization is required"
 
 msgctxt "#33002"
-msgid "Visit the link below to authorize the devices on your network:"
+msgid "Visit the link below to authorise the devices on your network:"
 msgstr "Visit the link below to authorize the devices on your network:"
 
 msgctxt "#33003"
@@ -221,20 +221,20 @@ msgid "Cached torrents only"
 msgstr "Cached torrents only"
 
 msgctxt "#33051"
-msgid "Premiumize Authorization Reset"
+msgid "Premiumize Authorisation Reset"
 msgstr "Premiumize Authorization Reset"
 
 msgctxt "#33052"
-msgid "Premiumize Resolver Authorized"
+msgid "Premiumize Resolver Authorised"
 msgstr "Premiumize Resolver Authorized"
 
 msgctxt "#33053"
-msgid "Linksnappy Authorization Reset"
-msgstr ""
+msgid "Linksnappy Authorisation Reset"
+msgstr "Linksnappy Authorization Reset"
 
 msgctxt "#33054"
-msgid "Linksnappy Resolver Authorized"
-msgstr ""
+msgid "Linksnappy Resolver Authorised"
+msgstr "Linksnappy Resolver Authorized"
 
 msgctxt "#33055"
 msgid "Download rate:"
@@ -253,19 +253,19 @@ msgid "Cached filehosts only"
 msgstr ""
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr ""
+msgid "OffCloud Authorisation Reset"
+msgstr "OffCloud Authorization Reset"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr ""
+msgid "Offcloud Resolver Authorised"
+msgstr "Offcloud Resolver Authorized"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
 msgstr ""
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
+msgid "Keep transferring to OffCloud in the background?"
 msgstr ""
 
 msgctxt "#33063"

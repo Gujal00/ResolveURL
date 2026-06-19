@@ -249,20 +249,20 @@ msgid "Cached filehosts only"
 msgstr "Solo hosts almacenados en caché"
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr "JetLoad Autorizado "
+msgid "OffCloud Authorization Reset"
+msgstr "Restablecimiento de autorización de OffCloud"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr "TorBox Autorizado"
+msgid "OffCloud Resolver Authorized"
+msgstr "Resolutor de OffCloud autorizado"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "Visita este enlace: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
+msgstr "Descargando al almacenamiento de OffCloud"
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Introduce el PIN como [B][COLOR blue]{0}[/COLOR][/B] y luego haz clic en 'Link Account' (enlazar cuenta)"
+msgid "Keep transferring to OffCloud in the background?"
+msgstr "¿Continuar transfiriendo a OffCloud en segundo plano?"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"

@@ -254,20 +254,20 @@ msgid "Cached filehosts only"
 msgstr "Alleen in het cachegeheugen opgeslagen hosts"
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr "JetLoad Stream Autorisatie"
+msgid "OffCloud Authorization Reset"
+msgstr "OffCloud-autorisatie opnieuw ingesteld"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr "TorBox Stream Autorisatie"
+msgid "OffCloud Resolver Authorized"
+msgstr "OffCloud-resolver geautoriseerd"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "Bezoek deze link: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
+msgstr "Downloaden naar OffCloud-opslag"
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Voer de pincode in als [B][COLOR blue]{0}[/COLOR][/B] en klik vervolgens op 'Account koppelen'"
+msgid "Keep transferring to OffCloud in the background?"
+msgstr "Doorgaan met overzetten naar OffCloud op de achtergrond?"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"

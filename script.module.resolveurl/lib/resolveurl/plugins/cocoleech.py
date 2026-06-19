@@ -69,10 +69,6 @@ class CocoLeechResolver(ResolveUrl):
                     ]
                     return sources
                 else:
-                    # sources = []
-                    # for link in transfer_info.get('files'):
-                    #     if any(link.get('name').lower().endswith(x) for x in FORMATS):
-                    #         sources.append((link.get('size'), link.get('downloadUrl')))
                     sources = [
                         (link.get('size'), link.get('downloadUrl'))
                         for link in transfer_info.get('files')

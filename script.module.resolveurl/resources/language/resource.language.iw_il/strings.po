@@ -252,20 +252,20 @@ msgid "Cached filehosts only"
 msgstr "מארחי קבצים במטמון בלבד"
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr "הרשאה להזרמה מ-JetLoad"
+msgid "OffCloud Authorization Reset"
+msgstr "איפוס הרשאת OffCloud"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr "הרשאה להזרמה מ-TorBox"
+msgid "OffCloud Resolver Authorized"
+msgstr "פותר OffCloud מורשה"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "[B][COLOR blue]{0}[/COLOR][/B]בקר בקישור זה: "
+msgid "Downloading to OffCloud storage"
+msgstr "מוריד לאחסון OffCloud"
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "הזן את ה- PIN כ- [B][COLOR blue]{0}[/COLOR][/B] ולחץ על 'קישור חשבון'"
+msgid "Keep transferring to OffCloud in the background?"
+msgstr "ממשיך להעביר ל-OffCloud ברקע?"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"

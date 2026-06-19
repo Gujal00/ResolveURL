@@ -251,20 +251,20 @@ msgid "Cached filehosts only"
 msgstr "Numai gazdele fișierului în cache"
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr "Autorizare stream JetLoad"
+msgid "OffCloud Authorization Reset"
+msgstr "Resetare autorizare OffCloud"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr "Autorizare stream TorBox"
+msgid "OffCloud Resolver Authorized"
+msgstr "Rezolvator OffCloud autorizat"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "Accesați acest link: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
+msgstr "Descărcare în spațiul de stocare OffCloud"
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Introduceți codul PIN ca [B][COLOR blue]{0}[/COLOR][/B] și apoi faceți clic pe 'Link Account'"
+msgid "Keep transferring to OffCloud in the background?"
+msgstr "Continuați transferul în OffCloud în fundal?"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"

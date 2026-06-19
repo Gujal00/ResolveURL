@@ -255,20 +255,20 @@ msgid "Cached filehosts only"
 msgstr "Samo predmemorirane datoteke"
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr "JetLoad ovjera strujanja"
+msgid "OffCloud Authorization Reset"
+msgstr "Poništavanje autorizacije OffClouda"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr "TorBox ovjera strujanja"
+msgid "OffCloud Resolver Authorized"
+msgstr "OffCloud razrješivač autoriziran"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "Posjetite ovu vezu: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
+msgstr "Preuzimanje u OffCloud pohranu"
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Unesite PIN kao [B][COLOR blue]{0}[/COLOR][/B], a zatim kliknite 'Poveži račun'"
+msgid "Keep transferring to OffCloud in the background?"
+msgstr "Nastaviti prijenos u OffCloud u pozadini?"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorisation Reset"

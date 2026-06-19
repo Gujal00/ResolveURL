@@ -249,20 +249,20 @@ msgid "Cached filehosts only"
 msgstr "Pouze mezipaměti filehosts"
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr "Autorizace vysílání JetLoad"
+msgid "OffCloud Authorisation Reset"
+msgstr "Reset autorizace OffCloud"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr "Autorizace vysílání TorBox"
+msgid "OffCloud Resolver Authorised"
+msgstr "Resolver OffCloud autorizován"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "Navštivte tento odkaz: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
+msgstr "Stahování do úložiště OffCloud"
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Zadejte PIN jako [B][COLOR blue]{0}[/COLOR][/B] a poté klikněte na 'Propojit účet'"
+msgid "Keep transferring to OffCloud in the background?"
+msgstr "Pokračovat v přenosu do OffCloud na pozadí?"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"

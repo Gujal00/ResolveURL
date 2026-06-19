@@ -249,20 +249,20 @@ msgid "Cached filehosts only"
 msgstr "Cache-fil värdar endast"
 
 msgctxt "#33059"
-msgid "JetLoad Stream Authorization"
-msgstr "JetLoad strömauktorisering"
+msgid "OffCloud Authorisation Reset"
+msgstr "OffCloud-auktorisering återställd"
 
 msgctxt "#33060"
-msgid "TorBox Stream Authorization"
-msgstr "TorBox strömauktorisering"
+msgid "OffCloud Resolver Authorised"
+msgstr "OffCloud-lösare auktoriserad"
 
 msgctxt "#33061"
-msgid "Visit this link: [B][COLOR blue]{0}[/COLOR][/B]"
-msgstr "Besök den här länken: [B][COLOR blue]{0}[/COLOR][/B]"
+msgid "Downloading to OffCloud storage"
+msgstr "Laddas ner till OffCloud-lagring"
 
 msgctxt "#33062"
-msgid "Enter the PIN as [B][COLOR blue]{0}[/COLOR][/B] and then click 'Link Account'"
-msgstr "Ange PIN-koden som [B][COLOR blue]{0}[/COLOR][/B] och klicka sedan på 'Länka konto'"
+msgid "Keep transferring to OffCloud in the background?"
+msgstr "Fortsätter överföringen till OffCloud i bakgrunden?"
 
 msgctxt "#33063"
 msgid "Debrid-Link Authorization Reset"
