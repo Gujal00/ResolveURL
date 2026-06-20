@@ -1,20 +1,50 @@
-Version 5.1.203 (Jun 13, 2026)
+Version 5.1.204 (Jun 20, 2026)
 - Code Base Changes:
-    - Add QR-Code support for debrid auth
-    - Add json support to Net
-    - helpers b64urldecode function
-    - add ecdsa library
-
-- Resolvers Added:
     - None
 
+- Resolvers Added:
+    - boodstream
+    - offcloud
+
 - Resolvers Fixed/Updated:
-    - byse
-    - mixdrop
-    - voe
+    - cocoleech (device auth)
+    - kinoger
+    - uqload
+    - vidbasic
 
 - Resolvers Removed
-    - uptobox
+    - saruch
+    - smoozed
+    - solidfiles
+    - speedfiles
+    - streamdav
+    - streamgzzz
+    - streamhub
+    - streamsilk
+    - streamvid
+    - streamvids
+    - superitu
+    - swiftload
+    - truhd
+    - tubeload
+    - up4stream
+    - upbaam
+    - uploadbaz
+    - uploaddo
+    - uploadever
+    - uploadhub
+    - uploadingsite
+    - uploadraja
+    - uppit
+    - upvid
+    - upvideo
+    - userload
+    - vcdnlare
+    - veeHD
+    - vembx
+    - vidbob
+    -vidcloud
+    - vshare_eu
 
 - Languages Added/Updated
     - All

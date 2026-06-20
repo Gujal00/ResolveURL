@@ -1,3 +1,6 @@
+Version 1.1.22 (Jun 20, 2026)
+- fix crash when resolving magnet and no mimetype
+
 Version 1.1.21 (Jun 13, 2026)
 - Check Universal Resolvers enabled in SMR settings before using debrid
 
