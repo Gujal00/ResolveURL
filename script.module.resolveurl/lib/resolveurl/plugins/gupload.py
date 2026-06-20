@@ -20,7 +20,6 @@ from resolveurl.lib import helpers
 import ast
 import re
 import json
-from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -33,27 +32,7 @@ class GUploadResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
-        html = ''
-        if common.BP_ENABLED:
-            bp_url = urllib_parse.urljoin(common.BP_URL, '/v1')
-            data = {
-                "cmd": "request.get",
-                "url": web_url,
-                "maxTimeout": common.BP_TIMEOUT * 1000
-            }
-            r = self.net.http_POST(bp_url, form_data=data, jdata=True, timeout=common.BP_TIMEOUT + 20).content
-            r = json.loads(r)
-            if r.get('message') == 'Success':
-                r = r.get('solution')
-                html = r.get('response')
-        else:
-            import cloudscraper
-            scraper = cloudscraper.create_scraper(
-                browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False},
-                delay=4
-            )
-            html = scraper.get(web_url, headers=headers, timeout=20).text
-
+        html = self.net.http_GET(web_url, headers=headers).content
         key = re.search(r'''_p=(\[.*?])''', html)
         edata = re.findall(r'''_cfg\s*=\s*[^']+'([^']+)''', html)
         if key and edata:
