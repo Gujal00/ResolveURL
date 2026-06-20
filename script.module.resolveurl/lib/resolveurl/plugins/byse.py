@@ -17,6 +17,7 @@
 """
 
 import json
+from random import uniform
 from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
@@ -75,7 +76,7 @@ class ByseResolver(ResolveUrl):
                 'token': attest['token'],
                 'viewer_id': attest['viewer_id'],
                 'device_id': attest['device_id'],
-                'confidence': attest['confidence'],
+                'confidence': round(uniform(0.75, 0.94), 2)
             }
 
             captcha_url = '{0}api/videos/{1}/embed/captcha'.format(ref, media_id)
@@ -147,7 +148,6 @@ class ByseResolver(ResolveUrl):
         from hashlib import sha256
         from os import urandom
         from time import time
-        from random import uniform
         v_id = hexlify(urandom(x)).decode()
         d_id = hexlify(urandom(x)).decode()
         ctime = int(time())
@@ -188,11 +188,13 @@ class ByseResolver(ResolveUrl):
             'public_key': pub,
             'client': {
                 'user_agent': common.RAND_UA,
+                'bitness': '64',
                 'pixel_ratio': 1,
                 'screen_width': 1366,
                 'screen_height': 768,
                 'color_depth': 24,
-                'hardware_concurrency': 1,
+                'hardware_concurrency': 4,
+                'device_memory': 4,
                 'touch_points': 0,
                 'pointer_type': 'fine,hover'
             },
