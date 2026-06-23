@@ -133,3 +133,6 @@ dmypy.json
 
 # Mac Spotlight
 *.DS_Store
+
+# KotlinExamples
+/KotlinResolvers
