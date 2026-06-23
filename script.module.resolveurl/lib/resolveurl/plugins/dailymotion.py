@@ -31,7 +31,7 @@ class DailymotionResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
                    'Origin': 'https://www.dailymotion.com',
                    'Referer': 'https://www.dailymotion.com/'}
         js_result = json.loads(self.net.http_GET(web_url, headers=headers).content)
@@ -50,11 +50,13 @@ class DailymotionResolver(ResolveUrl):
         if quals:
             mbtext = self.net.http_GET(quals.get('auto')[0].get('url'), headers=headers).content
             sources = re.findall('NAME="(?P<label>[^"]+)".*(?:,PROGRESSIVE-URI="|\n)(?P<url>[^#]+)', mbtext)
-            vid_src = helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+            vid_src = helpers.pick_source(helpers.sort_sources_list(sources))
+            vid_src = vid_src.replace('https://', 'http://')
+            vid_src = vid_src + helpers.append_headers(headers)
             if subs:
                 return vid_src, subtitles
             return vid_src
         raise ResolverError('No playable video found.')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://www.dailymotion.com/player/metadata/video/{media_id}')
+        return self._default_get_url(host, media_id, template='https://www.dailymotion.com/player/metadata/video/{media_id}')
