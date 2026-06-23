@@ -31,7 +31,7 @@ class StreamTapeResolver(ResolveUrl):
         'streamadblockplus.com', 'shavetape.cash', 'streamtape.to', 'streamta.site',
         'streamadblocker.xyz', 'tapewithadblock.org', 'adblocktape.wiki', 'antiadtape.com',
         'streamtape.xyz', 'tapeblocker.com', 'streamnoads.com', 'tapeadvertisement.com',
-        'tapeadsenjoyer.com', 'watchadsontape.com'
+        'tapeadsenjoyer.com', 'watchadsontape.com', 'tpead.net', 'advertape.net'
     ]
     pattern = r'(?://|\.)(' \
               r'(?:s(?:tr)?(?:eam|have)?|tapewith|watchadson)?(?:adblock(?:er|plus)?|antiad|noads)?' \
