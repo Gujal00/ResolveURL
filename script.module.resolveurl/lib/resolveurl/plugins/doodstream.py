@@ -47,7 +47,7 @@ class DoodStreamResolver(ResolveUrl):
             host = 'playmogo.com'
 
         web_url = 'https://{0}/e/{1}'.format(host, media_id)
-        headers = {'User-Agent': common.RAND_UA,
+        headers = {'User-Agent': common.CHROME_USER_AGENT,
                    'Referer': 'https://{0}/'.format(host)}
 
         html = self.net.http_GET(web_url, headers=headers).content

@@ -42,7 +42,7 @@ class StreamTapeResolver(ResolveUrl):
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {
-            'User-Agent': common.RAND_UA,
+            'User-Agent': common.CHROME_USER_AGENT,
             'Referer': 'https://{0}/'.format(host)
         }
         try:
