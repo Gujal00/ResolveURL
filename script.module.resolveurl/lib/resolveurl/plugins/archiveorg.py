@@ -25,9 +25,12 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class ArchiveResolver(ResolveUrl):
     name = 'Archive'
     domains = ['archive.org']
-    pattern = r'(?://|\.)(archive\.org)/embed/([0-9a-zA-Z-_\.]+)'
+    pattern = r'(?://|\.)(archive\.org)/(?:embed|download)/([0-9a-zA-Z-_\.]+)'
 
     def get_media_url(self, host, media_id):
+        if 'archive.org/download/' in self.url:
+            return self.url + helpers.append_headers({'User-Agent': common.RAND_UA})
+
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
