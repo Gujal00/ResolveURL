@@ -21,12 +21,15 @@ from resolveurl.resolver import ResolveUrl
 
 class MidianResolver(ResolveUrl):
     name = 'Midian'
-    domains = ['midian.appboxes.co']
-    pattern = r'(?://|\.)(midian\.appboxes\.co)/(.+)'
+    domains = ['www.midian.appboxes.co', 'midian.appboxes.co']
+    pattern = r'(?://|\.)((?:www\.)?midian\.appboxes\.co)/(.+)'
 
     def get_media_url(self, host, media_id):
-        # Kotlin resolver just ensures https and passes through
+        if not host.startswith('www.'):
+            host = 'www.' + host
         return 'https://{}/{}'.format(host, media_id)
 
     def get_url(self, host, media_id):
+        if not host.startswith('www.'):
+            host = 'www.' + host
         return 'https://{}/{}'.format(host, media_id)
