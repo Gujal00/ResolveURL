@@ -34,8 +34,8 @@ class StreamTapeResolver(ResolveUrl):
         'tapeadsenjoyer.com', 'watchadsontape.com', 'tpead.net', 'advertape.net'
     ]
     pattern = r'(?://|\.)(' \
-              r'(?:s(?:tr)?(?:eam|have)?|tapewith|watchadson)?(?:adblock(?:er|plus)?|antiad|noads)?' \
-              r'(?:ta?p?e?|cloud)?(?:blocker|advertisement|adsenjoyer)?\.' \
+              r'(?:s(?:tr)?(?:eam|have)?|tapewith|watchadson|adver)?(?:adblock(?:er|plus)?|antiad|noads)?' \
+              r'(?:ta?p?e?|cloud)?(?:blocker|advertisement|adsenjoyer|ad)?\.' \
               r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki|club)' \
               r')/(?:e|v)/([0-9a-zA-Z]+)'
 
