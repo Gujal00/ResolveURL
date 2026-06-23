@@ -45,24 +45,13 @@ class DoodStreamResolver(ResolveUrl):
     def get_media_url(self, host, media_id, subs=False):
         if host not in ['doodstream.com', 'myvidplay.com', 'playmogo.com']:
             host = 'playmogo.com'
-        web_url = self.get_url(host, media_id)
+
+        web_url = 'https://{0}/e/{1}'.format(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://{0}/'.format(host)}
 
-        r = self.net.http_GET(web_url, headers=headers)
-        if r.get_url() != web_url:
-            host = re.findall(r'(?://|\.)([^/]+)', r.get_url())[0]
-            web_url = self.get_url(host, media_id)
+        html = self.net.http_GET(web_url, headers=headers).content
         headers.update({'Referer': web_url})
-        html = r.content
-
-        match = re.search(r'<iframe\s*src="([^"]+)', html)
-        if match:
-            url = urllib_parse.urljoin(web_url, match.group(1))
-            html = self.net.http_GET(url, headers=headers).content
-        else:
-            url = web_url.replace('/d/', '/e/')
-            html = self.net.http_GET(url, headers=headers).content
 
         if subs:
             subtitles = {}
