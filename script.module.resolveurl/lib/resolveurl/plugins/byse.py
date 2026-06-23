@@ -76,7 +76,7 @@ class ByseResolver(ResolveUrl):
                 'token': attest['token'],
                 'viewer_id': attest['viewer_id'],
                 'device_id': attest['device_id'],
-                'confidence': round(uniform(0.75, 0.94), 2)
+                'confidence': round(uniform(0.83, 0.94), 2)
             }
 
             captcha_url = '{0}api/videos/{1}/embed/captcha'.format(ref, media_id)
@@ -94,7 +94,7 @@ class ByseResolver(ResolveUrl):
             data = self.net.http_POST(playback_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
         else:
             playback_url = '{0}api/videos/{1}/embed/playback'.format(ref, media_id)
-            data = self.net.http_POST(playback_url, headers=headers, form_data=self.fp(16, 0.6, 0.9), jdata=True).json
+            data = self.net.http_POST(playback_url, headers=headers, form_data=self.fp(16, 0.83, 0.94), jdata=True).json
 
         sources = data.get('sources')
         if sources:
@@ -204,8 +204,7 @@ class ByseResolver(ResolveUrl):
 
     @staticmethod
     def re(t, e):
-        m = 0xFFFFFFFF
-        return (t << e | t >> (32 - e)) & m
+        return ((t << e) | (t >> (32 - e))) & 0xFFFFFFFF
 
     def ye(self, t):
         m = 0xFFFFFFFF
