@@ -31,13 +31,15 @@ class StreamTapeResolver(ResolveUrl):
         'streamadblockplus.com', 'shavetape.cash', 'streamtape.to', 'streamta.site',
         'streamadblocker.xyz', 'tapewithadblock.org', 'adblocktape.wiki', 'antiadtape.com',
         'streamtape.xyz', 'tapeblocker.com', 'streamnoads.com', 'tapeadvertisement.com',
-        'tapeadsenjoyer.com', 'watchadsontape.com'
+        'tapeadsenjoyer.com', 'watchadsontape.com', 'tpead.net', 'advertape.net'
     ]
-    pattern = r'(?://|\.)(' \
-              r'(?:s(?:tr)?(?:eam|have)?|tapewith|watchadson)?(?:adblock(?:er|plus)?|antiad|noads)?' \
-              r'(?:ta?p?e?|cloud)?(?:blocker|advertisement|adsenjoyer)?\.' \
-              r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki|club)' \
-              r')/(?:e|v)/([0-9a-zA-Z]+)'
+    pattern = (
+        r'(?://|\.)((?:s(?:tr)?(?:eam|have)?|tapewith|watchadson|adver)'
+        r'?(?:adblock(?:er|plus)?|antiad|noads)?'
+        r'(?:ta?p?e?|cloud)?(?:blocker|advertisement|adsenjoyer|ad)?\.'
+        r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki|club)'
+        r')/(?:e|v)/([0-9a-zA-Z]+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
