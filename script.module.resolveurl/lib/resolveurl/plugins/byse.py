@@ -17,10 +17,10 @@
 """
 
 import json
-from random import uniform
-from six.moves import urllib_parse
+from hashlib import sha256
+from random import random, uniform
+from six.moves import urllib_parse, urllib_error
 from resolveurl.lib import helpers
-from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
@@ -43,27 +43,40 @@ class ByseResolver(ResolveUrl):
         r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))'
         r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+)'
     )
+    UA = "Mozilla/5.0 (Linux; Android 10; TX6s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36"
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
         headers = {
-            'User-Agent': common.RAND_UA,
+            'User-Agent': self.UA,
             'Referer': ref,
             'Origin': ref[:-1]
         }
-        details_url = '{0}api/videos/{1}/embed/details'.format(ref, media_id)
-        details = self.net.http_GET(details_url, headers=headers).json
+        embed = ''
+        details_url = '{0}api/videos/{1}/details'.format(ref, media_id)
+        try:
+            details = self.net.http_GET(details_url, headers=headers).json
+        except urllib_error.HTTPError as e:
+            if e.code == 404:
+                embed = 'embed/'
+                details_url = '{0}api/videos/{1}/{2}details'.format(ref, media_id, embed)
+                try:
+                    details = self.net.http_GET(details_url, headers=headers).json
+                except urllib_error.HTTPError:
+                    raise ResolverError('Video Link Not Found')
+            else:
+                raise ResolverError('Video Link Not Found')
         embed_url = details.get('embed_frame_url')
         if embed_url:
             ref = urllib_parse.urljoin(embed_url, '/')
             headers.update({
+                'X-Embed-Parent': web_url,
                 'Referer': ref,
                 'Origin': ref[:-1],
-                'X-Embed-Parent': web_url
             })
 
-        settings_url = '{0}api/videos/{1}/embed/settings'.format(ref, media_id)
+        settings_url = '{0}api/videos/{1}/{2}settings'.format(ref, media_id, embed)
         settings = self.net.http_GET(settings_url, headers=headers).json
 
         if settings.get('captcha_required'):
@@ -76,24 +89,24 @@ class ByseResolver(ResolveUrl):
                 'token': attest['token'],
                 'viewer_id': attest['viewer_id'],
                 'device_id': attest['device_id'],
-                'confidence': round(uniform(0.83, 0.94), 2)
+                'confidence': attest['confidence']
             }
 
-            captcha_url = '{0}api/videos/{1}/embed/captcha'.format(ref, media_id)
+            captcha_url = '{0}api/videos/{1}/{2}captcha'.format(ref, media_id, embed)
             captcha = self.net.http_POST(captcha_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
             solution = self.er(captcha['pow_nonce'], captcha['pow_difficulty'])
             if solution is None:
                 raise ResolverError('Unable to solve captcha')
 
-            verify_url = '{0}api/videos/{1}/embed/captcha/verify'.format(ref, media_id)
+            verify_url = '{0}api/videos/{1}/{2}captcha/verify'.format(ref, media_id, embed)
             post_data = {'pow_token': captcha['pow_token'], 'solution': solution, 'fingerprint': fingerprint}
             verify = self.net.http_POST(verify_url, headers=headers, form_data=post_data, jdata=True).json
             headers.update({'X-Captcha-Token': verify.get('token')})
 
-            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref, media_id)
+            playback_url = '{0}api/videos/{1}/{2}playback'.format(ref, media_id, embed)
             data = self.net.http_POST(playback_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
         else:
-            playback_url = '{0}api/videos/{1}/embed/playback'.format(ref, media_id)
+            playback_url = '{0}api/videos/{1}/{2}playback'.format(ref, media_id, embed)
             data = self.net.http_POST(playback_url, headers=headers, form_data=self.fp(16, 0.83, 0.94), jdata=True).json
 
         sources = data.get('sources')
@@ -135,6 +148,10 @@ class ByseResolver(ResolveUrl):
     def ft(e):
         return helpers.b64urldecode(e, binary=True)
 
+    @staticmethod
+    def fh(e):
+        return helpers.b64urlencode(sha256(str(e).encode('ascii')).digest(), strip=True)
+
     def xn(self, e, v):
         if v:
             v = int(v)
@@ -166,19 +183,18 @@ class ByseResolver(ResolveUrl):
         t_data.pop('exp')
         return {'fingerprint': t_data}
 
-    @staticmethod
-    def wn(ch):
+    def wn(self, ch):
         from resolveurl.lib.ecdsa import SigningKey, NIST256p
-        from hashlib import sha256
         sk = SigningKey.generate(curve=NIST256p, hashfunc=sha256)
-        vk = sk.verifying_key.pubkey.point
+        vk = sk.verifying_key.to_string()
         signature = sk.sign(ch.get('nonce').encode(), hashfunc=sha256)
         pub = {
             'crv': 'P-256', 'ext': True, 'key_ops': ['verify'], 'kty': 'EC',
-            'x': helpers.b64urlencode(vk.x().to_bytes(32, 'big'), strip=True),
-            'y': helpers.b64urlencode(vk.y().to_bytes(32, 'big'), strip=True),
+            'x': helpers.b64urlencode(vk[:32], strip=True),
+            'y': helpers.b64urlencode(vk[32:], strip=True)
         }
         sig = helpers.b64urlencode(signature, strip=True)
+        r = random()
         return {
             'viewer_id': '',
             'device_id': '',
@@ -187,16 +203,43 @@ class ByseResolver(ResolveUrl):
             'signature': sig,
             'public_key': pub,
             'client': {
-                'user_agent': common.RAND_UA,
-                'bitness': '64',
+                'user_agent': self.UA,
+                'architecture': 'arm',
+                'bitness': '32',
+                'platform': 'Android',
+                'platform_version': '10.0.0',
+                'model': 'TX6s',
+                'ua_full_version': '137.0.7337.0',
+                'brand_full_versions': [
+                    {
+                        'brand': 'Chromium',
+                        'version': '137.0.7337.0'
+                    }
+                ],
                 'pixel_ratio': 1,
-                'screen_width': 1366,
-                'screen_height': 768,
+                'screen_width': 1280,
+                'screen_height': 720,
                 'color_depth': 24,
+                'languages': [
+                    'en-US'
+                ],
+                'timezone': 'America/New_York',
                 'hardware_concurrency': 4,
-                'device_memory': 4,
-                'touch_points': 0,
-                'pointer_type': 'fine,hover'
+                'device_memory': 2,
+                'touch_points': 1,
+                'webgl_vendor': 'Google Inc. (ARM)',
+                'webgl_renderer': 'ANGLE (ARM, Mali-G31 MP2, OpenGL ES 3.2)',
+                'canvas_hash': self.fh(r),
+                'audio_hash': self.fh(r + 1),
+                'webgl_params_hash': self.fh(r + 2),
+                'fonts_hash': self.fh(r + 3),
+                'codecs_hash': self.fh(r + 4),
+                'media_devices': 'ai1ao1vi4',
+                'pointer_type': 'coarse',
+                'extra': {
+                    'vendor': 'Google Inc.',
+                    'appVersion': self.UA.lstrip('Mozilla/')
+                }
             },
             'storage': {},
             'attributes': {'entropy': 'high'}
@@ -257,8 +300,7 @@ class ByseResolver(ResolveUrl):
     @staticmethod
     def wr(t):
         e = 0
-        for r in range(len(t)):
-            n = int(t[r])
+        for n in t:
             if n == 0:
                 e += 32
                 continue
@@ -271,9 +313,10 @@ class ByseResolver(ResolveUrl):
             return '0'
         start = time.time()
         s = 0
+        t += ':'
         while True:
             for _ in range(1024):
-                d = self.gr((t + ':' + str(s)).encode('ascii'))
+                d = self.gr((t + str(s)).encode('ascii'))
                 if self.wr(d) >= e:
                     return str(s)
                 s += 1
