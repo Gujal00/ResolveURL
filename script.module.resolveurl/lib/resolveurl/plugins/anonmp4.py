@@ -17,7 +17,6 @@
 """
 
 import re
-import json
 from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
@@ -33,17 +32,15 @@ class AnonMP4Resolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        a = re.search(r"SINGLE_API_URL\s*=\s*'([^']+)", html)
+        a = re.search(r"res\s*=\s*await\s*fetch\('([^']+)", html)
         if a:
             ref = urllib_parse.urljoin(web_url, '/')
             headers.update({'Referer': ref, 'Origin': ref[:-1]})
-            html = self.net.http_GET(a.group(1), headers=headers).content
-            r = json.loads(html)
+            r = self.net.http_GET(a.group(1), headers=headers).json
             if 'tracks' in r.keys():
                 tracks = [(x.get('track_name'), x.get('track_url')) for x in r.get('tracks')]
                 surl = helpers.pick_source(tracks, auto_pick=False)
-                html = self.net.http_GET(surl, headers=headers).content
-                r = json.loads(html)
+                r = self.net.http_GET(surl, headers=headers).json
 
             if 'hls' in r.keys():
                 url = r.get('hls') + helpers.append_headers(headers)
