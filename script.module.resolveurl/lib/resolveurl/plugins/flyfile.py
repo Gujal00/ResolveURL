@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
+from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -29,15 +29,13 @@ class FlyFileResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        ref = 'https://{0}/'.format(host)
         headers = {
             'User-Agent': common.RAND_UA,
-            'Referer': ref,
-            'Origin': ref[:-1]
+            'Referer': web_url,
+            'Origin': urllib_parse.urljoin(web_url, '/')[:-1]
         }
-        resp = self.net.http_GET(web_url, headers=headers).content
-        data = json.loads(resp)
-
+        assign_url = 'https://api.{0}/api/streaming/assign/{1}'.format(host, media_id)
+        data = self.net.http_GET(assign_url, headers=headers).json
         if data.get('url') and data.get('token'):
             stream_url = '{0}/hls/{1}/master.m3u8'.format(
                 data['url'].rstrip('/'),
@@ -48,4 +46,4 @@ class FlyFileResolver(ResolveUrl):
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://api.{host}/api/streaming/assign/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')

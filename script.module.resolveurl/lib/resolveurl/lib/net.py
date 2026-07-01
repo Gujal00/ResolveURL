@@ -408,27 +408,7 @@ class Net:
                 if 'challenge' in e.hdrs.get('cf-mitigated', ''):
                     from resolveurl.resolver import ResolverError
                     raise ResolverError('Cloudflare challenge')
-                import ssl
-                ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-                ctx.set_alpn_protocols(['http/1.1'])
-                handlers = [urllib_request.HTTPSHandler(context=ctx)]
-                opener = urllib_request.build_opener(*handlers)
-                try:
-                    response = opener.open(req, timeout=timeout)
-                except urllib_error.HTTPError as e:
-                    if e.code == 403:
-                        ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
-                        ctx.set_alpn_protocols(['http/1.1'])
-                        handlers = [urllib_request.HTTPSHandler(context=ctx)]
-                        opener = urllib_request.build_opener(*handlers)
-                        try:
-                            response = opener.open(req, timeout=timeout)
-                        except urllib_error.HTTPError:
-                            raise
-                        except urllib_error.URLError:
-                            raise
-            else:
-                raise
+            raise
 
         return HttpResponse(response)
 
