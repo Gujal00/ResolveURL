@@ -18,19 +18,43 @@
 
 import re
 from resolveurl import common
+from resolveurl.common import i18n
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class ArchiveResolver(ResolveUrl):
-    name = 'Archive'
+class ArchiveOrgResolver(ResolveUrl):
+    name = 'Archive_Org'
     domains = ['archive.org']
-    pattern = r'(?://|\.)(archive\.org)/embed/([0-9a-zA-Z-_\.]+)'
+    pattern = r'(?://|\.)(archive\.org)/(?:embed|details|download)/([0-9a-zA-Z-_\.]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
+        needs_login = re.search(r'''class="theatre-title">You\s*must\s*log\s*in''', html)
+
+        if needs_login:
+            username, password = self.get_setting('username'), self.get_setting('password')
+            if not (username and password):
+                raise ResolverError(self.name + ' username & password required')
+            login_url = 'https://archive.org/services/account/login/'
+            resp = self.net.http_GET(login_url, headers=headers).json
+            token = resp.get('value').get('token')
+            data = {
+                'username': username,
+                'password': password,
+                't': token
+            }
+            try:
+                resp = self.net.http_POST(login_url, form_data=data, headers=headers, jdata=True)
+                cookie = resp.get_cookies()
+                if cookie:
+                    headers.update({'Cookie': cookie})
+                html = self.net.http_GET(web_url, headers=headers).content
+            except:
+                raise ResolverError('Login unsuccessful')
+
         sources = re.findall(r'"file":"(?P<url>[^"]+)[^}]+?label":"(?P<label>[\d]+p?)', html)
         if sources:
             sources = [(x[1], x[0]) for x in sources]
@@ -40,3 +64,10 @@ class ArchiveResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
+
+    @classmethod
+    def get_settings_xml(cls):
+        xml = super(cls, cls).get_settings_xml(include_login=False)
+        xml.append('<setting id="%s_username" enable="eq(-1,true)" type="text" label="%s" default=""/>' % (cls.__name__, i18n('username')))
+        xml.append('<setting id="%s_password" enable="eq(-2,true)" type="text" label="%s" option="hidden" default=""/>' % (cls.__name__, i18n('password')))
+        return xml
