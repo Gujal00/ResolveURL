@@ -46,6 +46,7 @@ class DrakkarResolver(ResolveUrl):
         html = ''
         if r:
             _ts = int(time.time() * 1000)
+            common.kodi.sleep(1500)
             if 'fromCharCode' in r.group(1):
                 s = re.findall(r'=\s*(\[[^;]+)', r.group(1))
                 if len(s) == 2:
