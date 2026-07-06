@@ -29,7 +29,7 @@ class VidNeoResolver(ResolveUrl):
     domains = ['vidneo.cc']
     pattern = r'(?://|\.)(vidneo\.cc)/e/([0-9a-zA-Z]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
@@ -41,7 +41,14 @@ class VidNeoResolver(ResolveUrl):
                 if src.startswith('/'):
                     src = urllib_parse.urljoin(web_url, src)
                 headers.update({'Referer': web_url})
-                return src + helpers.append_headers(headers)
+                src += helpers.append_headers(headers)
+                if subs:
+                    subtitles = {}
+                    s = jd.get('subtitleTracks')
+                    if s:
+                        subtitles = {x.get('label'): urllib_parse.urljoin(web_url, '/api' + x.get('vttPath')) for x in s}
+                    return src, subtitles
+                return src
         raise ResolverError('Video Link Not Found')
 
     def get_url(self, host, media_id):
