@@ -35,7 +35,7 @@ class DrakkarResolver(ResolveUrl):
     domains = ['drakkar.st']
     pattern = r'(?://|\.)(drakkar\.st)/v/([0-9a-zA-Z-_]+)'
 
-    def get_media_url(self, host, media_id):
+    def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
@@ -97,7 +97,15 @@ class DrakkarResolver(ResolveUrl):
         if html:
             r = re.search(r"videoSrc:\s*'([^']+)", html)
             if r:
-                return r.group(1) + helpers.append_headers(headers)
+                url = r.group(1) + helpers.append_headers(headers)
+                if subs:
+                    subtitles = {}
+                    s = re.search(r"subtitles:\s*(\[.+?]),", html)
+                    if s:
+                        s = json.loads(s.group(1))
+                        subtitles = {x.get('lang'): x.get('src') for x in s}
+                    return url, subtitles
+                return url
 
         raise ResolverError('Video Link Not Found')
 
