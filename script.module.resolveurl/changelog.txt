@@ -1,23 +1,49 @@
-Version 5.1.205 (Jul 01, 2026)
+Version 5.1.206 (Jul 12, 2026)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - vids_st
+    - cloudb
+    - drakkar
+    - vidneo
 
 - Resolvers Fixed/Updated:
-    - archive_org
-    - anonmp4
-    - byse
-    - flyfile
-    - gupload
-    - streamix
-    - streamtape
-    - vidmoly
-    - waaw
+    - filelions
 
 - Resolvers Removed
-    - None
+    - aliez
+    - anonymfile
+    - bannedvideo
+    - brplayer
+    - castamp
+    - clipwatching
+    - cloudvideo
+    - darkibox
+    - dembed
+    - desiupload
+    - downace
+    - drkvid
+    - drop
+    - flashx
+    - gamovideo
+    - goload
+    - govad
+    - holavid
+    - hurrystream
+    - justok
+    - juxxi
+    - latestview
+    - lewdhost
+    - moflix
+    - myfeminist
+    - myupload
+    - neohd
+    - oneupload
+    - pandafiles
+    - poophd
+    - racaty
+    - rovideo
+
 
 - Languages Added/Updated
     - None
