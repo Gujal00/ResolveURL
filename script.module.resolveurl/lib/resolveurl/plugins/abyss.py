@@ -28,9 +28,9 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class AbyssResolver(ResolveUrl):
     name = 'Abyss'
-    domains = ['abysscdn.com', 'hydraxcdn.biz', 'short.icu', 'embedplayabyss.top']
+    domains = ['abysscdn.com', 'hydraxcdn.biz', 'short.icu', 'embedplayabyss.top', 'abyssplayer.com']
     pattern = (
-        r'(?://|\.)((?:abysscdn|hydraxcdn|short|embedplayabyss)'
+        r'(?://|\.)((?:abysscdn|hydraxcdn|short|embedplayabyss|abyssplayer)'
         r'\.(?:com|biz|icu|top))'
         r'(?:/\?v=|/player\.html\?v=|/)([0-9a-zA-Z_-]+)'
     )
@@ -66,6 +66,9 @@ class AbyssResolver(ResolveUrl):
     def get_url(self, host, media_id):
         if host in ['short.icu', 'embedplayabyss.top']:
             host = 'abysscdn.com'
+        if host == 'abyssplayer.com':
+            # abyssplayer.com serves the player straight off the path, not ?v=
+            return self._default_get_url(host, media_id, 'https://{host}/{media_id}')
         return self._default_get_url(host, media_id, 'https://{host}/?v={media_id}')
 
     def _extract_datas_payload(self, html):
