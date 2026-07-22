@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidBasicResolver(ResolveUrl):
     name = 'VidBasic'
-    domains = ['vidbasic.top']
-    pattern = r'(?://|\.)(vidbasic\.top)/(?:embed)/([0-9a-zA-Z]+)'
+    domains = ['vidbasic.top', 'vidb.top']
+    pattern = r'(?://|\.)(vidbasic\.top|vidb\.top)/(?:embed)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         headers = {'User-Agent': common.RAND_UA}
