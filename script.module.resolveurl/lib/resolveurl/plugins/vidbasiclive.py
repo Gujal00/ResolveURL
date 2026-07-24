@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from six.moves import urllib_parse
 from resolveurl.lib import helpers
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
@@ -23,24 +24,19 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidBasicLiveResolver(ResolveUrl):
     name = 'VidBasicLive'
-    # vidbasic.live is NOT the same backend as vidbasic.top/vidb.top (see vidbasic.py):
-    # embed path is /stream/{type}/{id} rather than /embed/{id}, and the id in the
-    # url IS the realid the player uses - no need to fetch the embed page first.
-    # /stream/getSources?id={id} returns plain JSON (no AES/crypto layer - confirmed
-    # live), and the CDN file host requires Referer/Origin: vidbasic.live or it 403s.
     domains = ['vidbasic.live']
     pattern = r'(?://|\.)(vidbasic\.live)/stream/(?:[a-zA-Z0-9-]+/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        root = 'https://{0}/'.format(host)
+        web_url = self.get_url(host, media_id)
+        root = urllib_parse.urljoin(web_url, '/')
         headers = {
             'User-Agent': common.RAND_UA,
             'Referer': root,
             'Origin': root[:-1],
             'X-Requested-With': 'XMLHttpRequest',
         }
-        sources_url = '{0}stream/getSources?id={1}'.format(root, media_id)
-        data = self.net.http_GET(sources_url, headers=headers).json
+        data = self.net.http_GET(web_url, headers=headers).json
         murl = data.get('sources', {}).get('file')
         if murl:
             headers.pop('X-Requested-With')
@@ -49,4 +45,4 @@ class VidBasicLiveResolver(ResolveUrl):
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/stream/s-1/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/stream/getSources?id={media_id}')
