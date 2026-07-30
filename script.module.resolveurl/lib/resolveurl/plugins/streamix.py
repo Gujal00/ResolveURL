@@ -25,8 +25,14 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamixResolver(ResolveUrl):
     name = 'Streamix'
-    domains = ['streamix.so', 'stmix.io', 'vidara.so', 'vidara.to', 'vidaraa.cc', 'vidmatrixa.com']
-    pattern = r'(?://|\.)((?:st(?:rea)?mix|vid(?:ar|matrix)a*)\.(?:so|io|to|cc|com))/(?:e|v)/([0-9a-zA-Z]+)'
+    domains = [
+        'streamix.so', 'stmix.io', 'vidara.so', 'vidara.to', 'vidaraa.cc', 'vidmatrixa.com',
+        'kinoger.pw'
+    ]
+    pattern = (
+        r'(?://|\.)((?:st(?:rea)?mix|vid(?:ar|matrix)a*|kinoger)'
+        r'\.(?:so|io|to|cc|com|pw))/(?:e|v)/([0-9a-zA-Z]+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
