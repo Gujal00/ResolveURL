@@ -216,8 +216,15 @@ class Net:
         if not self._ssl_verify or node == 'xboxone':
             try:
                 import ssl
-                ctx = ssl.create_default_context()
-                ctx.maximum_version = ssl.PROTOCOL_TLSv1_3
+                if six.PY3:
+                    ctx = ssl.create_default_context()
+                    ctx.minimum_version = ssl.TLSVersion.TLSv1_1
+                    ctx.maximum_version = ssl.TLSVersion.TLSv1_3
+                else:
+                    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
+                    ctx.options |= ssl.OP_NO_SSLv2
+                    ctx.options |= ssl.OP_NO_SSLv3
+                    ctx.options |= ssl.OP_NO_TLSv1
                 ctx.set_alpn_protocols(['http/1.1'])
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
@@ -230,8 +237,15 @@ class Net:
         else:
             try:
                 import ssl
-                ctx = ssl.create_default_context(cafile=CERT_FILE)
-                ctx.maximum_version = ssl.PROTOCOL_TLSv1_3
+                if six.PY3:
+                    ctx = ssl.create_default_context(cafile=CERT_FILE)
+                    ctx.minimum_version = ssl.TLSVersion.TLSv1_1
+                    ctx.maximum_version = ssl.TLSVersion.TLSv1_3
+                else:
+                    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS, cafile=CERT_FILE)
+                    ctx.options |= ssl.OP_NO_SSLv2
+                    ctx.options |= ssl.OP_NO_SSLv3
+                    ctx.options |= ssl.OP_NO_TLSv1
                 ctx.set_alpn_protocols(['http/1.1'])
                 if self._http_debug:
                     handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
