@@ -26,11 +26,11 @@ class StreamRubyResolver(ResolveUrl):
     name = 'StreamRuby'
     domains = [
         'streamruby.com', 'sruby.xyz', 'rubystream.xyz', 'tuktukcimamulti.buzz',
-        'stmruby.com', 'rubystm.com', 'rubyvid.com', 'kinoger.be', 'rubyvidhub.com'
+        'stmruby.com', 'rubystm.com', 'rubyvid.com', 'rubyvidhub.com'
     ]
     pattern = (
-        r'(?://|\.)((?:s?(?:tream|tm)?ruby(?:stream|stm|vid(?:hub)?)?|kinoger|tuktukcimamulti)'
-        r'\.(?:com|xyz|buzz|be))/(?:embed-|e/|d/)?(\w+)'
+        r'(?://|\.)((?:s?(?:tream|tm)?ruby(?:stream|stm|vid(?:hub)?)?|tuktukcimamulti)'
+        r'\.(?:com|xyz|buzz))/(?:embed-|e/|d/)?(\w+)'
     )
 
     def get_media_url(self, host, media_id, subs=False):
