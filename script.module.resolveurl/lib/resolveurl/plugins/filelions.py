@@ -37,14 +37,14 @@ class FileLionsResolver(ResolveUrl):
         'streamvid.su', 'movearnpre.com', 'bingezove.com', 'dingtezuni.com', 'dinisglows.com',
         'ryderjet.com', 'e4xb5c2xnz.sbs', 'smoothpre.com', 'videoland.sbs', 'taylorplayer.com',
         'mivalyo.com', 'vidhidefast.com', 'peytonepre.com', 'dintezuvio.com', 'callistanise.com',
-        'minochinos.com', 'earnvids.xyz', 'lookmovie2.skin', 'morencius.com'
+        'minochinos.com', 'earnvids.xyz', 'lookmovie2.skin', 'morencius.com', 'kinoger.be'
     ]
     pattern = r'(?://|\.)((?:filelions|ajmidyadfihayh|alhayabambi|techradar|moflix-stream|azipcdn|' \
               r'[mad]lions|lumiawatch|javplaya|javlion|fviplions|egsyxutd|fdewsdc|vidhide|peytone|' \
               r'anime7u|coolciima|gsfomqu|katomen|dht|6sfkrspw4u|ryderjet|e4xb5c2xnz|smooth|morencius|' \
               r'streamvid|movearnpre|bingezove|dingtezuni|dinisglows|motvy55|videoland|mivalyo|lookmovie2|' \
-              r'taylorplayer|dintezuvio|callistanise|minochinos|earnvids)(?:pro|vip|pre|plus|hub|fast)?' \
-              r'\.(?:su|com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site|fun|skin))' \
+              r'taylorplayer|dintezuvio|callistanise|minochinos|earnvids|kinoger)(?:pro|vip|pre|plus|hub|fast)?' \
+              r'\.(?:su|com?|to|sbs|ink|click|pro|live|store|xyz|top|online|site|fun|skin|be))' \
               r'/((?:s|v|f|d|e|embed|file|download)/[0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id, subs=False):
