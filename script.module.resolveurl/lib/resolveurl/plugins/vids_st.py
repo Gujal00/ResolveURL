@@ -30,7 +30,8 @@ class VidsStResolver(ResolveGeneric):
             self.get_url(host, media_id),
             patterns=[r'''const\s*url\s*=\s*"(?P<url>[^"]+)'''],
             generic_patterns=False,
-            referer=False
+            referer=False,
+            ssl_verify=False
         )
 
     def get_url(self, host, media_id):
