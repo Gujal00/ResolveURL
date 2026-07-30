@@ -27,7 +27,7 @@ class VoeResolver(ResolveUrl):
     name = 'Voe'
     domains = [
         'voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com', 'un-block-voe.net',
-        'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com', 'jonathansociallike.com'
+        'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com', 'jonathansociallike.com',
         'voeun-block.net', 'v-o-e-unblock.com', 'edwardarriveoften.com', 'nathanfromsubject.com',
         'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com', 'kennethofficialitem.com',
         'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com', 'lukecomparetwo.com',
@@ -56,7 +56,8 @@ class VoeResolver(ResolveUrl):
         'lukesitturn.com', 'mikaylaarealike.com', 'christopheruntilpoint.com', 'walterprettytheir.com',
         'crystaltreatmenteast.com', 'lauradaydo.com', 'smoki.cc', 'lancewhosedifficult.com',
         'ogladaj.me', 'dianaavoidthey.com', 'jefferycontrolmodel.com', 'marissasharecareer.com',
-        'charlestoughrace.com', 'ianrequireadult.com', 'timmaybealready.com', 'jessicayeahcatch.com'
+        'charlestoughrace.com', 'ianrequireadult.com', 'timmaybealready.com', 'jessicayeahcatch.com',
+        'kinoger.ru'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = (
@@ -83,8 +84,8 @@ class VoeResolver(ResolveUrl):
         r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|'
         r'lukesitturn|mikaylaarealike|christopheruntilpoint|walterprettytheir|crystaltreatmenteast|'
         r'lauradaydo|smoki|lancewhosedifficult|ogladaj|dianaavoidthey|jefferycontrolmodel|marissasharecareer|'
-        r'charlestoughrace|ianrequireadult|timmaybealready|jessicayeahcatch|'
-        r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc|me))/'
+        r'charlestoughrace|ianrequireadult|timmaybealready|jessicayeahcatch|kinoger|'
+        r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc|me|ru))/'
         r'(?:e/)?([0-9A-Za-z]+)'
     )
 
