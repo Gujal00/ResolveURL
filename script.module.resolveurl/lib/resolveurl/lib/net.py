@@ -237,20 +237,15 @@ class Net:
         else:
             try:
                 import ssl
-                if six.PY3:
+                if ssl.OPENSSL_VERSION_INFO > (3, 0, 0):
                     ctx = ssl.create_default_context(cafile=CERT_FILE)
                     ctx.minimum_version = ssl.TLSVersion.TLSv1_1
                     ctx.maximum_version = ssl.TLSVersion.TLSv1_3
-                else:
-                    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS, cafile=CERT_FILE)
-                    ctx.options |= ssl.OP_NO_SSLv2
-                    ctx.options |= ssl.OP_NO_SSLv3
-                    ctx.options |= ssl.OP_NO_TLSv1
-                ctx.set_alpn_protocols(['http/1.1'])
-                if self._http_debug:
-                    handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
-                else:
-                    handlers += [urllib_request.HTTPSHandler(context=ctx)]
+                    ctx.set_alpn_protocols(['http/1.1'])
+                    if self._http_debug:
+                        handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
+                    else:
+                        handlers += [urllib_request.HTTPSHandler(context=ctx)]
             except:
                 pass
 
