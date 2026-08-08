@@ -35,12 +35,12 @@ class ByseResolver(ResolveUrl):
         'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', 'f51rm.com',
         'xcoic.com', 'filemoon.nl', 'boosteradx.online', 'streamlyplayer.online', 'bysewihe.com',
         'byselapuix.com', 'embedplaybyse.top', 'sb1254w9megshle.org', 'streamlyplayero.online',
-        'moflix-stream.link'
+        'moflix-stream.link', 'bysezoxexe.com'
     ]
     pattern = (
         r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|'
         r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx|streamlyplayero?|moflix-stream|'
-        r'(?:embedplay)?byse(?:sayeveum|tayico|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho|wihe|lapuix|vepoin)?)'
+        r'(?:embedplay)?byse(?:sayeveum|tayico|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho|wihe|lapuix|vepoin|zoxexe)?)'
         r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))'
         r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+)'
     )
@@ -85,7 +85,7 @@ class ByseResolver(ResolveUrl):
             challenge = self.net.http_POST(challenge_url, headers=headers, form_data={}).json
 
             attest_url = '{0}api/videos/access/attest'.format(ref)
-            attest = self.net.http_POST(attest_url, headers=headers, form_data=self.wn(challenge), jdata=True).json
+            attest = self.net.http_POST(attest_url, headers=headers, form_data=self.wn(challenge), jdata=True, timeout=40).json
             fingerprint = {
                 'token': attest['token'],
                 'viewer_id': attest['viewer_id'],
@@ -94,21 +94,21 @@ class ByseResolver(ResolveUrl):
             }
 
             captcha_url = '{0}api/videos/{1}/{2}captcha'.format(ref, media_id, embed)
-            captcha = self.net.http_POST(captcha_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
+            captcha = self.net.http_POST(captcha_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True, timeout=40).json
             solution = self.er(captcha['pow_nonce'], captcha['pow_difficulty'])
             if solution is None:
                 raise ResolverError('Unable to solve captcha')
 
             verify_url = '{0}api/videos/{1}/{2}captcha/verify'.format(ref, media_id, embed)
             post_data = {'pow_token': captcha['pow_token'], 'solution': solution, 'fingerprint': fingerprint}
-            verify = self.net.http_POST(verify_url, headers=headers, form_data=post_data, jdata=True).json
+            verify = self.net.http_POST(verify_url, headers=headers, form_data=post_data, jdata=True, timeout=40).json
             headers.update({'X-Captcha-Token': verify.get('token')})
 
             playback_url = '{0}api/videos/{1}/{2}playback'.format(ref, media_id, embed)
-            data = self.net.http_POST(playback_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True).json
+            data = self.net.http_POST(playback_url, headers=headers, form_data={'fingerprint': fingerprint}, jdata=True, timeout=40).json
         else:
             playback_url = '{0}api/videos/{1}/{2}playback'.format(ref, media_id, embed)
-            data = self.net.http_POST(playback_url, headers=headers, form_data=self.fp(16, 0.83, 0.94), jdata=True).json
+            data = self.net.http_POST(playback_url, headers=headers, form_data=self.fp(16, 0.83, 0.94), jdata=True, timeout=40).json
 
         sources = data.get('sources')
         if sources:
