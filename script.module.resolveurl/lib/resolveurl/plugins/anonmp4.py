@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class AnonMP4Resolver(ResolveUrl):
     name = 'AnonMP4'
-    domains = ['anonmp4.help']
-    pattern = r'(?://|\.)(anonmp4\.help)/embed/([0-9a-zA-Z]+)'
+    domains = ['anonmp4.help', 'anonmp4.art']
+    pattern = r'(?://|\.)(anonmp4\.(?:help|art))/embed/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
