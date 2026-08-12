@@ -107,7 +107,10 @@ class VoeResolver(ResolveUrl):
                 s = self.voe_decode(r.group(1), repl.group(1))
                 sources = [(s.get(x).split("?")[0].split(".")[-1], s.get(x)) for x in ['file', 'source', 'direct_access_url'] if x in s.keys()]
                 if len(sources) > 1:
-                    sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
+                    if self.get_setting('prefer_hls') == 'true':
+                        sources.sort(key=lambda x: 0 if 'm3u8' in x[0].lower() else 1)
+                    else:
+                        sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
                     headers.update({'verifypeer': 'false'})
                 stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
                 if subs:
@@ -134,6 +137,12 @@ class VoeResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
+
+    @classmethod
+    def get_settings_xml(cls):
+        xml = super(cls, cls).get_settings_xml()
+        xml.append('<setting id="{0}_prefer_hls" type="bool" label="Prefer HLS over MP4" default="false"/>'.format(cls.__name__))
+        return xml
 
     @staticmethod
     def voe_decode(ct, luts):
