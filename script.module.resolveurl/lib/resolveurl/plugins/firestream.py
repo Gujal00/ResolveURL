@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class FireStreamResolver(ResolveUrl):
     name = 'FireStream'
     domains = ['firestream.to']
-    pattern = r'(?://|\.)(firestream\.to)/(?:e|v)/([0-9a-zA-Z_]+)'
+    pattern = r'(?://|\.)(firestream\.to)/(?:e|v)/([0-9a-zA-Z_-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
