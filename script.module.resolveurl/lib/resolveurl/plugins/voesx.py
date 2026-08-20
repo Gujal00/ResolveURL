@@ -57,7 +57,7 @@ class VoeResolver(ResolveUrl):
         'crystaltreatmenteast.com', 'lauradaydo.com', 'smoki.cc', 'lancewhosedifficult.com',
         'ogladaj.me', 'dianaavoidthey.com', 'jefferycontrolmodel.com', 'marissasharecareer.com',
         'charlestoughrace.com', 'ianrequireadult.com', 'timmaybealready.com', 'jessicayeahcatch.com',
-        'kinoger.ru'
+        'kinoger.ru', 'johnbeyondnation.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = (
@@ -84,7 +84,7 @@ class VoeResolver(ResolveUrl):
         r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|'
         r'lukesitturn|mikaylaarealike|christopheruntilpoint|walterprettytheir|crystaltreatmenteast|'
         r'lauradaydo|smoki|lancewhosedifficult|ogladaj|dianaavoidthey|jefferycontrolmodel|marissasharecareer|'
-        r'charlestoughrace|ianrequireadult|timmaybealready|jessicayeahcatch|kinoger|'
+        r'charlestoughrace|ianrequireadult|timmaybealready|jessicayeahcatch|kinoger|johnbeyondnation|'
         r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc|me|ru))/'
         r'(?:e/)?([0-9A-Za-z]+)'
     )
