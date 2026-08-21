@@ -39,9 +39,10 @@ class KinoGerResolver(ResolveUrl):
     pattern = (
         r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|(?:moflix|cimanow|embedplay(?:apiupn)?|'
         r'(?:tuktuk|ultra)\.rpmvid|filedecrypt|(?:dzo|srbe84)\.vidplayer|video(?:shar\.uns|land)|'
-        r'w1tv|(?:flixfilmesonline\.|filma365\.|moviehax\.)?strp2p|flimmer\.rpmvip|(?:t1|kinoger)\.p2pplay|'
-        r'asianembed|securecdn|watch\.(?:ezplayer|streamcasthub)|kinoger\.(?:embed4me|seekplays)|'
-        r'filmi9)\.(?:upns|rpmplay)|disneycdn|vidmoly|animeshqip\.uns)'
+        r'w1tv|(?:flixfilmesonline\.|filma365\.|moviehax\.)?strp2p|flimmer\.rpmvip|'
+        r'asianembed|securecdn|watch\.(?:ezplayer|streamcasthub)|'
+        r'filmi9)\.(?:upns|rpmplay)|(?:t1|kinoger)\.p2pplay|kinoger\.(?:embed4me|seekplays)|'
+        r'disneycdn|vidmoly|animeshqip\.uns)'
         r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|l?i(?:nk|ve)|bio|cfd|site|shop|pro|cc|vip))/#([A-Za-z0-9]+)'
     )
 
