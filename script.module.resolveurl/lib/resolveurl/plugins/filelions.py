@@ -64,7 +64,7 @@ class FileLionsResolver(ResolveUrl):
         links = re.search(r'var\s*links\s*=\s*([^;]+)', html)
         if links:
             links = ast.literal_eval(links.group(1))
-            source = links.get('hls4') or links.get('hls3') or links.get('hls2')
+            source = links.get('hls2') or links.get('hls3') or links.get('hls4')
             if source.startswith('/'):
                 source = urllib_parse.urljoin(web_url, source)
             source = source + helpers.append_headers(headers)
