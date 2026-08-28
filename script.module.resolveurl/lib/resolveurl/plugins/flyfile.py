@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class FlyFileResolver(ResolveUrl):
     name = 'FlyFile'
     domains = ['flyfile.app', 'flyf.lat']
-    pattern = r'(?://|\.)(flyfile\.app|flyf\.lat)/embed/([A-Za-z0-9]+)'
+    pattern = r'(?://|\.)(flyf(?:ile)?\.(?:app|lat))/embed/([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -34,7 +34,7 @@ class FlyFileResolver(ResolveUrl):
             'Referer': web_url,
             'Origin': urllib_parse.urljoin(web_url, '/')[:-1]
         }
-        # The API lives on flyfile.app for every player mirror; api.flyf.lat does not exist
+        # The API lives on flyfile.app for every player mirror
         assign_url = 'https://api.flyfile.app/api/streaming/assign/{0}'.format(media_id)
         data = self.net.http_GET(assign_url, headers=headers).json
         if data.get('url') and data.get('token'):
