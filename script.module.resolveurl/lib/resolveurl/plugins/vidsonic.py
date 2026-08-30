@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import base64
 import binascii
 import json
 import re
@@ -29,7 +28,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class VidSonicResolver(ResolveUrl):
     name = 'VidSonic'
     domains = ['vidsonic.net', 'vixeo.io']
-    pattern = r'(?://|\.)(vidsonic\.net|vixeo\.io)/(?:e|d)/([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)((?:vidsonic|vixeo)\.(?:net|io))/(?:e|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -50,7 +49,7 @@ class VidSonicResolver(ResolveUrl):
             r = re.search(r'data-config="([^"]+)"', html)
             if r:
                 blob = r.group(1)
-                cfg = json.loads(base64.b64decode(blob + '=' * (-len(blob) % 4)))
+                cfg = json.loads(helpers.b64decode(blob))
                 src = cfg.get('source', '')
         if src:
             src = binascii.unhexlify(src.replace('|', '')).decode()[::-1]
