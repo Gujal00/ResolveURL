@@ -28,6 +28,7 @@ class EmbedojoResolver(ResolveUrl):
     name = 'Embedojo'
     domains = ['embedojo.net', 'embedplayer1.xyz', 'llanfairpwllgwyngyll.com', 'llanfairpwllgwyngy.com', 'kisscloud.online']
     pattern = r'(?://|\.)((?:embed(?:ojo|player1)|llanfairpwllgwyngyl*|kisscloud)\.(?:net|xyz|com|online))/([0-9a-zA-Z$:/.-_]+)'
+
     def get_media_url(self, host, media_id, subs=False):
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')
@@ -45,6 +46,7 @@ class EmbedojoResolver(ResolveUrl):
             web_url = resp.get_url()
             ref = urllib_parse.urljoin(web_url, '/')
             headers.update({'Referer': ref})
+        cookie = resp.get_cookies()
         response = helpers.get_packed_data(resp.content)
         r = re.search(r'FirePlayer\("([^"]+)",\s*(.*?),\s*(?:true|false)', response, re.DOTALL)
         if r:
@@ -57,9 +59,9 @@ class EmbedojoResolver(ResolveUrl):
             resp = self.net.http_POST(eurl, data, headers).content
             if resp:
                 # src = json.loads(resp).get('securedLink')
+                headers = {'User-Agent': common.RAND_UA, 'Cookie': cookie}
                 src = json.loads(resp)
                 stream_url = src.get('videoSource') + helpers.append_headers(headers)
-                headers.pop('X-Requested-With')
                 if subs:
                     sdata = json.loads(r.group(2))
                     if sdata.get('tracks'):
