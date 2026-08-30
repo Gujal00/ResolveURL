@@ -1,26 +1,16 @@
-Version 5.1.207 (Aug 22, 2027)
+Version 5.1.208 (Aug 30, 2026)
 - Code Base Changes:
-    - TLS handling
+    - None
 
 - Resolvers Added:
-    - allvideo
-    - firestream
-    - playmate
-    - vidbasic
+    - anonstream
+    - vcdnlare
 
 - Resolvers Fixed/Updated:
-    - abyss
-    - anonmp4
-    - byse
     - embedojo
-    - filelions
-    - kinoger
-    - peertube
-    - streamix
-    - uqload
-    - veev
-    - vidbasic
-    - vids_st
+    - flyfile
+    - uperbox
+    - vidsonic
     - voesx
 
 - Resolvers Removed
