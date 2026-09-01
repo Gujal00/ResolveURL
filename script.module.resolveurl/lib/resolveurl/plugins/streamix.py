@@ -27,10 +27,10 @@ class StreamixResolver(ResolveUrl):
     name = 'Streamix'
     domains = [
         'streamix.so', 'stmix.io', 'vidara.so', 'vidara.to', 'vidaraa.cc', 'vidmatrixa.com',
-        'kinoger.pw', 'viewdara.com', 'thebesthosterv.com'
+        'kinoger.pw', 'viewdara.com', 'thebesthosterv.com', 'odysseusa.cc'
     ]
     pattern = (
-        r'(?://|\.)((?:st(?:rea)?mix|vid(?:ar|matrix)a*|viewdara|thebesthosterv|kinoger)'
+        r'(?://|\.)((?:st(?:rea)?mix|vid(?:ar|matrix)a*|viewdara|thebesthosterv|kinoger|odysseusa)'
         r'\.(?:so|io|to|cc|com|pw))/(?:e|v)/([0-9a-zA-Z]+)'
     )
 
