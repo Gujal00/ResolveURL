@@ -27,11 +27,11 @@ class StreamixResolver(ResolveUrl):
     name = 'Streamix'
     domains = [
         'streamix.so', 'stmix.io', 'vidara.so', 'vidara.to', 'vidaraa.cc', 'vidmatrixa.com',
-        'kinoger.pw', 'viewdara.com', 'thebesthosterv.com', 'odysseusa.cc'
+        'kinoger.pw', 'viewdara.com', 'thebesthosterv.com', 'odysseusa.cc', 'ano.cx', 'vidwara.cc'
     ]
     pattern = (
-        r'(?://|\.)((?:st(?:rea)?mix|vid(?:ar|matrix)a*|viewdara|thebesthosterv|kinoger|odysseusa)'
-        r'\.(?:so|io|to|cc|com|pw))/(?:e|v)/([0-9a-zA-Z]+)'
+        r'(?://|\.)((?:st(?:rea)?mix|vid(?:w?ar|matrix)a*|viewdara|thebesthosterv|kinoger|odysseusa|ano)'
+        r'\.(?:so|io|to|cc|com|pw|cx))/(?:e|v)/([0-9a-zA-Z]+)'
     )
 
     def get_media_url(self, host, media_id, subs=False):
