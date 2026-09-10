@@ -23,29 +23,22 @@ from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class FireStreamResolver(ResolveUrl):
-    name = 'FireStream'
-    domains = ['firestream.to', 'firestream.site']
-    pattern = r'(?://|\.)(firestream\.(?:to|site))/(?:e|v)/([0-9a-zA-Z_-]+)'
+class FileMoonResolver(ResolveUrl):
+    name = 'FileMoon'
+    domains = ['filemoon.org']
+    pattern = r'(?://|\.)(filemoon\.org)/(\w{1,2}/[0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.RAND_UA}
-        html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search('id="token-blob"[^>]+>([^<]+)', html)
+        headers = {'User-Agent': common.RAND_UA, 'Referer': ref}
+        html = self.net.http_GET(web_url, headers=headers, redirect=False).content
+        r = re.search(r'<a\s*href="([^"]+)', html)
         if r:
-            pdata = {'blob': r.group(1)}
-            headers.update({'Referer': ref, 'Origin': ref[:-1]})
-            api_url = self.get_api_url(host, media_id)
-            jd = self.net.http_POST(api_url, form_data=pdata, headers=headers, jdata=True).json
-            if jd.get('signedVideoUrl'):
-                return jd.get('signedVideoUrl') + helpers.append_headers(headers)
+            source = r.group(1).replace('&amp;', '&')
+            return source + helpers.append_headers(headers)
 
-        raise ResolverError("Unable to locate stream URL.")
+        raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
-
-    def get_api_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/api/videos/{media_id}/resolve')
+        return self._default_get_url(host, media_id, template='https://{host}/{media_id}/stream')
