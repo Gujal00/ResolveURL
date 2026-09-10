@@ -103,7 +103,11 @@ class VKResolver(ResolveUrl):
         if payload:
             for item in payload:
                 if isinstance(item, dict):
-                    js_data = item.get('player').get('params')[0]
+                    player = item.get('player')
+                    if isinstance(player, dict):
+                        params = player.get('params')
+                        if params:
+                            js_data = params[0]
             for item in list(js_data.keys()):
                 if item.startswith('url'):
                     sources.append((item[3:], js_data.get(item)))
