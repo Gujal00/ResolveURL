@@ -31,7 +31,7 @@ class VKResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         ref = 'https://{0}/'.format(host)
-        headers = {'User-Agent': common.RAND_UA,
+        headers = {'User-Agent': common.EDGE_USER_AGENT,
                    'Referer': ref,
                    'Origin': ref[:-1]}
 
@@ -103,7 +103,11 @@ class VKResolver(ResolveUrl):
         if payload:
             for item in payload:
                 if isinstance(item, dict):
-                    js_data = item.get('player').get('params')[0]
+                    player = item.get('player')
+                    if isinstance(player, dict):
+                        params = player.get('params')
+                        if params:
+                            js_data = params[0]
             for item in list(js_data.keys()):
                 if item.startswith('url'):
                     sources.append((item[3:], js_data.get(item)))
