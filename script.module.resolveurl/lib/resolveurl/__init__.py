@@ -315,6 +315,7 @@ def _update_settings_xml():
         '\t\t<setting default="false" id="bp_enable" label="%s" type="bool"/>' % (common.i18n('enable_byparr')),
         '\t\t<setting id="bp_url" visible="eq(-1,true)" enable="eq(-1,true)" type="text" label="%s" default="http://localhost:8191"/>' % (common.i18n('byparr_url')),
         '\t\t<setting id="bp_timeout" visible="eq(-2,true)" enable="eq(-2,true)" type="slider" label="%s" default="60" range="30,30,180" option="int" />' % (common.i18n('byparr_timeout')),
+        '\t\t<setting id="twocaptcha_key" type="text" label="%s" option="hidden" default=""/>' % (common.i18n('twocaptcha_key')),
         '\t\t<setting id="personal_nid" label="Your NID" type="text" visible="false" default=""/>',
         '\t\t<setting id="last_ua_create" label="last_ua_create" type="number" visible="false" default="0"/>',
         '\t\t<setting id="current_ua" label="current_ua" type="text" visible="false" default=""/>',

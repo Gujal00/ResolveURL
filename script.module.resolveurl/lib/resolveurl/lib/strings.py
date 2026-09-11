@@ -123,5 +123,7 @@ STRINGS = {
     'cl_background': 33103,
     'enable_byparr': 33104,
     'byparr_url': 33105,
-    'byparr_timeout': 33106
+    'byparr_timeout': 33106,
+    'twocaptcha_key': 33107,
+    'solving_captcha': 33108
 }
