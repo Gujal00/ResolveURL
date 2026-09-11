@@ -31,13 +31,16 @@ class StreamTapeResolver(ResolveUrl):
         'streamadblockplus.com', 'shavetape.cash', 'streamtape.to', 'streamta.site',
         'streamadblocker.xyz', 'tapewithadblock.org', 'adblocktape.wiki', 'antiadtape.com',
         'streamtape.xyz', 'tapeblocker.com', 'streamnoads.com', 'tapeadvertisement.com',
-        'tapeadsenjoyer.com', 'watchadsontape.com', 'tpead.net', 'advertape.net'
+        'tapeadsenjoyer.com', 'watchadsontape.com', 'tpead.net', 'advertape.net',
+        'strtape.site', 'strtapeadblock.me', 'gettapeads.com',
+        'streamtapeadblock.art', 'streamtapeadblockuser.xyz', 'advtpe.com'
     ]
     pattern = (
-        r'(?://|\.)((?:s(?:tr)?(?:eam|have)?|tapewith|watchadson|adver)'
+        r'(?://|\.)((?:(?:stream|str)tapeadblock(?:user)?|gettapeads|advtpe|'
+        r'(?:s(?:tr)?(?:eam|have)?|tapewith|watchadson|adver)'
         r'?(?:adblock(?:er|plus)?|antiad|noads)?'
-        r'(?:ta?p?e?|cloud)?(?:blocker|advertisement|adsenjoyer|ad)?\.'
-        r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki|club)'
+        r'(?:ta?p?e?|cloud)?(?:blocker|advertisement|adsenjoyer|ad)?)\.'
+        r'(?:com|cloud|net|pe|site|link|cc|online|fun|cash|to|xyz|org|wiki|club|me|art)'
         r')/(?:e|v)/([0-9a-zA-Z]+)'
     )
 
