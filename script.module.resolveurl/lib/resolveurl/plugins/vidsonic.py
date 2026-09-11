@@ -27,8 +27,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VidSonicResolver(ResolveUrl):
     name = 'VidSonic'
-    domains = ['vidsonic.net', 'vixeo.io']
-    pattern = r'(?://|\.)((?:vidsonic|vixeo)\.(?:net|io))/(?:e|d)/([0-9a-zA-Z]+)'
+    domains = ['vidsonic.net', 'vixeo.io', 'vsonic.click']
+    pattern = r'(?://|\.)((?:v(?:id)?sonic|vixeo)\.(?:net|io|click))/(?:e|d)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
