@@ -54,11 +54,11 @@ def write_img(url=None, bin=None):
 
 
 def do_captcha(html, base_url=None):
-    solvemedia = re.search('<iframe[^>]+src="((?:https?:)?//api.solvemedia.com[^"]+)', html)
-    recaptcha = re.search(r'<script\s+type="text/javascript"\s+src="(http://www.google.com[^"]+)', html)
-    recaptcha_v2 = re.search('data-sitekey="([^"]+)', html)
+    solvemedia = re.search(r'<iframe[^>]+src="((?:https?:)?//api\.solvemedia\.com[^"]+)', html)
+    recaptcha = re.search(r'<script\s+type="text/javascript"\s+src="(http://www\.google\.com[^"]+)', html)
+    recaptcha_v2 = re.search(r'data-sitekey="([^"]+)', html)
     xfilecaptcha = re.search(r'<img\s+src="([^"]+/captchas/[^"]+)', html)
-    ccapimg = re.search('key=([^"]+)"', html)
+    ccapimg = re.search(r'key=([^"]+)"', html)
 
     if solvemedia:
         return do_solvemedia_captcha(solvemedia.group(1))

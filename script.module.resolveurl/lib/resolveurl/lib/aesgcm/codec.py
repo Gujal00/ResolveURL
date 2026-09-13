@@ -165,7 +165,7 @@ class Writer(object):
             :param lengthLength: amount of bytes in which to encode the overall
                 length of the array
             """
-            self.add(len(seq)*length, lengthLength)
+            self.add(len(seq) * length, lengthLength)
             if length == 1:
                 self.bytes.extend(seq)
             elif length == 2:
@@ -192,7 +192,7 @@ class Writer(object):
                 length of the array
             """
             seqLen = len(seq)
-            self.add(seqLen*length, lengthLength)
+            self.add(seqLen * length, lengthLength)
             if length == 1:
                 self.bytes.extend(seq)
             elif length == 2:
@@ -321,7 +321,7 @@ class Parser(object):
         end = self.index + lengthBytes
         if end > len(self.bytes):
             raise DecodeError("Read past end of buffer")
-        ret = self.bytes[self.index : end]
+        ret = self.bytes[self.index: end]
         self.index += lengthBytes
         return ret
 
@@ -358,10 +358,10 @@ class Parser(object):
 
         :rtype: list of int
         """
-        l = [0] * lengthList
+        ll = [0] * lengthList
         for x in range(lengthList):
-            l[x] = self.get(length)
-        return l
+            ll[x] = self.get(length)
+        return ll
 
     def getVarList(self, length, lengthLength):
         """
@@ -380,10 +380,10 @@ class Parser(object):
             raise DecodeError("Encoded length not a multiple of element "
                               "length")
         lengthList = lengthList // length
-        l = [0] * lengthList
+        ll = [0] * lengthList
         for x in range(lengthList):
-            l[x] = self.get(length)
-        return l
+            ll[x] = self.get(length)
+        return ll
 
     def getVarTupleList(self, elemLength, elemNum, lengthLength):
         """

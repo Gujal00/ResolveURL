@@ -31,7 +31,7 @@ class CdaResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'Referer': web_url, 'User-Agent': common.FF_USER_AGENT}
+        headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
 
         html = self.net.http_GET(web_url, headers=headers).content
         match = re.search(r'''player_data=['"](.*?)['"]\s*tabindex''', html)

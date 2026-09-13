@@ -8,6 +8,7 @@ from __future__ import division
 from .compat import compatHMAC
 import hmac
 
+
 def ct_lt_u32(val_a, val_b):
     """
     Returns 1 if val_a < val_b, 0 otherwise. Constant time.
@@ -21,7 +22,7 @@ def ct_lt_u32(val_a, val_b):
     val_a &= 0xffffffff
     val_b &= 0xffffffff
 
-    return (val_a^((val_a^val_b)|(((val_a-val_b)&0xffffffff)^val_b)))>>31
+    return (val_a ^ ((val_a ^ val_b) | (((val_a - val_b) & 0xffffffff) ^ val_b))) >> 31
 
 
 def ct_gt_u32(val_a, val_b):
@@ -78,7 +79,7 @@ def ct_isnonzero_u32(val):
     :rtype: int
     """
     val &= 0xffffffff
-    return (val|(-val&0xffffffff)) >> 31
+    return (val | (-val & 0xffffffff)) >> 31
 
 
 def ct_neq_u32(val_a, val_b):
@@ -94,7 +95,8 @@ def ct_neq_u32(val_a, val_b):
     val_a &= 0xffffffff
     val_b &= 0xffffffff
 
-    return (((val_a-val_b)&0xffffffff) | ((val_b-val_a)&0xffffffff)) >> 31
+    return (((val_a - val_b) & 0xffffffff) | ((val_b - val_a) & 0xffffffff)) >> 31
+
 
 def ct_eq_u32(val_a, val_b):
     """
@@ -107,6 +109,7 @@ def ct_eq_u32(val_a, val_b):
     :rtype: int
     """
     return 1 ^ ct_neq_u32(val_a, val_b)
+
 
 def ct_check_cbc_mac_and_pad(data, mac, seqnumBytes, contentType, version,
                              block_size=16):
@@ -135,7 +138,7 @@ def ct_check_cbc_mac_and_pad(data, mac, seqnumBytes, contentType, version,
     assert version in ((3, 0), (3, 1), (3, 2), (3, 3))
 
     data_len = len(data)
-    if mac.digest_size + 1 > data_len: # data_len is public
+    if mac.digest_size + 1 > data_len:  # data_len is public
         return False
 
     # 0 - OK
@@ -144,11 +147,11 @@ def ct_check_cbc_mac_and_pad(data, mac, seqnumBytes, contentType, version,
     #
     # check padding
     #
-    pad_length = data[data_len-1]
+    pad_length = data[data_len - 1]
     pad_start = data_len - pad_length - 1
     pad_start = max(0, pad_start)
 
-    if version == (3, 0): # version is public
+    if version == (3, 0):  # version is public
         # in SSLv3 we can only check if pad is not longer than the cipher
         # block size
 
@@ -179,7 +182,7 @@ def ct_check_cbc_mac_and_pad(data, mac, seqnumBytes, contentType, version,
     data_mac = mac.copy()
     data_mac.update(compatHMAC(seqnumBytes))
     data_mac.update(compatHMAC(bytearray([contentType])))
-    if version != (3, 0): # version is public
+    if version != (3, 0):  # version is public
         data_mac.update(compatHMAC(bytearray([version[0]])))
         data_mac.update(compatHMAC(bytearray([version[1]])))
     data_mac.update(compatHMAC(bytearray([mac_start >> 8])))
@@ -190,18 +193,19 @@ def ct_check_cbc_mac_and_pad(data, mac, seqnumBytes, contentType, version,
     end_pos = data_len - mac.digest_size
 
     # calculate all possible
-    for i in range(start_pos, end_pos): # constant for given overall length
+    for i in range(start_pos, end_pos):  # constant for given overall length
         cur_mac = data_mac.copy()
         cur_mac.update(compatHMAC(data[start_pos:i]))
         mac_compare = bytearray(cur_mac.digest())
         # compare the hash for real only if it's the place where mac is
         # supposed to be
         mask = ct_lsb_prop_u8(ct_eq_u32(i, mac_start))
-        for j in range(0, mac.digest_size): # digest_size is public
-            result |= (data[i+j] ^ mac_compare[j]) & mask
+        for j in range(0, mac.digest_size):  # digest_size is public
+            result |= (data[i + j] ^ mac_compare[j]) & mask
 
     # return python boolean
     return result == 0
+
 
 if hasattr(hmac, 'compare_digest'):
     ct_compare_digest = hmac.compare_digest

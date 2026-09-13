@@ -339,9 +339,10 @@ class PremiumizeMeResolver(ResolveUrl):
         js_result = json.loads(self.net.http_POST(token_path, form_data=data, headers=self.headers).content)
         line1 = '{0}: {1}'.format(i18n('goto_url'), js_result.get('verification_uri'))
         line2 = '{0}: {1}'.format(i18n('enter_prompt'), js_result.get('user_code'))
-        with common.kodi.CountdownDialog(
+        qr_file = common.make_qr_file(js_result.get('verification_uri'))
+        with common.kodi.AuthProgressDialog(
             'Resolve URL Premiumize {0}'.format(i18n('authorisation')), line1, line2,
-            countdown=180, interval=js_result.get('interval', 5)
+            image=qr_file, countdown=180, interval=js_result.get('interval', 5)
         ) as cd:
             result = cd.start(self.__get_token, [js_result.get('device_code')])
 

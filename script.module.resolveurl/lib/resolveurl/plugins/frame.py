@@ -30,7 +30,7 @@ class FrameResolver(ResolveUrl):
     pattern = r'(?://|\.)(f\.io)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         web_url = helpers.get_redirect_url(self.get_url(host, media_id), headers=headers)
         web_url = helpers.get_redirect_url(web_url, headers=headers)
         ref = urllib_parse.urljoin(web_url, '/')

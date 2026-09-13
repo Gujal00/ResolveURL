@@ -415,7 +415,7 @@ def girc(page_data, url, co=None):
     Copyright (C) 2021 ADDON-LAB, KAR10S
     """
     net = common.Net()
-    hdrs = {'User-Agent': common.FF_USER_AGENT,
+    hdrs = {'User-Agent': common.RAND_UA,
             'Referer': url}
     rurl = 'https://www.google.com/recaptcha/api.js'
     aurl = 'https://www.google.com/recaptcha/api2'
@@ -479,8 +479,7 @@ def xor_string(encurl, key):
     Code adapted from https://github.com/vb6rocod/utils/
     Copyright (C) 2019 vb6rocod
     """
-    import base64
-    strurl = base64.b64decode(encurl).decode('utf-8')
+    strurl = b64decode(encurl)
     surl = ''
     for i in range(len(strurl)):
         surl += chr(ord(strurl[i]) ^ ord(key[i % len(key)]))
@@ -825,5 +824,22 @@ def b64decode(t, binary=False):
     return r if binary else six.ensure_str(r)
 
 
-def b64encode(b):
-    return six.ensure_str(base64.b64encode(b if isinstance(b, bytes) else six.b(b)))
+def b64encode(b, strip=False):
+    r = six.ensure_str(base64.b64encode(b if isinstance(b, bytes) else six.b(b)))
+    if strip:
+        r = r.rstrip('=')
+    return r
+
+
+def b64urlencode(b, strip=False):
+    r = six.ensure_str(base64.urlsafe_b64encode(b if isinstance(b, bytes) else six.b(b)))
+    if strip:
+        r = r.rstrip('=')
+    return r
+
+
+def b64urldecode(t, binary=False):
+    if len(t) % 4 != 0:
+        t += '=' * (-len(t) % 4)
+    r = base64.urlsafe_b64decode(t)
+    return r if binary else six.ensure_str(r)

@@ -37,7 +37,7 @@ class VidMojoResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         if not referer:
             referer = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': referer}
         response = self.net.http_GET(web_url, headers=headers).content
         srcs = helpers.scrape_sources(response, patterns=[r'''sources:\s*[\[{]+\s*file:\s*"(?P<url>[^"]+)'''], generic_patterns=False)

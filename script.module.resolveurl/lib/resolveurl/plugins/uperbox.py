@@ -25,8 +25,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class UperBoxResolver(ResolveUrl):
     name = 'UperBox'
-    domains = ['www.uperbox.net', 'www.uperbox.io', 'www.uperbox.com']
-    pattern = r'(?://|\.)(www\.uperbox\.(?:net|io|com))/([0-9a-zA-Z$:/.]+)'
+    domains = ['www.uperbox.net', 'www.uperbox.io', 'www.uperbox.com', 'www.uperbox.cx']
+    pattern = r'(?://|\.)(www\.uperbox\.(?:net|io|com|cx))/([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id):
         if '$$' in media_id:

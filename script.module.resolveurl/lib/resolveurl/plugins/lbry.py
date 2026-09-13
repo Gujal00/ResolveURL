@@ -38,7 +38,7 @@ class LbryResolver(ResolveUrl):
             }
         }
         headers = {
-            'User-Agent': common.FF_USER_AGENT,
+            'User-Agent': common.RAND_UA,
             'Origin': 'https://lbry.tv',
             'Referer': web_url
         }

@@ -27,7 +27,7 @@ class VoeResolver(ResolveUrl):
     name = 'Voe'
     domains = [
         'voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com', 'un-block-voe.net',
-        'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com', 'jonathansociallike.com'
+        'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com', 'jonathansociallike.com',
         'voeun-block.net', 'v-o-e-unblock.com', 'edwardarriveoften.com', 'nathanfromsubject.com',
         'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com', 'kennethofficialitem.com',
         'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com', 'lukecomparetwo.com',
@@ -54,40 +54,52 @@ class VoeResolver(ResolveUrl):
         'richardsignfish.com', 'jennifercertaindevelopment.com', 'diananatureforeign.com', 'goofy-banana.com',
         'mariatheserepublican.com', 'johnalwayssame.com', 'kellywhatcould.com', 'jilliandescribecompany.com',
         'lukesitturn.com', 'mikaylaarealike.com', 'christopheruntilpoint.com', 'walterprettytheir.com',
-        'crystaltreatmenteast.com', 'lauradaydo.com', 'smoki.cc', 'lancewhosedifficult.com'
+        'crystaltreatmenteast.com', 'lauradaydo.com', 'smoki.cc', 'lancewhosedifficult.com',
+        'ogladaj.me', 'dianaavoidthey.com', 'jefferycontrolmodel.com', 'marissasharecareer.com',
+        'charlestoughrace.com', 'ianrequireadult.com', 'timmaybealready.com', 'jessicayeahcatch.com',
+        'kinoger.ru', 'johnbeyondnation.com', 'jeanprofessorcentral.com', 'juliewomanwish.com',
+        'garylargeavailable.com', 'jennifereconomicgive.com', 'pamelachangemission.com',
+        'ellenpoliticalfollow.com', 'caseyimpactstation.com', 'matthewhotelscience.com',
+        'jessicachoosemake.com', 'stevenfamilyedge.com', 'tracylocalschool.com', 'eugenemakedraw.com', 'johnfullwonder.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
-    pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|' \
-              r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|' \
-              r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|sethniceletter|' \
-              r'bigclatterhomesguideservice|uptodatefinishconferenceroom|edwardarriveoften|' \
-              r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|michaelapplysome|' \
-              r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|jayservicestuff|' \
-              r'745mingiestblissfully|19turanosephantasia|30sensualizeexpression|sandrataxeight|' \
-              r'321naturelikefurfuroid|449unceremoniousnasoseptal|guidon40hyporadius9|brucevotewithin|' \
-              r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|' \
-              r'matriculant401merited|scatch176duplicities|availedsmallest|stevenimaginelittle|' \
-              r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|kellywhatcould|' \
-              r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|diananatureforeign|' \
-              r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|' \
-              r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|goofy-banana|' \
-              r'jamiesamewalk|bradleyviewdoctor|graceaddresscommunity|shannonpersonalcost|cindyeyefinal|' \
-              r'rebeccaneverbase|loriwithinfamily|roberteachfinal|erikcoldperson|jasminetesttry|' \
-              r'heatherdiscussionwhen|robertplacespace|alleneconomicmatter|josephseveralconcern|' \
-              r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|' \
-              r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|' \
-              r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|' \
-              r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|' \
-              r'lukesitturn|mikaylaarealike|christopheruntilpoint|walterprettytheir|crystaltreatmenteast|' \
-              r'lauradaydo|smoki|lancewhosedifficult|' \
-              r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc))/' \
-              r'(?:e/)?([0-9A-Za-z]+)'
+    pattern = (
+        r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|kennethofficialitem|'
+        r'reputationsheriffkennethsand|fittingcentermondaysunday|paulkitchendark|'
+        r'housecardsummerbutton|fraudclatterflyingcar|35volitantplimsoles5.com|sethniceletter|'
+        r'bigclatterhomesguideservice|uptodatefinishconferenceroom|edwardarriveoften|'
+        r'realfinanceblogcenter|tinycat-voe-fashion|20demidistance9elongations|michaelapplysome|'
+        r'telyn610zoanthropy|toxitabellaeatrebates306|greaseball6eventual20|jayservicestuff|'
+        r'745mingiestblissfully|19turanosephantasia|30sensualizeexpression|sandrataxeight|'
+        r'321naturelikefurfuroid|449unceremoniousnasoseptal|guidon40hyporadius9|brucevotewithin|'
+        r'cyamidpulverulence530|boonlessbestselling244|antecoxalbobbing1010|lukecomparetwo|'
+        r'matriculant401merited|scatch176duplicities|availedsmallest|stevenimaginelittle|'
+        r'counterclockwisejacky|simpulumlamerop|wolfdyslectic|nectareousoverelate|kellywhatcould|'
+        r'metagnathtuggers|gamoneinterrupted|chromotypic|crownmakermacaronicism|diananatureforeign|'
+        r'yodelswartlike|figeterpiazine|strawberriesporail|valeronevijao|timberwoodanotia|'
+        r'generatesnitrosate|apinchcaseation|nonesnanking|kathleenmemberhistory|goofy-banana|'
+        r'jamiesamewalk|bradleyviewdoctor|graceaddresscommunity|shannonpersonalcost|cindyeyefinal|'
+        r'rebeccaneverbase|loriwithinfamily|roberteachfinal|erikcoldperson|jasminetesttry|'
+        r'heatherdiscussionwhen|robertplacespace|alleneconomicmatter|josephseveralconcern|'
+        r'donaldlineelse|lisatrialidea|toddpartneranimal|jamessoundcost|brittneystandardwestern|'
+        r'sandratableother|robertordercharacter|maxfinishseveral|chuckle-tube|kristiesoundsimply|'
+        r'adrianmissionminute|nathanfromsubject|richardsignfish|jennifercertaindevelopment|'
+        r'jonathansociallike|mariatheserepublican|johnalwayssame|jilliandescribecompany|'
+        r'lukesitturn|mikaylaarealike|christopheruntilpoint|walterprettytheir|crystaltreatmenteast|'
+        r'lauradaydo|smoki|lancewhosedifficult|ogladaj|dianaavoidthey|jefferycontrolmodel|marissasharecareer|'
+        r'charlestoughrace|ianrequireadult|timmaybealready|jessicayeahcatch|kinoger|johnbeyondnation|'
+        r'jeanprofessorcentral|juliewomanwish|garylargeavailable|jennifereconomicgive|'
+        r'pamelachangemission|ellenpoliticalfollow|caseyimpactstation|matthewhotelscience|'
+        r'jessicachoosemake|stevenfamilyedge|tracylocalschool|eugenemakedraw|johnfullwonder|'
+        r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc|me|ru))/'
+        r'(?:e/)?([0-9A-Za-z]+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
-        if 'const currentUrl' in html:
+        while 'const currentUrl' in html:
             r = re.search(r'''window\.location\.href\s*=\s*'([^']+)''', html)
             if r:
                 web_url = r.group(1)
@@ -101,7 +113,10 @@ class VoeResolver(ResolveUrl):
                 s = self.voe_decode(r.group(1), repl.group(1))
                 sources = [(s.get(x).split("?")[0].split(".")[-1], s.get(x)) for x in ['file', 'source', 'direct_access_url'] if x in s.keys()]
                 if len(sources) > 1:
-                    sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
+                    if self.get_setting('prefer_hls') == 'true':
+                        sources.sort(key=lambda x: 0 if 'm3u8' in x[0].lower() else 1)
+                    else:
+                        sources.sort(key=lambda x: int(re.sub(r"\D", "", x[0])))
                     headers.update({'verifypeer': 'false'})
                 stream_url = helpers.pick_source(sources) + helpers.append_headers(headers)
                 if subs:
@@ -128,6 +143,12 @@ class VoeResolver(ResolveUrl):
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, template='https://{host}/e/{media_id}')
+
+    @classmethod
+    def get_settings_xml(cls):
+        xml = super(cls, cls).get_settings_xml()
+        xml.append('<setting id="{0}_prefer_hls" type="bool" label="Prefer HLS over MP4" default="false"/>'.format(cls.__name__))
+        return xml
 
     @staticmethod
     def voe_decode(ct, luts):

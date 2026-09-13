@@ -24,14 +24,18 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamRubyResolver(ResolveUrl):
     name = 'StreamRuby'
-    domains = ['streamruby.com', 'sruby.xyz', 'rubystream.xyz', 'tuktukcimamulti.buzz',
-               'stmruby.com', 'rubystm.com', 'rubyvid.com', 'kinoger.be']
-    pattern = r'(?://|\.)((?:s?(?:tream|tm)?ruby(?:stream|stm|vid)?|kinoger|tuktukcimamulti)\.' \
-              r'(?:com|xyz|buzz|be))/(?:embed-|e/|d/)?(\w+)'
+    domains = [
+        'streamruby.com', 'sruby.xyz', 'rubystream.xyz', 'tuktukcimamulti.buzz',
+        'stmruby.com', 'rubystm.com', 'rubyvid.com', 'rubyvidhub.com'
+    ]
+    pattern = (
+        r'(?://|\.)((?:s?(?:tream|tm)?ruby(?:stream|stm|vid(?:hub)?)?|tuktukcimamulti)'
+        r'\.(?:com|xyz|buzz))/(?:embed-|e/|d/)?(\w+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT, 'Accept-Language': 'en-US,en;q=0.5'}
+        headers = {'User-Agent': common.RAND_UA, 'Accept-Language': 'en-US,en;q=0.5'}
         html = self.net.http_GET(web_url, headers=headers).content
         html += helpers.get_packed_data(html)
         master_url = re.search(r'''sources:\s*\[(?:{src:|{file:)?\s*['"]([^'"]+)''', html)

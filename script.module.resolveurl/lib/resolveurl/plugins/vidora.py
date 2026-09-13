@@ -29,7 +29,7 @@ class VidoraResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         html += helpers.get_packed_data(html)
         r = re.search(r'Playerjs\([^)]+?file:\s*"([^"]+)', html, re.DOTALL)

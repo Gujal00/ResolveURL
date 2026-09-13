@@ -30,7 +30,7 @@ class YourUploadResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
+        headers = {'User-Agent': common.RAND_UA, 'Referer': web_url}
         html = self.net.http_GET(web_url).content
         r = re.search(r'file\s*:\s*(?:\'|\")(.+?)(?:\'|\")', html)
 

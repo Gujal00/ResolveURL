@@ -22,8 +22,8 @@ from resolveurl.lib import helpers
 
 class VidoResolver(ResolveGeneric):
     name = 'Vido'
-    domains = ['vido.lol', 'vido.cool']
-    pattern = r'(?://|\.)(vido\.(?:lol|cool))/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
+    domains = ['vido.lol', 'vido.cool', 'vidon.to']
+    pattern = r'(?://|\.)(vidon?\.(?:lol|cool|to))/(?:embed-|e/|d/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(

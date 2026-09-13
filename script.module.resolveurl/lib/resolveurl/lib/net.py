@@ -20,6 +20,7 @@ import gzip
 import json
 import random
 import re
+import os
 import six
 from six.moves import urllib_request, urllib_parse, urllib_error, urllib_response, http_cookiejar
 import socket
@@ -30,32 +31,48 @@ from resolveurl.lib import kodi
 # Set Global timeout - Useful for slow connections and Putlocker.
 socket.setdefaulttimeout(10)
 
-BR_VERS = [
-    ['%s.0' % i for i in range(18, 50)],
-    ['37.0.2062.103', '37.0.2062.120', '37.0.2062.124', '38.0.2125.101', '38.0.2125.104', '38.0.2125.111', '39.0.2171.71', '39.0.2171.95', '39.0.2171.99', '40.0.2214.93', '40.0.2214.111',
-     '40.0.2214.115', '42.0.2311.90', '42.0.2311.135', '42.0.2311.152', '43.0.2357.81', '43.0.2357.124', '44.0.2403.155', '44.0.2403.157', '45.0.2454.101', '45.0.2454.85', '46.0.2490.71',
-     '46.0.2490.80', '46.0.2490.86', '47.0.2526.73', '47.0.2526.80', '48.0.2564.116', '49.0.2623.112', '50.0.2661.86'],
-    ['11.0'],
-    ['8.0', '9.0', '10.0', '10.6']]
-WIN_VERS = ['Windows NT 10.0', 'Windows NT 7.0', 'Windows NT 6.3', 'Windows NT 6.2', 'Windows NT 6.1', 'Windows NT 6.0', 'Windows NT 5.1', 'Windows NT 5.0']
-FEATURES = ['; WOW64', '; Win64; IA64', '; Win64; x64', '']
-RAND_UAS = ['Mozilla/5.0 ({win_ver}{feature}; rv:{br_ver}) Gecko/20100101 Firefox/{br_ver}',
-            'Mozilla/5.0 ({win_ver}{feature}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{br_ver} Safari/537.36',
-            'Mozilla/5.0 ({win_ver}{feature}; Trident/7.0; rv:{br_ver}) like Gecko',
-            'Mozilla/5.0 (compatible; MSIE {br_ver}; {win_ver}{feature}; Trident/6.0)']
+FF_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0'
+FF_LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0'
+FF_ANDROID_USER_AGENT = 'Mozilla/5.0 (Android 16; Mobile; rv:151.0) Gecko/151.0 Firefox/151.0'
+FF_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 15.7; rv:150.0) Gecko/20100101 Firefox/150.0'
+FF_IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/140.2 Mobile/15E148 Safari/605.1.15'
+FF_IPAD_USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 15_7_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/151.0 Mobile/15E148 Safari/605.1.15'
+OPERA_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
+OPERA_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
+OPERA_LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 OPR/133.0.0.0'
+IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
+IPAD_USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'
+ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 11; KFRAPWI) AppleWebKit/537.36 (KHTML, like Gecko) Silk/134.4.19 like Chrome/134.0.6998.207 Safari/537.36'
+EDGE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
+EDGE_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.3967.96'
+CHROME_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
+CHROME_LINUX_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
+CHROME_ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.216 Mobile Safari/537.36'
+CHROME_MAC_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
+CHROME_IOS_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/149.0.7827.45 Mobile/15E148 Safari/604.1'
+SAFARI_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15'
+ANDROID_KEYS = ['ANDROID_DATA', 'ANDROID_ROOT', 'ANDROID_STORAGE', 'ANDROID_ARGUMENT']
+
 CERT_FILE = kodi.translate_path('special://xbmc/system/certs/cacert.pem')
 
 
 def get_ua():
     try:
         last_gen = int(kodi.get_setting('last_ua_create'))
-    except:
+    except ValueError:
         last_gen = 0
     if not kodi.get_setting('current_ua') or last_gen < (time.time() - (7 * 24 * 60 * 60)):
-        index = random.randrange(len(RAND_UAS))
-        versions = {'win_ver': random.choice(WIN_VERS), 'feature': random.choice(FEATURES), 'br_ver': random.choice(BR_VERS[index])}
-        user_agent = RAND_UAS[index].format(**versions)
-        # logger.log('Creating New User Agent: %s' % (user_agent), log_utils.LOGDEBUG)
+        if sys.platform == "win32":
+            _USER_AGENTS = [FF_USER_AGENT, OPERA_USER_AGENT, EDGE_USER_AGENT, CHROME_USER_AGENT]
+        elif sys.platform == "ios":
+            _USER_AGENTS = [FF_IOS_USER_AGENT, CHROME_IOS_USER_AGENT, IOS_USER_AGENT, IPAD_USER_AGENT]
+        elif sys.platform == "darwin":
+            _USER_AGENTS = [FF_MAC_USER_AGENT, OPERA_MAC_USER_AGENT, EDGE_MAC_USER_AGENT, CHROME_MAC_USER_AGENT, SAFARI_USER_AGENT]
+        elif sys.platform == 'android' or hasattr(sys, 'getandroidapilevel') or any(key in os.environ for key in ANDROID_KEYS):
+            _USER_AGENTS = [FF_ANDROID_USER_AGENT, ANDROID_USER_AGENT, CHROME_ANDROID_USER_AGENT]
+        else:
+            _USER_AGENTS = [FF_LINUX_USER_AGENT, OPERA_LINUX_USER_AGENT, CHROME_LINUX_USER_AGENT]
+        user_agent = random.choice(_USER_AGENTS)
         kodi.set_setting('current_ua', user_agent)
         kodi.set_setting('last_ua_create', str(int(time.time())))
     else:
@@ -92,7 +109,7 @@ class Net:
 
     _cj = http_cookiejar.LWPCookieJar()
     _proxy = None
-    _user_agent = 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0'
+    _user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0'
     _http_debug = False
 
     def __init__(self, cookie_file='', proxy='', user_agent='', ssl_verify=True, http_debug=False):
@@ -199,7 +216,15 @@ class Net:
         if not self._ssl_verify or node == 'xboxone':
             try:
                 import ssl
-                ctx = ssl.create_default_context()
+                if six.PY3:
+                    ctx = ssl.create_default_context()
+                    ctx.minimum_version = ssl.TLSVersion.TLSv1_1
+                    ctx.maximum_version = ssl.TLSVersion.TLSv1_3
+                else:
+                    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
+                    ctx.options |= ssl.OP_NO_SSLv2
+                    ctx.options |= ssl.OP_NO_SSLv3
+                    ctx.options |= ssl.OP_NO_TLSv1
                 ctx.set_alpn_protocols(['http/1.1'])
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
@@ -212,12 +237,15 @@ class Net:
         else:
             try:
                 import ssl
-                ctx = ssl.create_default_context(cafile=CERT_FILE)
-                ctx.set_alpn_protocols(['http/1.1'])
-                if self._http_debug:
-                    handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
-                else:
-                    handlers += [urllib_request.HTTPSHandler(context=ctx)]
+                if ssl.OPENSSL_VERSION_INFO > (3, 0, 0):
+                    ctx = ssl.create_default_context(cafile=CERT_FILE)
+                    ctx.minimum_version = ssl.TLSVersion.TLSv1_1
+                    ctx.maximum_version = ssl.TLSVersion.TLSv1_3
+                    ctx.set_alpn_protocols(['http/1.1'])
+                    if self._http_debug:
+                        handlers += [urllib_request.HTTPSHandler(context=ctx, debuglevel=1)]
+                    else:
+                        handlers += [urllib_request.HTTPSHandler(context=ctx)]
             except:
                 pass
 
@@ -266,6 +294,26 @@ class Net:
         """
         return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata, redirect=redirect, timeout=timeout)
 
+    def http_PATCH(self, url, form_data, headers={}, compression=True, jdata=True, redirect=True, timeout=20):
+        """
+        Perform an HTTP PATCH request.
+
+        Args:
+            url (str): The URL to PATCH.
+            form_data (dict): A dictionary of form data to PATCH.
+
+        Kwargs:
+            headers (dict): A dictionary describing any headers you would like
+            to add to the request. (eg. ``{'X-Test': 'testing'}``)
+            compression (bool): If ``True`` (default), try to use gzip
+            compression.
+
+        Returns:
+            An :class:`HttpResponse` object containing headers and other
+            meta-information about the page and the page content.
+        """
+        return self._fetch(url, form_data, headers=headers, compression=compression, jdata=jdata, redirect=redirect, timeout=timeout, method='PATCH')
+
     def http_HEAD(self, url, headers={}):
         """
         Perform an HTTP HEAD request.
@@ -312,9 +360,9 @@ class Net:
         response = urllib_request.urlopen(request)
         return HttpResponse(response)
 
-    def _fetch(self, url, form_data={}, headers={}, compression=True, jdata=False, redirect=True, timeout=20):
+    def _fetch(self, url, form_data=None, headers={}, compression=True, jdata=False, redirect=True, timeout=20, method=None):
         """
-        Perform an HTTP GET or POST request.
+        Perform an HTTP, GET, POST or PATCH request.
 
         Args:
             url (str): The URL to GET or POST.
@@ -333,8 +381,8 @@ class Net:
             An :class:`HttpResponse` object containing headers and other
             meta-information about the page and the page content.
         """
-        req = urllib_request.Request(url)
-        if form_data:
+
+        if form_data is not None:
             if jdata:
                 form_data = json.dumps(form_data)
             elif isinstance(form_data, six.string_types):
@@ -343,6 +391,12 @@ class Net:
                 form_data = urllib_parse.urlencode(form_data, True)
             form_data = form_data.encode('utf-8') if six.PY3 else form_data
             req = urllib_request.Request(url, form_data)
+        else:
+            req = urllib_request.Request(url)
+
+        if method:
+            req.get_method = lambda: method
+
         req.add_header('User-Agent', self._user_agent)
         for key in headers:
             req.add_header(key, headers[key])
@@ -360,29 +414,10 @@ class Net:
                 response = urllib_request.urlopen(req, timeout=timeout)
         except urllib_error.HTTPError as e:
             if e.code == 403 and 'cloudflare' in e.hdrs.get('server', ''):
-                import ssl
-                ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-                ctx.set_alpn_protocols(['http/1.1'])
-                handlers = [urllib_request.HTTPSHandler(context=ctx)]
-                opener = urllib_request.build_opener(*handlers)
-                try:
-                    response = opener.open(req, timeout=timeout)
-                except urllib_error.HTTPError as e:
-                    if e.code == 403:
-                        ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
-                        ctx.set_alpn_protocols(['http/1.1'])
-                        handlers = [urllib_request.HTTPSHandler(context=ctx)]
-                        opener = urllib_request.build_opener(*handlers)
-                        try:
-                            response = opener.open(req, timeout=timeout)
-                        except urllib_error.HTTPError:
-                            from resolveurl.resolver import ResolverError
-                            raise ResolverError('Cloudflare challenge')
-                        except urllib_error.URLError:
-                            from resolveurl.resolver import ResolverError
-                            raise ResolverError('Cloudflare challenge')
-            else:
-                raise
+                if 'challenge' in e.hdrs.get('cf-mitigated', ''):
+                    from resolveurl.resolver import ResolverError
+                    raise ResolverError('Cloudflare challenge')
+            raise
 
         return HttpResponse(response)
 
@@ -415,9 +450,9 @@ class HttpResponse:
         html = self._response.read()
         encoding = None
         try:
-            if self._response.headers['content-encoding'].lower() == 'gzip':
+            if self._response.headers.get('content-encoding', '').lower() == 'gzip':
                 html = gzip.GzipFile(fileobj=six.BytesIO(html)).read()
-        except:
+        except (IOError, EOFError):
             pass
 
         if self._nodecode:
@@ -443,6 +478,10 @@ class HttpResponse:
             html = html.decode('ascii', errors='ignore') if six.PY3 else html
         return html
 
+    @property
+    def json(self):
+        return json.loads(self.content)
+
     def get_headers(self, as_dict=False):
         """Returns headers returned by the server.
         If as_dict is True, headers are returned as a dictionary otherwise a list"""
@@ -467,7 +506,8 @@ class HttpResponse:
                 x = item[1].split(';')[0]
                 k, v = x.split('=', 1)
                 cookies.update({k: v})
-                cookie_list.append(x)
+                if x not in cookie_list:
+                    cookie_list.append(x)
         return cookies if as_dict else '; '.join(cookie_list)
 
     def get_url(self):

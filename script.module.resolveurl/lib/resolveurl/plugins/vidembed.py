@@ -32,7 +32,7 @@ class VidEmbedResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         referer = urllib_parse.urljoin(web_url, '/')
         headers = {
-            'User-Agent': common.FF_USER_AGENT,
+            'User-Agent': common.RAND_UA,
             'Referer': referer,
             'Origin': referer[:-1],
             'X-Requested-With': 'XMLHttpRequest'

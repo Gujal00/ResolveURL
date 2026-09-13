@@ -19,6 +19,7 @@
 from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
+
 class DramaCoolMenResolver(ResolveGeneric):
     name = 'DramaCoolMen'
     domains = ['dramacool.men']
@@ -27,9 +28,7 @@ class DramaCoolMenResolver(ResolveGeneric):
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[
-                r'''links=\{"\w+":"(?P<url>[^\"]+)'''
-            ],
+            patterns=[r'''links=\{"\w+":"(?P<url>[^\"]+)'''],
             generic_patterns=False,
         )
 

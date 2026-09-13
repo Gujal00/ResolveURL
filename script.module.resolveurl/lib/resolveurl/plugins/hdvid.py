@@ -23,14 +23,19 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class HDvidResolver(ResolveUrl):
     name = 'HDvid'
-    domains = ['hdvid.tv', 'hdvid.fun', 'vidhdthe.online', 'hdvid.website', 'hdthevid.online',
-               'hdthevid.xyz', 'bestvidhd.site', 'tovidhd5.space']
-    pattern = r'(?://|\.)((?:hdvid|vidhdthe|hdthevid|bestvidhd|tovidhd5)\.(?:tv|fun|online|website|xyz|site|space))/' \
-              r'(?:embed-)?([0-9a-zA-Z]+)'
+    domains = [
+        'hdvid.tv', 'hdvid.fun', 'vidhdthe.online', 'hdvid.website', 'hdthevid.online',
+        'hdthevid.xyz', 'bestvidhd.site', 'tovidhd5.space', 'tohidvrd.space', 'vidhdnow2.space'
+    ]
+    pattern = (
+        r'(?://|\.)((?:hdvid|vidhdthe|hdthevid|bestvidhd|tovidhd5|tohidvrd|vidhdnow2)'
+        r'\.(?:tv|fun|online|website|xyz|site|space))'
+        r'/(?:embed-)?([0-9a-zA-Z]+)'
+    )
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         sources = helpers.scrape_sources(html)
         if sources:

@@ -25,15 +25,23 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class StreamixResolver(ResolveUrl):
     name = 'Streamix'
-    domains = ['streamix.so', 'stmix.io', 'vidara.so', 'vidara.to']
-    pattern = r'(?://|\.)((?:st(?:rea)?mix|vidara)\.(?:so|io|to))/(?:e|v)/([0-9a-zA-Z]+)'
+    domains = [
+        'streamix.so', 'stmix.io', 'vidara.so', 'vidara.to', 'vidaraa.cc', 'vidmatrixa.com',
+        'kinoger.pw', 'viewdara.com', 'thebesthosterv.com', 'odysseusa.cc', 'ano.cx', 'vidwara.cc'
+    ]
+    pattern = (
+        r'(?://|\.)((?:st(?:rea)?mix|vid(?:w?ar|matrix)a*|viewdara|thebesthosterv|kinoger|odysseusa|ano)'
+        r'\.(?:so|io|to|cc|com|pw|cx))/(?:e|v)/([0-9a-zA-Z]+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': ref}
-        html = self.net.http_GET(web_url, headers=headers).content
+        pdata = {'filecode': media_id,
+                 'device': 'web'}
+        html = self.net.http_POST(web_url, form_data=pdata, headers=headers, jdata=True).content
         r = json.loads(html)
         if 'streaming_url' in r.keys():
             headers.update({'Referer': ref, 'Origin': ref[:-1]})
@@ -49,7 +57,6 @@ class StreamixResolver(ResolveUrl):
         raise ResolverError("Unable to locate stream URL.")
 
     def get_url(self, host, media_id):
-        template = 'https://{host}/ajax/stream?filecode={media_id}'
-        if 'vidara' in host:
-            template = template.replace('/ajax/', '/api/')
-        return self._default_get_url(host, media_id, template=template)
+        if host in ['streamix.so', 'stmix.io']:
+            host = 'vidara.to'
+        return self._default_get_url(host, media_id, template='https://{host}/api/stream')

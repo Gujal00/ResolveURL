@@ -31,7 +31,7 @@ class FastDriveResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         rurl = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': rurl}
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r"btn--primary'\s*href='([^']+)", html)

@@ -29,7 +29,7 @@ class VideoWoodResolver(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'Referer': web_url, 'User-Agent': common.FF_USER_AGENT}
+        headers = {'Referer': web_url, 'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         if "This video doesn't exist." in html:
             raise ResolverError('The requested video was not found.')
@@ -40,7 +40,7 @@ class VideoWoodResolver(ResolveUrl):
             match = re.search("'([^']+)", aa_text)
             if match:
                 stream_url = match.group(1)
-                return stream_url + helpers.append_headers({'User-Agent': common.FF_USER_AGENT})
+                return stream_url + helpers.append_headers({'User-Agent': common.RAND_UA})
 
         raise ResolverError('Video Link Not Found')
 

@@ -28,23 +28,28 @@ class KinoGerResolver(ResolveUrl):
     name = 'KinoGer'
     domains = [
         'kinoger.re', 'shiid4u.upn.one', 'moflix.upns.xyz', 'player.upn.one', 'disneycdn.net',
-        'wasuytm.store', 'ultrastream.online', 'moflix.rpmplay.xyz', 'tuktuk.rpmvid.com', 'w1tv.xyz'
+        'wasuytm.store', 'ultrastream.online', 'moflix.rpmplay.xyz', 'tuktuk.rpmvid.com', 'w1tv.xyz',
         'filedecrypt.link', 'asianembed.cam', 'videoshar.uns.bio', 'videoland.cfd', 'dzo.vidplayer.live',
         'watch.ezplayer.me', 'watch.streamcasthub.store', 'ultra.rpmvid.site', 'securecdn.shop',
         'srbe84.vidplayer.live', 'flimmer.rpmvip.com', 't1.p2pplay.pro', 'flixfilmesonline.strp2p.site',
         'filma365.strp2p.site', 'strp2p.site', 'vidmoly.cc', 'animeshqip.uns.bio', 'cimanow.upns.online',
-        'kinoger.p2pplay.pro', 'embedplay.upns.ink'
+        'kinoger.p2pplay.pro', 'embedplay.upns.ink', 'moviehax.strp2p.site', 'filmi9.upns.xyz',
+        'embedplayapiupn.upns.xyz', 'kinoger.embed4me.vip', 'kinoger.seekplays.pro', 'kory.4meplayer.pro'
     ]
-    pattern = r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|(?:moflix|cimanow|embedplay)\.(?:upns|rpmplay)|' \
-              r'(?:tuktuk|ultra)\.rpmvid|filedecrypt|(?:dzo|srbe84)\.vidplayer|video(?:shar\.uns|land)|' \
-              r'w1tv|(?:flixfilmesonline\.|filma365\.)?strp2p|flimmer\.rpmvip|(?:t1|kinoger)\.p2pplay|asianembed|securecdn|' \
-              r'watch\.(?:ezplayer|streamcasthub)|disneycdn|vidmoly|animeshqip\.uns)' \
-              r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|l?i(?:nk|ve)|bio|cfd|site|shop|pro|cc))/#([A-Za-z0-9]+)'
+    pattern = (
+        r'(?://|\.)((?:kinoger|wasuytm|ultrastream|(?:shiid4u|player)\.upn|(?:moflix|cimanow|embedplay(?:apiupn)?|'
+        r'(?:tuktuk|ultra)\.rpmvid|filedecrypt|(?:dzo|srbe84)\.vidplayer|video(?:shar\.uns|land)|'
+        r'w1tv|(?:flixfilmesonline\.|filma365\.|moviehax\.)?strp2p|flimmer\.rpmvip|'
+        r'asianembed|securecdn|watch\.(?:ezplayer|streamcasthub)|'
+        r'filmi9)\.(?:upns|rpmplay)|(?:t1|kinoger)\.p2pplay|kinoger\.(?:embed4me|seekplays)|'
+        r'disneycdn|vidmoly|animeshqip\.uns|kory\.4meplayer)'
+        r'\.(?:[mr]e|one|xyz|store|online|c[oa]m|net|l?i(?:nk|ve)|bio|cfd|site|shop|pro|cc|vip))/#([A-Za-z0-9]+)'
+    )
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         referer = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': referer}
         edata = self.net.http_GET(web_url, headers=headers).content
         if edata:
@@ -55,6 +60,7 @@ class KinoGerResolver(ResolveUrl):
             ddata = decrypter.feed(edata)
             ddata += decrypter.feed()
             ddata = ddata.decode('utf-8')
+            common.logger.log(ddata, common.log_utils.LOGINFO)
             ddata = json.loads(ddata)
             # r = ddata.get('cf')  # Plays with xbmc Player
             r = ddata.get('source')  # Plays with Inputstream Adaptive

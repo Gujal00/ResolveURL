@@ -238,6 +238,13 @@ def scrape_supported(html, regex=None, host_only=False):
     return links
 
 
+def debrid_enabled():
+    """
+    helper function to determine if universal resolvers are enabled
+    """
+    return common.get_setting('allow_universal') == 'true'
+
+
 def display_settings():
     """
     Opens the settings dialog for :mod:`resolveurl` and its plugins.
@@ -305,6 +312,9 @@ def _update_settings_xml():
         '\t\t<setting default="true" id="auto_pick" label="%s" type="bool"/>' % (common.i18n('auto_pick')),
         '\t\t<setting default="true" id="use_cache" label="%s" type="bool"/>' % (common.i18n('use_function_cache')),
         '\t\t<setting id="reset_cache" type="action" label="%s" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_cache)"/>' % (common.i18n('reset_function_cache')),
+        '\t\t<setting default="false" id="bp_enable" label="%s" type="bool"/>' % (common.i18n('enable_byparr')),
+        '\t\t<setting id="bp_url" visible="eq(-1,true)" enable="eq(-1,true)" type="text" label="%s" default="http://localhost:8191"/>' % (common.i18n('byparr_url')),
+        '\t\t<setting id="bp_timeout" visible="eq(-2,true)" enable="eq(-2,true)" type="slider" label="%s" default="60" range="30,30,180" option="int" />' % (common.i18n('byparr_timeout')),
         '\t\t<setting id="personal_nid" label="Your NID" type="text" visible="false" default=""/>',
         '\t\t<setting id="last_ua_create" label="last_ua_create" type="number" visible="false" default="0"/>',
         '\t\t<setting id="current_ua" label="current_ua" type="text" visible="false" default=""/>',

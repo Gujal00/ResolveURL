@@ -38,7 +38,7 @@ class BunnyResolver(ResolveUrl):
         web_ref = urllib_parse.urljoin(web_url, '/')
         if not referer:
             referer = web_ref
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': referer}
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'<source.+?src="([^"]+)', html)

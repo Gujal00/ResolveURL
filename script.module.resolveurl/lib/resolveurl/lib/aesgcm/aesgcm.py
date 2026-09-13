@@ -18,6 +18,7 @@ from . import python_aes
 from .constanttime import ct_compare_digest
 from .cryptomath import bytesToNumber, numberToByteArray
 
+
 class AESGCM(object):
     """
     AES-GCM implementation. Note: this implementation does not attempt
@@ -52,10 +53,9 @@ class AESGCM(object):
         self._productTable[self._reverseBits(1)] = h
         for i in range(2, 16, 2):
             self._productTable[self._reverseBits(i)] = \
-                self._gcmShift(self._productTable[self._reverseBits(i//2)])
-            self._productTable[self._reverseBits(i+1)] = \
+                self._gcmShift(self._productTable[self._reverseBits(i // 2)])
+            self._productTable[self._reverseBits(i + 1)] = \
                 self._gcmAdd(self._productTable[self._reverseBits(i)], h)
-
 
     def _auth(self, ciphertext, ad, tagMask):
         y = 0
@@ -68,7 +68,7 @@ class AESGCM(object):
 
     def _update(self, y, data):
         for i in range(0, len(data) // 16):
-            y ^= bytesToNumber(data[16*i:16*i+16])
+            y ^= bytesToNumber(data[16 * i: 16 * i + 16])
             y = self._mul(y)
         extra = len(data) % 16
         if extra != 0:
@@ -88,7 +88,7 @@ class AESGCM(object):
             # precomputed.
             retHigh = ret & 0xf
             ret >>= 4
-            ret ^= (AESGCM._gcmReductionTable[retHigh] << (128-16))
+            ret ^= (AESGCM._gcmReductionTable[retHigh] << (128 - 16))
 
             # Add in y' * H where y' are the next four terms of y, shifted down
             # to the x^0..x^4. This is one of the pre-computed multiples of
@@ -173,12 +173,12 @@ class AESGCM(object):
             # The x^127 term was shifted up to x^128, so subtract a 1+x+x^2+x^7
             # term. This is 0b11100001 or 0xe1 when represented as an 8-bit
             # polynomial.
-            x ^= 0xe1 << (128-8)
+            x ^= 0xe1 << (128 - 8)
         return x
 
     @staticmethod
     def _inc32(counter):
-        for i in range(len(counter)-1, len(counter)-5, -1):
+        for i in range(len(counter) - 1, len(counter) - 5, -1):
             counter[i] = (counter[i] + 1) % 256
             if counter[i] != 0:
                 break

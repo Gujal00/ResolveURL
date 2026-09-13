@@ -30,7 +30,7 @@ class FileKeeperResolver(ResolveUrl):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         uri = web_url
         r = self.net.http_GET(uri, headers=headers, redirect=False)
         hdrs = r.get_headers(as_dict=True)

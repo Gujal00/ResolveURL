@@ -30,7 +30,7 @@ class VimeoResolver(ResolveUrl):
     pattern = r'(?://|\.)(vimeo\.com)/(?:video/)?([0-9a-zA-Z.:/$&?=]+)'
 
     def get_media_url(self, host, media_id, subs=False):
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         ref = 'https://vimeo.com/'
         if '$$' in media_id:
             media_id, referer = media_id.split('$$')

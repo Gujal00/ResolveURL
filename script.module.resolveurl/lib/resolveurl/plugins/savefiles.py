@@ -27,8 +27,10 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class SaveFilesResolver(ResolveUrl):
     name = 'SaveFiles'
     domains = ['savefiles.com', 'streamhls.to']
-    pattern = r'(?://|\.)((?:savefiles|streamhls)\.' \
-              r'(?:com|to))/(?:e/|v/)?([0-9a-zA-Z]+)'
+    pattern = (
+        r'(?://|\.)((?:savefiles|streamhls)\.'
+        r'(?:com|to))/(?:e/|v/)?([0-9a-zA-Z]+)'
+    )
 
     def get_media_url(self, host, media_id, subs=False):
         web_url = self.get_url(host, media_id)

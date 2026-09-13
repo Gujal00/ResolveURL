@@ -25,16 +25,16 @@ class UQLoadResolver(ResolveGeneric):
     domains = [
         'uqload.com', 'uqload.co', 'uqload.io', 'uqload.to',
         'uqload.ws', 'uqload.net', 'uqload.cx', 'uqload.bz',
-        'uqload.org', 'uqload.is'
+        'uqload.org', 'uqload.is', 'uqload.vc'
     ]
-    pattern = r'(?://|\.)(uqload\.(?:[ict]om?|[iw]s|net|cx|bz|org))/(?:embed-)?([0-9a-zA-Z]+)'
+    pattern = r'(?://|\.)(uqload\.(?:[ict]om?|[iw]s|net|cx|bz|org|vc))/(?:e/|embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[['"](?P<url>[^'"]+)'''],
+            patterns=[r'''sources:\s*\[{\s*file:\s*['"](?P<url>[^'"]+)'''],
             referer=False
         )
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, 'https://uqload.is/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, 'https://uqload.vc/embed-{media_id}.html')

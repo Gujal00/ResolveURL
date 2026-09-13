@@ -29,7 +29,7 @@ class RuTubeResolver(ResolveUrl):
     pattern = r'(?://|\.)(rutube\.ru)/(?:play/embed/|video/)([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         web_url = self.get_url(host, media_id)
         html = self.net.http_GET(web_url, headers=headers).content
         html = json.loads(html)

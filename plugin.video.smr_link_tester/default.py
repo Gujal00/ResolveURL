@@ -28,9 +28,13 @@ from resources.lib import kodi
 
 logger = log_utils.Logger.get_logger()
 xxx_enabled = kodi.get_setting('xxx_plugins') == 'true'
+debrid_enabled = resolveurl.debrid_enabled()
 xxx_plugins_path = 'special://home/addons/script.module.resolveurl.xxx/resources/plugins/'
+external_plugins_path = kodi.get_setting('external_plugins')
 if xxx_enabled and xbmcvfs.exists(xxx_plugins_path):
     resolveurl.add_plugin_dirs(kodi.translatePath(xxx_plugins_path))
+if external_plugins_path and xbmcvfs.exists(external_plugins_path):
+    resolveurl.add_plugin_dirs(kodi.translatePath(external_plugins_path))
 
 
 def __enum(**enums):
@@ -225,17 +229,23 @@ def edit_link(index, path):
 def play_link(link):
     logger.log('Playing Link: |%s|' % (link), log_utils.LOGDEBUG)
     ia = False
-    debrid = link.startswith('magnet')
+    magnet = link.startswith('magnet')
+    if magnet and not debrid_enabled:
+        logger.log('Universal resolvers not enabled by smr: %s' % (link), log_utils.LOGDEBUG)
+        kodi.notify('Link Not Supported: %s' % (link), duration=7500)
+        return False
     if link.startswith('ia://'):
         ia = True
         link = link[5:]
     elif link.endswith('$$subs'):
         link = link[:-6]
 
-    if link.endswith('$$all'):
-        hmf = resolveurl.HostedMediaFile(url=link[:-5], include_universal=debrid, return_all=True)
+    if magnet and link.endswith('$$all'):
+        hmf = resolveurl.HostedMediaFile(url=link[:-5], include_universal=debrid_enabled, return_all=True)
     else:
-        hmf = resolveurl.HostedMediaFile(url=link, include_universal=True, subs=True, content_type=True)
+        if link.endswith('$$all'):
+            link = link[:-5]
+        hmf = resolveurl.HostedMediaFile(url=link, include_universal=debrid_enabled, subs=True, content_type=True)
     if not hmf:
         logger.log('Indirect hoster_url not supported by smr: %s' % (link), log_utils.LOGDEBUG)
         kodi.notify('Link Not Supported: %s' % (link), duration=7500)
@@ -245,6 +255,7 @@ def play_link(link):
 
     try:
         subs = {}
+        mimetype = ''
         if link.endswith('$$all'):
             allfiles = hmf.resolve()
             names = [x.get('name') for x in allfiles]
@@ -254,7 +265,6 @@ def play_link(link):
             stream_url = allfiles[item].get('link')
             if resolveurl.HostedMediaFile(stream_url):
                 stream_url = resolveurl.resolve(stream_url)
-                mimetype = ''
         else:
             resp = hmf.resolve()
             if resp:

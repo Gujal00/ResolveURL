@@ -34,7 +34,7 @@ class DubokuResolver(ResolveUrl):
         if host.endswith(('.fun', '.com')):
             host = 'duboku.tv'
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT,
+        headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://{0}/'.format(host)}
         html = self.net.http_GET(web_url, headers=headers).content
         match = re.search(r'var\s*player_[a-z]{0,4}\s*=\s*([^<]+)', html)
