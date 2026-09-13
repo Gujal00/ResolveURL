@@ -27,7 +27,7 @@ from six.moves import urllib_parse
 class VideaResolver(ResolveUrl):
     name = 'Videa'
     domains = ['videa.hu', 'videakid.hu']
-    pattern = r'(?://|\.)((?:videa|videakid)\.hu)/(?:player/?\?v=|player/v/|videok/)(?:.*-|)([0-9a-zA-Z]+)'
+    pattern =  r'(?://|\.)((?:videa|videakid)\.hu)/(?:player/?\?[vf]=|player/v/|videok/)(?:.*-|)([0-9a-zA-Z]+)'
     url = ''
     videa_secret = 'xHb0ZvME5q8CBcoQi6AngerDu3FGO9fkUlwPmLVY_RTzj2hJIS4NasXWKy1td7p'
     key = ''
