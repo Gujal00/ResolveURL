@@ -440,3 +440,11 @@ msgstr ""
 msgctxt "#33106"
 msgid "ByParr timeout"
 msgstr ""
+
+msgctxt "#33107"
+msgid "2Captcha API Key"
+msgstr ""
+
+msgctxt "#33108"
+msgid "Solving Captcha, please wait"
+msgstr ""
