@@ -33,6 +33,11 @@ class IndaVideoResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
+
+        jsonp_match = re.search(r'\(\s*(\{.*\})\s*\)\s*;?\s*$', html, re.DOTALL)
+        if jsonp_match:
+            html = jsonp_match.group(1)
+
         data = json.loads(html)
 
         if data['success'] == '0':
@@ -44,6 +49,11 @@ class IndaVideoResolver(ResolveUrl):
             web_url = self.get_url(host, emb_hash.group(1))
 
             html = self.net.http_GET(web_url).content
+
+            jsonp_match = re.search(r'\(\s*(\{.*\})\s*\)\s*;?\s*$', html, re.DOTALL)
+            if jsonp_match:
+                html = jsonp_match.group(1)
+
             data = json.loads(html)
 
         if data['success'] == '1':
@@ -72,4 +82,7 @@ class IndaVideoResolver(ResolveUrl):
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return 'http://amfphp.indavideo.hu/SYm0json.php/player.playerHandler.getVideoData/%s/?_=%s' % (media_id, int(time.time() * 1000))
+        return ('http://amfphp.indavideo.hu/SYm0json.php/'
+                'player.playerHandler.getVideoData/%s/12////'
+                '?directlink&callback=jQuery&_=%s'
+                % (media_id, int(time.time() * 1000)))
