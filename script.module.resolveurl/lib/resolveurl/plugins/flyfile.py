@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class FlyFileResolver(ResolveUrl):
     name = 'FlyFile'
     domains = ['flyfile.app', 'flyf.lat']
-    pattern = r'(?://|\.)(flyf(?:ile)?\.(?:app|lat))/embed/([A-Za-z0-9]+)'
+    pattern = r'(?://|\.)(flyf(?:ile)?\.(?:app|lat))/(?:embed|v)/([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
