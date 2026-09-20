@@ -1,16 +1,23 @@
-Version 5.1.208 (Aug 30, 2026)
+Version 5.1.209 (Sep 20, 2026)
 - Code Base Changes:
-    - None
+    - 2Captcha support, required for dropload
 
 - Resolvers Added:
-    - anonstream
-    - vcdnlare
+    - filemoon
+    - vidzy
 
 - Resolvers Fixed/Updated:
-    - embedojo
+    - dropload
+    - firestream
     - flyfile
-    - uperbox
+    - indavideo
+    - mixdrop
+    - streamix
+    - streamtape
+    - streamwish
+    - videa
     - vidsonic
+    - vk
     - voesx
 
 - Resolvers Removed
