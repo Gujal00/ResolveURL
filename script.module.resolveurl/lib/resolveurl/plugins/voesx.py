@@ -1,3 +1,4 @@
+
 """
     Plugin for ResolveURL
     Copyright (C) 2020 gujal
@@ -170,3 +171,4 @@ class VoeResolver(ResolveUrl):
         txt = ''.join([chr(ord(i) - 3) for i in ct])
         txt = helpers.b64decode(txt[::-1])
         return json.loads(txt)
+
