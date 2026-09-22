@@ -1,3 +1,4 @@
+
 """
     Plugin for ResolveURL
     Copyright (C) 2020 gujal
@@ -61,7 +62,7 @@ class VoeResolver(ResolveUrl):
         'garylargeavailable.com', 'jennifereconomicgive.com', 'pamelachangemission.com',
         'ellenpoliticalfollow.com', 'caseyimpactstation.com', 'matthewhotelscience.com',
         'jessicachoosemake.com', 'stevenfamilyedge.com', 'tracylocalschool.com', 'eugenemakedraw.com', 'johnfullwonder.com',
-        'katherineschoolphone.com'
+        'katherineschoolphone.com', 'jamesbornmain.com'
     ]
     domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
     pattern = (
@@ -92,7 +93,7 @@ class VoeResolver(ResolveUrl):
         r'jeanprofessorcentral|juliewomanwish|garylargeavailable|jennifereconomicgive|'
         r'pamelachangemission|ellenpoliticalfollow|caseyimpactstation|matthewhotelscience|'
         r'jessicachoosemake|stevenfamilyedge|tracylocalschool|eugenemakedraw|johnfullwonder|'
-        r'katherineschoolphone|'
+        r'katherineschoolphone|jamesbornmain|'
         r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net|cc|me|ru))/'
         r'(?:e/)?([0-9A-Za-z]+)'
     )
@@ -170,3 +171,4 @@ class VoeResolver(ResolveUrl):
         txt = ''.join([chr(ord(i) - 3) for i in ct])
         txt = helpers.b64decode(txt[::-1])
         return json.loads(txt)
+
