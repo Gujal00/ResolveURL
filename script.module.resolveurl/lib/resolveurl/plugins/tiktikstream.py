@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class TikTikStreamResolver(ResolveUrl):
     name = 'TikTikStream'
     domains = ['tiktikstream.com']
-    pattern = r'(?://|\.)(tiktikstream\.com)/v/([0-9A-Za-z_-]+)'
+    pattern = r'(?://|\.)(tiktikstream\.com)/(?:v|embed)/([0-9A-Za-z_-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
