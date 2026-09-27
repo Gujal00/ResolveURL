@@ -1,23 +1,15 @@
-Version 5.1.209 (Sep 20, 2026)
+Version 5.1.210 (Sep 27, 2026)
 - Code Base Changes:
-    - 2Captcha support, required for dropload
+    - None
 
 - Resolvers Added:
-    - filemoon
-    - vidzy
+    - tiktikstream
 
 - Resolvers Fixed/Updated:
-    - dropload
-    - firestream
-    - flyfile
-    - indavideo
-    - mixdrop
+    - byse
+    - lulustrean
     - streamix
-    - streamtape
-    - streamwish
-    - videa
-    - vidsonic
-    - vk
+    - vidmoly
     - voesx
 
 - Resolvers Removed
