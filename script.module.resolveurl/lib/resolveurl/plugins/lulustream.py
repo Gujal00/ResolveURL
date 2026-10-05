@@ -24,7 +24,7 @@ class LuluStreamResolver(ResolveGeneric):
     name = 'LuluStream'
     domains = [
         'lulustream.com', 'luluvdo.com', 'lulu.st', 'luluvid.com', '732eg54de642sa.sbs',
-        'cdn1.site', 'streamhihi.com', 'luluvdoo.com', 'd00ds.site', 'lulust.com'
+        'cdn1.site', 'streamhihi.com', 'luluvdoo.com', 'd00ds.site', 'lulust.com', 'luluvido.com'
     ]
     pattern = r'(?://|\.)((?:lulu(?:st(?:ream)?|vi*do*)?|732eg54de642sa|cdn1|streamhihi|d00ds)\.(?:com|sbs|si?te?))/(?:e/|d/)?([0-9a-zA-Z]+)'
 
