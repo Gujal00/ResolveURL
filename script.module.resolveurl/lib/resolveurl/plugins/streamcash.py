@@ -27,7 +27,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class StreamCashResolver(ResolveUrl):
     name = 'StreamCash'
     domains = ['streamcash.to']
-    pattern = r'(?://|\.)(streamcash\.to)/embed/([0-9a-zA-Z_-]+)'
+    pattern = r'(?://|\.)(streamcash\.to)/(?:embed|watch)/([0-9a-zA-Z_-]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
