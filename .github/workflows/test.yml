@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  offline:
+    name: Tier 0+1 (offline)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.11', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install six
+      - run: python -m unittest discover -s tests -t . -v
+
+  live:
+    name: Tier 2 (live, never gates)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: pip install six
+      - run: RESOLVEURL_LIVE_TESTS=1 python -m unittest tests.test_live -v
