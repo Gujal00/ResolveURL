@@ -133,6 +133,49 @@ class TestResolvers(unittest.TestCase):
         self.assertIn('User-Agent=UA', helpers.append_headers({'User-Agent': 'UA'}))
         self.assertIn('Referer=https%3A%2F%2Fx%2F', helpers.append_headers({'Referer': 'https://x/'}))
 
+    def test_facebook_reel_and_share_forms(self):
+        cls = _resolver_class('facebook')
+        for url, media_id in (
+            ('https://www.facebook.com/share/r/1DsbQqrYfx/', '1DsbQqrYfx'),
+            ('https://www.facebook.com/reel/1389266733416566', '1389266733416566'),
+            ('https://www.facebook.com/watch/?v=1234567890123456',
+             '1234567890123456'),
+            ('https://www.facebook.com/video/embed?video_id=987654321098765',
+             '987654321098765'),
+        ):
+            with self.subTest(url=url):
+                m = re.search(cls.pattern, url)
+                self.assertIsNotNone(m)
+                self.assertEqual(m.groups(), ('facebook.com', media_id))
+
+    def test_facebook_share_unwrap(self):
+        cls = _resolver_class('facebook')
+
+        class FakeRedirect:
+            def get_redirect_url(self):
+                return 'https://www.facebook.com/reel/1389266733416566?rdid=x'
+
+        class FakeEmbed:
+            content = '{"hd_src":"https://video.xx/hd.mp4"}'
+
+        class FakeNet:
+            def __init__(self):
+                self.calls = []
+
+            def http_GET(self, url, headers=None, **kwargs):
+                self.calls.append((url, kwargs.get('redirect', True)))
+                if 'share/r' in url:
+                    return FakeRedirect()
+                return FakeEmbed()
+
+        inst = cls()
+        inst.net = FakeNet()
+        resolved = inst.get_media_url('facebook.com', '1DsbQqrYfx')
+        self.assertTrue(resolved.startswith('https://video.xx/hd.mp4'))
+        share_calls = [c for c in inst.net.calls if 'share/r' in c[0]]
+        self.assertEqual(len(share_calls), 1)
+        self.assertFalse(share_calls[0][1], 'share unwrap must not follow redirects')
+
     def test_net_response_parsing(self):
         from resolveurl.lib.net import HttpResponse
 
