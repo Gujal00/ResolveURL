@@ -33,7 +33,7 @@ class FileMoonResolver(ResolveUrl):
         ref = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.RAND_UA, 'Referer': ref}
         html = self.net.http_GET(web_url, headers=headers, redirect=False).content
-        r = re.search(r'<a\s*href="([^"]+)', html)
+        r = re.search(r'''content="0;url='([^']+)''', html)
         if r:
             source = r.group(1).replace('&amp;', '&')
             return source + helpers.append_headers(headers)
