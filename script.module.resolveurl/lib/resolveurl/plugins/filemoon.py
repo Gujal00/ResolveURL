@@ -32,13 +32,17 @@ class FileMoonResolver(ResolveUrl):
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
         headers = {'User-Agent': common.RAND_UA, 'Referer': ref}
-        html = self.net.http_GET(web_url, headers=headers, redirect=False).content
-        r = re.search(r'''content="0;url='([^']+)''', html)
+        resp = self.net.http_GET(web_url, headers=headers)
+        cookie = resp.get_cookies()
+        r = re.search(r'data-hls-url="([^"]+)', resp.content)
         if r:
-            source = r.group(1).replace('&amp;', '&')
-            return source + helpers.append_headers(headers)
+            headers.update({'Cookie': cookie})
+            source = r.group(1)
+            resp = self.net.http_GET(source, headers=headers, redirect=False)
+            if not resp.get_redirect_url():
+                return source + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}/stream')
+        return self._default_get_url(host, media_id, template='https://{host}/{media_id}/embed')
