@@ -193,3 +193,50 @@ def do_ccapimg_captcha(captcha_url):
     common.logger.log_debug('CCapImg Captcha: %s' % captcha_url)
     captcha_img = write_img(captcha_url)
     return get_response(captcha_img)
+
+
+def do_altcha(html, page_url, headers=None, timeout=30):
+    """
+    Solve an ALTCHA proof of work widget (<altcha-widget challenge="...">)
+    locally. The challenge carries PBKDF2 parameters: find the counter whose
+    key of nonce + counter (uint32, big endian) starts with keyPrefix, as the
+    widget's worker does. Returns the form field the widget would fill (base64
+    encoded json of challenge and solution) or an empty dict if there is no
+    challenge, it is not a PBKDF2 one or it is not solved within the timeout.
+    """
+    import time
+    from binascii import hexlify, unhexlify
+    from hashlib import pbkdf2_hmac
+    from struct import pack
+    from six.moves import urllib_parse
+    r = re.search(r'''<altcha-widget[^>]*\schallenge=["']([^"']+)''', html)
+    if not r:
+        return {}
+    name = re.search(r'''<altcha-widget[^>]*\sname=["']([^"']+)''', html)
+    headers = dict(headers or {}, Referer=page_url)
+    challenge = json.loads(net.http_GET(urllib_parse.urljoin(page_url, r.group(1)), headers=headers).content)
+    params = challenge.get('parameters', {})
+    algorithm = params.get('algorithm', '')
+    if not algorithm.startswith('PBKDF2/'):
+        common.logger.log_warning('ALTCHA: unsupported challenge %s' % (algorithm or challenge.get('algorithm')))
+        return {}
+    digest = algorithm.split('/')[1].replace('-', '').lower()
+    nonce = unhexlify(params.get('nonce'))
+    salt = unhexlify(params.get('salt'))
+    start = time.time()
+    counter = 0
+    while True:
+        key = hexlify(pbkdf2_hmac(digest, nonce + pack('>I', counter), salt, params.get('cost'), params.get('keyLength', 32))).decode('ascii')
+        if key.startswith(params.get('keyPrefix')):
+            break
+        if time.time() - start > timeout:
+            common.logger.log_warning('ALTCHA: no solution within %s seconds' % timeout)
+            return {}
+        counter += 1
+    took = int((time.time() - start) * 1000)
+    common.logger.log_debug('ALTCHA %s solved: counter %s after %s ms' % (algorithm, counter, took))
+    payload = {
+        'challenge': {'parameters': params, 'signature': challenge.get('signature')},
+        'solution': {'counter': counter, 'derivedKey': key, 'time': took}
+    }
+    return {name.group(1) if name else 'altcha': helpers.b64encode(json.dumps(payload, sort_keys=True, separators=(',', ':')))}
