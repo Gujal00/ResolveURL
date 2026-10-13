@@ -19,6 +19,7 @@
 import re
 from six.moves import urllib_parse
 from resolveurl import common
+from resolveurl.lib import captcha_lib
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
@@ -106,6 +107,19 @@ class VoeResolver(ResolveUrl):
             if r:
                 web_url = r.group(1)
                 html = self.net.http_GET(web_url, headers=headers).content
+
+        if '<altcha-widget' in html:
+            # some videos are gated by an ALTCHA proof of work; the player only comes
+            # back as the answer to the posted access form, not on a later request
+            form = re.search(r'''<form[^>]+action=["']([^"']+)''', html)
+            captcha = captcha_lib.do_altcha(html, web_url, headers) if form else {}
+            if not captcha:
+                raise ResolverError('Unable to solve captcha')
+            data = helpers.get_hidden(html)
+            data.update(captcha)
+            html = self.net.http_POST(urllib_parse.urljoin(web_url, form.group(1)), form_data=data, headers=dict(headers, Referer=web_url)).content
+            if '<altcha-widget' in html:
+                raise ResolverError('Captcha not accepted')
 
         r = re.search(r'json">\["([^"]+)"]</script>\s*<script\s*src="([^"]+)', html)
         if r:
