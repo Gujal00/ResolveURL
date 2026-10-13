@@ -107,6 +107,18 @@ class VoeResolver(ResolveUrl):
                 web_url = r.group(1)
                 html = self.net.http_GET(web_url, headers=headers).content
 
+        if 'altcha-widget' in html:
+            from resolveurl.lib.captcha_lib import AltchaSolver
+            solver = AltchaSolver()
+            ch_url = re.search(r'altcha-widget\s*challenge="([^"]+)', html)
+            if ch_url:
+                params = helpers.get_hidden(html)
+                challenge = self.net.http_GET(ch_url.group(1), headers=headers).json
+                params.update({'altcha': solver.get_payload(challenge)})
+                html = self.net.http_POST(web_url, form_data=params, headers=headers).content
+            else:
+                raise ResolverError('No video found')
+
         r = re.search(r'json">\["([^"]+)"]</script>\s*<script\s*src="([^"]+)', html)
         if r:
             html2 = self.net.http_GET(urllib_parse.urljoin(web_url, r.group(2)), headers=headers).content
