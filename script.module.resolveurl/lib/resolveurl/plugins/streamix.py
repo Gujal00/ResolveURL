@@ -34,7 +34,7 @@ class StreamixResolver(ResolveUrl):
     ]
     pattern = (
         r'(?://|\.)((?:st(?:rea)?mix|vid(?:[wv]?ar|matrix)a*|viewdara|thebesthosterv|kinoger|odysseusa|ano|viderea|ougbas|sufbgao|isbfga)'
-        r'\.(?:so|io|to|cc|com|pw|cx|fit|lol|online|biz|art|site|xyz|space|store))/(?:e|v)/([0-9a-zA-Z_-]+)'
+        r'\.(?:so|io|to|cc|com|pw|cx|fit|lol|online|biz|art|site|xyz|space|store))/(?:e/|v/)?([0-9a-zA-Z_-]+)'
     )
 
     def get_media_url(self, host, media_id, subs=False):
