@@ -26,9 +26,21 @@ from resolveurl.lib import helpers
 class FacebookResolver(ResolveUrl):
     name = 'Facebook'
     domains = ['facebook.com']
-    pattern = r'(?://|\.)(facebook\.com)/.+?(?:video_id|v|videos)[=/]([0-9a-zA-Z]+)/?'
+    pattern = r'(?://|\.)(facebook\.com)/.*?(?:video_id|v|videos|reel|share/r)[=/]([0-9a-zA-Z]+)/?'
 
     def get_media_url(self, host, media_id):
+        if not media_id.isdigit():
+            # Share token (/share/r/<token>): unwrap the 302 redirect to the
+            # reel id. Falls through to the embed flow when shrinking fails.
+            try:
+                share_url = 'https://{0}/share/r/{1}'.format(host, media_id)
+                resp = self.net.http_GET(
+                    share_url, headers={'User-Agent': common.RAND_UA}, redirect=False)
+                match = re.search(r'/reel/(\d+)', resp.get_redirect_url() or '')
+                if match:
+                    media_id = match.group(1)
+            except Exception:
+                pass
         web_url = self.get_url(host, media_id)
         headers = {'User-Agent': common.RAND_UA,
                    'Referer': 'https://{0}/'.format(host)}

@@ -67,7 +67,7 @@ class StreamWishResolver(ResolveGeneric):
 
     def get_url(self, host, media_id):
         dmca = ["hgplaycdn.com", "hglamioz.com", "niramirus.com", "playnixes.com", "medixiru.com"]
-        main = ["hanerix.com", "audinifer.com", "vibuxer.com", "masukestin.com"]
+        main = ["hanerix.com", "audinifer.com", "vibuxer.com"]
         rules = ["dhcplay.com", "hglink.to", "hgcloud.to"]
 
         if host in rules:

@@ -1,16 +1,18 @@
-Version 5.1.208 (Aug 30, 2026)
+Version 5.1.211 (Oct 11, 2026)
 - Code Base Changes:
-    - None
+    - add close method and context manager support to HttpResponse
+    - add test suite
 
 - Resolvers Added:
-    - anonstream
-    - vcdnlare
+    - dtube
 
 - Resolvers Fixed/Updated:
-    - embedojo
-    - flyfile
-    - uperbox
-    - vidsonic
+    - anonmp4
+    - debridlink
+    - filemoon
+    - gupload
+    - lulustream
+    - streamcash
     - voesx
 
 - Resolvers Removed

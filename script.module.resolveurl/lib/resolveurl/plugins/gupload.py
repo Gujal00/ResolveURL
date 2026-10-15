@@ -26,8 +26,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class GUploadResolver(ResolveUrl):
     name = 'GUpload'
-    domains = ['gupload.xyz']
-    pattern = r'(?://|\.)(gupload\.xyz)/data/e/([0-9a-f]+)'
+    domains = ['gupload.xyz', 'gupload.site']
+    pattern = r'(?://|\.)(gupload\.(?:xyz|site))/data/e/([0-9a-f]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

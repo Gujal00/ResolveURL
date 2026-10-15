@@ -531,3 +531,15 @@ class HttpResponse:
         """
         self._nodecode = bool(nodecode)
         return self
+
+    def close(self):
+        """Closes the underlying HTTP response stream."""
+        if hasattr(self._response, 'close'):
+            self._response.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False

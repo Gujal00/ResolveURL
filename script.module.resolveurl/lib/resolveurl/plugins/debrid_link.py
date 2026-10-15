@@ -114,10 +114,24 @@ class DebridLinkResolver(ResolveUrl):
         return {}
 
     def __create_transfer(self, media_id, cached_only=False):
+        if (cached_only or self.get_setting('cached_only') == 'true') and media_id.lower().startswith('magnet:'):
+            media_id = media_id.split('&')[0].split(':')[-1]
         url = '{0}/seedbox/add'.format(api_url)
         data = {'url': media_id,
                 'async': 'true'}
-        js_result = json.loads(self.net.http_POST(url, form_data=data, headers=self.headers).content)
+        try:
+            result = self.net.http_POST(url, form_data=data, headers=self.headers)
+        except urllib_error.HTTPError as e:
+            if e.code == 422:
+                raise ResolverError(i18n('cached_torrents_only'))
+            else:
+                js_result = json.loads(e.read())
+                msg = 'Unknown Error (1)'
+                if 'error' in js_result:
+                    msg = js_result.get('error')
+                raise ResolverError('Debrid-Link Error: {0} ({1})'.format(msg, e.code))
+
+        js_result = json.loads(result.content)
         js_result = js_result.get('value')
         if js_result:
             torrent_id = js_result.get('id')

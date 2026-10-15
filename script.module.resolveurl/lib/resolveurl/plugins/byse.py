@@ -35,16 +35,16 @@ class ByseResolver(ResolveUrl):
         'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', 'f51rm.com',
         'xcoic.com', 'filemoon.nl', 'boosteradx.online', 'streamlyplayer.online', 'bysewihe.com',
         'byselapuix.com', 'embedplaybyse.top', 'sb1254w9megshle.org', 'streamlyplayero.online',
-        'moflix-stream.link', 'bysezoxexe.com'
+        'moflix-stream.link', 'bysezoxexe.com', 'klcams.com', 'mfw09.org'
     ]
     pattern = (
-        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|'
+        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|klcams|mfw09|'
         r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx|streamlyplayero?|moflix-stream|'
         r'(?:embedplay)?byse(?:sayeveum|tayico|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho|wihe|lapuix|vepoin|zoxexe)?)'
         r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))'
         r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+)'
     )
-    UA = "Mozilla/5.0 (Linux; Android 10; TX6s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36"
+    UA = 'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G5510 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/7.2 Chrome/59.0.3071.125 Mobile Safari/537.36'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -208,13 +208,13 @@ class ByseResolver(ResolveUrl):
                 'architecture': 'arm',
                 'bitness': '32',
                 'platform': 'Android',
-                'platform_version': '10.0.0',
-                'model': 'TX6s',
-                'ua_full_version': '137.0.7337.0',
+                'platform_version': '6.0.1',
+                'model': 'SM-G5510',
+                'ua_full_version': '59.0.3071.125',
                 'brand_full_versions': [
                     {
-                        'brand': 'Chromium',
-                        'version': '137.0.7337.0'
+                        'brand': 'SamsungBrowser',
+                        'version': '7.2'
                     }
                 ],
                 'pixel_ratio': 1,
@@ -228,18 +228,15 @@ class ByseResolver(ResolveUrl):
                 'hardware_concurrency': 4,
                 'device_memory': 2,
                 'touch_points': 1,
-                'webgl_vendor': 'Google Inc. (ARM)',
-                'webgl_renderer': 'ANGLE (ARM, Mali-G31 MP2, OpenGL ES 3.2)',
                 'canvas_hash': self.fh(r),
                 'audio_hash': self.fh(r + 1),
-                'webgl_params_hash': self.fh(r + 2),
                 'fonts_hash': self.fh(r + 3),
                 'codecs_hash': self.fh(r + 4),
                 'media_devices': 'ai1ao1vi4',
                 'pointer_type': 'coarse',
                 'extra': {
-                    'vendor': 'Google Inc.',
-                    'appVersion': self.UA.lstrip('Mozilla/')
+                    'vendor': 'Samsung',
+                    'appVersion': '7.2'
                 }
             },
             'storage': {},
@@ -308,7 +305,7 @@ class ByseResolver(ResolveUrl):
             return e + (32 - n.bit_length())
         return e
 
-    def er(self, t, e, r=20.0):
+    def er(self, t, e, r=30.0):
         import time
         if e <= 0:
             return '0'
