@@ -31,7 +31,7 @@ class OKRuResolver(ResolveUrl):
     qual_map = {'ultra': '2160', 'quad': '1440', 'full': '1080', 'hd': '720', 'sd': '480', 'low': '360', 'lowest': '240', 'mobile': '144'}
 
     def get_media_url(self, host, media_id, subs=False):
-        vids, subtitles = self.__get_Metadata(media_id, subs)
+        vids, subtitles = self.__get_Metadata(host, media_id, subs)
         if isinstance(vids, dict):
             sources = []
             for entry in vids['urls']:
@@ -54,8 +54,8 @@ class OKRuResolver(ResolveUrl):
     def __replaceQuality(self, qual):
         return self.qual_map.get(qual.lower(), '000')
 
-    def __get_Embed(self, media_id):
-        url = "http://www.ok.ru/videoembed/{0}".format(media_id)
+    def __get_Embed(self, host, media_id):
+        url = self.get_url(host, media_id)
         html = self.net.http_GET(url, headers=self.header).content
         if "notFound" not in html:
             match = re.search(r'data-options="({[^"]+)"', html)
@@ -68,8 +68,8 @@ class OKRuResolver(ResolveUrl):
                     return metadata
         raise ResolverError('File Not Found or removed')
 
-    def __get_Metadata(self, media_id, subs):
-        json_data = self.__get_Embed(media_id)
+    def __get_Metadata(self, host, media_id, subs):
+        json_data = self.__get_Embed(host, media_id)
 
         subtitles = {}
         if subs and 'movie' in json_data and 'subtitleTracks' in json_data['movie']:
@@ -84,24 +84,12 @@ class OKRuResolver(ResolveUrl):
             for entry in json_data['videos']:
                 info['urls'].append(entry)
         else:  # Live Stream
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"}
-            html = self.net.http_GET("http://www.ok.ru/videoembed/{0}".format(media_id), headers=headers).content
-            match = re.search(r'data-options="({[^"]+)"', html)
-            if match:
-                json_data = json.loads(match.group(1).replace('&quot;', '"').replace('&amp;', '&'))
-                metadata = json_data.get("flashvars", {}).get("metadata")
-                if metadata:
-                    if isinstance(metadata, str):
-                        metadata = json.loads(metadata)
-                    info = metadata.get('hlsManifestUrl', '')
-                    if info:
-                        info = info + helpers.append_headers(headers)
-                    else:
-                        raise ResolverError('No live stream URL found')
-                else:
-                    raise ResolverError('No metadata found')
+            info = metadata.get('hlsManifestUrl', '')
+            if info:
+                info = info + helpers.append_headers(headers)
             else:
-                raise ResolverError('No data-options found')
+                raise ResolverError('No live stream URL found')
+
         return info, subtitles
 
     def get_url(self, host, media_id):
