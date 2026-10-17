@@ -84,7 +84,7 @@ class OKRuResolver(ResolveUrl):
             for entry in json_data['videos']:
                 info['urls'].append(entry)
         else:  # Live Stream
-            info = metadata.get('hlsManifestUrl', '')
+            info = json_data.get('hlsManifestUrl', '')
             if info:
                 info = info + helpers.append_headers(headers)
             else:
