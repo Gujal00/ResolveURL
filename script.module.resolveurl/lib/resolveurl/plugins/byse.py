@@ -35,18 +35,23 @@ class ByseResolver(ResolveUrl):
         'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', 'f51rm.com',
         'xcoic.com', 'filemoon.nl', 'boosteradx.online', 'streamlyplayer.online', 'bysewihe.com',
         'byselapuix.com', 'embedplaybyse.top', 'sb1254w9megshle.org', 'streamlyplayero.online',
-        'moflix-stream.link', 'bysezoxexe.com', 'klcams.com', 'mfw09.org'
+        'moflix-stream.link', 'bysezoxexe.com', 'klcams.com', 'mfw09.org', 'kinoger.re'
     ]
     pattern = (
-        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|klcams|mfw09|'
+        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|klcams|mfw09|kinoger|'
         r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx|streamlyplayero?|moflix-stream|'
         r'(?:embedplay)?byse(?:sayeveum|tayico|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho|wihe|lapuix|vepoin|zoxexe)?)'
-        r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))'
-        r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+)'
+        r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online|re))'
+        r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+(?:\$\$.+)?)'
     )
     UA = 'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G5510 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/7.2 Chrome/59.0.3071.125 Mobile Safari/537.36'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
         headers = {
@@ -54,6 +59,13 @@ class ByseResolver(ResolveUrl):
             'Referer': ref,
             'Origin': ref[:-1]
         }
+        if referer:
+            # embed-restricted videos: the player sends the embedding page along with every API call
+            parent = urllib_parse.urlparse(referer).hostname or ''
+            headers.update({
+                'X-Embed-Origin': parent[4:] if parent.startswith('www.') else parent,
+                'X-Embed-Referer': referer
+            })
         embed = ''
         details_url = '{0}api/videos/{1}/details'.format(ref, media_id)
         try:
@@ -135,6 +147,10 @@ class ByseResolver(ResolveUrl):
                     headers.pop('X-Embed-Parent')
                 if 'X-Captcha-Token' in headers.keys():
                     headers.pop('X-Captcha-Token')
+                if 'X-Embed-Origin' in headers.keys():
+                    headers.pop('X-Embed-Origin')
+                if 'X-Embed-Referer' in headers.keys():
+                    headers.pop('X-Embed-Referer')
                 return uri + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
@@ -305,7 +321,7 @@ class ByseResolver(ResolveUrl):
             return e + (32 - n.bit_length())
         return e
 
-    def er(self, t, e, r=30.0):
+    def er(self, t, e, r=45.0):
         import time
         if e <= 0:
             return '0'
