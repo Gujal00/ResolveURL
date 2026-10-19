@@ -35,18 +35,23 @@ class ByseResolver(ResolveUrl):
         'bf0skv.org', 'z1ekv717.fun', 'l1afav.net', '222i8x.lol', '8mhlloqo.fun', 'f51rm.com',
         'xcoic.com', 'filemoon.nl', 'boosteradx.online', 'streamlyplayer.online', 'bysewihe.com',
         'byselapuix.com', 'embedplaybyse.top', 'sb1254w9megshle.org', 'streamlyplayero.online',
-        'moflix-stream.link', 'bysezoxexe.com', 'klcams.com', 'mfw09.org'
+        'moflix-stream.link', 'bysezoxexe.com', 'klcams.com', 'mfw09.org', 'kinoger.re'
     ]
     pattern = (
-        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|klcams|mfw09|'
+        r'(?://|\.)((?:filemoon|cinegrab|moonmov|kerapoxy|furher|1azayf9w|81u6xl9d|f16px|sb1254w9megshle|klcams|mfw09|kinoger|'
         r'smdfs40r|bf0skv|z1ekv717|l1afav|222i8x|8mhlloqo|96ar|xcoic|f51rm|c1z39|boosteradx|streamlyplayero?|moflix-stream|'
         r'(?:embedplay)?byse(?:sayeveum|tayico|zejataos|koze|sukior|jikuar|fujedu|dikamoum|buho|wihe|lapuix|vepoin|zoxexe)?)'
-        r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online))'
-        r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+)'
+        r'\.(?:sx|top?|s?k?in|link|nl|wf|com|eu|art|pro|cc|xyz|org|fun|net|lol|online|re))'
+        r'/(?:(?:e|d|download)/)?([0-9a-zA-Z]+(?:\$\$.+)?)'
     )
     UA = 'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G5510 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/7.2 Chrome/59.0.3071.125 Mobile Safari/537.36'
 
     def get_media_url(self, host, media_id):
+        if '$$' in media_id:
+            media_id, referer = media_id.split('$$')
+            referer = urllib_parse.urljoin(referer, '/')
+        else:
+            referer = False
         web_url = self.get_url(host, media_id)
         ref = urllib_parse.urljoin(web_url, '/')
         headers = {
@@ -54,6 +59,13 @@ class ByseResolver(ResolveUrl):
             'Referer': ref,
             'Origin': ref[:-1]
         }
+        if referer:
+            # embed-restricted videos: the player sends the embedding page along with every API call
+            parent = urllib_parse.urlparse(referer).hostname or ''
+            headers.update({
+                'X-Embed-Origin': parent[4:] if parent.startswith('www.') else parent,
+                'X-Embed-Referer': referer
+            })
         embed = ''
         details_url = '{0}api/videos/{1}/details'.format(ref, media_id)
         try:
@@ -135,6 +147,10 @@ class ByseResolver(ResolveUrl):
                     headers.pop('X-Embed-Parent')
                 if 'X-Captcha-Token' in headers.keys():
                     headers.pop('X-Captcha-Token')
+                if 'X-Embed-Origin' in headers.keys():
+                    headers.pop('X-Embed-Origin')
+                if 'X-Embed-Referer' in headers.keys():
+                    headers.pop('X-Embed-Referer')
                 return uri + helpers.append_headers(headers)
 
         raise ResolverError('Video Link Not Found')
@@ -305,10 +321,96 @@ class ByseResolver(ResolveUrl):
             return e + (32 - n.bit_length())
         return e
 
-    def er(self, t, e, r=30.0):
+    @staticmethod
+    def qr(a, b, c, d, m):
+        a = (a + b) & m
+        x = d ^ a
+        d = ((x << 16) | (x >> 16)) & m
+        c = (c + d) & m
+        x = b ^ c
+        b = ((x << 12) | (x >> 20)) & m
+        a = (a + b) & m
+        x = d ^ a
+        d = ((x << 8) | (x >> 24)) & m
+        c = (c + d) & m
+        x = b ^ c
+        b = ((x << 7) | (x >> 25)) & m
+        return a, b, c, d
+
+    def er(self, t, e, r=45.0):
+        import struct
+        import sys
         import time
+        from array import array
+        from operator import itemgetter
         if e <= 0:
             return '0'
+        if e > 32 or sys.byteorder != 'little' or not hasattr(int, 'from_bytes'):
+            return self.es(t, e, r)
+        # Same result as es() (the smallest s), but 64 attempts at a time: each attempt has its own
+        # 64 bit field in one big integer, so every addition, xor, shift and multiplication below
+        # works on all of them in one step. Only the lookup r[r[s] & 511] differs per field, it goes
+        # through a flat array. With e <= 32 only the first output word decides.
+        k, m = 64, 0xFFFFFFFF
+        ones = sum(1 << (64 * j) for j in range(k))
+        mm, im, nb = ones * m, ones * 511, 8 * k
+        jo = sum(j << (64 * j) for j in range(k))
+        hi = ((m << (32 - e)) & m) * ones
+        q = struct.Struct('<%dQ' % k)
+        a, b, c, d = 1779033703, 3144134277, 1013904242, 2773480762
+        for i in bytearray((t + ':').encode('ascii')):
+            a = self.re((a + i) & m, 7)
+            a, b, c, d = self.qr(a, b, c, d, m)
+        st = (a * ones, b * ones, c * ones, d * ones)
+        start = time.time()
+        s, n, nx = 0, 1, 10
+        while True:
+            cnt = min(k, nx - s)
+            ds = [str(v) for v in range(s, s + cnt)]
+            ds += [ds[-1]] * (k - cnt)
+            a, b, c, d = st
+            for p in range(n):
+                a = (a + int.from_bytes(q.pack(*[ord(x[p]) for x in ds]), 'little')) & mm
+                a = ((a << 7) | (a >> 25)) & mm
+                a, b, c, d = self.qr(a, b, c, d, mm)
+            for _ in range(8):
+                a, b, c, d = self.qr(a, b, c, d, mm)
+            rr = [0] * 512
+            for i in range(512):
+                a, b, c, d = self.qr(a, b, c, d, mm)
+                rr[i] = a ^ c
+            fl = array('Q')
+            fl.frombytes(b''.join([v.to_bytes(nb, 'little') for v in rr]))
+            fv = memoryview(fl)
+            for _ in range(2):
+                for i in range(512):
+                    x = rr[i]
+                    y = itemgetter(*q.unpack(((x & im) * k + jo).to_bytes(nb, 'little')))(fl)
+                    y = (x + int.from_bytes(q.pack(*y), 'little')) & mm
+                    y = ((y << 13) | (y >> 19)) & mm
+                    y ^= (rr[(i + 1) & 511] * 2654435761) & mm
+                    rr[i] = y
+                    fv[i * k:i * k + k] = memoryview(y.to_bytes(nb, 'little')).cast('Q')
+                    a, b, c, d = self.qr(a ^ y, b, c, d, mm)
+            a, b, c, d = self.qr(a, b, c, d, mm)
+            x = a
+            for v in rr[:64]:
+                x = (x + v) & mm
+                x = ((x << 5) | (x >> 27)) & mm
+                x ^= (v * 2246822519) & mm
+            x = q.unpack(((x ^ c) & hi).to_bytes(nb, 'little'))
+            for j in range(cnt):
+                if not x[j]:
+                    return str(s + j)
+            s += cnt
+            if s == nx:
+                n, nx = n + 1, nx * 10
+            if time.time() - start > r:
+                return None
+
+    def es(self, t, e, r):
+        # one attempt at a time, the reference for er()
+        import time
         start = time.time()
         s = 0
         t += ':'
