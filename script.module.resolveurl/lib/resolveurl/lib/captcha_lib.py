@@ -291,7 +291,7 @@ class AltchaSolver:
         elif algorithm.startswith("PBKDF2"):
             return self._solve_pbkdf2(params, algorithm)
         else:
-            raise ValueError(f"Unsupported algorithm: {algorithm}. Supported: {self.SUPPORTED_ALGORITHMS}")
+            raise Exception("Unsupported algorithm: {0}. Supported: {1}".format(algorithm, self.SUPPORTED_ALGORITHMS))
 
     def _solve_sha_challenge(self, params, algorithm):
         """
@@ -327,7 +327,7 @@ class AltchaSolver:
                     "time": round(elapsed_ms, 1)
                 }
 
-        raise RuntimeError("No solution found after {} iterations".format(min(max_number, self.max_iterations)))
+        raise Exception("No solution found after {} iterations".format(min(max_number, self.max_iterations)))
 
     def _solve_sha_prefix(self, params, algorithm):
         """
@@ -369,7 +369,7 @@ class AltchaSolver:
                     "time": round(elapsed_ms, 1)
                 }
 
-        raise RuntimeError("No solution found after {} iterations".format(self.max_iterations))
+        raise Exception("No solution found after {} iterations".format(self.max_iterations))
 
     def _solve_pbkdf2(self, params, algorithm):
         """
@@ -424,7 +424,7 @@ class AltchaSolver:
                     "time": round(elapsed_ms, 1)
                 }
 
-        raise RuntimeError("No solution found after {} iterations".format(self.max_iterations))
+        raise Exception("No solution found after {} iterations".format(self.max_iterations))
 
     @staticmethod
     def build_payload(challenge, solution):
@@ -453,7 +453,7 @@ class AltchaSolver:
         return base64.b64encode(json_str.encode()).decode()
 
     @staticmethod
-    def list_algorithms() -> list:
+    def list_algorithms():
         """Return list of supported algorithms."""
         return AltchaSolver.SUPPORTED_ALGORITHMS.copy()
 
