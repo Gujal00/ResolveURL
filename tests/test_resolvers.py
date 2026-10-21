@@ -31,10 +31,12 @@ VECTORS = {
     'doodstream': 'https://dood.watch/e/abc123xyzAB',
     'filelions': 'https://filelions.to/v/abc123xyzAB',
     'filemoon': 'https://filemoon.org/e/abc123xyzAB',
+    'lbry': 'https://odysee.com/ELENI-1981',
     'lulustream': 'https://lulustream.com/e/abc123xyzAB',
     'mixdrop': 'https://mixdrop.ps/e/ab12cd34ef56',
     'mp4upload': 'https://www.mp4upload.com/abc123xyzAB',
     'ok': 'https://ok.ru/videoembed/3567556037366',
+    'peertube': 'https://tube.peerbir.in/videos/watch/63CArfxHJqPMJThEt9Q7y8',
     'rapidgator': 'https://rapidgator.net/file/abc123xyzAB45/xyz.html',
     'sendvid': 'https://sendvid.com/abc123xyzAB12',
     'streamtape': 'https://streamtape.com/e/AbC123xYz45',
@@ -147,6 +149,28 @@ class TestResolvers(unittest.TestCase):
                 m = re.search(cls.pattern, url)
                 self.assertIsNotNone(m)
                 self.assertEqual(m.groups(), ('facebook.com', media_id))
+
+    def test_odysee_claim_forms(self):
+        cls = _resolver_class('lbry')
+        for url, media_id in (
+            ('https://odysee.com/ELENI-1981', 'ELENI-1981'),
+            ('https://odysee.com/O-Megalexandros-Theo-Angelopoulos-1980:3',
+             'O-Megalexandros-Theo-Angelopoulos-1980:3'),
+            ('https://odysee.com/@channel:1/video:2', '@channel:1/video:2'),
+        ):
+            with self.subTest(url=url):
+                m = re.search(cls.pattern, url)
+                self.assertIsNotNone(m)
+                self.assertEqual(m.group(2), media_id)
+
+    def test_peertube_extra_instance(self):
+        cls = _resolver_class('peertube')
+        m = re.search(
+            cls.pattern,
+            'https://tube.peerbir.in/videos/watch/63CArfxHJqPMJThEt9Q7y8')
+        self.assertIsNotNone(m)
+        self.assertEqual(m.groups(),
+                         ('tube.peerbir.in', '63CArfxHJqPMJThEt9Q7y8'))
 
     def test_facebook_share_unwrap(self):
         cls = _resolver_class('facebook')

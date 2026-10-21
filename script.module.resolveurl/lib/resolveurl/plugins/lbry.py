@@ -25,7 +25,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 class LbryResolver(ResolveUrl):
     name = 'Lbry'
     domains = ['lbry.tv', 'lbry.science', 'odysee.com', 'madiator.com']
-    pattern = r'(?://|\.)((?:lbry|odysee|mediator)\.(?:tv|science|com))/(@[^/]+/[^/]+)'
+    pattern = r'(?://|\.)((?:lbry|odysee|mediator)\.(?:tv|science|com))/((?:@[^/]+/)?[^/?#]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
