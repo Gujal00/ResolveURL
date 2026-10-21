@@ -106,6 +106,8 @@ class VoeResolver(ResolveUrl):
             if r:
                 web_url = r.group(1)
                 html = self.net.http_GET(web_url, headers=headers).content
+            else:
+                break
 
         if 'altcha-widget' in html:
             from resolveurl.lib.captcha_lib import AltchaSolver
