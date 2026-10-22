@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
 from six.moves import urllib_parse, urllib_error
 from resolveurl import common
 from resolveurl.lib import helpers
@@ -37,7 +36,7 @@ class StreamOriginResolver(ResolveUrl):
         # the embed page is a client side app, its player gets the signed links from the play api
         api_url = 'https://{0}/app/v1/play/{1}?embed=1'.format(host, media_id)
         try:
-            data = json.loads(self.net.http_GET(api_url, headers=headers).content)
+            data = self.net.http_GET(api_url, headers=headers).json
         except urllib_error.HTTPError:
             # removed files and unknown ids get a 404 with {"message":"No file"}
             raise ResolverError('File Not Found or Removed')
