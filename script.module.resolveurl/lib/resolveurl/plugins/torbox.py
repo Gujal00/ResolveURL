@@ -44,8 +44,9 @@ class TorBoxResolver(ResolveUrl):
         self.hosters = None
         self.hosts = None
         self.headers = {'User-Agent': USER_AGENT}
-        if self.get_setting('apikey'):
-            self.headers.update({'Authorization': 'Bearer {0}'.format(self.get_setting('apikey'))})
+        self.apikey = self.get_setting('apikey')
+        if self.apikey:
+            self.headers.update({'Authorization': 'Bearer {0}'.format(self.apikey)})
 
     def __api(self, endpoint, query=None, data=None, empty=None, json_data=False):
         try:
@@ -385,6 +386,7 @@ class TorBoxResolver(ResolveUrl):
         if 'Authorization' in self.headers.keys():
             self.headers.pop('Authorization')
         self.set_setting('apikey', '')
+        self.set_setting('user', '')
 
     def authorize_resolver(self):
         url = self.api_url + '/user/auth/device/start?app=ResolveUrl'
@@ -402,23 +404,25 @@ class TorBoxResolver(ResolveUrl):
         # cancelled
         if result is None:
             return
-        return self.__get_token(js_data.get('device_code'))
+        return self.__get_info()
 
-    def __get_token(self, device_code):
-        url = self.api_url + '/user/auth/device/token'
-        data = {'device_code': device_code}
+    def __get_info(self):
         try:
-            js_data = self.net.http_POST(url, form_data=data, headers=self.headers, jdata=True).json
-            if js_data.get("success"):
-                js_data = js_data.get('data')
-                token = js_data.get('access_token', '')
-                logger.log_debug('Authorizing TorBox Result: |{0}|'.format(token))
-                self.set_setting('apikey', token)
-                self.headers.update({'Authorization': 'Bearer {0}'.format(token)})
+            self.headers.update({'Authorization': 'Bearer {0}'.format(self.apikey)})
+            js_data = self.__get('user/me', {'settings': 'false'}, empty={})
+            if js_data.get("plan", 0) > 0:
+                logger.log_debug('Authorizing TorBox Result: |{0}|'.format(self.apikey))
+                self.set_setting('apikey', self.apikey)
+                self.set_setting('user', js_data.get('email'))
                 return True
+            else:
+                logger.log_debug('TorBox Free Account')
         except Exception as e:
             logger.log_debug('TorBox Authorization Failed: {0}'.format(e))
-            return False
+
+        self.apikey = ''
+        self.headers.pop('Authorization')
+        return False
 
     def __check_auth(self, device_code):
         activated = False
@@ -428,6 +432,8 @@ class TorBoxResolver(ResolveUrl):
             js_data = self.net.http_POST(url, form_data=data, headers=self.headers, jdata=True).json
             if js_data.get("success"):
                 activated = True
+                js_data = js_data.get('data')
+                self.apikey = js_data.get('access_token', '')
         except Exception as e:
             logger.log_debug('Exception during TB auth: {0}'.format(e))
         return activated
@@ -458,6 +464,10 @@ class TorBoxResolver(ResolveUrl):
         xml.append(
             '<setting id="{0}_reset" type="action" label="{1}" action="RunPlugin(plugin://script.module.resolveurl/?mode=reset_tb)"/>'.format(
                 cls.__name__, i18n('reset_my_auth'))
+        )
+        xml.append(
+            '<setting id="{0}_user" enable="false" label="{1}" visible="eq(-6,true)" type="text" default=""/>'.format(
+                cls.__name__, i18n('username'))
         )
         xml.append(
             '<setting id="{0}_apikey" visible="false" type="text" default=""/>'.format(cls.__name__)
