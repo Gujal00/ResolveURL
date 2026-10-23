@@ -34,9 +34,7 @@ class ContentStResolver(ResolveUrl):
             'Origin': 'https://{0}'.format(host)
         }
         # The embed page carries no stream address (its config has src:null,
-        # needCheck:true); loading it once sets the cookies the release call needs.
-        self.net.http_GET(web_url, headers=headers)
-        # The stream address is handed out by POST /x/k/<id> once the client-side
+        # needCheck:true); it is handed out by POST /x/k/<id> once the client-side
         # ad-block check is clean. The check result is a plain string in the body:
         # an empty string means "no ad blocker", which is what a player loads with.
         api_url = 'https://{0}/x/k/{1}'.format(host, media_id)
