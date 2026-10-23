@@ -1,23 +1,26 @@
-Version 5.1.211 (Oct 11, 2026)
+Version 5.1.212 (Oct 24, 2026)
 - Code Base Changes:
-    - add close method and context manager support to HttpResponse
-    - add test suite
+    - support altcha 
 
 - Resolvers Added:
-    - dtube
+    - contentst
+    - ufoload
 
 - Resolvers Fixed/Updated:
-    - anonmp4
-    - debridlink
+    - byse
+    - facebook
     - filemoon
-    - gupload
-    - lulustream
-    - streamcash
+    - lbry
+    - okru
+    - peertube
+    - streamix
+    - streamorigin
+    - streamruby
+    - torbox
     - voesx
 
 - Resolvers Removed
     - None
-
 
 - Languages Added/Updated
     - None
