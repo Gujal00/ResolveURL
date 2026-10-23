@@ -36,8 +36,9 @@ class VidzyResolver(ResolveUrl):
         }
         html = self.net.http_GET(web_url, headers=headers).content
         r = re.search(r'sources:\s*\[{src:\s*\(function\(s\).+?\}\)\("([^"]+)"\)', html, re.DOTALL)
-        if r:
-            source = self._decode_source(r.group(1), host)
+        b = re.search(r'BC!==(\d+)', html)
+        if r and b:
+            source = self._decode_source(r.group(1), host, int(b.group(1)))
             # a wrong key does not fail, the player just falls back to a decoy
             # playlist, so anything that is not a link is treated as no link
             if source.startswith('http'):
@@ -49,7 +50,7 @@ class VidzyResolver(ResolveUrl):
         return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')
 
     @staticmethod
-    def _decode_source(blob, host):
+    def _decode_source(blob, host, bc):
         # the player keeps the source reversed, xored and base64 encoded, with
         # the xor key seeded from the hostname the page is served from, so the
         # seed has to be taken from the host instead of being hardcoded
@@ -60,5 +61,5 @@ class VidzyResolver(ResolveUrl):
         source = ''
         for i in range(len(raw)):
             b = raw[i] if isinstance(raw[i], int) else ord(raw[i])
-            source += chr(b ^ ((0x3d + i * 89 + seed) & 255))
+            source += chr(b ^ ((61 + i * 89 + seed + bc) & 255))
         return source
