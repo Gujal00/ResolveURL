@@ -35,6 +35,12 @@ class VidzyResolver(ResolveUrl):
             'Referer': urllib_parse.urljoin(web_url, '/')
         }
         html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r'sources:\s*\[{src:\s*"([^"]+)', html)
+        if r:
+            source = r.group(1)
+            if source.startswith('http'):
+                return source + helpers.append_headers(headers)
+
         r = re.search(r'sources:\s*\[{src:\s*\(function\(s\).+?\}\)\("([^"]+)"\)', html, re.DOTALL)
         b = re.search(r'BC!==(\d+)', html)
         if r and b:
