@@ -34,9 +34,9 @@ TWOCAPTCHA_API = 'https://api.2captcha.com'
 
 
 def get_response(img, x=450, y=225, w=400, h=130):
+    img = xbmcgui.ControlImage(x, y, w, h, img)
+    wdlg = xbmcgui.WindowDialog()
     try:
-        img = xbmcgui.ControlImage(x, y, w, h, img)
-        wdlg = xbmcgui.WindowDialog()
         wdlg.addControl(img)
         wdlg.show()
         common.kodi.sleep(5000)
