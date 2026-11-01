@@ -34,9 +34,9 @@ TWOCAPTCHA_API = 'https://api.2captcha.com'
 
 
 def get_response(img, x=450, y=225, w=400, h=130):
+    img = xbmcgui.ControlImage(x, y, w, h, img)
+    wdlg = xbmcgui.WindowDialog()
     try:
-        img = xbmcgui.ControlImage(x, y, w, h, img)
-        wdlg = xbmcgui.WindowDialog()
         wdlg.addControl(img)
         wdlg.show()
         common.kodi.sleep(5000)
@@ -45,7 +45,7 @@ def get_response(img, x=450, y=225, w=400, h=130):
             raise Exception('captcha_error')
     finally:
         wdlg.close()
-        return solution
+    return solution
 
 
 def write_img(url=None, bin=None):
