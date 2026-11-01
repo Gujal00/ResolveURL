@@ -45,7 +45,7 @@ def get_response(img, x=450, y=225, w=400, h=130):
             raise Exception('captcha_error')
     finally:
         wdlg.close()
-        return solution
+    return solution
 
 
 def write_img(url=None, bin=None):
