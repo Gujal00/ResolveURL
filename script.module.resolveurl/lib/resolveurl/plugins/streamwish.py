@@ -32,7 +32,7 @@ class StreamWishResolver(ResolveGeneric):
                'wishfast.top', 'ankrznm.sbs', 'sfastwish.com', 'eghjrutf.sbs', 'eghzrutw.sbs', 'guxhag.com',
                'playembed.online', 'egsyxurh.sbs', 'egtpgrvh.sbs', 'flaswish.com', 'obeywish.com',
                'cdnwish.com', 'javsw.me', 'cinemathek.online', 'trgsfjll.sbs', 'fsdcmo.sbs', 'hailindihg.com',
-               'anime4low.sbs', 'mohahhda.site', 'ma2d.store', 'dancima.shop', 'swhoi.com', 'aiavh.com'
+               'anime4low.sbs', 'mohahhda.site', 'ma2d.store', 'dancima.shop', 'swhoi.com', 'aiavh.com',
                'gsfqzmqu.sbs', 'jodwish.com', 'swdyu.com', 'strwish.com', 'asnwish.com', 'kravaxxa.com',
                'wishonly.site', 'playerwish.com', 'katomen.store', 'hlswish.com', 'streamwish.fun',
                'swishsrv.com', 'iplayerhls.com', 'hlsflast.com', '4yftwvrdz7.sbs', 'ghbrisk.com', 'hgbazooka.com',
@@ -45,7 +45,7 @@ class StreamWishResolver(ResolveGeneric):
               r'eghjrutf|eghzrutw|playembed|egsyxurh|egtpgrvh|uqloads|javsw|cinemathek|trgsfjll|fsdcmo|guxhag|' \
               r'anime4low|mohahhda|ma2d|dancima|swhoi|gsfqzmqu|jodwish|swdyu|katomen|iplayerhls|hlsflast|' \
               r'4yftwvrdz7|ghbrisk|eb8gfmjn71|cybervynx|edbrdl7pab|stbhg|dhcplay|gradehgplus|tryzendm|dumbalag|' \
-              r'hg(?:bazooka|link|cloud)|haxloppd|daviod|kravaxxa|aiavh|uasopt)' \
+              r'hg(?:bazooka|link|cloud)|haxloppd|davioad|kravaxxa|aiavh|uasopt)' \
               r'\.(?:com|to|sbs|pro|xyz|store|top|site|online|me|shop|fun|click))/(?:e/|f/|d/)?([0-9a-zA-Z$:/.]+)'
 
     def get_media_url(self, host, media_id, subs=False):
