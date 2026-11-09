@@ -173,11 +173,10 @@ class TorBoxResolver(ResolveUrl):
             if not torrent_id:
                 raise ResolverError("Errror adding torrent")
 
-            ready = cached
-            while not ready:
+            while True:
                 info = self.__get_torrent_info(torrent_id)
-                ready = info.get("download_present", False)
-                if ready:
+                files = info.get("files", [])
+                if info.get("download_present", False) and files:
                     break
                 if d.is_canceled():
                     keep_transfer = common.kodi.yesnoDialog(
@@ -199,7 +198,6 @@ class TorBoxResolver(ResolveUrl):
                 )
                 common.kodi.sleep(1500)
 
-        files = self.__get_torrent_info(torrent_id).get("files", [])
         files = [f for f in files if any(f["name"].lower().endswith(x) for x in FORMATS)]
 
         if return_all:

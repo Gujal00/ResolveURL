@@ -12,6 +12,9 @@ import os
 import re
 import sys
 import unittest
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
+from urllib.parse import parse_qs, urlparse
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if TESTS_DIR not in sys.path:
@@ -234,6 +237,98 @@ class TestResolvers(unittest.TestCase):
         resp = HttpResponse(FakeRaw(b'hi', {'Content-Type': 'text/plain'}))
         hdrs = resp.get_headers(as_dict=True)
         self.assertEqual(hdrs.get('Content-Type'), 'text/plain')
+
+
+class TestTorBox(unittest.TestCase):
+    magnet = 'magnet:?xt=urn:btih:' + 'a' * 40
+    download_url = 'https://example.com/episode.mkv'
+
+    def setUp(self):
+        from resolveurl.plugins import torbox
+
+        self.torbox = torbox
+        self.file = {'id': 0, 'name': 'episode.mkv', 'short_name': 'episode.mkv', 'size': 100}
+        self.ready = {'download_present': True, 'files': [self.file]}
+        self.infos = [self.ready]
+        self.cached = True
+        self.downloads = []
+        self.resolver = torbox.TorBoxResolver()
+        self.resolver.net = Mock()
+        self.resolver.net.http_GET.side_effect = self.http_get
+        self.resolver.net.http_POST.return_value = self.response({'torrent_id': 123})
+        dialog_patch = patch.object(torbox.common.kodi, 'ProgressDialog')
+        self.dialog = dialog_patch.start().return_value.__enter__.return_value
+        self.dialog.is_canceled.return_value = False
+        self.addCleanup(dialog_patch.stop)
+
+    def response(self, data):
+        return SimpleNamespace(content=json.dumps({'success': True, 'data': data}))
+
+    def http_get(self, url, **kwargs):
+        parsed = urlparse(url)
+        endpoint = parsed.path.rsplit('/', 1)[-1]
+        if endpoint == 'checkcached':
+            return self.response([{'hash': 'a' * 40}] if self.cached else [])
+        if endpoint == 'mylist':
+            info = self.infos[0]
+            if len(self.infos) > 1:
+                self.infos.pop(0)
+            return self.response(info)
+        if endpoint == 'requestdl':
+            self.downloads.append(parse_qs(parsed.query))
+            return self.response(self.download_url)
+        raise AssertionError('Unexpected TorBox endpoint: ' + endpoint)
+
+    def test_cached_torrent_waits_for_metadata(self):
+        self.infos = [{}, {'download_present': False, 'files': []}, self.ready]
+        self.assertEqual(
+            self.resolver.get_media_url('torbox.app', self.magnet), self.download_url)
+        self.assertEqual(self.downloads[0]['file_id'], ['0'])
+
+    def test_cached_torrent_waits_for_files(self):
+        self.infos = [{'download_present': True, 'files': []}, self.ready]
+        self.assertEqual(
+            self.resolver.get_media_url('torbox.app', self.magnet), self.download_url)
+
+    def test_return_all_waits_for_metadata(self):
+        self.infos = [{}, self.ready]
+        self.assertEqual(
+            self.resolver.get_media_url('torbox.app', self.magnet, return_all=True),
+            [{'name': 'episode.mkv', 'link': 'tb:0|' + self.magnet}])
+        self.assertEqual(self.downloads, [])
+
+    def test_uses_files_from_ready_response(self):
+        self.cached = False
+        self.infos = [self.ready, {}]
+        self.assertEqual(
+            self.resolver.get_media_url('torbox.app', self.magnet), self.download_url)
+
+    def test_ready_cached_torrent_keeps_file_id_zero(self):
+        self.assertEqual(
+            self.resolver.get_media_url('torbox.app', 'tb:0|' + self.magnet),
+            self.download_url)
+        self.assertEqual(self.downloads[0]['file_id'], ['0'])
+
+    def test_cached_only_rejects_uncached_torrent(self):
+        self.cached = False
+        with self.assertRaises(ResolverError):
+            self.resolver.get_media_url('torbox.app', self.magnet, cached_only=True)
+        self.resolver.net.http_POST.assert_not_called()
+        self.assertEqual(self.downloads, [])
+
+    def test_cancel_while_waiting(self):
+        self.infos = [{}]
+        self.dialog.is_canceled.return_value = True
+        for keep_transfer in (False, True):
+            with self.subTest(keep_transfer=keep_transfer), patch.object(
+                    self.torbox.common.kodi, 'yesnoDialog', return_value=keep_transfer):
+                if keep_transfer:
+                    self.assertIsNone(
+                        self.resolver.get_media_url('torbox.app', self.magnet))
+                else:
+                    with self.assertRaises(ResolverError):
+                        self.resolver.get_media_url('torbox.app', self.magnet)
+                self.assertEqual(self.downloads, [])
 
 
 if __name__ == '__main__':
