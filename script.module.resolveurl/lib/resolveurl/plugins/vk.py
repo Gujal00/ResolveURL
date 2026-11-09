@@ -26,7 +26,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class VKResolver(ResolveUrl):
     name = 'VK'
-    domains = ['vk.com', 'vkvideo.ru']
+    domains = ['vk.com', 'vk.ru', 'vkvideo.ru']
     pattern = r'(?://|\.)(vk(?:video)?\.(?:com|ru))/(?:video_ext\.php\?)?(.+)'
 
     def get_media_url(self, host, media_id):
