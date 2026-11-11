@@ -125,5 +125,7 @@ STRINGS = {
     'byparr_url': 33105,
     'byparr_timeout': 33106,
     'twocaptcha_key': 33107,
-    'solving_captcha': 33108
+    'solving_captcha': 33108,
+    'hw_authorized': 33109,
+    'hw_auth_reset': 33110
 }

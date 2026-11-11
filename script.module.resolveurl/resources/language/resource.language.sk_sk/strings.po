@@ -448,3 +448,11 @@ msgstr ""
 msgctxt "#33108"
 msgid "Solving Captcha, please wait"
 msgstr ""
+
+msgctxt "#33109"
+msgid "High-Way Resolver Authorised"
+msgstr ""
+
+msgctxt "#33110"
+msgid "High-Way Authorisation Reset"
+msgstr ""

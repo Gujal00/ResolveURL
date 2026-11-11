@@ -36,6 +36,7 @@ MODES = __enum(
     AUTH_AD='auth_ad', RESET_AD='reset_ad', AUTH_LS='auth_ls', RESET_LS='reset_ls',
     AUTH_DL='auth_dl', RESET_DL='reset_dl', AUTH_TB='auth_tb', RESET_TB='reset_tb',
     AUTH_CL='auth_cl', RESET_CL='reset_cl', AUTH_OC='auth_oc', RESET_OC='reset_oc',
+    AUTH_HW='auth_hw', RESET_HW='reset_hw',
     RESET_CACHE='reset_cache',
     CLEAN_SETTINGS='clean_settings'
 )
@@ -155,6 +156,25 @@ def reset_oc():
     oc = offcloud.OffCloudResolver()
     oc.reset_authorization()
     kodi.notify(msg=kodi.i18n('oc_auth_reset'), duration=5000)
+
+
+@url_dispatcher.register(MODES.AUTH_HW)
+def auth_hw():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or authorize won't work for some reason
+    from resolveurl.plugins import highway
+    if highway.HighWayResolver().authorize_resolver():
+        kodi.notify(msg=kodi.i18n('hw_authorized'), duration=5000)
+
+
+@url_dispatcher.register(MODES.RESET_HW)
+def reset_hw():
+    kodi.close_all()
+    kodi.sleep(500)  # sleep or reset won't work for some reason
+    from resolveurl.plugins import highway
+    hw = highway.HighWayResolver()
+    hw.reset_authorization()
+    kodi.notify(msg=kodi.i18n('hw_auth_reset'), duration=5000)
 
 
 @url_dispatcher.register(MODES.RESET_CACHE)
