@@ -443,3 +443,11 @@ msgstr "Adres URL ByParr"
 msgctxt "#33106"
 msgid "ByParr timeout"
 msgstr "Limit czasu ByParr"
+
+msgctxt "#33109"
+msgid "High-Way Resolver Authorised"
+msgstr ""
+
+msgctxt "#33110"
+msgid "High-Way Authorisation Reset"
+msgstr ""

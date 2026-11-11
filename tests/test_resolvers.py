@@ -330,6 +330,134 @@ class TestTorBox(unittest.TestCase):
                         self.resolver.get_media_url('torbox.app', self.magnet)
                 self.assertEqual(self.downloads, [])
 
+class TestHighWay(unittest.TestCase):
+    btih = 'b' * 40
+    magnet = 'magnet:?xt=urn:btih:' + 'b' * 40
+    hoster_link = 'https://rapidgator.net/file/abc/episode.mkv.html'
+    dl_link = 'https://ndev.dwld.link/dl2/abc-123/'
+    file_url = 'https://cloud.dwld.link/dav/TORRENT/Show/episode.mkv?sig=x'
+
+    def setUp(self):
+        from resolveurl.plugins import highway
+
+        self.highway = highway
+        self.files = [
+            {'id': 'f1', 'path': 'Show/episode.mkv', 'size': 900, 'partial': False},
+            {'id': 'f2', 'path': 'Show/sample.mkv', 'size': 10, 'partial': False},
+            {'id': 'f3', 'path': 'Show/info.nfo', 'size': 1, 'partial': False},
+            {'id': 'f4', 'path': 'Show/episode2.mkv', 'size': 950, 'partial': True},
+        ]
+        self.cached = True
+        self.transfers = [{'id': '77', 'name': 'Show', 'state': 'completed', 'hash': self.btih, 'files': self.files}]
+        self.och = {'code': 0, 'id': 'abc-123', 'name': 'episode.mkv', 'cache_ready': True, 'download': self.dl_link}
+        self.polls = []
+        self.calls = []
+        self.resolver = highway.HighWayResolver()
+        self.resolver.net = Mock()
+        self.resolver.net.http_GET.side_effect = self.http_get
+        self.resolver.net.http_POST.side_effect = self.http_post
+        dialog_patch = patch.object(highway.common.kodi, 'ProgressDialog')
+        self.dialog = dialog_patch.start().return_value.__enter__.return_value
+        self.dialog.is_canceled.return_value = False
+        self.addCleanup(dialog_patch.stop)
+        sleep_patch = patch.object(highway.common.kodi, 'sleep')
+        sleep_patch.start()
+        self.addCleanup(sleep_patch.stop)
+
+    @staticmethod
+    def response(data):
+        return SimpleNamespace(content=json.dumps(data))
+
+    def http_get(self, url, **kwargs):
+        parsed = urlparse(url)
+        endpoint = parsed.path.rsplit('/', 1)[-1]
+        query = {k: v[0] for k, v in parse_qs(parsed.query).items()}
+        self.calls.append(('GET', endpoint, query))
+        if endpoint == 'transfers.php' and 'check' in query:
+            return self.response({'service': 'torrent', 'results': {self.btih: {'known': self.cached, 'ready': self.cached}}})
+        if endpoint == 'transfers.php' and 'file' in query:
+            return self.response({'id': query['id'], 'file': {'id': query['file'], 'download_url': self.file_url}})
+        if endpoint == 'transfers.php' and 'id' in query:
+            transfer = self.transfers[0]
+            if len(self.transfers) > 1:
+                self.transfers.pop(0)
+            return self.response(transfer)
+        if endpoint == 'download.php' and query.get('action') == 'cache':
+            return self.response(self.polls.pop(0))
+        if endpoint == 'status.php':
+            return self.response({'items': [
+                {'code': 'rapidgator.net', 'is_hoster': 1, 'available': True, 'enabled': True,
+                 'link_wildcards': '*://rg.to/*|*://rapidgator.net/*'},
+                {'code': 'turbobit.net', 'is_hoster': 1, 'available': False, 'enabled': True, 'link_wildcards': ''},
+                {'code': 'torrent', 'is_hoster': 0, 'available': True, 'enabled': True, 'link_wildcards': ''},
+            ]})
+        raise AssertionError('Unexpected High-Way GET: ' + url)
+
+    def http_post(self, url, form_data=None, **kwargs):
+        endpoint = urlparse(url).path.rsplit('/', 1)[-1]
+        self.calls.append(('POST', endpoint, form_data))
+        if endpoint == 'transfers.php':
+            return self.response({'id': '77', 'service': 'torrent', 'state': 'queued'})
+        if endpoint == 'download.php':
+            return self.response({'results': [self.och]})
+        raise AssertionError('Unexpected High-Way POST: ' + url)
+
+    def test_cached_hoster_link(self):
+        self.assertEqual(self.resolver.get_media_url('high-way.me', self.hoster_link), self.dl_link)
+        self.assertEqual(self.calls[0], ('POST', 'download.php', {'links': self.hoster_link}))
+
+    def test_hoster_link_waits_for_cache(self):
+        self.och = dict(self.och, cache_ready=False, retry_in_seconds=5)
+        self.polls = [{'code': 0, 'ready': False, 'percentage': 40}, {'code': 0, 'ready': True, 'percentage': 100}]
+        self.assertEqual(self.resolver.get_media_url('high-way.me', self.hoster_link), self.dl_link)
+        self.assertEqual([c[2] for c in self.calls if c[0] == 'GET' and c[2].get('action') == 'cache'],
+                         [{'action': 'cache', 'id': 'abc-123'}] * 2)
+
+    def test_hoster_error(self):
+        self.och = {'code': 9, 'message': 'The requested file is not available!'}
+        with self.assertRaises(ResolverError):
+            self.resolver.get_media_url('high-way.me', self.hoster_link)
+
+    def test_cached_torrent_picks_largest_complete_video(self):
+        self.assertEqual(self.resolver.get_media_url('high-way.me', self.magnet), self.file_url)
+        self.assertEqual(self.calls[-1][2], {'id': '77', 'service': 'torrent', 'file': 'f1'})
+
+    def test_return_all_lists_videos(self):
+        self.assertEqual(
+            self.resolver.get_media_url('high-way.me', self.magnet, return_all=True),
+            [{'name': 'episode.mkv', 'link': 'hw:77:f1|' + self.magnet},
+             {'name': 'sample.mkv', 'link': 'hw:77:f2|' + self.magnet}])
+        self.assertEqual(
+            self.resolver.get_media_url('high-way.me', 'hw:77:f2|' + self.magnet), self.file_url)
+        self.assertEqual(self.calls[-1][2], {'id': '77', 'service': 'torrent', 'file': 'f2'})
+
+    def test_uncached_torrent_waits(self):
+        self.cached = False
+        self.transfers = [dict(self.transfers[0], state='downloading', progress=30, files=[])] + self.transfers
+        self.assertEqual(self.resolver.get_media_url('high-way.me', self.magnet), self.file_url)
+
+    def test_cached_only_rejects_uncached_torrent(self):
+        self.cached = False
+        with self.assertRaises(ResolverError):
+            self.resolver.get_media_url('high-way.me', self.magnet, cached_only=True)
+        self.assertNotIn('POST', [c[0] for c in self.calls])
+
+    def test_cancel_keeps_transfer(self):
+        self.cached = False
+        self.transfers = [dict(self.transfers[0], state='downloading', files=[])]
+        self.dialog.is_canceled.return_value = True
+        with self.assertRaises(ResolverError):
+            self.resolver.get_media_url('high-way.me', self.magnet)
+        self.resolver.net.http_DELETE.assert_not_called()
+
+    def test_valid_url(self):
+        with patch.object(self.highway.HighWayResolver, 'get_setting', return_value='true'):
+            self.assertTrue(self.resolver.valid_url('https://www.rapidgator.net/file/abc', ''))
+            self.assertTrue(self.resolver.valid_url('https://rg.to/file/abc', ''))
+            self.assertFalse(self.resolver.valid_url('https://turbobit.net/abc.html', ''))
+            self.assertFalse(self.resolver.valid_url('https://notrg.to/file/abc', ''))
+            self.assertTrue(self.resolver.valid_url(self.magnet, ''))
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
