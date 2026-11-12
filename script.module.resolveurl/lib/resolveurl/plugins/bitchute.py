@@ -27,7 +27,7 @@ class BitchuteResolver(ResolveUrl):
 
     name = 'Bitchute'
     domains = ['bitchute.com']
-    pattern = r'(?://|\.)(bitchute\.com)/(?:video|embed)/([\w-]+)/'
+    pattern = r'(?://|\.)(bitchute\.com)/(?:video|embed)/([\w-]+)'
 
     def get_media_url(self, host, media_id):
         api_url = 'https://api.bitchute.com/api/beta/video/media'
