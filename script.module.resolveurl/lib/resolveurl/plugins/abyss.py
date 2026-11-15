@@ -201,16 +201,47 @@ class AbyssResolver(ResolveUrl):
             key=lambda s: int(s.get('size', 0) or 0),
             reverse=True
         )
+
+        # Try 'sora' token path first
+        domains = mp4.get('domains') if isinstance(mp4.get('domains'), list) else []
+        for src in sources:
+            size = src.get('size')
+            res_id = src.get('res_id')
+            sub = src.get('sub')
+            if not (size and res_id and sub and md5_id and slug):
+                continue
+            domain = next((d for d in domains if isinstance(d, str) and sub in d), None)
+            if not domain:
+                if isinstance(sub, str) and '.' in sub:
+                    domain = sub
+                else:
+                    url_ = src.get('url')
+                    if isinstance(url_, str) and url_:
+                        domain = urllib_parse.urlparse(url_).netloc
+            if not domain:
+                continue
+            path_value = '/mp4/{0}/{1}/{2}?v={3}'.format(md5_id, res_id, size, slug)
+            token = self._build_sora_token(path_value, str(size))
+            if token:
+                norm = domain if domain.startswith('http') else 'https://' + domain
+                url = '{0}/sora/{1}/{2}'.format(norm.rstrip('/'), size, token)
+                return url
+
+        # Fall back to direct 'file' field
         for src in sources:
             direct = src.get('file')
             if isinstance(direct, str) and direct:
                 return direct.replace('\\/', '/')
-            if not is_download:
+
+        # Fall back to 'url' + 'path' combination
+        if not is_download:
+            for src in sources:
                 url_ = src.get('url')
                 path_ = src.get('path')
                 if isinstance(url_, str) and isinstance(path_, str) and url_ and path_:
                     return '{0}/{1}'.format(url_.rstrip('/'), path_.lstrip('/')).replace('\\/', '/')
 
+        # HLS fallback
         hls = media_payload.get('hls') if isinstance(media_payload.get('hls'), dict) else {}
         for key in ('file', 'url', 'master', 'src', 'source'):
             val = hls.get(key)
@@ -222,23 +253,6 @@ class AbyssResolver(ResolveUrl):
             f = hs.get('file') or hs.get('url') or hs.get('src')
             if isinstance(f, str) and f:
                 return f.replace('\\/', '/')
-
-        domains = mp4.get('domains') if isinstance(mp4.get('domains'), list) else []
-        for src in sources:
-            size = src.get('size')
-            res_id = src.get('res_id')
-            sub = src.get('sub')
-            if not (size and res_id and sub and md5_id and slug):
-                continue
-            domain = next((d for d in domains if isinstance(d, str) and sub in d), None)
-            if not domain:
-                continue
-            path_value = '/mp4/{0}/{1}/{2}?v={3}'.format(md5_id, res_id, size, slug)
-            token = self._build_sora_token(path_value, str(size))
-            if token:
-                norm = domain if domain.startswith('http') else 'https://' + domain
-                url = '{0}/sora/{1}/{2}'.format(norm.rstrip('/'), size, token)
-                return url
 
         hls_id = hls.get('id')
         if hls_id:
