@@ -17,6 +17,7 @@
 """
 
 import json
+import re
 from hashlib import sha256
 from random import random, uniform
 from six.moves import urllib_parse, urllib_error
@@ -69,7 +70,8 @@ class ByseResolver(ResolveUrl):
         embed = ''
         details_url = '{0}api/videos/{1}/details'.format(ref, media_id)
         try:
-            details = self.net.http_GET(details_url, headers=headers).json
+            pg = self.net.http_GET(details_url, headers=headers).content
+            details = json.loads(pg)
         except urllib_error.HTTPError as e:
             if e.code == 404:
                 embed = 'embed/'
@@ -80,6 +82,20 @@ class ByseResolver(ResolveUrl):
                     raise ResolverError('Video Link Not Found')
             else:
                 raise ResolverError('Video Link Not Found')
+        except json.JSONDecodeError:
+            r = re.search(r'<iframe\s*src="([^"]+)', pg)
+            if r:
+                iurl = r.group(1)
+                ref = urllib_parse.urljoin(iurl, '/')
+                details_url = iurl.replace('/details', '/embed/details')
+                embed = 'embed/'
+                try:
+                    details = self.net.http_GET(details_url, headers=headers).json
+                except:
+                    raise ResolverError('Video Link Not Found')
+            else:
+                raise ResolverError('Video Link Not Found')
+
         embed_url = details.get('embed_frame_url')
         if embed_url:
             ref = urllib_parse.urljoin(embed_url, '/')
