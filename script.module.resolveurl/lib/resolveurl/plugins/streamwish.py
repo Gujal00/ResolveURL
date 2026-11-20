@@ -41,16 +41,16 @@ class StreamWishResolver(ResolveUrl):
                'swishsrv.com', 'iplayerhls.com', 'hlsflast.com', '4yftwvrdz7.sbs', 'ghbrisk.com', 'hgbazooka.com',
                'eb8gfmjn71.sbs', 'cybervynx.com', 'edbrdl7pab.sbs', 'stbhg.click', 'dhcplay.com', 'strwish.xyz',
                'gradehgplus.com', 'tryzendm.com', 'hglink.to', 'dumbalag.com', 'haxloppd.com', 'davioad.com',
-               'uasopt.com', 'hgcloud.to', 'hanerix.com', 'vsembed.com', 'audinifer.com']
+               'uasopt.com', 'hgcloud.to', 'hanerix.com', 'vsembed.com', 'audinifer.com', 'turboembed.com']
     pattern = r'(?://|\.)((?:(?:stream|flas|obey|sfast|str|embed|[mads]|cdn|asn|player|hls)?wish(?:embed|fast|only|srv)?|' \
               r'ajmidyad|atabkhha|atabknha|atabknhk|atabknhs|abkrzkr|abkrzkz|vidmoviesb|kharabnahs|hayaatieadhab|' \
               r'cilootv|tuktukcinema|doodporn|ankrzkz|volvovideo|strmwis|ankrznm|yadmalik|khadhnayad|hailindihg|' \
               r'eghjrutf|eghzrutw|playembed|egsyxurh|egtpgrvh|uqloads|javsw|cinemathek|trgsfjll|fsdcmo|guxhag|' \
               r'anime4low|mohahhda|ma2d|dancima|swhoi|gsfqzmqu|jodwish|swdyu|katomen|iplayerhls|hlsflast|' \
               r'4yftwvrdz7|ghbrisk|eb8gfmjn71|cybervynx|edbrdl7pab|stbhg|dhcplay|gradehgplus|tryzendm|dumbalag|' \
-              r'hg(?:bazooka|link|cloud)|haxloppd|davioad|kravaxxa|aiavh|uasopt|hanerix|vsembed|audinifer)' \
+              r'hg(?:bazooka|link|cloud)|haxloppd|davioad|kravaxxa|aiavh|uasopt|hanerix|vsembed|audinifer|turboembed)' \
               r'\.(?:com|to|sbs|pro|xyz|store|top|site|online|me|shop|fun|click))/(?:e/|f/|d/)?([0-9a-zA-Z$:/.]+)'
-    vs_hosts = ['vsembed.com']
+    vs_hosts = ['vsembed.com', 'turboembed.com']
 
     def get_media_url(self, host, media_id, subs=False):
         if '$$' in media_id:
