@@ -30,30 +30,29 @@ class RumbleResolver(ResolveUrl):
     pattern = r'(?://|\.)(rumble\.com)/(?:embed/)?([^/\?]+)'
 
     def get_media_url(self, host, media_id):
-
+        headers = {'User-Agent': common.RAND_UA}
         web_url = self.get_url(host, media_id)
-        res = self.net.http_GET(web_url).content
-
-        try:
+        html = self.net.http_GET(web_url, headers=headers).content
+        r = re.search(r'{0}"\]=([^;]+)'.format(media_id), html)
+        if r:
+            res = re.sub(r',\s*loaded:\w\(\)', '', r.group(1))
             _json = json.loads(res)
             ua = _json.get('ua')
-
             streams = []
             if ua.get('mp4'):
                 for quality, details in iteritems(ua['mp4']):
                     if details.get('url'):
                         streams.append((quality, details['url']))
-            elif ua.get('hls'):
-                for quality, details in iteritems(ua['hls']):
+            elif ua.get('tar'):
+                for quality, details in iteritems(ua['tar']):
                     if details.get('url'):
                         # Use a descriptive label for HLS streams
                         label = '%sp (HLS)' % quality if quality.isdigit() else 'HLS'
                         streams.append((label, details['url']))
 
-            return helpers.pick_source(streams[::-1]) + helpers.append_headers({'User-Agent': common.RAND_UA})
+            return helpers.pick_source(streams[::-1]) + helpers.append_headers(headers)
 
-        except Exception:
-            raise ResolverError('Unable to locate video')
+        raise ResolverError('Unable to locate video')
 
     def get_url(self, host, media_id):
 
@@ -64,4 +63,4 @@ class RumbleResolver(ResolveUrl):
                 raise ResolverError('Invalid video link')
             media_id = re.search(r'video":"([^"]+)', res).group(1)
 
-        return self._default_get_url(host, media_id, template='https://{host}/embedJS/u3/?request=video&ver=2&v={media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')

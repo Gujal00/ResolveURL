@@ -22,11 +22,10 @@ from random import choice
 from six.moves import urllib_parse
 from resolveurl import common
 from resolveurl.lib import helpers, pyaes
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.resolver import ResolverError
+from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class StreamWishResolver(ResolveGeneric):
+class StreamWishResolver(ResolveUrl):
     name = 'StreamWish'
     domains = ['streamwish.com', 'streamwish.to', 'ajmidyad.sbs', 'khadhnayad.sbs', 'yadmalik.sbs',
                'hayaatieadhab.sbs', 'kharabnahs.sbs', 'atabkhha.sbs', 'atabknha.sbs', 'atabknhk.sbs',
