@@ -1,15 +1,21 @@
-Version 5.1.213 (Nov 06, 2026)
+Version 5.1.214 (Nov 20, 2026)
 - Code Base Changes:
     - None 
 
 - Resolvers Added:
-    - None
+    - Highway (Debrid)
 
 - Resolvers Fixed/Updated:
-    - mixdrop
-    - streamix
-    - vidzy
-    - voesx
+    - abyss
+    - bitchute
+    - byse
+    - lulustream
+    - peestream
+    - rumble
+    - streamwish
+    - torbox
+    - vk
+    - voe
 
 - Resolvers Removed
     - None
