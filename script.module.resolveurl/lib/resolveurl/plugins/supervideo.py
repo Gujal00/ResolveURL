@@ -24,8 +24,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class SuperVideoResolver(ResolveUrl):
     name = 'SuperVideo'
-    domains = ['supervideo.tv', 'supervideo.cc']
-    pattern = r'(?://|\.)(supervideo\.(?:tv|cc))/(?:embed-|e/|k/)?([0-9a-zA-Z]+)'
+    domains = ['supervideo.tv', 'supervideo.cc', 'superplayer.ws']
+    pattern = r'(?://|\.)(supervideo\.(?:tv|cc)|superplayer\.ws)/(?:embed-|e/|k/)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
