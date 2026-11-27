@@ -31,11 +31,11 @@ class StreamixResolver(ResolveUrl):
         'vidwara.fit', 'vidvara.lol', 'vidvara.online', 'viderea.online', 'vidwara.biz', 'vidwara.art',
         'vidwara.site', 'vidvara.site', 'vidvara.biz', 'vidvara.fit', 'ougbas.xyz',
         'sufbgao.xyz', 'isbfga.online', 'isbfga.space', 'isbfga.store', 'sufbgao.space', 'bufsao.com',
-        'fhjabs.com', 'czzbgnw.com', 'oisauh.com'
+        'fhjabs.com', 'czzbgnw.com', 'oisauh.com', 'gvfiosuab.co', 'sufgbva.co'
     ]
     pattern = (
-        r'(?://|\.)((?:st(?:rea)?mix|vid(?:[wv]?ar|matrix)a*|viewdara|thebesthosterv|kinoger|odysseusa|ano|viderea|ougbas|sufbgao|isbfga|bufsao|fhjabs|czzbgnw|oisauh)'
-        r'\.(?:so|io|to|cc|com|pw|cx|fit|lol|online|biz|art|site|xyz|space|store))/(?:e/|v/)?([0-9a-zA-Z_-]+)'
+        r'(?://|\.)((?:st(?:rea)?mix|vid(?:[wv]?ar|matrix)a*|viewdara|thebesthosterv|kinoger|odysseusa|ano|viderea|ougbas|sufbgao|isbfga|bufsao|fhjabs|czzbgnw|oisauh|gvfiosuab|sufgbva)'
+        r'\.(?:so|io|to|cc|com|co|pw|cx|fit|lol|online|biz|art|site|xyz|space|store))/(?:e/|v/)?([0-9a-zA-Z_-]+)'
     )
 
     def get_media_url(self, host, media_id, subs=False):
